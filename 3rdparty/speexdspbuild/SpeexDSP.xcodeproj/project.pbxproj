@@ -1,0 +1,305 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2862FAA710F16ABD00EDDFA1 /* speex_jitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2862FA9710F16ABD00EDDFA1 /* speex_jitter.h */; };
+		2862FAA810F16ABD00EDDFA1 /* speex_preprocess.h in Headers */ = {isa = PBXBuildFile; fileRef = 2862FA9810F16ABD00EDDFA1 /* speex_preprocess.h */; };
+		2862FAA910F16ABD00EDDFA1 /* speex_resampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 2862FA9910F16ABD00EDDFA1 /* speex_resampler.h */; };
+		2862FAAA10F16ABD00EDDFA1 /* speex_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 2862FA9A10F16ABD00EDDFA1 /* speex_types.h */; };
+		2862FAAB10F16ABD00EDDFA1 /* speex.h in Headers */ = {isa = PBXBuildFile; fileRef = 2862FA9B10F16ABD00EDDFA1 /* speex.h */; };
+		28886AA010F167910060BD16 /* fftwrap.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A3F10F167910060BD16 /* fftwrap.c */; };
+		28886AA110F167910060BD16 /* fftwrap.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A4010F167910060BD16 /* fftwrap.h */; };
+		28886AA210F167910060BD16 /* filterbank.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A4110F167910060BD16 /* filterbank.c */; };
+		28886AA310F167910060BD16 /* filterbank.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A4210F167910060BD16 /* filterbank.h */; };
+		28886AB310F167910060BD16 /* jitter.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A5210F167910060BD16 /* jitter.c */; };
+		28886AC510F167910060BD16 /* mdf.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A6510F167910060BD16 /* mdf.c */; };
+		28886ACD10F167910060BD16 /* preprocess.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A6D10F167910060BD16 /* preprocess.c */; };
+		28886AD210F167910060BD16 /* resample_sse.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7210F167910060BD16 /* resample_sse.h */; };
+		28886AD310F167910060BD16 /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7310F167910060BD16 /* resample.c */; };
+		28886AD410F167910060BD16 /* sb_celp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7410F167910060BD16 /* sb_celp.c */; };
+		28886AD510F167910060BD16 /* sb_celp.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7510F167910060BD16 /* sb_celp.h */; };
+		28886AD610F167910060BD16 /* scal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7610F167910060BD16 /* scal.c */; };
+		28886AD710F167910060BD16 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7710F167910060BD16 /* smallft.c */; };
+		28886AD810F167910060BD16 /* smallft.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7810F167910060BD16 /* smallft.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2862FA9710F16ABD00EDDFA1 /* speex_jitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = speex_jitter.h; path = ../speex/include/speex/speex_jitter.h; sourceTree = SOURCE_ROOT; };
+		2862FA9810F16ABD00EDDFA1 /* speex_preprocess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = speex_preprocess.h; path = ../speex/include/speex/speex_preprocess.h; sourceTree = SOURCE_ROOT; };
+		2862FA9910F16ABD00EDDFA1 /* speex_resampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = speex_resampler.h; path = ../speex/include/speex/speex_resampler.h; sourceTree = SOURCE_ROOT; };
+		2862FA9A10F16ABD00EDDFA1 /* speex_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = speex_types.h; path = ../speex/include/speex/speex_types.h; sourceTree = SOURCE_ROOT; };
+		2862FA9B10F16ABD00EDDFA1 /* speex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = speex.h; path = ../speex/include/speex/speex.h; sourceTree = SOURCE_ROOT; };
+		28886A3F10F167910060BD16 /* fftwrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fftwrap.c; sourceTree = "<group>"; };
+		28886A4010F167910060BD16 /* fftwrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fftwrap.h; sourceTree = "<group>"; };
+		28886A4110F167910060BD16 /* filterbank.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = filterbank.c; sourceTree = "<group>"; };
+		28886A4210F167910060BD16 /* filterbank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filterbank.h; sourceTree = "<group>"; };
+		28886A5210F167910060BD16 /* jitter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jitter.c; sourceTree = "<group>"; };
+		28886A6510F167910060BD16 /* mdf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mdf.c; sourceTree = "<group>"; };
+		28886A6D10F167910060BD16 /* preprocess.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = preprocess.c; sourceTree = "<group>"; };
+		28886A7210F167910060BD16 /* resample_sse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resample_sse.h; sourceTree = "<group>"; };
+		28886A7310F167910060BD16 /* resample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = resample.c; sourceTree = "<group>"; };
+		28886A7410F167910060BD16 /* sb_celp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sb_celp.c; sourceTree = "<group>"; };
+		28886A7510F167910060BD16 /* sb_celp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sb_celp.h; sourceTree = "<group>"; };
+		28886A7610F167910060BD16 /* scal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scal.c; sourceTree = "<group>"; };
+		28886A7710F167910060BD16 /* smallft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smallft.c; sourceTree = "<group>"; };
+		28886A7810F167910060BD16 /* smallft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smallft.h; sourceTree = "<group>"; };
+		D2AAC07E0554694100DB518D /* libSpeexDSP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSpeexDSP.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC07C0554694100DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC07E0554694100DB518D /* libSpeexDSP.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* SpeexDSP */ = {
+			isa = PBXGroup;
+			children = (
+				2862FA8810F16A3500EDDFA1 /* Headers */,
+				32C88DFF0371C24200C91783 /* Source */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = SpeexDSP;
+			sourceTree = "<group>";
+		};
+		2862FA8810F16A3500EDDFA1 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				2862FA9710F16ABD00EDDFA1 /* speex_jitter.h */,
+				2862FA9810F16ABD00EDDFA1 /* speex_preprocess.h */,
+				2862FA9910F16ABD00EDDFA1 /* speex_resampler.h */,
+				2862FA9A10F16ABD00EDDFA1 /* speex_types.h */,
+				2862FA9B10F16ABD00EDDFA1 /* speex.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				28886A3F10F167910060BD16 /* fftwrap.c */,
+				28886A4010F167910060BD16 /* fftwrap.h */,
+				28886A4110F167910060BD16 /* filterbank.c */,
+				28886A4210F167910060BD16 /* filterbank.h */,
+				28886A5210F167910060BD16 /* jitter.c */,
+				28886A6510F167910060BD16 /* mdf.c */,
+				28886A6D10F167910060BD16 /* preprocess.c */,
+				28886A7210F167910060BD16 /* resample_sse.h */,
+				28886A7310F167910060BD16 /* resample.c */,
+				28886A7410F167910060BD16 /* sb_celp.c */,
+				28886A7510F167910060BD16 /* sb_celp.h */,
+				28886A7610F167910060BD16 /* scal.c */,
+				28886A7710F167910060BD16 /* smallft.c */,
+				28886A7810F167910060BD16 /* smallft.h */,
+			);
+			name = Source;
+			path = ../speex/libspeex;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC07A0554694100DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28886AA110F167910060BD16 /* fftwrap.h in Headers */,
+				28886AA310F167910060BD16 /* filterbank.h in Headers */,
+				28886AD210F167910060BD16 /* resample_sse.h in Headers */,
+				28886AD510F167910060BD16 /* sb_celp.h in Headers */,
+				28886AD810F167910060BD16 /* smallft.h in Headers */,
+				2862FAA710F16ABD00EDDFA1 /* speex_jitter.h in Headers */,
+				2862FAA810F16ABD00EDDFA1 /* speex_preprocess.h in Headers */,
+				2862FAA910F16ABD00EDDFA1 /* speex_resampler.h in Headers */,
+				2862FAAA10F16ABD00EDDFA1 /* speex_types.h in Headers */,
+				2862FAAB10F16ABD00EDDFA1 /* speex.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC07D0554694100DB518D /* SpeexDSP */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "SpeexDSP" */;
+			buildPhases = (
+				D2AAC07A0554694100DB518D /* Headers */,
+				D2AAC07B0554694100DB518D /* Sources */,
+				D2AAC07C0554694100DB518D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpeexDSP;
+			productName = SpeexDSP;
+			productReference = D2AAC07E0554694100DB518D /* libSpeexDSP.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "SpeexDSP" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* SpeexDSP */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC07D0554694100DB518D /* SpeexDSP */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC07B0554694100DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28886AA010F167910060BD16 /* fftwrap.c in Sources */,
+				28886AA210F167910060BD16 /* filterbank.c in Sources */,
+				28886AB310F167910060BD16 /* jitter.c in Sources */,
+				28886AC510F167910060BD16 /* mdf.c in Sources */,
+				28886ACD10F167910060BD16 /* preprocess.c in Sources */,
+				28886AD310F167910060BD16 /* resample.c in Sources */,
+				28886AD410F167910060BD16 /* sb_celp.c in Sources */,
+				28886AD610F167910060BD16 /* scal.c in Sources */,
+				28886AD710F167910060BD16 /* smallft.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB921F08733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/SpeexDSP.dst;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_FAST_MATH = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_UNROLL_LOOPS = YES;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../speex/include//**";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-fsingle-precision-constant";
+				"OTHER_CFLAGS[arch=armv7]" = (
+					"-mfpu=neon",
+					"-mfloat-abi=softfp",
+					"-mcpu=cortex-a8",
+				);
+				"OTHER_CPLUSPLUSFLAGS[arch=armv7]" = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = SpeexDSP;
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../speex/libspeex//** ${PROJECT_DIR}/**";
+			};
+			name = Debug;
+		};
+		1DEB922008733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				DSTROOT = /tmp/SpeexDSP.dst;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_FAST_MATH = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_UNROLL_LOOPS = YES;
+				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../speex/include//**";
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_CFLAGS = "-fsingle-precision-constant";
+				"OTHER_CFLAGS[arch=armv7]" = (
+					"-mfpu=neon",
+					"-mfloat-abi=softfp",
+					"-mcpu=cortex-a8",
+				);
+				"OTHER_CPLUSPLUSFLAGS[arch=armv7]" = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = SpeexDSP;
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../speex/libspeex//** ${PROJECT_DIR}/**";
+			};
+			name = Release;
+		};
+		1DEB922308733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PREBINDING = NO;
+				SDKROOT = iphoneos3.1.2;
+			};
+			name = Debug;
+		};
+		1DEB922408733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PREBINDING = NO;
+				SDKROOT = iphoneos3.1.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "SpeexDSP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB921F08733DC00010E9CD /* Debug */,
+				1DEB922008733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "SpeexDSP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB922308733DC00010E9CD /* Debug */,
+				1DEB922408733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

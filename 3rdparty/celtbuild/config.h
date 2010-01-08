@@ -1,0 +1,1 @@
+#define FLOATING_POINT

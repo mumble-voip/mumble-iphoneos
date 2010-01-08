@@ -1,0 +1,40 @@
+(Last-Updated: Jan 5 2010)
+
+The Mumble protobuf protocol
+============================
+
+Mumble uses Protocol Buffers for its command-channel communication
+in version 1.2 and greater.
+
+This directory contains the ObjC-output from the protobuf compiler,
+and a Mumble.proto protocol description fetched from the desktop
+Mumble client's git repository.
+
+
+Updating the protocol decription
+================================
+
+Simply run the `update-proto.sh' script in this directory to update
+the protocol description. Note however that you need a protoc exe-
+cutable that can output Objective-C.
+
+Please refer to the next section of this document if you don't have
+a Obj-C capable protoc.
+
+
+Generating the Objective-C from Mumble.proto
+============================================
+
+To get a protobuf compiler that can output Objective-C, it is
+recommended that you build the one found in the protobuf submodule:
+
+ 3rdparty/protobuf/
+
+No special parameters or anything need to be configured, simply run:
+
+ $ ./configure
+ $ make
+
+And you should have a working protoc executable in
+
+ 3rdparty/protobuf/src/protoc
