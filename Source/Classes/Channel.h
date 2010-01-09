@@ -28,66 +28,60 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class Channel;
+@class User;
 
-typedef enum _TalkingState {
-	TalkingStateOff = 0,
-	TalkingStateTalking,
-	TalkingStateWhisperChannel,
-	TalkingStateWhisperTalk,
-} TalkingState;
+@interface Channel : NSObject {
+	Channel *channelParent;
 
-@interface User : NSObject {
-	@protected
-		BOOL muteState;
-		BOOL deafState;
-		BOOL suppressState;
-		BOOL localMuteState;
-		BOOL selfMuteState;
-		BOOL selfDeafState;
-		TalkingState talkState;
-		NSUInteger userSession;
-		NSString *userName;
+	NSUInteger channelId;
+	NSString *channelName;
+	NSInteger position;
 
-		Channel *channel;
+	BOOL inheritACL;
+	BOOL temporary;
 
-	@public
-		int sequence;
-		int frames;
+	NSMutableArray *channelList;
+	NSMutableArray *userList;
+	NSMutableArray *aclList;
+	NSMutableArray *linkedList;
 }
 
-+ (User *) lookupBySession:(NSUInteger)session;
-+ (User *) lookupByHash:(NSString *)hash;
-+ (User *) addUserWithSession:(NSUInteger)session;
++ (void) moduleSetup;
++ (void) moduleTeardown;
 
-- (void) setSession:(NSUInteger)session;
-- (NSUInteger) session;
+#pragma mark -
 
-- (void) setName:(NSString *)name;
-- (NSString *) name;
++ (Channel *) getWithId:(NSUInteger)channelId;
++ (Channel *) addNewWithId:(NSUInteger)channelId;
++ (void) removeWithId:(NSUInteger)channelId;
 
-- (void) setTalking:(TalkingState)flag;
-- (TalkingState) talkingState;
+#pragma mark -
 
-- (void) setMute:(BOOL)flag;
-- (BOOL) muted;
+- (id) initWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(Channel *)parent;
+- (id) initWithId:(NSUInteger)chanId name:(NSString *)chanName;
+- (id) initWithId:(NSUInteger)chanId;
+- (void) dealloc;
 
-- (void) setDeaf:(BOOL)flag;
-- (BOOL) deafened;
+#pragma mark -
 
-- (void) setSuppress:(BOOL)flag;
-- (BOOL) suppressed;
+- (void) addChannel:(Channel *)chan;
+- (void) removeChannel:(Channel *)chan;
 
-- (void) setLocalMute:(BOOL)flag;
-- (BOOL) localMuted;
+#pragma mark -
 
-- (void) setSelfMute:(BOOL)flag;
-- (BOOL) selfMuted;
+- (void) addUser:(User *)user;
+- (void) removeUser:(User *)user;
 
-- (void) setSelfDeaf:(BOOL)flag;
-- (BOOL) selfDeafened;
+#pragma mark -
 
-- (void) setChannel:(Channel *)chan;
-- (Channel *) channel;
+- (BOOL) linkedToChannel:(Channel *)chan;
+- (void) linkToChannel:(Channel *)chan;
+- (void) unlinkFromChannel:(Channel *)chan;
+- (void) unlinkAll;
+
+#pragma mark -
+
+- (void) setParent:(Channel *)chan;
+- (Channel *) parent;
 
 @end

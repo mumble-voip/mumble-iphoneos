@@ -15,6 +15,7 @@
 		2822DE0C10F16B3400A5D72C /* libSpeexDSP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2822DE0B10F16B2E00A5D72C /* libSpeexDSP.a */; };
 		2822DE0D10F16B3800A5D72C /* libSpeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2822DE0210F16B2700A5D72C /* libSpeex.a */; };
 		282E231910ED386E00383BE1 /* RWLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 282E231810ED386E00383BE1 /* RWLock.m */; };
+		284AB37410F8DCD8008D05D5 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 284AB37310F8DCD8008D05D5 /* Channel.m */; };
 		285FD35A106D072A00A7A967 /* ad.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD268106D072A00A7A967 /* ad.png */; };
 		285FD35B106D072A00A7A967 /* ae.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD269106D072A00A7A967 /* ae.png */; };
 		285FD35C106D072A00A7A967 /* af.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD26A106D072A00A7A967 /* af.png */; };
@@ -406,6 +407,8 @@
 		2822DE0310F16B2E00A5D72C /* SpeexDSP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SpeexDSP.xcodeproj; path = 3rdparty/speexdspbuild/SpeexDSP.xcodeproj; sourceTree = "<group>"; };
 		282E231710ED386E00383BE1 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
 		282E231810ED386E00383BE1 /* RWLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWLock.m; sourceTree = "<group>"; };
+		284AB37210F8DCD8008D05D5 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Channel.h; sourceTree = "<group>"; };
+		284AB37310F8DCD8008D05D5 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
 		284F906B10A8A59400897B27 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		285FD268106D072A00A7A967 /* ad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad.png; sourceTree = "<group>"; };
 		285FD269106D072A00A7A967 /* ae.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ae.png; sourceTree = "<group>"; };
@@ -771,6 +774,7 @@
 				28872D9210DC272400EDFA60 /* WelcomeScreen */,
 				286930EC10CAFF7B0064D737 /* About */,
 				28872D8610DC26AE00EDFA60 /* PublicServerList */,
+				284AB36910F8DC9D008D05D5 /* ServerView */,
 				1D3623240D0F684500981E51 /* AppDelegate.h */,
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				2863CA08106E098700F07F5F /* LanServerListDataSource.h */,
@@ -781,15 +785,10 @@
 				28BD0C5110B2F36500D85A8B /* CryptState.m */,
 				28990E6610DEDC2200636A79 /* Services.h */,
 				28990E6710DEDC2200636A79 /* Services.m */,
-				28BE246B10E155B300F1A7A5 /* ServerViewController.xib */,
-				28BE246910E155B300F1A7A5 /* ServerViewController.h */,
-				28BE246A10E155B300F1A7A5 /* ServerViewController.m */,
 				28BE268E10E17EF000F1A7A5 /* PDFImageLoader.h */,
 				28BE268F10E17EF000F1A7A5 /* PDFImageLoader.m */,
 				28BD0C7C10B305DB00D85A8B /* Version.h */,
 				287EC59910EAE26E00F79184 /* Version.m */,
-				2861428610ED294600D2B9FA /* User.h */,
-				2861428710ED294600D2B9FA /* User.m */,
 				282E231710ED386E00383BE1 /* RWLock.h */,
 				282E231810ED386E00383BE1 /* RWLock.m */,
 			);
@@ -819,6 +818,20 @@
 				2822DE0B10F16B2E00A5D72C /* libSpeexDSP.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		284AB36910F8DC9D008D05D5 /* ServerView */ = {
+			isa = PBXGroup;
+			children = (
+				28BE246B10E155B300F1A7A5 /* ServerViewController.xib */,
+				28BE246910E155B300F1A7A5 /* ServerViewController.h */,
+				28BE246A10E155B300F1A7A5 /* ServerViewController.m */,
+				2861428610ED294600D2B9FA /* User.h */,
+				2861428710ED294600D2B9FA /* User.m */,
+				284AB37210F8DCD8008D05D5 /* Channel.h */,
+				284AB37310F8DCD8008D05D5 /* Channel.m */,
+			);
+			name = ServerView;
 			sourceTree = "<group>";
 		};
 		285FD267106D072A00A7A967 /* Flags */ = {
@@ -1711,6 +1724,7 @@
 				282E231910ED386E00383BE1 /* RWLock.m in Sources */,
 				2892D5C710EEC92D00C18781 /* AudioOutputSpeech.m in Sources */,
 				2892D5D810EECB3200C18781 /* AudioOutputUser.m in Sources */,
+				284AB37410F8DCD8008D05D5 /* Channel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

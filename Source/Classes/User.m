@@ -30,19 +30,10 @@
 
 #import "User.h"
 #import "RWLock.h"
+#import "Channel.h"
 
 static NSMutableDictionary *userSessionMap = nil;
-static RWLock *userLock;
-
-#define MODULE_SETUP \
-	do { \
-		if (userLock == nil) { \
-			userLock = [[RWLock alloc] init]; \
-		} \
-		if (userSessionMap == nil) { \
-			userSessionMap = [[NSMutableDictionary alloc] init]; \
-		} \
-	} while (0)
+static RWLock *userLock = nil;
 
 @implementation User
 
@@ -50,8 +41,20 @@ static RWLock *userLock;
  * Static getters and adder.
  */
 
++ (void) moduleSetup {
+	userLock = [[RWLock alloc] init];
+	userSessionMap = [[NSMutableDictionary alloc] init];
+}
+
++ (void) moduleTeardown {
+	[userLock release];
+	[userSessionMap release];
+}
+
 + (User *) lookupBySession:(NSUInteger)session {
-	MODULE_SETUP;
+	if (userSessionMap == nil || userLock == nil)
+		[self moduleSetup];
+
 	User *u;
 
 	[userLock readLock];
@@ -62,14 +65,16 @@ static RWLock *userLock;
 }
 
 + (User *) lookupByHash:(NSString *)hash {
-	MODULE_SETUP;
+	if (userSessionMap == nil || userLock == nil)
+		[self moduleSetup];
 
 	NSLog(@"User: lookupByHash: not implemented.");
 	return nil;
 }
 
 + (User *) addUserWithSession:(NSUInteger)session {
-	MODULE_SETUP;
+	if (userSessionMap == nil || userLock == nil)
+		return nil;
 
 	[userLock writeLock];
 
@@ -175,5 +180,14 @@ static RWLock *userLock;
 - (BOOL) selfDeafened {
 	return selfDeafState;
 }
+
+- (void) setChannel:(Channel *)chan {
+	channel = chan;
+}
+
+- (Channel *) channel {
+	return channel;
+}
+
 
 @end
