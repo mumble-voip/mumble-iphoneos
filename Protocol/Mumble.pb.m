@@ -1629,12 +1629,346 @@ BOOL MPReject_RejectTypeIsValidValue(MPReject_RejectType value) {
 }
 @end
 
+@interface MPServerConfig ()
+@property int32_t maxBandwidth;
+@property (retain) NSString* welcomeText;
+@property BOOL allowHtml;
+@property int32_t messageLength;
+@property int32_t imageMessageLength;
+@end
+
+@implementation MPServerConfig
+
+- (BOOL) hasMaxBandwidth {
+  return !!hasMaxBandwidth_;
+}
+- (void) setHasMaxBandwidth:(BOOL) value {
+  hasMaxBandwidth_ = !!value;
+}
+@synthesize maxBandwidth;
+- (BOOL) hasWelcomeText {
+  return !!hasWelcomeText_;
+}
+- (void) setHasWelcomeText:(BOOL) value {
+  hasWelcomeText_ = !!value;
+}
+@synthesize welcomeText;
+- (BOOL) hasAllowHtml {
+  return !!hasAllowHtml_;
+}
+- (void) setHasAllowHtml:(BOOL) value {
+  hasAllowHtml_ = !!value;
+}
+- (BOOL) allowHtml {
+  return !!allowHtml_;
+}
+- (void) setAllowHtml:(BOOL) value {
+  allowHtml_ = !!value;
+}
+- (BOOL) hasMessageLength {
+  return !!hasMessageLength_;
+}
+- (void) setHasMessageLength:(BOOL) value {
+  hasMessageLength_ = !!value;
+}
+@synthesize messageLength;
+- (BOOL) hasImageMessageLength {
+  return !!hasImageMessageLength_;
+}
+- (void) setHasImageMessageLength:(BOOL) value {
+  hasImageMessageLength_ = !!value;
+}
+@synthesize imageMessageLength;
+- (void) dealloc {
+  self.welcomeText = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.maxBandwidth = 0;
+    self.welcomeText = @"";
+    self.allowHtml = NO;
+    self.messageLength = 0;
+    self.imageMessageLength = 0;
+  }
+  return self;
+}
+static MPServerConfig* defaultMPServerConfigInstance = nil;
++ (void) initialize {
+  if (self == [MPServerConfig class]) {
+    defaultMPServerConfigInstance = [[MPServerConfig alloc] init];
+  }
+}
++ (MPServerConfig*) defaultInstance {
+  return defaultMPServerConfigInstance;
+}
+- (MPServerConfig*) defaultInstance {
+  return defaultMPServerConfigInstance;
+}
+- (BOOL) isInitialized {
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasMaxBandwidth) {
+    [output writeUInt32:1 value:self.maxBandwidth];
+  }
+  if (self.hasWelcomeText) {
+    [output writeString:2 value:self.welcomeText];
+  }
+  if (self.hasAllowHtml) {
+    [output writeBool:3 value:self.allowHtml];
+  }
+  if (self.hasMessageLength) {
+    [output writeUInt32:4 value:self.messageLength];
+  }
+  if (self.hasImageMessageLength) {
+    [output writeUInt32:5 value:self.imageMessageLength];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  if (self.hasMaxBandwidth) {
+    size += computeUInt32Size(1, self.maxBandwidth);
+  }
+  if (self.hasWelcomeText) {
+    size += computeStringSize(2, self.welcomeText);
+  }
+  if (self.hasAllowHtml) {
+    size += computeBoolSize(3, self.allowHtml);
+  }
+  if (self.hasMessageLength) {
+    size += computeUInt32Size(4, self.messageLength);
+  }
+  if (self.hasImageMessageLength) {
+    size += computeUInt32Size(5, self.imageMessageLength);
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (MPServerConfig*) parseFromData:(NSData*) data {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromData:data] build];
+}
++ (MPServerConfig*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (MPServerConfig*) parseFromInputStream:(NSInputStream*) input {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromInputStream:input] build];
+}
++ (MPServerConfig*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPServerConfig*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromCodedInputStream:input] build];
+}
++ (MPServerConfig*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPServerConfig*)[[[MPServerConfig builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPServerConfig_Builder*) builder {
+  return [[[MPServerConfig_Builder alloc] init] autorelease];
+}
++ (MPServerConfig_Builder*) builderWithPrototype:(MPServerConfig*) prototype {
+  return [[MPServerConfig builder] mergeFrom:prototype];
+}
+- (MPServerConfig_Builder*) builder {
+  return [MPServerConfig builder];
+}
+@end
+
+@interface MPServerConfig_Builder()
+@property (retain) MPServerConfig* result;
+@end
+
+@implementation MPServerConfig_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[MPServerConfig alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (MPServerConfig_Builder*) clear {
+  self.result = [[[MPServerConfig alloc] init] autorelease];
+  return self;
+}
+- (MPServerConfig_Builder*) clone {
+  return [MPServerConfig builderWithPrototype:result];
+}
+- (MPServerConfig*) defaultInstance {
+  return [MPServerConfig defaultInstance];
+}
+- (MPServerConfig*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (MPServerConfig*) buildPartial {
+  MPServerConfig* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (MPServerConfig_Builder*) mergeFrom:(MPServerConfig*) other {
+  if (other == [MPServerConfig defaultInstance]) {
+    return self;
+  }
+  if (other.hasMaxBandwidth) {
+    [self setMaxBandwidth:other.maxBandwidth];
+  }
+  if (other.hasWelcomeText) {
+    [self setWelcomeText:other.welcomeText];
+  }
+  if (other.hasAllowHtml) {
+    [self setAllowHtml:other.allowHtml];
+  }
+  if (other.hasMessageLength) {
+    [self setMessageLength:other.messageLength];
+  }
+  if (other.hasImageMessageLength) {
+    [self setImageMessageLength:other.imageMessageLength];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (MPServerConfig_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (MPServerConfig_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 8: {
+        [self setMaxBandwidth:[input readUInt32]];
+        break;
+      }
+      case 18: {
+        [self setWelcomeText:[input readString]];
+        break;
+      }
+      case 24: {
+        [self setAllowHtml:[input readBool]];
+        break;
+      }
+      case 32: {
+        [self setMessageLength:[input readUInt32]];
+        break;
+      }
+      case 40: {
+        [self setImageMessageLength:[input readUInt32]];
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasMaxBandwidth {
+  return result.hasMaxBandwidth;
+}
+- (int32_t) maxBandwidth {
+  return result.maxBandwidth;
+}
+- (MPServerConfig_Builder*) setMaxBandwidth:(int32_t) value {
+  result.hasMaxBandwidth = YES;
+  result.maxBandwidth = value;
+  return self;
+}
+- (MPServerConfig_Builder*) clearMaxBandwidth {
+  result.hasMaxBandwidth = NO;
+  result.maxBandwidth = 0;
+  return self;
+}
+- (BOOL) hasWelcomeText {
+  return result.hasWelcomeText;
+}
+- (NSString*) welcomeText {
+  return result.welcomeText;
+}
+- (MPServerConfig_Builder*) setWelcomeText:(NSString*) value {
+  result.hasWelcomeText = YES;
+  result.welcomeText = value;
+  return self;
+}
+- (MPServerConfig_Builder*) clearWelcomeText {
+  result.hasWelcomeText = NO;
+  result.welcomeText = @"";
+  return self;
+}
+- (BOOL) hasAllowHtml {
+  return result.hasAllowHtml;
+}
+- (BOOL) allowHtml {
+  return result.allowHtml;
+}
+- (MPServerConfig_Builder*) setAllowHtml:(BOOL) value {
+  result.hasAllowHtml = YES;
+  result.allowHtml = value;
+  return self;
+}
+- (MPServerConfig_Builder*) clearAllowHtml {
+  result.hasAllowHtml = NO;
+  result.allowHtml = NO;
+  return self;
+}
+- (BOOL) hasMessageLength {
+  return result.hasMessageLength;
+}
+- (int32_t) messageLength {
+  return result.messageLength;
+}
+- (MPServerConfig_Builder*) setMessageLength:(int32_t) value {
+  result.hasMessageLength = YES;
+  result.messageLength = value;
+  return self;
+}
+- (MPServerConfig_Builder*) clearMessageLength {
+  result.hasMessageLength = NO;
+  result.messageLength = 0;
+  return self;
+}
+- (BOOL) hasImageMessageLength {
+  return result.hasImageMessageLength;
+}
+- (int32_t) imageMessageLength {
+  return result.imageMessageLength;
+}
+- (MPServerConfig_Builder*) setImageMessageLength:(int32_t) value {
+  result.hasImageMessageLength = YES;
+  result.imageMessageLength = value;
+  return self;
+}
+- (MPServerConfig_Builder*) clearImageMessageLength {
+  result.hasImageMessageLength = NO;
+  result.imageMessageLength = 0;
+  return self;
+}
+@end
+
 @interface MPServerSync ()
 @property int32_t session;
 @property int32_t maxBandwidth;
 @property (retain) NSString* welcomeText;
 @property int64_t permissions;
-@property BOOL allowHtml;
 @end
 
 @implementation MPServerSync
@@ -1667,18 +2001,6 @@ BOOL MPReject_RejectTypeIsValidValue(MPReject_RejectType value) {
   hasPermissions_ = !!value;
 }
 @synthesize permissions;
-- (BOOL) hasAllowHtml {
-  return !!hasAllowHtml_;
-}
-- (void) setHasAllowHtml:(BOOL) value {
-  hasAllowHtml_ = !!value;
-}
-- (BOOL) allowHtml {
-  return !!allowHtml_;
-}
-- (void) setAllowHtml:(BOOL) value {
-  allowHtml_ = !!value;
-}
 - (void) dealloc {
   self.welcomeText = nil;
   [super dealloc];
@@ -1689,7 +2011,6 @@ BOOL MPReject_RejectTypeIsValidValue(MPReject_RejectType value) {
     self.maxBandwidth = 0;
     self.welcomeText = @"";
     self.permissions = 0L;
-    self.allowHtml = YES;
   }
   return self;
 }
@@ -1721,9 +2042,6 @@ static MPServerSync* defaultMPServerSyncInstance = nil;
   if (self.hasPermissions) {
     [output writeUInt64:4 value:self.permissions];
   }
-  if (self.hasAllowHtml) {
-    [output writeBool:5 value:self.allowHtml];
-  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -1744,9 +2062,6 @@ static MPServerSync* defaultMPServerSyncInstance = nil;
   }
   if (self.hasPermissions) {
     size += computeUInt64Size(4, self.permissions);
-  }
-  if (self.hasAllowHtml) {
-    size += computeBoolSize(5, self.allowHtml);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -1835,9 +2150,6 @@ static MPServerSync* defaultMPServerSyncInstance = nil;
   if (other.hasPermissions) {
     [self setPermissions:other.permissions];
   }
-  if (other.hasAllowHtml) {
-    [self setAllowHtml:other.allowHtml];
-  }
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
@@ -1873,10 +2185,6 @@ static MPServerSync* defaultMPServerSyncInstance = nil;
       }
       case 32: {
         [self setPermissions:[input readUInt64]];
-        break;
-      }
-      case 40: {
-        [self setAllowHtml:[input readBool]];
         break;
       }
     }
@@ -1944,22 +2252,6 @@ static MPServerSync* defaultMPServerSyncInstance = nil;
 - (MPServerSync_Builder*) clearPermissions {
   result.hasPermissions = NO;
   result.permissions = 0L;
-  return self;
-}
-- (BOOL) hasAllowHtml {
-  return result.hasAllowHtml;
-}
-- (BOOL) allowHtml {
-  return result.allowHtml;
-}
-- (MPServerSync_Builder*) setAllowHtml:(BOOL) value {
-  result.hasAllowHtml = YES;
-  result.allowHtml = value;
-  return self;
-}
-- (MPServerSync_Builder*) clearAllowHtml {
-  result.hasAllowHtml = NO;
-  result.allowHtml = YES;
   return self;
 }
 @end
@@ -2154,6 +2446,7 @@ static MPChannelRemove* defaultMPChannelRemoveInstance = nil;
 @property (retain) NSMutableArray* mutableLinksRemoveList;
 @property BOOL temporary;
 @property int32_t position;
+@property (retain) NSData* descriptionHash;
 @end
 
 @implementation MPChannelState
@@ -2208,12 +2501,20 @@ static MPChannelRemove* defaultMPChannelRemoveInstance = nil;
   hasPosition_ = !!value;
 }
 @synthesize position;
+- (BOOL) hasDescriptionHash {
+  return !!hasDescriptionHash_;
+}
+- (void) setHasDescriptionHash:(BOOL) value {
+  hasDescriptionHash_ = !!value;
+}
+@synthesize descriptionHash;
 - (void) dealloc {
   self.name = nil;
   self.mutableLinksList = nil;
   self.description = nil;
   self.mutableLinksAddList = nil;
   self.mutableLinksRemoveList = nil;
+  self.descriptionHash = nil;
   [super dealloc];
 }
 - (id) init {
@@ -2224,6 +2525,7 @@ static MPChannelRemove* defaultMPChannelRemoveInstance = nil;
     self.description = @"";
     self.temporary = NO;
     self.position = 0;
+    self.descriptionHash = [NSData data];
   }
   return self;
 }
@@ -2291,6 +2593,9 @@ static MPChannelState* defaultMPChannelStateInstance = nil;
   if (self.hasPosition) {
     [output writeInt32:9 value:self.position];
   }
+  if (self.hasDescriptionHash) {
+    [output writeData:10 value:self.descriptionHash];
+  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -2341,6 +2646,9 @@ static MPChannelState* defaultMPChannelStateInstance = nil;
   }
   if (self.hasPosition) {
     size += computeInt32Size(9, self.position);
+  }
+  if (self.hasDescriptionHash) {
+    size += computeDataSize(10, self.descriptionHash);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -2453,6 +2761,9 @@ static MPChannelState* defaultMPChannelStateInstance = nil;
   if (other.hasPosition) {
     [self setPosition:other.position];
   }
+  if (other.hasDescriptionHash) {
+    [self setDescriptionHash:other.descriptionHash];
+  }
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
@@ -2508,6 +2819,10 @@ static MPChannelState* defaultMPChannelStateInstance = nil;
       }
       case 72: {
         [self setPosition:[input readInt32]];
+        break;
+      }
+      case 82: {
+        [self setDescriptionHash:[input readData]];
         break;
       }
     }
@@ -2700,6 +3015,22 @@ static MPChannelState* defaultMPChannelStateInstance = nil;
 - (MPChannelState_Builder*) clearPosition {
   result.hasPosition = NO;
   result.position = 0;
+  return self;
+}
+- (BOOL) hasDescriptionHash {
+  return result.hasDescriptionHash;
+}
+- (NSData*) descriptionHash {
+  return result.descriptionHash;
+}
+- (MPChannelState_Builder*) setDescriptionHash:(NSData*) value {
+  result.hasDescriptionHash = YES;
+  result.descriptionHash = value;
+  return self;
+}
+- (MPChannelState_Builder*) clearDescriptionHash {
+  result.hasDescriptionHash = NO;
+  result.descriptionHash = [NSData data];
   return self;
 }
 @end
@@ -3016,10 +3347,12 @@ static MPUserRemove* defaultMPUserRemoveInstance = nil;
 @property BOOL selfMute;
 @property BOOL selfDeaf;
 @property (retain) NSData* texture;
-@property (retain) NSString* pluginContext;
+@property (retain) NSData* pluginContext;
 @property (retain) NSString* pluginIdentity;
 @property (retain) NSString* comment;
 @property (retain) NSString* hash;
+@property (retain) NSData* commentHash;
+@property (retain) NSData* textureHash;
 @end
 
 @implementation MPUserState
@@ -3154,6 +3487,20 @@ static MPUserRemove* defaultMPUserRemoveInstance = nil;
   hasHash_ = !!value;
 }
 @synthesize hash;
+- (BOOL) hasCommentHash {
+  return !!hasCommentHash_;
+}
+- (void) setHasCommentHash:(BOOL) value {
+  hasCommentHash_ = !!value;
+}
+@synthesize commentHash;
+- (BOOL) hasTextureHash {
+  return !!hasTextureHash_;
+}
+- (void) setHasTextureHash:(BOOL) value {
+  hasTextureHash_ = !!value;
+}
+@synthesize textureHash;
 - (void) dealloc {
   self.name = nil;
   self.texture = nil;
@@ -3161,6 +3508,8 @@ static MPUserRemove* defaultMPUserRemoveInstance = nil;
   self.pluginIdentity = nil;
   self.comment = nil;
   self.hash = nil;
+  self.commentHash = nil;
+  self.textureHash = nil;
   [super dealloc];
 }
 - (id) init {
@@ -3176,10 +3525,12 @@ static MPUserRemove* defaultMPUserRemoveInstance = nil;
     self.selfMute = NO;
     self.selfDeaf = NO;
     self.texture = [NSData data];
-    self.pluginContext = @"";
+    self.pluginContext = [NSData data];
     self.pluginIdentity = @"";
     self.comment = @"";
     self.hash = @"";
+    self.commentHash = [NSData data];
+    self.textureHash = [NSData data];
   }
   return self;
 }
@@ -3233,7 +3584,7 @@ static MPUserState* defaultMPUserStateInstance = nil;
     [output writeData:11 value:self.texture];
   }
   if (self.hasPluginContext) {
-    [output writeString:12 value:self.pluginContext];
+    [output writeData:12 value:self.pluginContext];
   }
   if (self.hasPluginIdentity) {
     [output writeString:13 value:self.pluginIdentity];
@@ -3243,6 +3594,12 @@ static MPUserState* defaultMPUserStateInstance = nil;
   }
   if (self.hasHash) {
     [output writeString:15 value:self.hash];
+  }
+  if (self.hasCommentHash) {
+    [output writeData:16 value:self.commentHash];
+  }
+  if (self.hasTextureHash) {
+    [output writeData:17 value:self.textureHash];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -3287,7 +3644,7 @@ static MPUserState* defaultMPUserStateInstance = nil;
     size += computeDataSize(11, self.texture);
   }
   if (self.hasPluginContext) {
-    size += computeStringSize(12, self.pluginContext);
+    size += computeDataSize(12, self.pluginContext);
   }
   if (self.hasPluginIdentity) {
     size += computeStringSize(13, self.pluginIdentity);
@@ -3297,6 +3654,12 @@ static MPUserState* defaultMPUserStateInstance = nil;
   }
   if (self.hasHash) {
     size += computeStringSize(15, self.hash);
+  }
+  if (self.hasCommentHash) {
+    size += computeDataSize(16, self.commentHash);
+  }
+  if (self.hasTextureHash) {
+    size += computeDataSize(17, self.textureHash);
   }
   size += self.unknownFields.serializedSize;
   memoizedSerializedSize = size;
@@ -3418,6 +3781,12 @@ static MPUserState* defaultMPUserStateInstance = nil;
   if (other.hasHash) {
     [self setHash:other.hash];
   }
+  if (other.hasCommentHash) {
+    [self setCommentHash:other.commentHash];
+  }
+  if (other.hasTextureHash) {
+    [self setTextureHash:other.textureHash];
+  }
   [self mergeUnknownFields:other.unknownFields];
   return self;
 }
@@ -3484,7 +3853,7 @@ static MPUserState* defaultMPUserStateInstance = nil;
         break;
       }
       case 98: {
-        [self setPluginContext:[input readString]];
+        [self setPluginContext:[input readData]];
         break;
       }
       case 106: {
@@ -3497,6 +3866,14 @@ static MPUserState* defaultMPUserStateInstance = nil;
       }
       case 122: {
         [self setHash:[input readString]];
+        break;
+      }
+      case 130: {
+        [self setCommentHash:[input readData]];
+        break;
+      }
+      case 138: {
+        [self setTextureHash:[input readData]];
         break;
       }
     }
@@ -3681,17 +4058,17 @@ static MPUserState* defaultMPUserStateInstance = nil;
 - (BOOL) hasPluginContext {
   return result.hasPluginContext;
 }
-- (NSString*) pluginContext {
+- (NSData*) pluginContext {
   return result.pluginContext;
 }
-- (MPUserState_Builder*) setPluginContext:(NSString*) value {
+- (MPUserState_Builder*) setPluginContext:(NSData*) value {
   result.hasPluginContext = YES;
   result.pluginContext = value;
   return self;
 }
 - (MPUserState_Builder*) clearPluginContext {
   result.hasPluginContext = NO;
-  result.pluginContext = @"";
+  result.pluginContext = [NSData data];
   return self;
 }
 - (BOOL) hasPluginIdentity {
@@ -3740,6 +4117,38 @@ static MPUserState* defaultMPUserStateInstance = nil;
 - (MPUserState_Builder*) clearHash {
   result.hasHash = NO;
   result.hash = @"";
+  return self;
+}
+- (BOOL) hasCommentHash {
+  return result.hasCommentHash;
+}
+- (NSData*) commentHash {
+  return result.commentHash;
+}
+- (MPUserState_Builder*) setCommentHash:(NSData*) value {
+  result.hasCommentHash = YES;
+  result.commentHash = value;
+  return self;
+}
+- (MPUserState_Builder*) clearCommentHash {
+  result.hasCommentHash = NO;
+  result.commentHash = [NSData data];
+  return self;
+}
+- (BOOL) hasTextureHash {
+  return result.hasTextureHash;
+}
+- (NSData*) textureHash {
+  return result.textureHash;
+}
+- (MPUserState_Builder*) setTextureHash:(NSData*) value {
+  result.hasTextureHash = YES;
+  result.textureHash = value;
+  return self;
+}
+- (MPUserState_Builder*) clearTextureHash {
+  result.hasTextureHash = NO;
+  result.textureHash = [NSData data];
   return self;
 }
 @end
@@ -9088,6 +9497,1564 @@ static MPCodecVersion* defaultMPCodecVersionInstance = nil;
 - (MPCodecVersion_Builder*) clearPreferAlpha {
   result.hasPreferAlpha = NO;
   result.preferAlpha = YES;
+  return self;
+}
+@end
+
+@interface MPUserStats ()
+@property int32_t session;
+@property BOOL statsOnly;
+@property (retain) NSMutableArray* mutableCertificatesList;
+@property (retain) MPUserStats_Stats* fromClient;
+@property (retain) MPUserStats_Stats* fromServer;
+@property int32_t udpPackets;
+@property int32_t tcpPackets;
+@property Float32 udpPingAvg;
+@property Float32 udpPingVar;
+@property Float32 tcpPingAvg;
+@property Float32 tcpPingVar;
+@property (retain) MPVersion* version;
+@property (retain) NSMutableArray* mutableCeltVersionsList;
+@property (retain) NSData* address;
+@property int32_t bandwidth;
+@property int32_t onlinesecs;
+@property int32_t idlesecs;
+@property BOOL strongCertificate;
+@end
+
+@implementation MPUserStats
+
+- (BOOL) hasSession {
+  return !!hasSession_;
+}
+- (void) setHasSession:(BOOL) value {
+  hasSession_ = !!value;
+}
+@synthesize session;
+- (BOOL) hasStatsOnly {
+  return !!hasStatsOnly_;
+}
+- (void) setHasStatsOnly:(BOOL) value {
+  hasStatsOnly_ = !!value;
+}
+- (BOOL) statsOnly {
+  return !!statsOnly_;
+}
+- (void) setStatsOnly:(BOOL) value {
+  statsOnly_ = !!value;
+}
+@synthesize mutableCertificatesList;
+- (BOOL) hasFromClient {
+  return !!hasFromClient_;
+}
+- (void) setHasFromClient:(BOOL) value {
+  hasFromClient_ = !!value;
+}
+@synthesize fromClient;
+- (BOOL) hasFromServer {
+  return !!hasFromServer_;
+}
+- (void) setHasFromServer:(BOOL) value {
+  hasFromServer_ = !!value;
+}
+@synthesize fromServer;
+- (BOOL) hasUdpPackets {
+  return !!hasUdpPackets_;
+}
+- (void) setHasUdpPackets:(BOOL) value {
+  hasUdpPackets_ = !!value;
+}
+@synthesize udpPackets;
+- (BOOL) hasTcpPackets {
+  return !!hasTcpPackets_;
+}
+- (void) setHasTcpPackets:(BOOL) value {
+  hasTcpPackets_ = !!value;
+}
+@synthesize tcpPackets;
+- (BOOL) hasUdpPingAvg {
+  return !!hasUdpPingAvg_;
+}
+- (void) setHasUdpPingAvg:(BOOL) value {
+  hasUdpPingAvg_ = !!value;
+}
+@synthesize udpPingAvg;
+- (BOOL) hasUdpPingVar {
+  return !!hasUdpPingVar_;
+}
+- (void) setHasUdpPingVar:(BOOL) value {
+  hasUdpPingVar_ = !!value;
+}
+@synthesize udpPingVar;
+- (BOOL) hasTcpPingAvg {
+  return !!hasTcpPingAvg_;
+}
+- (void) setHasTcpPingAvg:(BOOL) value {
+  hasTcpPingAvg_ = !!value;
+}
+@synthesize tcpPingAvg;
+- (BOOL) hasTcpPingVar {
+  return !!hasTcpPingVar_;
+}
+- (void) setHasTcpPingVar:(BOOL) value {
+  hasTcpPingVar_ = !!value;
+}
+@synthesize tcpPingVar;
+- (BOOL) hasVersion {
+  return !!hasVersion_;
+}
+- (void) setHasVersion:(BOOL) value {
+  hasVersion_ = !!value;
+}
+@synthesize version;
+@synthesize mutableCeltVersionsList;
+- (BOOL) hasAddress {
+  return !!hasAddress_;
+}
+- (void) setHasAddress:(BOOL) value {
+  hasAddress_ = !!value;
+}
+@synthesize address;
+- (BOOL) hasBandwidth {
+  return !!hasBandwidth_;
+}
+- (void) setHasBandwidth:(BOOL) value {
+  hasBandwidth_ = !!value;
+}
+@synthesize bandwidth;
+- (BOOL) hasOnlinesecs {
+  return !!hasOnlinesecs_;
+}
+- (void) setHasOnlinesecs:(BOOL) value {
+  hasOnlinesecs_ = !!value;
+}
+@synthesize onlinesecs;
+- (BOOL) hasIdlesecs {
+  return !!hasIdlesecs_;
+}
+- (void) setHasIdlesecs:(BOOL) value {
+  hasIdlesecs_ = !!value;
+}
+@synthesize idlesecs;
+- (BOOL) hasStrongCertificate {
+  return !!hasStrongCertificate_;
+}
+- (void) setHasStrongCertificate:(BOOL) value {
+  hasStrongCertificate_ = !!value;
+}
+- (BOOL) strongCertificate {
+  return !!strongCertificate_;
+}
+- (void) setStrongCertificate:(BOOL) value {
+  strongCertificate_ = !!value;
+}
+- (void) dealloc {
+  self.mutableCertificatesList = nil;
+  self.fromClient = nil;
+  self.fromServer = nil;
+  self.version = nil;
+  self.mutableCeltVersionsList = nil;
+  self.address = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.session = 0;
+    self.statsOnly = NO;
+    self.fromClient = [MPUserStats_Stats defaultInstance];
+    self.fromServer = [MPUserStats_Stats defaultInstance];
+    self.udpPackets = 0;
+    self.tcpPackets = 0;
+    self.udpPingAvg = 0;
+    self.udpPingVar = 0;
+    self.tcpPingAvg = 0;
+    self.tcpPingVar = 0;
+    self.version = [MPVersion defaultInstance];
+    self.address = [NSData data];
+    self.bandwidth = 0;
+    self.onlinesecs = 0;
+    self.idlesecs = 0;
+    self.strongCertificate = NO;
+  }
+  return self;
+}
+static MPUserStats* defaultMPUserStatsInstance = nil;
++ (void) initialize {
+  if (self == [MPUserStats class]) {
+    defaultMPUserStatsInstance = [[MPUserStats alloc] init];
+  }
+}
++ (MPUserStats*) defaultInstance {
+  return defaultMPUserStatsInstance;
+}
+- (MPUserStats*) defaultInstance {
+  return defaultMPUserStatsInstance;
+}
+- (NSArray*) certificatesList {
+  return mutableCertificatesList;
+}
+- (NSData*) certificatesAtIndex:(int32_t) index {
+  id value = [mutableCertificatesList objectAtIndex:index];
+  return value;
+}
+- (NSArray*) celtVersionsList {
+  return mutableCeltVersionsList;
+}
+- (int32_t) celtVersionsAtIndex:(int32_t) index {
+  id value = [mutableCeltVersionsList objectAtIndex:index];
+  return [value intValue];
+}
+- (BOOL) isInitialized {
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasSession) {
+    [output writeUInt32:1 value:self.session];
+  }
+  if (self.hasStatsOnly) {
+    [output writeBool:2 value:self.statsOnly];
+  }
+  for (NSData* element in self.mutableCertificatesList) {
+    [output writeData:3 value:element];
+  }
+  if (self.hasFromClient) {
+    [output writeMessage:4 value:self.fromClient];
+  }
+  if (self.hasFromServer) {
+    [output writeMessage:5 value:self.fromServer];
+  }
+  if (self.hasUdpPackets) {
+    [output writeUInt32:6 value:self.udpPackets];
+  }
+  if (self.hasTcpPackets) {
+    [output writeUInt32:7 value:self.tcpPackets];
+  }
+  if (self.hasUdpPingAvg) {
+    [output writeFloat:8 value:self.udpPingAvg];
+  }
+  if (self.hasUdpPingVar) {
+    [output writeFloat:9 value:self.udpPingVar];
+  }
+  if (self.hasTcpPingAvg) {
+    [output writeFloat:10 value:self.tcpPingAvg];
+  }
+  if (self.hasTcpPingVar) {
+    [output writeFloat:11 value:self.tcpPingVar];
+  }
+  if (self.hasVersion) {
+    [output writeMessage:12 value:self.version];
+  }
+  for (NSNumber* value in self.mutableCeltVersionsList) {
+    [output writeInt32:13 value:[value intValue]];
+  }
+  if (self.hasAddress) {
+    [output writeData:14 value:self.address];
+  }
+  if (self.hasBandwidth) {
+    [output writeUInt32:15 value:self.bandwidth];
+  }
+  if (self.hasOnlinesecs) {
+    [output writeUInt32:16 value:self.onlinesecs];
+  }
+  if (self.hasIdlesecs) {
+    [output writeUInt32:17 value:self.idlesecs];
+  }
+  if (self.hasStrongCertificate) {
+    [output writeBool:18 value:self.strongCertificate];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  if (self.hasSession) {
+    size += computeUInt32Size(1, self.session);
+  }
+  if (self.hasStatsOnly) {
+    size += computeBoolSize(2, self.statsOnly);
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSData* element in self.mutableCertificatesList) {
+      dataSize += computeDataSizeNoTag(element);
+    }
+    size += dataSize;
+    size += 1 * self.mutableCertificatesList.count;
+  }
+  if (self.hasFromClient) {
+    size += computeMessageSize(4, self.fromClient);
+  }
+  if (self.hasFromServer) {
+    size += computeMessageSize(5, self.fromServer);
+  }
+  if (self.hasUdpPackets) {
+    size += computeUInt32Size(6, self.udpPackets);
+  }
+  if (self.hasTcpPackets) {
+    size += computeUInt32Size(7, self.tcpPackets);
+  }
+  if (self.hasUdpPingAvg) {
+    size += computeFloatSize(8, self.udpPingAvg);
+  }
+  if (self.hasUdpPingVar) {
+    size += computeFloatSize(9, self.udpPingVar);
+  }
+  if (self.hasTcpPingAvg) {
+    size += computeFloatSize(10, self.tcpPingAvg);
+  }
+  if (self.hasTcpPingVar) {
+    size += computeFloatSize(11, self.tcpPingVar);
+  }
+  if (self.hasVersion) {
+    size += computeMessageSize(12, self.version);
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSNumber* value in self.mutableCeltVersionsList) {
+      dataSize += computeInt32SizeNoTag([value intValue]);
+    }
+    size += dataSize;
+    size += 1 * self.mutableCeltVersionsList.count;
+  }
+  if (self.hasAddress) {
+    size += computeDataSize(14, self.address);
+  }
+  if (self.hasBandwidth) {
+    size += computeUInt32Size(15, self.bandwidth);
+  }
+  if (self.hasOnlinesecs) {
+    size += computeUInt32Size(16, self.onlinesecs);
+  }
+  if (self.hasIdlesecs) {
+    size += computeUInt32Size(17, self.idlesecs);
+  }
+  if (self.hasStrongCertificate) {
+    size += computeBoolSize(18, self.strongCertificate);
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (MPUserStats*) parseFromData:(NSData*) data {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromData:data] build];
+}
++ (MPUserStats*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats*) parseFromInputStream:(NSInputStream*) input {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromInputStream:input] build];
+}
++ (MPUserStats*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromCodedInputStream:input] build];
+}
++ (MPUserStats*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats*)[[[MPUserStats builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats_Builder*) builder {
+  return [[[MPUserStats_Builder alloc] init] autorelease];
+}
++ (MPUserStats_Builder*) builderWithPrototype:(MPUserStats*) prototype {
+  return [[MPUserStats builder] mergeFrom:prototype];
+}
+- (MPUserStats_Builder*) builder {
+  return [MPUserStats builder];
+}
+@end
+
+@interface MPUserStats_Stats ()
+@property int32_t good;
+@property int32_t late;
+@property int32_t lost;
+@property int32_t resync;
+@end
+
+@implementation MPUserStats_Stats
+
+- (BOOL) hasGood {
+  return !!hasGood_;
+}
+- (void) setHasGood:(BOOL) value {
+  hasGood_ = !!value;
+}
+@synthesize good;
+- (BOOL) hasLate {
+  return !!hasLate_;
+}
+- (void) setHasLate:(BOOL) value {
+  hasLate_ = !!value;
+}
+@synthesize late;
+- (BOOL) hasLost {
+  return !!hasLost_;
+}
+- (void) setHasLost:(BOOL) value {
+  hasLost_ = !!value;
+}
+@synthesize lost;
+- (BOOL) hasResync {
+  return !!hasResync_;
+}
+- (void) setHasResync:(BOOL) value {
+  hasResync_ = !!value;
+}
+@synthesize resync;
+- (void) dealloc {
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.good = 0;
+    self.late = 0;
+    self.lost = 0;
+    self.resync = 0;
+  }
+  return self;
+}
+static MPUserStats_Stats* defaultMPUserStats_StatsInstance = nil;
++ (void) initialize {
+  if (self == [MPUserStats_Stats class]) {
+    defaultMPUserStats_StatsInstance = [[MPUserStats_Stats alloc] init];
+  }
+}
++ (MPUserStats_Stats*) defaultInstance {
+  return defaultMPUserStats_StatsInstance;
+}
+- (MPUserStats_Stats*) defaultInstance {
+  return defaultMPUserStats_StatsInstance;
+}
+- (BOOL) isInitialized {
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasGood) {
+    [output writeUInt32:1 value:self.good];
+  }
+  if (self.hasLate) {
+    [output writeUInt32:2 value:self.late];
+  }
+  if (self.hasLost) {
+    [output writeUInt32:3 value:self.lost];
+  }
+  if (self.hasResync) {
+    [output writeUInt32:4 value:self.resync];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  if (self.hasGood) {
+    size += computeUInt32Size(1, self.good);
+  }
+  if (self.hasLate) {
+    size += computeUInt32Size(2, self.late);
+  }
+  if (self.hasLost) {
+    size += computeUInt32Size(3, self.lost);
+  }
+  if (self.hasResync) {
+    size += computeUInt32Size(4, self.resync);
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (MPUserStats_Stats*) parseFromData:(NSData*) data {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromData:data] build];
+}
++ (MPUserStats_Stats*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats_Stats*) parseFromInputStream:(NSInputStream*) input {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromInputStream:input] build];
+}
++ (MPUserStats_Stats*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats_Stats*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromCodedInputStream:input] build];
+}
++ (MPUserStats_Stats*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPUserStats_Stats*)[[[MPUserStats_Stats builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPUserStats_Stats_Builder*) builder {
+  return [[[MPUserStats_Stats_Builder alloc] init] autorelease];
+}
++ (MPUserStats_Stats_Builder*) builderWithPrototype:(MPUserStats_Stats*) prototype {
+  return [[MPUserStats_Stats builder] mergeFrom:prototype];
+}
+- (MPUserStats_Stats_Builder*) builder {
+  return [MPUserStats_Stats builder];
+}
+@end
+
+@interface MPUserStats_Stats_Builder()
+@property (retain) MPUserStats_Stats* result;
+@end
+
+@implementation MPUserStats_Stats_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[MPUserStats_Stats alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (MPUserStats_Stats_Builder*) clear {
+  self.result = [[[MPUserStats_Stats alloc] init] autorelease];
+  return self;
+}
+- (MPUserStats_Stats_Builder*) clone {
+  return [MPUserStats_Stats builderWithPrototype:result];
+}
+- (MPUserStats_Stats*) defaultInstance {
+  return [MPUserStats_Stats defaultInstance];
+}
+- (MPUserStats_Stats*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (MPUserStats_Stats*) buildPartial {
+  MPUserStats_Stats* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (MPUserStats_Stats_Builder*) mergeFrom:(MPUserStats_Stats*) other {
+  if (other == [MPUserStats_Stats defaultInstance]) {
+    return self;
+  }
+  if (other.hasGood) {
+    [self setGood:other.good];
+  }
+  if (other.hasLate) {
+    [self setLate:other.late];
+  }
+  if (other.hasLost) {
+    [self setLost:other.lost];
+  }
+  if (other.hasResync) {
+    [self setResync:other.resync];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (MPUserStats_Stats_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (MPUserStats_Stats_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 8: {
+        [self setGood:[input readUInt32]];
+        break;
+      }
+      case 16: {
+        [self setLate:[input readUInt32]];
+        break;
+      }
+      case 24: {
+        [self setLost:[input readUInt32]];
+        break;
+      }
+      case 32: {
+        [self setResync:[input readUInt32]];
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasGood {
+  return result.hasGood;
+}
+- (int32_t) good {
+  return result.good;
+}
+- (MPUserStats_Stats_Builder*) setGood:(int32_t) value {
+  result.hasGood = YES;
+  result.good = value;
+  return self;
+}
+- (MPUserStats_Stats_Builder*) clearGood {
+  result.hasGood = NO;
+  result.good = 0;
+  return self;
+}
+- (BOOL) hasLate {
+  return result.hasLate;
+}
+- (int32_t) late {
+  return result.late;
+}
+- (MPUserStats_Stats_Builder*) setLate:(int32_t) value {
+  result.hasLate = YES;
+  result.late = value;
+  return self;
+}
+- (MPUserStats_Stats_Builder*) clearLate {
+  result.hasLate = NO;
+  result.late = 0;
+  return self;
+}
+- (BOOL) hasLost {
+  return result.hasLost;
+}
+- (int32_t) lost {
+  return result.lost;
+}
+- (MPUserStats_Stats_Builder*) setLost:(int32_t) value {
+  result.hasLost = YES;
+  result.lost = value;
+  return self;
+}
+- (MPUserStats_Stats_Builder*) clearLost {
+  result.hasLost = NO;
+  result.lost = 0;
+  return self;
+}
+- (BOOL) hasResync {
+  return result.hasResync;
+}
+- (int32_t) resync {
+  return result.resync;
+}
+- (MPUserStats_Stats_Builder*) setResync:(int32_t) value {
+  result.hasResync = YES;
+  result.resync = value;
+  return self;
+}
+- (MPUserStats_Stats_Builder*) clearResync {
+  result.hasResync = NO;
+  result.resync = 0;
+  return self;
+}
+@end
+
+@interface MPUserStats_Builder()
+@property (retain) MPUserStats* result;
+@end
+
+@implementation MPUserStats_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[MPUserStats alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (MPUserStats_Builder*) clear {
+  self.result = [[[MPUserStats alloc] init] autorelease];
+  return self;
+}
+- (MPUserStats_Builder*) clone {
+  return [MPUserStats builderWithPrototype:result];
+}
+- (MPUserStats*) defaultInstance {
+  return [MPUserStats defaultInstance];
+}
+- (MPUserStats*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (MPUserStats*) buildPartial {
+  MPUserStats* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (MPUserStats_Builder*) mergeFrom:(MPUserStats*) other {
+  if (other == [MPUserStats defaultInstance]) {
+    return self;
+  }
+  if (other.hasSession) {
+    [self setSession:other.session];
+  }
+  if (other.hasStatsOnly) {
+    [self setStatsOnly:other.statsOnly];
+  }
+  if (other.mutableCertificatesList.count > 0) {
+    if (result.mutableCertificatesList == nil) {
+      result.mutableCertificatesList = [NSMutableArray array];
+    }
+    [result.mutableCertificatesList addObjectsFromArray:other.mutableCertificatesList];
+  }
+  if (other.hasFromClient) {
+    [self mergeFromClient:other.fromClient];
+  }
+  if (other.hasFromServer) {
+    [self mergeFromServer:other.fromServer];
+  }
+  if (other.hasUdpPackets) {
+    [self setUdpPackets:other.udpPackets];
+  }
+  if (other.hasTcpPackets) {
+    [self setTcpPackets:other.tcpPackets];
+  }
+  if (other.hasUdpPingAvg) {
+    [self setUdpPingAvg:other.udpPingAvg];
+  }
+  if (other.hasUdpPingVar) {
+    [self setUdpPingVar:other.udpPingVar];
+  }
+  if (other.hasTcpPingAvg) {
+    [self setTcpPingAvg:other.tcpPingAvg];
+  }
+  if (other.hasTcpPingVar) {
+    [self setTcpPingVar:other.tcpPingVar];
+  }
+  if (other.hasVersion) {
+    [self mergeVersion:other.version];
+  }
+  if (other.mutableCeltVersionsList.count > 0) {
+    if (result.mutableCeltVersionsList == nil) {
+      result.mutableCeltVersionsList = [NSMutableArray array];
+    }
+    [result.mutableCeltVersionsList addObjectsFromArray:other.mutableCeltVersionsList];
+  }
+  if (other.hasAddress) {
+    [self setAddress:other.address];
+  }
+  if (other.hasBandwidth) {
+    [self setBandwidth:other.bandwidth];
+  }
+  if (other.hasOnlinesecs) {
+    [self setOnlinesecs:other.onlinesecs];
+  }
+  if (other.hasIdlesecs) {
+    [self setIdlesecs:other.idlesecs];
+  }
+  if (other.hasStrongCertificate) {
+    [self setStrongCertificate:other.strongCertificate];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (MPUserStats_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (MPUserStats_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 8: {
+        [self setSession:[input readUInt32]];
+        break;
+      }
+      case 16: {
+        [self setStatsOnly:[input readBool]];
+        break;
+      }
+      case 26: {
+        [self addCertificates:[input readData]];
+        break;
+      }
+      case 34: {
+        MPUserStats_Stats_Builder* subBuilder = [MPUserStats_Stats builder];
+        if (self.hasFromClient) {
+          [subBuilder mergeFrom:self.fromClient];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setFromClient:[subBuilder buildPartial]];
+        break;
+      }
+      case 42: {
+        MPUserStats_Stats_Builder* subBuilder = [MPUserStats_Stats builder];
+        if (self.hasFromServer) {
+          [subBuilder mergeFrom:self.fromServer];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setFromServer:[subBuilder buildPartial]];
+        break;
+      }
+      case 48: {
+        [self setUdpPackets:[input readUInt32]];
+        break;
+      }
+      case 56: {
+        [self setTcpPackets:[input readUInt32]];
+        break;
+      }
+      case 69: {
+        [self setUdpPingAvg:[input readFloat]];
+        break;
+      }
+      case 77: {
+        [self setUdpPingVar:[input readFloat]];
+        break;
+      }
+      case 85: {
+        [self setTcpPingAvg:[input readFloat]];
+        break;
+      }
+      case 93: {
+        [self setTcpPingVar:[input readFloat]];
+        break;
+      }
+      case 98: {
+        MPVersion_Builder* subBuilder = [MPVersion builder];
+        if (self.hasVersion) {
+          [subBuilder mergeFrom:self.version];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setVersion:[subBuilder buildPartial]];
+        break;
+      }
+      case 104: {
+        [self addCeltVersions:[input readInt32]];
+        break;
+      }
+      case 114: {
+        [self setAddress:[input readData]];
+        break;
+      }
+      case 120: {
+        [self setBandwidth:[input readUInt32]];
+        break;
+      }
+      case 128: {
+        [self setOnlinesecs:[input readUInt32]];
+        break;
+      }
+      case 136: {
+        [self setIdlesecs:[input readUInt32]];
+        break;
+      }
+      case 144: {
+        [self setStrongCertificate:[input readBool]];
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasSession {
+  return result.hasSession;
+}
+- (int32_t) session {
+  return result.session;
+}
+- (MPUserStats_Builder*) setSession:(int32_t) value {
+  result.hasSession = YES;
+  result.session = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearSession {
+  result.hasSession = NO;
+  result.session = 0;
+  return self;
+}
+- (BOOL) hasStatsOnly {
+  return result.hasStatsOnly;
+}
+- (BOOL) statsOnly {
+  return result.statsOnly;
+}
+- (MPUserStats_Builder*) setStatsOnly:(BOOL) value {
+  result.hasStatsOnly = YES;
+  result.statsOnly = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearStatsOnly {
+  result.hasStatsOnly = NO;
+  result.statsOnly = NO;
+  return self;
+}
+- (NSArray*) certificatesList {
+  if (result.mutableCertificatesList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableCertificatesList;
+}
+- (NSData*) certificatesAtIndex:(int32_t) index {
+  return [result certificatesAtIndex:index];
+}
+- (MPUserStats_Builder*) replaceCertificatesAtIndex:(int32_t) index with:(NSData*) value {
+  [result.mutableCertificatesList replaceObjectAtIndex:index withObject:value];
+  return self;
+}
+- (MPUserStats_Builder*) addCertificates:(NSData*) value {
+  if (result.mutableCertificatesList == nil) {
+    result.mutableCertificatesList = [NSMutableArray array];
+  }
+  [result.mutableCertificatesList addObject:value];
+  return self;
+}
+- (MPUserStats_Builder*) addAllCertificates:(NSArray*) values {
+  if (result.mutableCertificatesList == nil) {
+    result.mutableCertificatesList = [NSMutableArray array];
+  }
+  [result.mutableCertificatesList addObjectsFromArray:values];
+  return self;
+}
+- (MPUserStats_Builder*) clearCertificatesList {
+  result.mutableCertificatesList = nil;
+  return self;
+}
+- (BOOL) hasFromClient {
+  return result.hasFromClient;
+}
+- (MPUserStats_Stats*) fromClient {
+  return result.fromClient;
+}
+- (MPUserStats_Builder*) setFromClient:(MPUserStats_Stats*) value {
+  result.hasFromClient = YES;
+  result.fromClient = value;
+  return self;
+}
+- (MPUserStats_Builder*) setFromClientBuilder:(MPUserStats_Stats_Builder*) builderForValue {
+  return [self setFromClient:[builderForValue build]];
+}
+- (MPUserStats_Builder*) mergeFromClient:(MPUserStats_Stats*) value {
+  if (result.hasFromClient &&
+      result.fromClient != [MPUserStats_Stats defaultInstance]) {
+    result.fromClient =
+      [[[MPUserStats_Stats builderWithPrototype:result.fromClient] mergeFrom:value] buildPartial];
+  } else {
+    result.fromClient = value;
+  }
+  result.hasFromClient = YES;
+  return self;
+}
+- (MPUserStats_Builder*) clearFromClient {
+  result.hasFromClient = NO;
+  result.fromClient = [MPUserStats_Stats defaultInstance];
+  return self;
+}
+- (BOOL) hasFromServer {
+  return result.hasFromServer;
+}
+- (MPUserStats_Stats*) fromServer {
+  return result.fromServer;
+}
+- (MPUserStats_Builder*) setFromServer:(MPUserStats_Stats*) value {
+  result.hasFromServer = YES;
+  result.fromServer = value;
+  return self;
+}
+- (MPUserStats_Builder*) setFromServerBuilder:(MPUserStats_Stats_Builder*) builderForValue {
+  return [self setFromServer:[builderForValue build]];
+}
+- (MPUserStats_Builder*) mergeFromServer:(MPUserStats_Stats*) value {
+  if (result.hasFromServer &&
+      result.fromServer != [MPUserStats_Stats defaultInstance]) {
+    result.fromServer =
+      [[[MPUserStats_Stats builderWithPrototype:result.fromServer] mergeFrom:value] buildPartial];
+  } else {
+    result.fromServer = value;
+  }
+  result.hasFromServer = YES;
+  return self;
+}
+- (MPUserStats_Builder*) clearFromServer {
+  result.hasFromServer = NO;
+  result.fromServer = [MPUserStats_Stats defaultInstance];
+  return self;
+}
+- (BOOL) hasUdpPackets {
+  return result.hasUdpPackets;
+}
+- (int32_t) udpPackets {
+  return result.udpPackets;
+}
+- (MPUserStats_Builder*) setUdpPackets:(int32_t) value {
+  result.hasUdpPackets = YES;
+  result.udpPackets = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearUdpPackets {
+  result.hasUdpPackets = NO;
+  result.udpPackets = 0;
+  return self;
+}
+- (BOOL) hasTcpPackets {
+  return result.hasTcpPackets;
+}
+- (int32_t) tcpPackets {
+  return result.tcpPackets;
+}
+- (MPUserStats_Builder*) setTcpPackets:(int32_t) value {
+  result.hasTcpPackets = YES;
+  result.tcpPackets = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearTcpPackets {
+  result.hasTcpPackets = NO;
+  result.tcpPackets = 0;
+  return self;
+}
+- (BOOL) hasUdpPingAvg {
+  return result.hasUdpPingAvg;
+}
+- (Float32) udpPingAvg {
+  return result.udpPingAvg;
+}
+- (MPUserStats_Builder*) setUdpPingAvg:(Float32) value {
+  result.hasUdpPingAvg = YES;
+  result.udpPingAvg = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearUdpPingAvg {
+  result.hasUdpPingAvg = NO;
+  result.udpPingAvg = 0;
+  return self;
+}
+- (BOOL) hasUdpPingVar {
+  return result.hasUdpPingVar;
+}
+- (Float32) udpPingVar {
+  return result.udpPingVar;
+}
+- (MPUserStats_Builder*) setUdpPingVar:(Float32) value {
+  result.hasUdpPingVar = YES;
+  result.udpPingVar = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearUdpPingVar {
+  result.hasUdpPingVar = NO;
+  result.udpPingVar = 0;
+  return self;
+}
+- (BOOL) hasTcpPingAvg {
+  return result.hasTcpPingAvg;
+}
+- (Float32) tcpPingAvg {
+  return result.tcpPingAvg;
+}
+- (MPUserStats_Builder*) setTcpPingAvg:(Float32) value {
+  result.hasTcpPingAvg = YES;
+  result.tcpPingAvg = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearTcpPingAvg {
+  result.hasTcpPingAvg = NO;
+  result.tcpPingAvg = 0;
+  return self;
+}
+- (BOOL) hasTcpPingVar {
+  return result.hasTcpPingVar;
+}
+- (Float32) tcpPingVar {
+  return result.tcpPingVar;
+}
+- (MPUserStats_Builder*) setTcpPingVar:(Float32) value {
+  result.hasTcpPingVar = YES;
+  result.tcpPingVar = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearTcpPingVar {
+  result.hasTcpPingVar = NO;
+  result.tcpPingVar = 0;
+  return self;
+}
+- (BOOL) hasVersion {
+  return result.hasVersion;
+}
+- (MPVersion*) version {
+  return result.version;
+}
+- (MPUserStats_Builder*) setVersion:(MPVersion*) value {
+  result.hasVersion = YES;
+  result.version = value;
+  return self;
+}
+- (MPUserStats_Builder*) setVersionBuilder:(MPVersion_Builder*) builderForValue {
+  return [self setVersion:[builderForValue build]];
+}
+- (MPUserStats_Builder*) mergeVersion:(MPVersion*) value {
+  if (result.hasVersion &&
+      result.version != [MPVersion defaultInstance]) {
+    result.version =
+      [[[MPVersion builderWithPrototype:result.version] mergeFrom:value] buildPartial];
+  } else {
+    result.version = value;
+  }
+  result.hasVersion = YES;
+  return self;
+}
+- (MPUserStats_Builder*) clearVersion {
+  result.hasVersion = NO;
+  result.version = [MPVersion defaultInstance];
+  return self;
+}
+- (NSArray*) celtVersionsList {
+  if (result.mutableCeltVersionsList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableCeltVersionsList;
+}
+- (int32_t) celtVersionsAtIndex:(int32_t) index {
+  return [result celtVersionsAtIndex:index];
+}
+- (MPUserStats_Builder*) replaceCeltVersionsAtIndex:(int32_t) index with:(int32_t) value {
+  [result.mutableCeltVersionsList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPUserStats_Builder*) addCeltVersions:(int32_t) value {
+  if (result.mutableCeltVersionsList == nil) {
+    result.mutableCeltVersionsList = [NSMutableArray array];
+  }
+  [result.mutableCeltVersionsList addObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPUserStats_Builder*) addAllCeltVersions:(NSArray*) values {
+  if (result.mutableCeltVersionsList == nil) {
+    result.mutableCeltVersionsList = [NSMutableArray array];
+  }
+  [result.mutableCeltVersionsList addObjectsFromArray:values];
+  return self;
+}
+- (MPUserStats_Builder*) clearCeltVersionsList {
+  result.mutableCeltVersionsList = nil;
+  return self;
+}
+- (BOOL) hasAddress {
+  return result.hasAddress;
+}
+- (NSData*) address {
+  return result.address;
+}
+- (MPUserStats_Builder*) setAddress:(NSData*) value {
+  result.hasAddress = YES;
+  result.address = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearAddress {
+  result.hasAddress = NO;
+  result.address = [NSData data];
+  return self;
+}
+- (BOOL) hasBandwidth {
+  return result.hasBandwidth;
+}
+- (int32_t) bandwidth {
+  return result.bandwidth;
+}
+- (MPUserStats_Builder*) setBandwidth:(int32_t) value {
+  result.hasBandwidth = YES;
+  result.bandwidth = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearBandwidth {
+  result.hasBandwidth = NO;
+  result.bandwidth = 0;
+  return self;
+}
+- (BOOL) hasOnlinesecs {
+  return result.hasOnlinesecs;
+}
+- (int32_t) onlinesecs {
+  return result.onlinesecs;
+}
+- (MPUserStats_Builder*) setOnlinesecs:(int32_t) value {
+  result.hasOnlinesecs = YES;
+  result.onlinesecs = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearOnlinesecs {
+  result.hasOnlinesecs = NO;
+  result.onlinesecs = 0;
+  return self;
+}
+- (BOOL) hasIdlesecs {
+  return result.hasIdlesecs;
+}
+- (int32_t) idlesecs {
+  return result.idlesecs;
+}
+- (MPUserStats_Builder*) setIdlesecs:(int32_t) value {
+  result.hasIdlesecs = YES;
+  result.idlesecs = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearIdlesecs {
+  result.hasIdlesecs = NO;
+  result.idlesecs = 0;
+  return self;
+}
+- (BOOL) hasStrongCertificate {
+  return result.hasStrongCertificate;
+}
+- (BOOL) strongCertificate {
+  return result.strongCertificate;
+}
+- (MPUserStats_Builder*) setStrongCertificate:(BOOL) value {
+  result.hasStrongCertificate = YES;
+  result.strongCertificate = value;
+  return self;
+}
+- (MPUserStats_Builder*) clearStrongCertificate {
+  result.hasStrongCertificate = NO;
+  result.strongCertificate = NO;
+  return self;
+}
+@end
+
+@interface MPRequestBlob ()
+@property (retain) NSMutableArray* mutableSessionTextureList;
+@property (retain) NSMutableArray* mutableSessionCommentList;
+@property (retain) NSMutableArray* mutableChannelDescriptionList;
+@end
+
+@implementation MPRequestBlob
+
+@synthesize mutableSessionTextureList;
+@synthesize mutableSessionCommentList;
+@synthesize mutableChannelDescriptionList;
+- (void) dealloc {
+  self.mutableSessionTextureList = nil;
+  self.mutableSessionCommentList = nil;
+  self.mutableChannelDescriptionList = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+  }
+  return self;
+}
+static MPRequestBlob* defaultMPRequestBlobInstance = nil;
++ (void) initialize {
+  if (self == [MPRequestBlob class]) {
+    defaultMPRequestBlobInstance = [[MPRequestBlob alloc] init];
+  }
+}
++ (MPRequestBlob*) defaultInstance {
+  return defaultMPRequestBlobInstance;
+}
+- (MPRequestBlob*) defaultInstance {
+  return defaultMPRequestBlobInstance;
+}
+- (NSArray*) sessionTextureList {
+  return mutableSessionTextureList;
+}
+- (int32_t) sessionTextureAtIndex:(int32_t) index {
+  id value = [mutableSessionTextureList objectAtIndex:index];
+  return [value intValue];
+}
+- (NSArray*) sessionCommentList {
+  return mutableSessionCommentList;
+}
+- (int32_t) sessionCommentAtIndex:(int32_t) index {
+  id value = [mutableSessionCommentList objectAtIndex:index];
+  return [value intValue];
+}
+- (NSArray*) channelDescriptionList {
+  return mutableChannelDescriptionList;
+}
+- (int32_t) channelDescriptionAtIndex:(int32_t) index {
+  id value = [mutableChannelDescriptionList objectAtIndex:index];
+  return [value intValue];
+}
+- (BOOL) isInitialized {
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  for (NSNumber* value in self.mutableSessionTextureList) {
+    [output writeUInt32:1 value:[value intValue]];
+  }
+  for (NSNumber* value in self.mutableSessionCommentList) {
+    [output writeUInt32:2 value:[value intValue]];
+  }
+  for (NSNumber* value in self.mutableChannelDescriptionList) {
+    [output writeUInt32:3 value:[value intValue]];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size = memoizedSerializedSize;
+  if (size != -1) {
+    return size;
+  }
+
+  size = 0;
+  {
+    int32_t dataSize = 0;
+    for (NSNumber* value in self.mutableSessionTextureList) {
+      dataSize += computeUInt32SizeNoTag([value intValue]);
+    }
+    size += dataSize;
+    size += 1 * self.mutableSessionTextureList.count;
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSNumber* value in self.mutableSessionCommentList) {
+      dataSize += computeUInt32SizeNoTag([value intValue]);
+    }
+    size += dataSize;
+    size += 1 * self.mutableSessionCommentList.count;
+  }
+  {
+    int32_t dataSize = 0;
+    for (NSNumber* value in self.mutableChannelDescriptionList) {
+      dataSize += computeUInt32SizeNoTag([value intValue]);
+    }
+    size += dataSize;
+    size += 1 * self.mutableChannelDescriptionList.count;
+  }
+  size += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size;
+  return size;
+}
++ (MPRequestBlob*) parseFromData:(NSData*) data {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromData:data] build];
+}
++ (MPRequestBlob*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (MPRequestBlob*) parseFromInputStream:(NSInputStream*) input {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromInputStream:input] build];
+}
++ (MPRequestBlob*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPRequestBlob*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromCodedInputStream:input] build];
+}
++ (MPRequestBlob*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (MPRequestBlob*)[[[MPRequestBlob builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (MPRequestBlob_Builder*) builder {
+  return [[[MPRequestBlob_Builder alloc] init] autorelease];
+}
++ (MPRequestBlob_Builder*) builderWithPrototype:(MPRequestBlob*) prototype {
+  return [[MPRequestBlob builder] mergeFrom:prototype];
+}
+- (MPRequestBlob_Builder*) builder {
+  return [MPRequestBlob builder];
+}
+@end
+
+@interface MPRequestBlob_Builder()
+@property (retain) MPRequestBlob* result;
+@end
+
+@implementation MPRequestBlob_Builder
+@synthesize result;
+- (void) dealloc {
+  self.result = nil;
+  [super dealloc];
+}
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[[MPRequestBlob alloc] init] autorelease];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (MPRequestBlob_Builder*) clear {
+  self.result = [[[MPRequestBlob alloc] init] autorelease];
+  return self;
+}
+- (MPRequestBlob_Builder*) clone {
+  return [MPRequestBlob builderWithPrototype:result];
+}
+- (MPRequestBlob*) defaultInstance {
+  return [MPRequestBlob defaultInstance];
+}
+- (MPRequestBlob*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (MPRequestBlob*) buildPartial {
+  MPRequestBlob* returnMe = [[result retain] autorelease];
+  self.result = nil;
+  return returnMe;
+}
+- (MPRequestBlob_Builder*) mergeFrom:(MPRequestBlob*) other {
+  if (other == [MPRequestBlob defaultInstance]) {
+    return self;
+  }
+  if (other.mutableSessionTextureList.count > 0) {
+    if (result.mutableSessionTextureList == nil) {
+      result.mutableSessionTextureList = [NSMutableArray array];
+    }
+    [result.mutableSessionTextureList addObjectsFromArray:other.mutableSessionTextureList];
+  }
+  if (other.mutableSessionCommentList.count > 0) {
+    if (result.mutableSessionCommentList == nil) {
+      result.mutableSessionCommentList = [NSMutableArray array];
+    }
+    [result.mutableSessionCommentList addObjectsFromArray:other.mutableSessionCommentList];
+  }
+  if (other.mutableChannelDescriptionList.count > 0) {
+    if (result.mutableChannelDescriptionList == nil) {
+      result.mutableChannelDescriptionList = [NSMutableArray array];
+    }
+    [result.mutableChannelDescriptionList addObjectsFromArray:other.mutableChannelDescriptionList];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (MPRequestBlob_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (MPRequestBlob_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 8: {
+        [self addSessionTexture:[input readUInt32]];
+        break;
+      }
+      case 16: {
+        [self addSessionComment:[input readUInt32]];
+        break;
+      }
+      case 24: {
+        [self addChannelDescription:[input readUInt32]];
+        break;
+      }
+    }
+  }
+}
+- (NSArray*) sessionTextureList {
+  if (result.mutableSessionTextureList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableSessionTextureList;
+}
+- (int32_t) sessionTextureAtIndex:(int32_t) index {
+  return [result sessionTextureAtIndex:index];
+}
+- (MPRequestBlob_Builder*) replaceSessionTextureAtIndex:(int32_t) index with:(int32_t) value {
+  [result.mutableSessionTextureList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addSessionTexture:(int32_t) value {
+  if (result.mutableSessionTextureList == nil) {
+    result.mutableSessionTextureList = [NSMutableArray array];
+  }
+  [result.mutableSessionTextureList addObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addAllSessionTexture:(NSArray*) values {
+  if (result.mutableSessionTextureList == nil) {
+    result.mutableSessionTextureList = [NSMutableArray array];
+  }
+  [result.mutableSessionTextureList addObjectsFromArray:values];
+  return self;
+}
+- (MPRequestBlob_Builder*) clearSessionTextureList {
+  result.mutableSessionTextureList = nil;
+  return self;
+}
+- (NSArray*) sessionCommentList {
+  if (result.mutableSessionCommentList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableSessionCommentList;
+}
+- (int32_t) sessionCommentAtIndex:(int32_t) index {
+  return [result sessionCommentAtIndex:index];
+}
+- (MPRequestBlob_Builder*) replaceSessionCommentAtIndex:(int32_t) index with:(int32_t) value {
+  [result.mutableSessionCommentList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addSessionComment:(int32_t) value {
+  if (result.mutableSessionCommentList == nil) {
+    result.mutableSessionCommentList = [NSMutableArray array];
+  }
+  [result.mutableSessionCommentList addObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addAllSessionComment:(NSArray*) values {
+  if (result.mutableSessionCommentList == nil) {
+    result.mutableSessionCommentList = [NSMutableArray array];
+  }
+  [result.mutableSessionCommentList addObjectsFromArray:values];
+  return self;
+}
+- (MPRequestBlob_Builder*) clearSessionCommentList {
+  result.mutableSessionCommentList = nil;
+  return self;
+}
+- (NSArray*) channelDescriptionList {
+  if (result.mutableChannelDescriptionList == nil) {
+    return [NSArray array];
+  }
+  return result.mutableChannelDescriptionList;
+}
+- (int32_t) channelDescriptionAtIndex:(int32_t) index {
+  return [result channelDescriptionAtIndex:index];
+}
+- (MPRequestBlob_Builder*) replaceChannelDescriptionAtIndex:(int32_t) index with:(int32_t) value {
+  [result.mutableChannelDescriptionList replaceObjectAtIndex:index withObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addChannelDescription:(int32_t) value {
+  if (result.mutableChannelDescriptionList == nil) {
+    result.mutableChannelDescriptionList = [NSMutableArray array];
+  }
+  [result.mutableChannelDescriptionList addObject:[NSNumber numberWithInt:value]];
+  return self;
+}
+- (MPRequestBlob_Builder*) addAllChannelDescription:(NSArray*) values {
+  if (result.mutableChannelDescriptionList == nil) {
+    result.mutableChannelDescriptionList = [NSMutableArray array];
+  }
+  [result.mutableChannelDescriptionList addObjectsFromArray:values];
+  return self;
+}
+- (MPRequestBlob_Builder*) clearChannelDescriptionList {
+  result.mutableChannelDescriptionList = nil;
   return self;
 }
 @end
