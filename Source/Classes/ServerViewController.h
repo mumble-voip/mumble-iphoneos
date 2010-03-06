@@ -29,16 +29,18 @@
 */
 
 #import "Connection.h"
+#import "ServerModel.h"
+#import "ServerModelItem.h"
 
 @interface ServerViewController : UITableViewController {
 	Connection *connection;
+	ServerModel *model;
 	NSString *serverHostName;
 	NSUInteger serverPortNumber;
+	BOOL serverSyncReceived;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
 - (void)dealloc;
-
-- (void) connectToHost:(NSString *)host port:(NSUInteger)port;
 
 @end

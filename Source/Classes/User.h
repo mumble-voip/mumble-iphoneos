@@ -48,7 +48,7 @@ typedef enum _TalkingState {
 		TalkingState talkState;
 		NSUInteger userSession;
 		NSString *userName;
-
+		NSUInteger depth;
 		Channel *channel;
 
 	@public
@@ -56,15 +56,20 @@ typedef enum _TalkingState {
 		int frames;
 }
 
-+ (User *) lookupBySession:(NSUInteger)session;
-+ (User *) lookupByHash:(NSString *)hash;
-+ (User *) addUserWithSession:(NSUInteger)session;
+- (void) dealloc;
+
+#pragma mark -
+
+- (NSUInteger) treeDepth;
+- (void) setTreeDepth:(NSUInteger)depth;
+
+#pragma mark -
 
 - (void) setSession:(NSUInteger)session;
 - (NSUInteger) session;
 
-- (void) setName:(NSString *)name;
-- (NSString *) name;
+- (void) setUserName:(NSString *)name;
+- (NSString *) userName;
 
 - (void) setTalking:(TalkingState)flag;
 - (TalkingState) talkingState;

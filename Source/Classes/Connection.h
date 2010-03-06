@@ -76,27 +76,27 @@ typedef enum {
 - (void) connectionOpened:(Connection *)conn;
 - (void) connectionClosed:(Connection *)conn;
 
-- (void) handleAuthenticateMessage: (MPAuthenticate *)auth;
-- (void) handleBanListMessage: (MPBanList *)banlist;
-- (void) handleRejectMessage: (MPReject *)reject;
-- (void) handleServerSyncMessage: (MPServerSync *)sync;
-- (void) handlePermissionDeniedMessage: (MPPermissionDenied *)perm;
-- (void) handleUserStateMessage: (MPUserState *)state;
-- (void) handleUserRemoveMessage: (MPUserRemove *)remove;
-- (void) handleChannelStateMesage: (MPChannelState *)state;
-- (void) handleChannelRemoveMessage: (MPChannelRemove *)remove;
+- (void) handleAuthenticateMessage: (MPAuthenticate *)msg;
+- (void) handleBanListMessage: (MPBanList *)msg;
+- (void) handleRejectMessage: (MPReject *)msg;
+- (void) handleServerSyncMessage: (MPServerSync *)msg;
+- (void) handlePermissionDeniedMessage: (MPPermissionDenied *)msg;
+- (void) handleUserStateMessage: (MPUserState *)msg;
+- (void) handleUserRemoveMessage: (MPUserRemove *)msg;
+- (void) handleChannelStateMessage: (MPChannelState *)msg;
+- (void) handleChannelRemoveMessage: (MPChannelRemove *)msg;
 - (void) handleTextMessageMessage: (MPTextMessage *)msg;
-- (void) handleACLMessage: (MPACL *)acl;
-- (void) handleQueryUsersMessage: (MPQueryUsers *)query;
-- (void) handlePingMessage: (MPPing *)ping;
-- (void) handleCryptSetupMessage: (MPCryptSetup *)setup;
-- (void) handleContextActionMessage: (MPContextAction *)action;
+- (void) handleACLMessage: (MPACL *)msg;
+- (void) handleQueryUsersMessage: (MPQueryUsers *)msg;
+- (void) handlePingMessage: (MPPing *)msg;
+- (void) handleCryptSetupMessage: (MPCryptSetup *)msg;
+- (void) handleContextActionMessage: (MPContextAction *)msg;
 - (void) handleContextActionAddMessage: (MPContextActionAdd *)add;
-- (void) handleVersionMessage: (MPVersion *)version;
-- (void) handleUserListMessage: (MPUserList *)userlist;
-- (void) handleVoiceTargetMessage: (MPVoiceTarget *)target;
-- (void) handlePermissionQueryMessage: (MPPermissionQuery *)perm;
-- (void) handleCodecVersionMessage: (MPCodecVersion *)codec;
+- (void) handleVersionMessage: (MPVersion *)msg;
+- (void) handleUserListMessage: (MPUserList *)msg;
+- (void) handleVoiceTargetMessage: (MPVoiceTarget *)msg;
+- (void) handlePermissionQueryMessage: (MPPermissionQuery *)msg;
+- (void) handleCodecVersionMessage: (MPCodecVersion *)msg;
 
 @end
 

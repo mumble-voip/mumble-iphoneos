@@ -32,80 +32,25 @@
 #import "RWLock.h"
 #import "Channel.h"
 
-static NSMutableDictionary *userSessionMap = nil;
-static RWLock *userLock = nil;
-
 @implementation User
-
-/*
- * Static getters and adder.
- */
-
-+ (void) moduleSetup {
-	userLock = [[RWLock alloc] init];
-	userSessionMap = [[NSMutableDictionary alloc] init];
-}
-
-+ (void) moduleTeardown {
-	[userLock release];
-	[userSessionMap release];
-}
-
-+ (User *) lookupBySession:(NSUInteger)session {
-	if (userSessionMap == nil || userLock == nil)
-		[self moduleSetup];
-
-	User *u;
-
-	[userLock readLock];
-	u = [userSessionMap objectForKey:[NSNumber numberWithUnsignedInt:session]];
-	[userLock unlock];
-
-	return u;
-}
-
-+ (User *) lookupByHash:(NSString *)hash {
-	if (userSessionMap == nil || userLock == nil)
-		[self moduleSetup];
-
-	NSLog(@"User: lookupByHash: not implemented.");
-	return nil;
-}
-
-+ (User *) addUserWithSession:(NSUInteger)session {
-	if (userSessionMap == nil || userLock == nil)
-		return nil;
-
-	[userLock writeLock];
-
-	User *user = [[User alloc] init];
-	[user setSession:session];
-	[userSessionMap setObject:user forKey:[NSNumber numberWithUnsignedInt:session]];
-	[user release];
-	[userLock unlock];
-
-	return user;
-}
-
-/*
- * The user class itself.
- */
-
-- (id) init {
-	self = [super init];
-	if (self == nil)
-		return nil;
-
-	userName = nil;
-
-	return self;
-}
 
 - (void) dealloc {
 	if (userName)
 		[userName release];
 	[super dealloc];
 }
+
+#pragma mark -
+
+- (NSUInteger) treeDepth {
+	return depth;
+}
+
+- (void) setTreeDepth:(NSUInteger)treeDepth {
+	depth = treeDepth;
+}
+
+#pragma mark -
 
 - (void) setSession:(NSUInteger)session {
 	userSession = session;
@@ -115,13 +60,13 @@ static RWLock *userLock = nil;
 	return userSession;
 }
 
-- (void) setName:(NSString *)name {
+- (void) setUserName:(NSString *)name {
 	if (userName)
 		[userName release];
 	userName = [name copy];
 }
 
-- (NSString *) name {
+- (NSString *) userName {
 	return userName;
 }
 

@@ -269,6 +269,7 @@
 		286C4576106D743A00B8F9A4 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 286C4575106D743A00B8F9A4 /* AboutViewController.xib */; };
 		286C45DB106D789100B8F9A4 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 286C45DA106D789100B8F9A4 /* icon.png */; };
 		286D27C510DEA04400F02B0F /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 286D27C410DEA04400F02B0F /* PublicServerList.m */; };
+		2870417F10F902F600ABD7DE /* ServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2870417E10F902F600ABD7DE /* ServerModel.m */; };
 		287EC48610EACD9000F79184 /* WelcomeScreenController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287EC48510EACD9000F79184 /* WelcomeScreenController.xib */; };
 		287EC49410EACE2900F79184 /* PublicServerListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287EC49310EACE2900F79184 /* PublicServerListController.xib */; };
 		287EC59A10EAE26E00F79184 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 287EC59910EAE26E00F79184 /* Version.m */; };
@@ -277,6 +278,8 @@
 		2892D5C710EEC92D00C18781 /* AudioOutputSpeech.m in Sources */ = {isa = PBXBuildFile; fileRef = 2892D5C610EEC92D00C18781 /* AudioOutputSpeech.m */; };
 		2892D5D810EECB3200C18781 /* AudioOutputUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2892D5D710EECB3200C18781 /* AudioOutputUser.m */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
+		28978FDC114311460099BE69 /* ServerModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28978FDA114311460099BE69 /* ServerModelTests.m */; };
+		28979013114311FF0099BE69 /* ServerModelTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28978FD8114311460099BE69 /* ServerModelTests-Info.plist */; };
 		2898E03F10DE93B600C0877B /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2898E03E10DE93B600C0877B /* Countries.plist */; };
 		28990E3210DED28200636A79 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 28990E3110DED28200636A79 /* Default.png */; };
 		28990E6810DEDC2200636A79 /* Services.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990E6710DEDC2200636A79 /* Services.m */; };
@@ -284,6 +287,11 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28B24F151071058B0027F2B1 /* Mumble.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 28B24F131071058B0027F2B1 /* Mumble.pb.m */; };
 		28B24F161071058B0027F2B1 /* Mumble.proto in Resources */ = {isa = PBXBuildFile; fileRef = 28B24F141071058B0027F2B1 /* Mumble.proto */; };
+		28B9A40811426FE900C91D13 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861428710ED294600D2B9FA /* User.m */; };
+		28B9A40911426FE900C91D13 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 284AB37310F8DCD8008D05D5 /* Channel.m */; };
+		28B9A40A11426FE900C91D13 /* ServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2870417E10F902F600ABD7DE /* ServerModel.m */; };
+		28B9A4211142709B00C91D13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		28B9A48D1142747000C91D13 /* RWLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 282E231810ED386E00383BE1 /* RWLock.m */; };
 		28BD0C5210B2F36500D85A8B /* CryptState.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BD0C5110B2F36500D85A8B /* CryptState.m */; };
 		28BD0CA710B3096900D85A8B /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BD0CA610B3096900D85A8B /* Audio.m */; };
 		28BE230C10E13D1A00F1A7A5 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE230A10E13D1A00F1A7A5 /* CountryServerListController.m */; };
@@ -402,6 +410,7 @@
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2814C28311426CE0009E8112 /* ServerModelTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ServerModelTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2822DDEF10F16B0600A5D72C /* CELT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CELT.xcodeproj; path = 3rdparty/celtbuild/CELT.xcodeproj; sourceTree = "<group>"; };
 		2822DDFA10F16B2700A5D72C /* Speex.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Speex.xcodeproj; path = 3rdparty/speexbuild/Speex.xcodeproj; sourceTree = "<group>"; };
 		2822DE0310F16B2E00A5D72C /* SpeexDSP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SpeexDSP.xcodeproj; path = 3rdparty/speexdspbuild/SpeexDSP.xcodeproj; sourceTree = "<group>"; };
@@ -670,6 +679,8 @@
 		286C45DA106D789100B8F9A4 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icons/icon.png; sourceTree = "<group>"; };
 		286D27C310DEA04400F02B0F /* PublicServerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerList.h; sourceTree = "<group>"; };
 		286D27C410DEA04400F02B0F /* PublicServerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicServerList.m; sourceTree = "<group>"; };
+		2870417D10F902F600ABD7DE /* ServerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerModel.h; sourceTree = "<group>"; };
+		2870417E10F902F600ABD7DE /* ServerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerModel.m; sourceTree = "<group>"; };
 		287EC48510EACD9000F79184 /* WelcomeScreenController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenController.xib; sourceTree = "<group>"; };
 		287EC49310EACE2900F79184 /* PublicServerListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PublicServerListController.xib; sourceTree = "<group>"; };
 		287EC59910EAE26E00F79184 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
@@ -681,6 +692,9 @@
 		2892D5D610EECB3200C18781 /* AudioOutputUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutputUser.h; sourceTree = "<group>"; };
 		2892D5D710EECB3200C18781 /* AudioOutputUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutputUser.m; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		28978FD8114311460099BE69 /* ServerModelTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ServerModelTests-Info.plist"; sourceTree = "<group>"; };
+		28978FD9114311460099BE69 /* ServerModelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerModelTests.h; sourceTree = "<group>"; };
+		28978FDA114311460099BE69 /* ServerModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerModelTests.m; sourceTree = "<group>"; };
 		2898E03E10DE93B600C0877B /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Countries.plist; path = Resources/serverlist/Countries.plist; sourceTree = "<group>"; };
 		28990E3110DED28200636A79 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/icons/Default.png; sourceTree = "<group>"; };
 		28990E6610DEDC2200636A79 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Services.h; sourceTree = "<group>"; };
@@ -763,6 +777,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2814C28011426CE0009E8112 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28B9A4211142709B00C91D13 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -820,6 +842,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		282388C211431094008BEE85 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				28978FD7114311460099BE69 /* ServerModel */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
 		284AB36910F8DC9D008D05D5 /* ServerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -830,6 +860,8 @@
 				2861428710ED294600D2B9FA /* User.m */,
 				284AB37210F8DCD8008D05D5 /* Channel.h */,
 				284AB37310F8DCD8008D05D5 /* Channel.m */,
+				2870417D10F902F600ABD7DE /* ServerModel.h */,
+				2870417E10F902F600ABD7DE /* ServerModel.m */,
 			);
 			name = ServerView;
 			sourceTree = "<group>";
@@ -1147,6 +1179,17 @@
 			name = Audio;
 			sourceTree = "<group>";
 		};
+		28978FD7114311460099BE69 /* ServerModel */ = {
+			isa = PBXGroup;
+			children = (
+				28978FD8114311460099BE69 /* ServerModelTests-Info.plist */,
+				28978FD9114311460099BE69 /* ServerModelTests.h */,
+				28978FDA114311460099BE69 /* ServerModelTests.m */,
+			);
+			name = ServerModel;
+			path = Tests/ServerModel;
+			sourceTree = "<group>";
+		};
 		28B24F111071058B0027F2B1 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -1204,6 +1247,7 @@
 			isa = PBXGroup;
 			children = (
 				28D613E6107105D800FA808A /* Mumble.app */,
+				2814C28311426CE0009E8112 /* ServerModelTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1240,6 +1284,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				282388C211431094008BEE85 /* Tests */,
 				28E516B610F0495F00AAE419 /* Dependencies */,
 				28B24F111071058B0027F2B1 /* Protocol */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -1314,6 +1359,24 @@
 			productReference = 28D613E6107105D800FA808A /* Mumble.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2814C28211426CE0009E8112 /* UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2814C28711426CE0009E8112 /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildPhases = (
+				2814C27E11426CE0009E8112 /* Resources */,
+				2814C27F11426CE0009E8112 /* Sources */,
+				2814C28011426CE0009E8112 /* Frameworks */,
+				2814C28111426CE0009E8112 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UnitTests;
+			productName = ServerModelTests;
+			productReference = 2814C28311426CE0009E8112 /* ServerModelTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1356,6 +1419,7 @@
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Mumble */,
+				2814C28211426CE0009E8112 /* UnitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1690,7 +1754,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2814C27E11426CE0009E8112 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28979013114311FF0099BE69 /* ServerModelTests-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2814C28111426CE0009E8112 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
@@ -1725,6 +1813,19 @@
 				2892D5C710EEC92D00C18781 /* AudioOutputSpeech.m in Sources */,
 				2892D5D810EECB3200C18781 /* AudioOutputUser.m in Sources */,
 				284AB37410F8DCD8008D05D5 /* Channel.m in Sources */,
+				2870417F10F902F600ABD7DE /* ServerModel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2814C27F11426CE0009E8112 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28B9A48D1142747000C91D13 /* RWLock.m in Sources */,
+				28B9A40811426FE900C91D13 /* User.m in Sources */,
+				28B9A40911426FE900C91D13 /* Channel.m in Sources */,
+				28B9A40A11426FE900C91D13 /* ServerModel.m in Sources */,
+				28978FDC114311460099BE69 /* ServerModelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1846,6 +1947,71 @@
 			};
 			name = Release;
 		};
+		2814C28511426CE0009E8112 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = Source/Mumble.pch;
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/Protocol/\n${PROJECT_DIR}/3rdparty/celt/libcelt//**\n${PROJECT_DIR}/3rdparty/speex/include//**\n${PROJECT_DIR}/3rdparty/protobuf/objectivec/Classes//**/**",
+					"${PROJECT_DIR}/3rdparty/celt/libcelt//**",
+					"${PROJECT_DIR}/3rdparty/speex/include//**",
+					"${PROJECT_DIR}/3rdparty/protobuf/objectivec/Classes//**",
+				);
+				INFOPLIST_FILE = "Tests/ServerModel/ServerModelTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = ServerModelTests;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		2814C28611426CE0009E8112 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INFOPLIST_FILE = "ServerModelTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					SenTestingKit,
+					"-framework",
+					UIKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = ServerModelTests;
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1925,6 +2091,15 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2814C28711426CE0009E8112 /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2814C28511426CE0009E8112 /* Debug */,
+				2814C28611426CE0009E8112 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

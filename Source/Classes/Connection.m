@@ -407,7 +407,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		}
 		case ServerSyncMessage: {
 			MPServerSync *ss = [MPServerSync parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleServerSyncMessage)])
+			if ([delegate respondsToSelector:@selector(handleServerSyncMessage:)])
 				[delegate handleServerSyncMessage:ss];
 			break;
 		}
@@ -419,7 +419,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		}
 		case ChannelStateMessage: {
 			MPChannelState *chs = [MPChannelState parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleChannelStateMessage:)])
+			if ([delegate respondsToSelector:@selector(handleChannelStateMessage:)]);
 				[delegate handleChannelStateMesage:chs];
 			break;
 		}
@@ -437,7 +437,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		}
 		case BanListMessage: {
 			MPBanList *bl = [MPBanList parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleBanListMessage)])
+			if ([delegate respondsToSelector:@selector(handleBanListMessage:)])
 				[delegate handleBanListMessage:bl];
 			break;
 		}
@@ -473,7 +473,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		}
 		case ContextActionAddMessage: {
 			MPContextActionAdd *caa = [MPContextActionAdd parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleContextActionAdd:)])
+			if ([delegate respondsToSelector:@selector(handleContextActionAddMessage:)])
 				[delegate handleContextActionAddMessage:caa];
 			break;
 		}
@@ -545,7 +545,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	bytes[0] = (unsigned char)msgflags;
 	memcpy(bytes+1, [pds dataPtr], [pds left]);
 
-	User *user = [User lookupBySession:session];
+	User *user = nil;//[User lookupBySession:session];
 	AudioOutput *ao = [Audio audioOutput];
 	[ao addFrameToBufferWithUser:user data:voicePacketData sequence:seq type:msgType];
 

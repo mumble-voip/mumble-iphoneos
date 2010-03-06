@@ -1,4 +1,4 @@
-/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,64 +28,37 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class User;
+#import "ServerModelTests.h"
+#import "ServerModel.h"
+#import "Channel.h"
 
-@interface Channel : NSObject {
-	Channel *channelParent;
+@implementation ServerModelTests
 
-	NSUInteger channelId;
-	NSString *channelName;
-	NSInteger position;
+- (void) testChildCount {
+	
+	ServerModel *model = [[ServerModel alloc] init];
+	STAssertNotNil(model, @"Unable to allocate server model");
 
-	BOOL inheritACL;
-	BOOL temporary;
-
-	@public
-	NSMutableArray *channelList;
-	NSMutableArray *userList;
-	NSMutableArray *ACLList;
-	NSMutableArray *linkedList;
-	NSUInteger depth;
+	Channel *root = [model rootChannel];
+	STAssertNotNil(root, @"Root channel is nil.");
+	
+	Channel *c1 = [model addChannelWithId:22 name:@"T" parent:root];
+	STAssertNotNil(c1, @"T is nil.");
+	
+	Channel *c2 = [model addChannelWithId:20 name:@"U" parent:root];
+	STAssertNotNil(c2, @"U is nil.");
+	
+	/*
+	 * Our tree should now look like this:
+	 *
+	 *  (c) Root
+	 *    (c) T
+	 *    (c) U
+	 */
+	
+	NSUInteger numChildren = [root numChildren];
+	NSLog(@"numChildren = %u", numChildren);
+	STAssertTrue([root numChildren] == 2, @"Hurray.");
 }
-
-- (id) init;
-- (void) dealloc;
-
-#pragma mark -
-
-- (void) addChannel:(Channel *)chan;
-- (void) removeChannel:(Channel *)chan;
-- (void) addUser:(User *)user;
-- (void) removeUser:(User *)user;
-- (NSUInteger) numChildren;
-
-#pragma mark -
-
-- (NSUInteger) treeDepth;
-- (void) setTreeDepth:(NSUInteger)depth;
-
-#pragma mark -
-
-- (BOOL) linkedToChannel:(Channel *)chan;
-- (void) linkToChannel:(Channel *)chan;
-- (void) unlinkFromChannel:(Channel *)chan;
-- (void) unlinkAll;
-
-#pragma mark -
-
-- (NSString *) channelName;
-- (void) setChannelName:(NSString *)name;
-
-- (void) setParent:(Channel *)chan;
-- (Channel *) parent;
-
-- (void) setChannelId:(NSUInteger)chanId;
-- (NSUInteger) channelId;
-
-- (void) setTemporary:(BOOL)flag;
-- (BOOL) temporary;
-
-- (NSInteger) position;
-- (void) setPosition:(NSInteger)pos;
 
 @end

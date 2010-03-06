@@ -37,6 +37,8 @@
 @synthesize navigationController;
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
+	NSLog(@"%@: %s", [self class], __FUNCTION__);
+
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
 

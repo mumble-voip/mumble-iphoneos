@@ -37,6 +37,8 @@
 
 @implementation ServerViewController
 
+#pragma mark UITableViewController methods
+
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port {
 	self = [super initWithNibName:@"ServerViewController" bundle:nil];
 	if (self == nil)
@@ -44,18 +46,34 @@
 
 	serverHostName = host;
 	serverPortNumber = port;
-
+	
 	connection = [[Connection alloc] init];
 	[connection setDelegate:self];
 	[connection connectToHost:serverHostName port:serverPortNumber];
 	[[[UIApplication sharedApplication] delegate] setConnection:connection];
 
+	model = [[ServerModel alloc] init];
 	return self;
 }
 
 - (void)dealloc {
     [super dealloc];
 }
+
+
+- (void)didReceiveMemoryWarning {
+	// Releases the view if it doesn't have a superview.
+    [super didReceiveMemoryWarning];
+
+	// Release any cached data, images, etc that aren't in use.
+}
+
+- (void)viewDidUnload {
+	// Release any retained subviews of the main view.
+	// e.g. self.myOutlet = nil;
+}
+
+#pragma mark Connection delegate methods
 
 /*
  * invalidSslCertificateChain.
@@ -73,7 +91,7 @@
 	[alert release];
 }
 
--(void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
+- (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	/* ok clicked. */
 	if (buttonIndex == 1) {
 		[connection reconnect];
@@ -122,18 +140,17 @@
  *
  * Sent from the server to us on connect.
  */
--(void)handleVersionMessage: (MPVersion *)version {
+-(void)handleVersionMessage: (MPVersion *)msg {
 	NSLog(@"ServerViewController: Recieved Version message..");
-#if 0
-	if (version.hasVersion)
-		NSLog(@"Version = 0x%x", version.version);
-	if (version.hasRelease)
-		NSLog(@"Release = %@", version.release);
-	if (version.hasOs)
-		NSLog(@"OS = %@", version.os);
-	if (version.hasOsVersion)
-		NSLog(@"OSVersion = %@", version.osVersion);
-#endif
+
+	if ([msg hasVersion])
+		NSLog(@"Version = 0x%x", [msg version]);
+	if ([msg hasRelease])
+		NSLog(@"Release = %@", [msg release]);
+	if ([msg hasOs])
+		NSLog(@"OS = %@", [msg os]);
+	if ([ msg hasOsVersion])
+		NSLog(@"OSVersion = %@", [msg osVersion]);
 }
 
 /*
@@ -160,171 +177,172 @@
 		NSLog(@"preferAlpha = %i", [codec preferAlpha]);
 }
 
--(void) handleChannelStateMesage:(MPChannelState *)state {
-	NSLog(@"ServerViewController: Received ChannelState message");
-	//if ([state hasChannelId])
-	//	NSLog(@"channelId = 0x%x", [state channelId]);
-	//if ([state hasParent])
-	//	NSLog(@"parentId = 0x%x", [state parent]);
-	//if ([state hasName])
-	//	NSLog(@"name = %@", [state name]);
-	// fixme(mkrautz): How to check for repeated field availability in objc protobuf?
-	//if ([state hasLinks]) {
-	//	NSArray *links = [state linksList];
-	//	for (i = 0; i < [links count]; i++) {
-	//		NSLog(@"links[%i] = %i", i, [links objectAtIndex:i]);
-	//	}
-	//}
-}
-
--(void) handleUserStateMessage:(MPUserState *)state {
+- (void) handleUserStateMessage:(MPUserState *)msg {
 	NSLog(@"ServerViewController: Recieved UserState message");
+	BOOL newUser = NO;
 
-	UInt32 session = 0;
-	UInt32 actor = 0;
-	UInt32 userId = 0;
-	UInt32 channelId = 0;
-	BOOL mute, deaf, selfMute, selfDeaf;
-	MUMBLE_UNUSED NSData *texture = nil;
-	NSString *name = nil;
-	MUMBLE_UNUSED NSString *pluginContext = nil;
-	MUMBLE_UNUSED NSString *pluginIdentity = nil;
-	MUMBLE_UNUSED NSString *comment = nil;
-	MUMBLE_UNUSED NSString *hash = nil;
-
-	if ([state hasSession]) {
-		session = [state session];
-		NSLog(@"  session = 0x%x", session);
-	}
-	if ([state hasActor]) {
-		actor = [state actor];
-		NSLog(@"  actor = 0x%x", actor);
-	}
-	if ([state hasName]) {
-		name = [[[state name] copy] autorelease];
-		NSLog(@"  name = %@", name);
-	}
-	if ([state hasUserId]) {
-		userId = [state userId];
-		NSLog(@"  userId = 0x%x", userId);
-	}
-	if ([state hasChannelId]) {
-		channelId = [state channelId];
-		NSLog(@"  channelId = 0x%x", channelId);
-	}
-	if ([state hasMute]) {
-		mute = [state mute];
-		NSLog(@"  mute = %i", mute);
-	}
-	if ([state hasDeaf]) {
-		deaf = [state deaf];
-		NSLog(@"  deaf = %i", deaf);
-	}
-	if ([state hasSelfMute]) {
-		selfMute = [state selfMute];
-		NSLog(@"  selfMute = %i", selfMute);
-	}
-	if ([state hasSelfDeaf]) {
-		selfDeaf = [state selfDeaf];
-		NSLog(@"  selfDeaf = %i", selfDeaf);
-	}
-
-	/*NSData *texture = [state texture];
-	NSString *pluginContext = [state pluginContext];
-	NSString *pluginIdentity = [state pluginIdentity];
-	NSString *comment = [state comment];
-	NSString *hash = [state hash];*/
-
-
-	User *user = nil;
-
-	if (! session) {
-		NSLog(@"ServerViewController: Somthing has gone horribly wrong. No session in UserState packet.");
-	}
-
-	user = [User lookupBySession:session];
-	if (! user && name) {
-		user = [User addUserWithSession:session];
-		[user setName:name];
-		NSLog(@"ServerViewController: Added user for session=%u (%@)...", session, name);
-	} else {
-		NSLog(@"ServerViewController: No user created, but no name in packet.");
+	if (![msg hasSession]) {
 		return;
 	}
+
+	NSUInteger session = [msg session];
+	User *user = [model userWithSession:session];
+	if (user == nil) {
+		if ([msg hasName]) {
+			NSLog(@"Adding user....!");
+			user = [model addUserWithSession:session name:[msg name]];
+			if (serverSyncReceived == YES)
+				[[self tableView] reloadData];
+		} else {
+			return;
+		}
+	}
+
+	if ([msg hasUserId]) {
+		[model setIdForUser:user to:[msg userId]];
+	}
+
+	if ([msg hasHash]) {
+		[model setHashForUser:user to:[msg hash]];
+		/* Check if user is a friend? */
+	}
+
+	if (newUser) {
+		NSLog(@"%@ connected.", [user userName]);
+	}
+	
+	if ([msg hasChannelId]) {
+		Channel *chan = [model channelWithId:[msg channelId]];
+		if (chan == nil) {
+			NSLog(@"ServerViewController: UserState with invalid channelId.");
+		}
+		
+		Channel *oldChan = [user channel];
+		if (chan != oldChan) {
+			[model moveUser:user toChannel:chan];
+			NSLog(@"Moved user '%@' to channel '%@'", [user userName], [chan channelName]);
+		}
+	}
+	
+	if ([msg hasName]) {
+		[model renameUser:user to:[msg name]];
+	}
+	
+	if ([msg hasTexture]) {
+		NSLog(@"ServerViewController: User has texture.. Discarding.");
+	}
+	
+	if ([msg hasComment]) {
+		NSLog(@"ServerViewControler: User has comment... Discarding.");
+	}
+	
+	[[self tableView] reloadData];
 }
 
--(void) handleServerSyncMessage:(MPServerSync *)sync {
+- (void) handleUserRemoveMessage:(MPUserRemove *)msg {
+	NSLog(@"ServerViewController: Recieved UserRemove message");
+}
+
+- (void) handleChannelStateMesage:(MPChannelState *)msg {
+	NSLog(@"ServerViewController: Received ChannelState message");
+	BOOL updateModel = NO;
+
+	if (![msg hasChannelId]) {
+		NSLog(@"ServerViewController: ChannelState without channelId.");
+		return;
+	}
+
+	Channel *chan = [model channelWithId:[msg channelId]];
+	Channel *parent = [msg hasParent] ? [model channelWithId:[msg parent]] : NULL;
+
+	if (!chan) {
+		if ([msg hasParent] && [msg hasName]) {
+			NSLog(@"Adding new channel....");
+			chan = [model addChannelWithId:[msg channelId] name:[msg name] parent:parent];
+			if ([msg hasTemporary]) {
+				[chan setTemporary:[msg temporary]];
+			}
+			updateModel = YES;
+		} else {
+			return;
+		}
+	}
+
+	if (parent) {
+		NSLog(@"Moving %@ to %@", [chan channelName], [parent channelName]);
+		[model moveChannel:chan toChannel:parent];
+		updateModel = YES;
+	}
+
+	if ([msg hasName]) {
+		[model renameChannel:chan to:[msg name]];
+		updateModel = YES;
+	}
+
+	if ([msg hasDescription]) {
+		[model setCommentForChannel:chan to:[msg description]];
+		updateModel = YES;
+	}
+
+	if ([msg hasPosition]) {
+		[model repositionChannel:chan to:[msg position]];
+		updateModel = YES;
+	}
+	
+	/*
+	 * Handle links.
+	 */
+
+	if (serverSyncReceived == YES && updateModel == YES) {
+		[[self tableView] reloadData];
+	}
+}
+
+- (void) handleChannelRemoveMessage:(MPChannelRemove *)msg {
+	NSLog(@"ServerViewController: ChannelRemove message");
+
+	if (! [msg hasChannelId]) {
+		NSLog(@"ServerViewController: ChannelRemove without channelId.");
+		return;
+	}
+
+	Channel *chan = [model channelWithId:[msg channelId]];
+	if (chan && [chan channelId] != 0) {
+		[model removeChannel:chan];
+		if (serverSyncReceived == YES) {
+			[[self tableView] reloadData];
+		}
+	}
+}
+
+- (void) handleServerSyncMessage:(MPServerSync *)msg {
 	NSLog(@"ServerViewController: Recieved ServerSync message");
+	if (![msg hasSession]) {
+		NSLog(@"ServerViewController: Invalid ServerSync recieved.");
+		return;
+	}
+
+	NSLog(@"ServerSync: Our session=%u", [msg session]);
+	
+	[[self tableView] reloadData];
+	NSLog(@"reloadedData...");
 }
 
--(void) handlePermissionQueryMessage:(MPPermissionQuery *)perm {
+- (void) handlePermissionQueryMessage:(MPPermissionQuery *)perm {
 }
 
-/*
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-*/
-
-/*
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
-}
-*/
-
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
-
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-
-#pragma mark Table view methods
+#pragma mark Table View methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-
-// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    NSInteger numRows = [model count];
+	NSLog(@"ServerViewController: numRows = %i", numRows);
+	return numRows;
 }
 
-
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *CellIdentifier = @"serverViewCell";
@@ -333,72 +351,26 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-	cell.indentationWidth = 15.0f;
-	NSUInteger rowNumber = [indexPath indexAtPosition:1];
-
-	if (rowNumber == 0) {
-		cell.textLabel.text = @"Root";
-		UIImage *image = [PDFImageLoader imageFromPDF:@"channel"];
-		NSLog(@"rootImage =%p", image);
-		cell.imageView.image = image;
-		cell.indentationLevel = 0;
-	} else if (rowNumber == 1) {
-		cell.textLabel.text = @"User";
-		UIImage *image = [PDFImageLoader imageFromPDF:@"talking_off"];
-		NSLog(@"userImage=%p", image);
-		cell.imageView.image = image;
-		cell.indentationLevel = 1;
+	
+	id object = [model objectAtIndex:[indexPath indexAtPosition:1]];
+	if ([object class] == [Channel class]) {
+		Channel *c = (Channel *)object;
+		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
+		cell.textLabel.text = [c channelName];
+	} else if ([object class] == [User class]) {
+		User *u = (User *)object;
+		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
+		cell.textLabel.text = [u userName];
 	}
+
+	cell.indentationWidth = 6.0f;
+	cell.indentationLevel = [object treeDepth];
 
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 @end
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -32,109 +32,39 @@
 #import "Channel.h"
 #import "User.h"
 
-static NSMutableDictionary *channelIdMap = nil;
-static RWLock *channelLock = nil;
-
 @implementation Channel
 
-+ (void) moduleSetup {
-	channelIdMap = [[NSMutableDictionary alloc] init];
-	channelLock = [[RWLock alloc] init];
-}
-
-+ (void) moduleTeardown {
-	[channelIdMap release];
-	[channelLock release];
-}
-
-/*
- * Lookup a channel by id.
- */
-+ (Channel *) getWithId:(NSUInteger)channelId {
-	if (channelIdMap == nil)
-		return nil;
-
-	[channelLock readLock];
-	Channel *chan = [channelIdMap objectForKey:[NSNumber numberWithUnsignedInt:channelId]];
-	[channelLock unlock];
-	return chan;
-}
-
-/*
- * Add a new channel with an id.
- */
-+ (Channel *) addNewWithId:(NSUInteger)channelId {
-	if (channelIdMap == nil || channelLock == nil)
-		[self moduleSetup];
-
-	[channelLock writeLock];
-	Channel *chan = [channelIdMap objectForKey:[NSNumber numberWithUnsignedInt:channelId]];
-	if (chan != nil) {
-		NSLog(@"Channel: Attempted to add already-existing channel ID.");
-		return nil;
-	}
-
-	chan = [[Channel alloc] initWithId:channelId];
-	[channelIdMap setObject:chan forKey:[NSNumber numberWithUnsignedInt:channelId]];
-	[chan release];
-	[channelLock unlock];
-
-	return chan;
-}
-
-/*
- * Remove channel by id.
- */
-+ (void) removeWithId:(NSUInteger)channelId {
-	if (channelIdMap == nil)
-		return;
-
-	[channelLock writeLock];
-	[channelIdMap removeObjectForKey:[NSNumber numberWithUnsignedInt:channelId]];
-	[channelLock unlock];
-}
-
-#pragma mark -
-
-- (id) initWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(Channel *)parent {
+- (id) init {
 	self = [super init];
 	if (self == nil)
 		return nil;
 
-	channelId = chanId;
-	channelName = [chanName copy];
 	inheritACL = YES;
-	temporary = NO;
-
 	channelList = [[NSMutableArray alloc] init];
 	userList = [[NSMutableArray alloc] init];
-	aclList = [[NSMutableArray alloc] init];
-
-	if (parent) {
-		channelParent = parent;
-		[channelParent addChannel:self];
-	}
+	ACLList = [[NSMutableArray alloc] init];
 
 	return self;
 }
 
-- (id) initWithId:(NSUInteger)chanId name:(NSString *)chanName {
-	return [self initWithId:chanId name:chanName parent:nil];
-}
-
-- (id) initWithId:(NSUInteger)chanId {
-	return [self initWithId:chanId name:nil parent:nil];
-}
-
 - (void) dealloc {
-	[channelParent removeChannel:self];
 	[channelName release];
 
 	[userList release];
 	[channelList release];
-	[aclList release];
+	[ACLList release];
 
 	[super dealloc];
+}
+
+#pragma mark -
+
+- (NSUInteger) treeDepth {
+	return depth;
+}
+
+- (void) setTreeDepth:(NSUInteger)treeDepth {
+	depth = treeDepth;
 }
 
 #pragma mark -
@@ -149,8 +79,6 @@ static RWLock *channelLock = nil;
 	[channelList removeObject:chan];
 }
 
-#pragma mark -
-
 - (void) addUser:(User *)user {
 	Channel *chan = [user channel];
 	[chan removeUser:user];
@@ -160,6 +88,14 @@ static RWLock *channelLock = nil;
 
 - (void) removeUser:(User *)user {
 	[userList removeObject:user];
+}
+
+- (NSUInteger) numChildren {
+	NSUInteger count = 0;
+	for (Channel *c in channelList) {
+		count += 1 + [c numChildren];
+	}
+	return count + [userList count];
 }
 
 #pragma mark -
@@ -194,6 +130,15 @@ static RWLock *channelLock = nil;
 
 #pragma mark -
 
+- (void) setChannelName:(NSString *)name {
+	[channelName release];
+	channelName = [name copy];
+}
+
+- (NSString *) channelName {
+	return channelName;
+}
+
 - (void) setParent:(Channel *)chan {
 	channelParent = chan;
 }
@@ -202,5 +147,28 @@ static RWLock *channelLock = nil;
 	return channelParent;
 }
 
+- (void) setChannelId:(NSUInteger)chanId {
+	channelId = chanId;
+}
+
+- (NSUInteger) channelId {
+	return channelId;
+}
+
+- (void) setTemporary:(BOOL)flag {
+	temporary = flag;
+}
+
+- (BOOL) temporary {
+	return temporary;
+}
+
+- (NSInteger) position {
+	return position;
+}
+
+- (void) setPosition:(NSInteger)pos {
+	position = pos;
+}
 
 @end

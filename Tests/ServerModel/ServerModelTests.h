@@ -1,4 +1,4 @@
-/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,64 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class User;
+#import <SenTestingKit/SenTestingKit.h>
+#import <UIKit/UIKit.h>
 
-@interface Channel : NSObject {
-	Channel *channelParent;
-
-	NSUInteger channelId;
-	NSString *channelName;
-	NSInteger position;
-
-	BOOL inheritACL;
-	BOOL temporary;
-
-	@public
-	NSMutableArray *channelList;
-	NSMutableArray *userList;
-	NSMutableArray *ACLList;
-	NSMutableArray *linkedList;
-	NSUInteger depth;
+@interface ServerModelTests : SenTestCase {
 }
 
-- (id) init;
-- (void) dealloc;
-
-#pragma mark -
-
-- (void) addChannel:(Channel *)chan;
-- (void) removeChannel:(Channel *)chan;
-- (void) addUser:(User *)user;
-- (void) removeUser:(User *)user;
-- (NSUInteger) numChildren;
-
-#pragma mark -
-
-- (NSUInteger) treeDepth;
-- (void) setTreeDepth:(NSUInteger)depth;
-
-#pragma mark -
-
-- (BOOL) linkedToChannel:(Channel *)chan;
-- (void) linkToChannel:(Channel *)chan;
-- (void) unlinkFromChannel:(Channel *)chan;
-- (void) unlinkAll;
-
-#pragma mark -
-
-- (NSString *) channelName;
-- (void) setChannelName:(NSString *)name;
-
-- (void) setParent:(Channel *)chan;
-- (Channel *) parent;
-
-- (void) setChannelId:(NSUInteger)chanId;
-- (NSUInteger) channelId;
-
-- (void) setTemporary:(BOOL)flag;
-- (BOOL) temporary;
-
-- (NSInteger) position;
-- (void) setPosition:(NSInteger)pos;
+- (void) testChildCount;
 
 @end
