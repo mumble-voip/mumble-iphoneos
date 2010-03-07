@@ -34,6 +34,8 @@
 		28A4934B11431863000627EB /* MKAudioOutputSpeech.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4934111431863000627EB /* MKAudioOutputSpeech.m */; };
 		28A4934C11431863000627EB /* MKAudioOutputUser.h in Headers */ = {isa = PBXBuildFile; fileRef = 28A4934211431863000627EB /* MKAudioOutputUser.h */; };
 		28A4934D11431863000627EB /* MKAudioOutputUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4934311431863000627EB /* MKAudioOutputUser.m */; };
+		28AE414A11432A26004B3046 /* MKServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 28AE414911432A26004B3046 /* MKServices.h */; };
+		28AE414C11432A2E004B3046 /* MKServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 28AE414B11432A2E004B3046 /* MKServices.m */; };
 		AA747D9F0F9514B9006C5449 /* MumbleKit.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* MumbleKit.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,8 @@
 		28A4934111431863000627EB /* MKAudioOutputSpeech.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKAudioOutputSpeech.m; path = src/MKAudioOutputSpeech.m; sourceTree = "<group>"; };
 		28A4934211431863000627EB /* MKAudioOutputUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKAudioOutputUser.h; sourceTree = "<group>"; };
 		28A4934311431863000627EB /* MKAudioOutputUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKAudioOutputUser.m; path = src/MKAudioOutputUser.m; sourceTree = "<group>"; };
+		28AE414911432A26004B3046 /* MKServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKServices.h; sourceTree = "<group>"; };
+		28AE414B11432A2E004B3046 /* MKServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKServices.m; path = src/MKServices.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* MumbleKit.pch */ = {isa = PBXFileReference; explicitFileType = sourcecode; fileEncoding = 4; name = MumbleKit.pch; path = src/MumbleKit.pch; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libMumbleKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMumbleKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +122,7 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				28AE414B11432A2E004B3046 /* MKServices.m */,
 				28750A4511431D2E002885AF /* MKChannel.m */,
 				28750A4611431D2E002885AF /* MKConnection.m */,
 				28750A4711431D2E002885AF /* MKCryptState.m */,
@@ -137,6 +142,7 @@
 		287509B511431932002885AF /* MumbleKit */ = {
 			isa = PBXGroup;
 			children = (
+				28AE414911432A26004B3046 /* MKServices.h */,
 				28750A5111431D39002885AF /* MKChannel.h */,
 				28750A5211431D39002885AF /* MKConnection.h */,
 				28750A5311431D39002885AF /* MKCryptState.h */,
@@ -184,6 +190,7 @@
 				28750A5A11431D39002885AF /* MKPacketDataStream.h in Headers */,
 				28750A5B11431D39002885AF /* MKServerModel.h in Headers */,
 				28750A5C11431D39002885AF /* MKUser.h in Headers */,
+				28AE414A11432A26004B3046 /* MKServices.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +249,7 @@
 				28750A4E11431D2E002885AF /* MKPacketDataStream.m in Sources */,
 				28750A4F11431D2E002885AF /* MKServerModel.m in Sources */,
 				28750A5011431D2E002885AF /* MKUser.m in Sources */,
+				28AE414C11432A2E004B3046 /* MKServices.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

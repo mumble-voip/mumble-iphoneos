@@ -29,7 +29,7 @@
 */
 
 #import "PublicServerList.h"
-#import "Services.h"
+#import <MumbleKit/MKServices.h>
 
 @implementation PublicServerList
 
@@ -60,7 +60,7 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 
 - (void) load {
 	// Setup request.
-	urlRequest = [NSURLRequest requestWithURL:[Services regionalServerListURL]];
+	urlRequest = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
 	[NSURLConnection connectionWithRequest:urlRequest delegate:self];
 }
 

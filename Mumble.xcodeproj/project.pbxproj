@@ -277,7 +277,6 @@
 		28979013114311FF0099BE69 /* ServerModelTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28978FD8114311460099BE69 /* ServerModelTests-Info.plist */; };
 		2898E03F10DE93B600C0877B /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2898E03E10DE93B600C0877B /* Countries.plist */; };
 		28990E3210DED28200636A79 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 28990E3110DED28200636A79 /* Default.png */; };
-		28990E6810DEDC2200636A79 /* Services.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990E6710DEDC2200636A79 /* Services.m */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28B24F151071058B0027F2B1 /* Mumble.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 28B24F131071058B0027F2B1 /* Mumble.pb.m */; };
 		28B24F161071058B0027F2B1 /* Mumble.proto in Resources */ = {isa = PBXBuildFile; fileRef = 28B24F141071058B0027F2B1 /* Mumble.proto */; };
@@ -684,8 +683,6 @@
 		28978FDA114311460099BE69 /* ServerModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerModelTests.m; sourceTree = "<group>"; };
 		2898E03E10DE93B600C0877B /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Countries.plist; path = Resources/serverlist/Countries.plist; sourceTree = "<group>"; };
 		28990E3110DED28200636A79 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/icons/Default.png; sourceTree = "<group>"; };
-		28990E6610DEDC2200636A79 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Services.h; sourceTree = "<group>"; };
-		28990E6710DEDC2200636A79 /* Services.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Services.m; sourceTree = "<group>"; };
 		28A0AAE50D9B0CCF005BE974 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Source/MainWindow.xib; sourceTree = "<group>"; };
 		28B24F121071058B0027F2B1 /* Mumble.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mumble.pb.h; sourceTree = "<group>"; };
@@ -776,8 +773,6 @@
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				2863CA08106E098700F07F5F /* LanServerListDataSource.h */,
 				2863CA09106E098700F07F5F /* LanServerListDataSource.m */,
-				28990E6610DEDC2200636A79 /* Services.h */,
-				28990E6710DEDC2200636A79 /* Services.m */,
 				28BE268E10E17EF000F1A7A5 /* PDFImageLoader.h */,
 				28BE268F10E17EF000F1A7A5 /* PDFImageLoader.m */,
 				28BD0C7C10B305DB00D85A8B /* Version.h */,
@@ -1753,7 +1748,6 @@
 				286930EF10CAFFA30064D737 /* AboutDialog.m in Sources */,
 				2869323E10CB0EF30064D737 /* AboutViewController.m in Sources */,
 				286D27C510DEA04400F02B0F /* PublicServerList.m in Sources */,
-				28990E6810DEDC2200636A79 /* Services.m in Sources */,
 				28BE230C10E13D1A00F1A7A5 /* CountryServerListController.m in Sources */,
 				28BE246C10E155B300F1A7A5 /* ServerViewController.m in Sources */,
 				28BE269010E17EF000F1A7A5 /* PDFImageLoader.m in Sources */,

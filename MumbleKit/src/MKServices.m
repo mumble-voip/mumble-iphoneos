@@ -28,9 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Services.h"
+#import <MumbleKit/MKServices.h>
 
-@implementation Services
+@implementation MKServices
 
 + (NSString *) regionalServicesHost {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -44,11 +44,11 @@
  */
 
 + (NSString *) regionalServerList {
-	return [NSString stringWithFormat:@"%@/list2.cgi", [Services regionalServicesHost]];
+	return [NSString stringWithFormat:@"%@/list2.cgi", [MKServices regionalServicesHost]];
 }
 
 + (NSURL *) regionalServerListURL {
-	return [NSURL URLWithString:[Services regionalServerList]];
+	return [NSURL URLWithString:[MKServices regionalServerList]];
 }
 
 @end

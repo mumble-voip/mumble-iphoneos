@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface Services : NSObject
+@interface MKServices : NSObject
 + (NSString *) regionalServicesHost;
 + (NSString *) regionalServerList;
 + (NSURL *) regionalServerListURL;
