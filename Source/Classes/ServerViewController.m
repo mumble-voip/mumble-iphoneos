@@ -242,7 +242,7 @@
 	NSLog(@"ServerViewController: Recieved UserRemove message");
 }
 
-- (void) handleChannelStateMesage:(MPChannelState *)msg {
+- (void) handleChannelStateMessage:(MPChannelState *)msg {
 	NSLog(@"ServerViewController: Received ChannelState message");
 	BOOL updateModel = NO;
 
