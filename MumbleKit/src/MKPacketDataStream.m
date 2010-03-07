@@ -29,9 +29,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "PacketDataStream.h"
+#import <MumbleKit/MKPacketDataStream.h>
 
-@implementation PacketDataStream
+@implementation MKPacketDataStream
 
 - (id) initWithData:(NSData *)ourContainer {
 	self = [super init];

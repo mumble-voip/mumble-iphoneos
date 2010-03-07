@@ -1,4 +1,5 @@
 /* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+   Copyright (C) 2005-2010 Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
 
@@ -28,21 +29,26 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <pthread.h>
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKAudioOutputUser.h>
 
-@interface RWLock : NSObject {
-	pthread_rwlock_t rwlock;
+@interface MKAudioOutputUser : NSObject {
+	NSString *name;
+	NSUInteger bufferSize;
+	float *buffer;
+	float *volume;
+	float pos[3];
 }
 
 - (id) init;
 - (void) dealloc;
 
-- (BOOL) tryWriteLock;
-- (void) writeLock;
+- (MKUser *) user;
+- (float *) buffer;
+- (NSUInteger) bufferLength;
 
-- (BOOL) tryReadLock;
-- (void) readLock;
 
-- (void) unlock;
+- (BOOL) needSamples:(NSUInteger)nsamples;
+- (void) resizeBuffer:(NSUInteger)newSize;
 
 @end

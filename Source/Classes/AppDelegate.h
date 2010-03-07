@@ -28,12 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AudioOutput.h"
-#import "AudioInput.h"
-#import "Connection.h"
-
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
-	Connection *connection;
 	UIWindow *window;
 	UINavigationController *navigationController;
 }
@@ -43,9 +38,6 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application;
 - (void) applicationWillTerminate:(UIApplication *)application;
-
-- (void) setConnection:(Connection *)conn;
-- (Connection *) connection;
 
 @end
 

@@ -1,5 +1,4 @@
-/* Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -29,59 +28,63 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * This code implements OCB-AES128.
- * In the US, OCB is covered by patents. The inventor has given a license
- * to all programs distributed under the GPL.
- * Mumble is BSD (revised) licensed, meaning you can use the code in a
- * closed-source program. If you do, you'll have to either replace
- * OCB with something else or get yourself a license.
- */
+#import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKConnection.h>
+#import <AudioUnit/AudioUnit.h>
+#import <AudioUnit/AUComponent.h>
+#import <AudioToolbox/AudioToolbox.h>
 
-#import "CryptState.h"
+#include <speex/speex.h>
+#include <speex/speex_preprocess.h>
+#include <speex/speex_echo.h>
+#include <speex/speex_resampler.h>
+#include <speex/speex_jitter.h>
+#include <speex/speex_types.h>
+#include <celt.h>
 
-@implementation CryptState
+@interface MKAudioInput : NSObject {
 
-- (id) init {
-	int i;
+	@public
+		AudioUnit audioUnit;
+		AudioBufferList buflist;
+		int micSampleSize;
+		int numMicChannels;
 
-	self = [super init];
-	if (self == nil)
-		return nil;
+	@protected
+		int frameSize;
+		int micFrequency;
+		int sampleRate;
 
-	for (i = 0; i < 0x100; i++)
-		decryptHistory[i] = 0;
+		int	micFilled;
+		int micLength;
+		BOOL previousVoice;
+		SpeexPreprocessState *preprocessorState;
+		int audioQuality;
+		int numAudioFrames;
+		int bitrate;
+		int frameCounter;
 
-	initialized = NO;
-	numGood = numLost = numResync = 0;
+		BOOL doResetPreprocessor;
 
-	return self;
+		short *psMic;
+
+		MKCodecFormat cfType;
+
+		MKUDPMessageType udpMessageType;
+		CELTEncoder *celtEncoder;
+		NSMutableArray *frameList;
 }
 
-- (void) dealloc {
-	[super dealloc];
-	NSLog(@"CryptState: Dealloc.");
-}
+- (id) init;
+- (void) dealloc;
 
-- (BOOL) valid {
-	return initialized;
-}
+- (BOOL) setupDevice;
+- (void) initializeMixer;
 
-- (void) generateKey {
-}
+- (void) resetPreprocessor;
+- (void) addMicrophoneDataWithBuffer:(short *)input amount:(NSUInteger)nsamp;
+- (void) encodeAudioFrame;
+- (void) flushCheck:(NSData *)outputBuffer terminator:(BOOL)terminator;
 
-- (void) setKey:(NSData *)key eiv:(NSData *)enc div:(NSData *)dec {
-}
-
-- (void) setDecryptIV:(NSData *)dec {
-}
-
-- (NSData *) encryptData:(NSData *)data {
-	return nil;
-}
-
-- (NSData *) decryptData:(NSData *)data {
-	return nil;
-}
 
 @end

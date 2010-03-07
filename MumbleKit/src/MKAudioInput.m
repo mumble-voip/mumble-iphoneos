@@ -29,12 +29,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AudioInput.h"
-#import "PacketDataStream.h"
+#import <MumbleKit/MKAudioInput.h>
+#import <MumbleKit/MKPacketDataStream.h>
 
 static OSStatus inputCallback(void *udata, AudioUnitRenderActionFlags *flags, const AudioTimeStamp *ts,
                               UInt32 busnum, UInt32 nframes, AudioBufferList *buflist) {
-	AudioInput *i = (AudioInput *)udata;
+	MKAudioInput *i = (MKAudioInput *)udata;
 	OSStatus err;
 
 	if (! i->buflist.mBuffers->mData) {
@@ -68,7 +68,7 @@ static OSStatus inputCallback(void *udata, AudioUnitRenderActionFlags *flags, co
 	return noErr;
 }
 
-@implementation AudioInput
+@implementation MKAudioInput
 
 - (id) init {
 	self = [super init];
@@ -363,7 +363,7 @@ static OSStatus inputCallback(void *udata, AudioUnitRenderActionFlags *flags, co
 	unsigned char data[1024];
 	data[0] = (unsigned char )(flags & 0xff);
 
-	PacketDataStream *pds = [[PacketDataStream alloc] initWithBuffer:(data+1) length:1023];
+	MKPacketDataStream *pds = [[MKPacketDataStream alloc] initWithBuffer:(data+1) length:1023];
 	[pds addVarint:(frameCounter - [frameList count])];
 
 	/* fix terminator stuff here. */
@@ -382,6 +382,7 @@ static OSStatus inputCallback(void *udata, AudioUnitRenderActionFlags *flags, co
 	NSUInteger len = [pds size] + 1;
 	[pds release];
 
+#if 0
 	Connection *conn = [[[UIApplication sharedApplication] delegate] connection];
 
 	if ([conn connected]) {
@@ -389,6 +390,7 @@ static OSStatus inputCallback(void *udata, AudioUnitRenderActionFlags *flags, co
 		[conn sendMessageWithType:UDPTunnelMessage data:msgData];
 		[msgData release];
 	}
+#endif
 }
 
 @end

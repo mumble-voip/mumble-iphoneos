@@ -29,7 +29,7 @@
 */
 
 #import "ServerModelTests.h"
-#import "ServerModel.h"
+#import <MServerModel.h"
 #import "Channel.h"
 
 @implementation ServerModelTests

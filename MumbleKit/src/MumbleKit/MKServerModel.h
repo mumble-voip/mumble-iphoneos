@@ -28,18 +28,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "User.h"
-#import "Channel.h"
-#import "RWLock.h"
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKChannel.h>
+#import <MumbleKit/MKReadWriteLock.h>
 
-@interface ServerModel : NSObject {
-	Channel *root;
+@interface MKServerModel : NSObject {
+	MKChannel *root;
 	NSMutableArray *array;
 	
-	RWLock *userMapLock;
+	MKReadWriteLock *userMapLock;
 	NSMutableDictionary *userMap;
 
-	RWLock *channelMapLock;
+	MKReadWriteLock *channelMapLock;
 	NSMutableDictionary *channelMap;
 }
 
@@ -47,37 +47,37 @@
 - (void) dealloc;
 
 - (void) updateModelArray;
-- (void) addChannelTreeToArray:(Channel *)tree depth:(NSUInteger)currentDepth;
+- (void) addChannelTreeToArray:(MKChannel *)tree depth:(NSUInteger)currentDepth;
 
 - (NSUInteger) count;
 - (id) objectAtIndex:(NSUInteger)idx;
 
 #pragma mark -
 
-- (User *) addUserWithSession:(NSUInteger)userSession name:(NSString *)userName;
-- (User *) userWithSession:(NSUInteger)session;
-- (User *) userWithHash:(NSString *)hash;
-- (void) renameUser:(User *)user to:(NSString *)newName;
-- (void) setIdForUser:(User *)user to:(NSUInteger)newId;
-- (void) setHashForUser:(User *)user to:(NSString *)newHash;
-- (void) setFriendNameForUser:(User *)user to:(NSString *)newFriendName;
-- (void) setCommentForUser:(User *) to:(NSString *)newComment;
-- (void) setSeenCommentForUser:(User *)user;
-- (void) moveUser:(User *)user toChannel:(Channel *)chan;
-- (void) removeUser:(User *)user;
+- (MKUser *) addUserWithSession:(NSUInteger)userSession name:(NSString *)userName;
+- (MKUser *) userWithSession:(NSUInteger)session;
+- (MKUser *) userWithHash:(NSString *)hash;
+- (void) renameUser:(MKUser *)user to:(NSString *)newName;
+- (void) setIdForUser:(MKUser *)user to:(NSUInteger)newId;
+- (void) setHashForUser:(MKUser *)user to:(NSString *)newHash;
+- (void) setFriendNameForUser:(MKUser *)user to:(NSString *)newFriendName;
+- (void) setCommentForUser:(MKUser *) to:(NSString *)newComment;
+- (void) setSeenCommentForUser:(MKUser *)user;
+- (void) moveUser:(MKUser *)user toChannel:(MKChannel *)chan;
+- (void) removeUser:(MKUser *)user;
 
 #pragma mark -
 
-- (Channel *) rootChannel;
-- (Channel *) addChannelWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(Channel *)p;
-- (Channel *) channelWithId:(NSUInteger)chanId;
-- (void) renameChannel:(Channel *)chan to:(NSString *)newName;
-- (void) repositionChannel:(Channel *)chan to:(NSInteger)pos;
-- (void) setCommentForChannel:(Channel *)chan to:(NSString *)newComment;
-- (void) moveChannel:(Channel *)chan toChannel:(Channel *)newParent;
-- (void) removeChannel:(Channel *)chan;
-- (void) linkChannel:(Channel *)chan withChannels:(NSArray *)channelLinks;
-- (void) unlinkChannel:(Channel *)chan fromChannels:(NSArray *)channelLinks;
-- (void) unlinkAllFromChannel:(Channel *)chan;
+- (MKChannel *) rootChannel;
+- (MKChannel *) addChannelWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(MKChannel *)p;
+- (MKChannel *) channelWithId:(NSUInteger)chanId;
+- (void) renameChannel:(MKChannel *)chan to:(NSString *)newName;
+- (void) repositionChannel:(MKChannel *)chan to:(NSInteger)pos;
+- (void) setCommentForChannel:(MKChannel *)chan to:(NSString *)newComment;
+- (void) moveChannel:(MKChannel *)chan toChannel:(MKChannel *)newParent;
+- (void) removeChannel:(MKChannel *)chan;
+- (void) linkChannel:(MKChannel *)chan withChannels:(NSArray *)channelLinks;
+- (void) unlinkChannel:(MKChannel *)chan fromChannels:(NSArray *)channelLinks;
+- (void) unlinkAllFromChannel:(MKChannel *)chan;
 
 @end

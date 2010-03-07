@@ -36,15 +36,15 @@
  */
 #define errSSLXCertChainInvalid -9807
 
-@class Connection;
-@class PacketDataStream;
+@class MKConnection;
+@class MKPacketDataStream;
 
 typedef enum {
 	UDPVoiceCELTAlphaMessage = 0,
 	UDPPingMessage,
 	UDPVoiceSpeexMessage,
 	UDPVoiceCELTBetaMessage
-} UDPMessageType;
+} MKUDPMessageType;
 
 typedef enum {
 	VersionMessage = 0,
@@ -69,12 +69,12 @@ typedef enum {
 	VoiceTargetMessage,
 	PermissionQueryMessage,
 	CodecVersionMessage
-} MessageType;
+} MKMessageType;
 
-@protocol MessageHandler
+@protocol MKMessageHandler
 
-- (void) connectionOpened:(Connection *)conn;
-- (void) connectionClosed:(Connection *)conn;
+- (void) connectionOpened:(MKConnection *)conn;
+- (void) connectionClosed:(MKConnection *)conn;
 
 - (void) handleAuthenticateMessage: (MPAuthenticate *)msg;
 - (void) handleBanListMessage: (MPBanList *)msg;
@@ -100,12 +100,12 @@ typedef enum {
 
 @end
 
-@interface Connection : NSObject {
+@interface MKConnection : NSObject {
 	@protected
 		CFWriteStreamRef writeStream;
 		CFReadStreamRef readStream;
 		id delegate;
-		MessageType packetType;
+		MKMessageType packetType;
 		int packetLength;
 		int packetBufferOffset;
 		NSMutableData *packetBuffer;
@@ -128,10 +128,10 @@ typedef enum {
 - (void) closeStreams;
 - (BOOL) connected;
 
-- (void) setDelegate: (id<MessageHandler>)messageHandler;
+- (void) setDelegate: (id<MKMessageHandler>)messageHandler;
 
-- (void) sendMessageWithType:(MessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len;
-- (void) sendMessageWithType:(MessageType)messageType data:(NSData *)data;
+- (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len;
+- (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data;
 
 - (void) dataReady;
 - (void) messageRecieved: (NSData *)data;
@@ -140,7 +140,7 @@ typedef enum {
 
 - (void) handleError: (CFStreamError)streamError;
 - (void) handleSslError: (CFStreamError)streamError;
-- (void) handleVoicePacketOfType:(UDPMessageType)messageType flags:(NSUInteger)messageFlags datastream:(PacketDataStream *)pds;
+- (void) handleVoicePacketOfType:(MKUDPMessageType)messageType flags:(NSUInteger)messageFlags datastream:(MKPacketDataStream *)pds;
 
 /* Access the connection's peer certificates. */
 - (NSArray *) peerCertificates;

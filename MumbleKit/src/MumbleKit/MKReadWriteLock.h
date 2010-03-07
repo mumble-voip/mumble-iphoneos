@@ -1,5 +1,4 @@
-/* Copyright (C) 2005-2010 Thorvald Natvig <thorvald@natvig.com>
-   Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -29,60 +28,21 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-typedef union _float32u {
-	uint8_t b[4];
-	float f;
-} float32u;
+#include <pthread.h>
 
-@interface PacketDataStream : NSObject {
-	NSMutableData *mutableData;
-	NSData *immutableData;
-	unsigned char *data;
-	NSUInteger maxSize;
-	NSUInteger offset;
-	NSUInteger overshoot;
-	BOOL ok;
+@interface MKReadWriteLock : NSObject {
+	pthread_rwlock_t rwlock;
 }
 
-- (id) initWithData:(NSData *)data;
-- (id) initWithMutableData:(NSMutableData *)data;
-- (id) initWithBuffer:(unsigned char *)buffer length:(NSUInteger)len;
+- (id) init;
 - (void) dealloc;
 
-- (NSUInteger) size;
-- (NSUInteger) capactiy;
-- (NSUInteger) left;
-- (BOOL) valid;
+- (BOOL) tryWriteLock;
+- (void) writeLock;
 
-- (void) rewind;
-- (void) truncate;
+- (BOOL) tryReadLock;
+- (void) readLock;
 
-- (unsigned char *) dataPtr;
-- (char *) charPtr;
-- (NSData *) data;
-- (NSMutableData *) mutableData;
-
-- (void) appendValue:(uint64_t)value;
-- (void) appendBytes:(unsigned char *)buffer length:(NSUInteger)len;
-
-- (void) skip:(NSUInteger)amount;
-- (uint64_t) next;
-- (uint8_t) next8;
-
-/* Adders. */
-- (void) addVarint:(uint64_t)value;
-
-/* Getters. */
-- (uint64_t) getVarint;
-- (int) getInt;
-- (unsigned int) getUnsignedInt;
-- (short) getShort;
-- (unsigned short) getUnsignedShort;
-- (char) getChar;
-- (unsigned char) getUnsignedChar;
-- (float) getFloat;
-- (double) getDouble;
-
-- (NSData *) copyDataBlock:(NSUInteger)len;
+- (void) unlock;
 
 @end

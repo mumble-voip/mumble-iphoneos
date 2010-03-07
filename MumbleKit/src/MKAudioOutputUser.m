@@ -29,9 +29,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AudioOutputUser.h"
+#import <MumbleKit/MKAudioOutputUser.h>
 
-@implementation AudioOutputUser
+@implementation MKAudioOutputUser
 
 - (id) init {
 	self = [super init];
@@ -56,7 +56,7 @@
 		free(volume);
 }
 
-- (User *) user {
+- (MKUser *) user {
 	return nil;
 }
 

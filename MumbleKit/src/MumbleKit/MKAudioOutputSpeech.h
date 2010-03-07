@@ -1,4 +1,5 @@
 /* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+   Copyright (C) 2005-2010 Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
 
@@ -28,37 +29,55 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AppDelegate.h"
-#import "WelcomeScreenController.h"
-
+#import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKAudioOutputUser.h>
 
-@implementation AppDelegate
+#include <speex/speex.h>
+#include <speex/speex_preprocess.h>
+#include <speex/speex_echo.h>
+#include <speex/speex_resampler.h>
+#include <speex/speex_jitter.h>
+#include <speex/speex_types.h>
+#include <celt.h>
 
-@synthesize window;
-@synthesize navigationController;
+@interface MKAudioOutputSpeech : MKAudioOutputUser {
+	MKUDPMessageType messageType;
+	NSUInteger bufferOffset;
+	NSUInteger bufferFilled;
+	NSUInteger outputSize;
+	NSUInteger lastConsume;
+	NSUInteger frameSize;
+	BOOL lastAlive;
+	BOOL hasTerminator;
 
-- (void) applicationDidFinishLaunching:(UIApplication *)application {
-	NSLog(@"%@: %s", [self class], __FUNCTION__);
+	float *fadeIn;
+	float *fadeOut;
 
-	[window addSubview:[navigationController view]];
-	[window makeKeyAndVisible];
+	JitterBuffer *jitter;
+	NSInteger missCount;
+	NSInteger missedFrames;
 
-	/* Show our welcome screen. */
-	WelcomeScreenController *welcomeScreen = [[WelcomeScreenController alloc] initWithNibName:@"WelcomeScreenController" bundle:nil];
-	[navigationController pushViewController:welcomeScreen animated:YES];
-	[welcomeScreen release];
+	NSMutableArray *frames;
+	unsigned char flags;
 
-	[MKAudio initializeAudio];
+	MKUser *user;
+	float powerMin, powerMax;
+	float averageAvailable;
+
+	CELTMode *celtMode;
+	CELTDecoder *celtDecoder;
+
+	pthread_mutex_t jitterMutex;
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
-}
+- (id) initWithUser:(MKUser *)user sampleRate:(NSUInteger)freq messageType:(MKMessageType)type;
+- (void) dealloc;
 
-- (void)dealloc {
-	[navigationController release];
-	[window release];
-	[super dealloc];
-}
+- (MKUser *) user;
+- (MKMessageType) messageType;
+
+- (void) addFrame:(NSData *)data forSequence:(NSUInteger)seq;
 
 @end

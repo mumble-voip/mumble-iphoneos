@@ -29,17 +29,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AudioOutput.h"
-#import "AudioOutputSpeech.h"
+#import <MumbleKit/MKUtils.h>
+#import <MumbleKit/MKAudioOutput.h>
+#import <MumbleKit/MKAudioOutputSpeech.h>
 
 /*
  * Output callback.
  */
 static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, const AudioTimeStamp *ts,
 							   UInt32 busnum, UInt32 nframes, AudioBufferList *buflist) {
-	AudioOutput *ao = udata;
+	MKAudioOutput *ao = (MKAudioOutput *) udata;
 	AudioBuffer *buf = buflist->mBuffers;
-	MUMBLE_UNUSED OSStatus err;
+	MK_UNUSED OSStatus err;
 	BOOL done;
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -60,7 +61,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 	return noErr;
 }
 
-@implementation AudioOutput
+@implementation MKAudioOutput
 
 - (id) init {
 	self = [super init];
@@ -71,7 +72,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 	frameSize = SAMPLE_RATE / 100;
 	mixerFrequency = 0;
 
-	outputLock = [[RWLock alloc] init];
+	outputLock = [[MKReadWriteLock alloc] init];
 	outputs = [[NSMutableDictionary alloc] init];
 
 	return self;
@@ -189,7 +190,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 
 	[outputLock readLock];
 	for (NSNumber *sessionKey in outputs) {
-		AudioOutputUser *ou = [outputs objectForKey:sessionKey];
+		MKAudioOutputUser *ou = [outputs objectForKey:sessionKey];
 		if (! [ou needSamples:nsamp]) {
 			[del addObject:ou];
 		} else {
@@ -201,7 +202,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 	memset(mixBuffer, 0, sizeof(float)*numChannels*nsamp);
 
 	if ([mix count] > 0) {
-		for (AudioOutputUser *ou in mix) {
+		for (MKAudioOutputUser *ou in mix) {
 			const float * restrict userBuffer = [ou buffer];
 			for (s = 0; s < nchan; ++s) {
 				const float str = speakerVolume[s];
@@ -228,7 +229,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 
 	[outputLock unlock];
 
-	for (AudioOutputUser *ou in del) {
+	for (MKAudioOutputUser *ou in del) {
 		[self removeBuffer:ou];
 	}
 
@@ -240,23 +241,23 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 	return retVal;
 }
 
-- (void) removeBuffer:(AudioOutputUser *)u {
+- (void) removeBuffer:(MKAudioOutputUser *)u {
 	[outputLock writeLock];
 
-	User *user = [u user];
+	MKUser *user = [u user];
 	NSUInteger session = [user session];
 	[outputs removeObjectForKey:[NSNumber numberWithUnsignedInt:session]];
 
 	[outputLock unlock];
 }
 
-- (void) addFrameToBufferWithUser:(User *)user data:(NSData *)data sequence:(NSUInteger)seq type:(MessageType)msgType {
+- (void) addFrameToBufferWithUser:(MKUser *)user data:(NSData *)data sequence:(NSUInteger)seq type:(MKMessageType)msgType {
 	if (numChannels == 0)
 		return;
 
 	[outputLock readLock];
 	NSInteger session = [user session];
-	AudioOutputSpeech *outputUser = [outputs objectForKey:[NSNumber numberWithUnsignedInt:session]];
+	MKAudioOutputSpeech *outputUser = [outputs objectForKey:[NSNumber numberWithUnsignedInt:session]];
 	if (outputUser == nil || [outputUser messageType] != msgType) {
 		[outputLock unlock];
 
@@ -267,7 +268,7 @@ static OSStatus outputCallback(void *udata, AudioUnitRenderActionFlags *flags, c
 		NSLog(@"AudioOutput: No AudioOutputSpeech for user, allocating.");
 
 		[outputLock writeLock];
-		outputUser = [[AudioOutputSpeech alloc] initWithUser:user sampleRate:mixerFrequency messageType:msgType];
+		outputUser = [[MKAudioOutputSpeech alloc] initWithUser:user sampleRate:mixerFrequency messageType:msgType];
 		[outputs setObject:outputUser forKey:[NSNumber numberWithUnsignedInt:session]];
 		[outputUser release];
 	}

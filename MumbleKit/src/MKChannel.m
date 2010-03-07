@@ -28,11 +28,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "RWLock.h"
-#import "Channel.h"
-#import "User.h"
+#import <MumbleKit/MKChannel.h>
+#import <MumbleKit/MKUser.h>
 
-@implementation Channel
+@implementation MKChannel
 
 - (id) init {
 	self = [super init];
@@ -69,30 +68,30 @@
 
 #pragma mark -
 
-- (void) addChannel:(Channel *)chan {
+- (void) addChannel:(MKChannel *)chan {
 	[chan setParent:self];
 	[channelList addObject:chan];
 }
 
-- (void) removeChannel:(Channel *)chan {
+- (void) removeChannel:(MKChannel *)chan {
 	[chan setParent:nil];
 	[channelList removeObject:chan];
 }
 
-- (void) addUser:(User *)user {
-	Channel *chan = [user channel];
+- (void) addUser:(MKUser *)user {
+	MKChannel *chan = [user channel];
 	[chan removeUser:user];
 	[user setChannel:self];
 	[userList addObject:user];
 }
 
-- (void) removeUser:(User *)user {
+- (void) removeUser:(MKUser *)user {
 	[userList removeObject:user];
 }
 
 - (NSUInteger) numChildren {
 	NSUInteger count = 0;
-	for (Channel *c in channelList) {
+	for (MKChannel *c in channelList) {
 		count += 1 + [c numChildren];
 	}
 	return count + [userList count];
@@ -100,8 +99,8 @@
 
 #pragma mark -
 
-- (BOOL) linkedToChannel:(Channel *)chan {
-	for (Channel *c in linkedList) {
+- (BOOL) linkedToChannel:(MKChannel *)chan {
+	for (MKChannel *c in linkedList) {
 		if (c == chan) {
 			return YES;
 		}
@@ -109,7 +108,7 @@
 	return NO;
 }
 
-- (void) linkToChannel:(Channel *)chan {
+- (void) linkToChannel:(MKChannel *)chan {
 	if ([self linkedToChannel:chan])
 		return;
 
@@ -117,13 +116,13 @@
 	[chan->linkedList addObject:self];
 }
 
-- (void) unlinkFromChannel:(Channel *)chan {
+- (void) unlinkFromChannel:(MKChannel *)chan {
 	[linkedList removeObject:chan];
 	[chan->linkedList removeObject:self];
 }
 
 - (void) unlinkAll {
-	for (Channel *chan in linkedList) {
+	for (MKChannel *chan in linkedList) {
 		[self unlinkFromChannel:chan];
 	}
 }
@@ -139,11 +138,11 @@
 	return channelName;
 }
 
-- (void) setParent:(Channel *)chan {
+- (void) setParent:(MKChannel *)chan {
 	channelParent = chan;
 }
 
-- (Channel *) parent {
+- (MKChannel *) parent {
 	return channelParent;
 }
 

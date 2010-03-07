@@ -28,19 +28,20 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Audio.h"
-#import "AudioInput.h"
-#import "AudioOutput.h"
+#import <MumbleKit/MKUtils.h>
+#import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKAudioInput.h>
+#import <MumbleKit/MKAudioOutput.h>
 
-static Audio *audioSingleton = nil;
+static MKAudio *audioSingleton = nil;
 
 static void AudioInterruptionListenerCallback(void *udata, UInt32 interruptionState) {
-	MUMBLE_UNUSED Audio *audio = (Audio *) udata;
+	MK_UNUSED MKAudio *audio = (MKAudio *) udata;
 	NSLog(@"Audio: Interruption state callback called.");
 }
 
 static void AudioSessionPropertyListenerCallback(void *udata, AudioSessionPropertyID property, UInt32 len, void *data) {
-	MUMBLE_UNUSED Audio *audio = (Audio *) udata;
+	MK_UNUSED MKAudio *audio = (MKAudio *) udata;
 	BOOL audioInputAvailable;
 	UInt32 *u32;
 
@@ -60,24 +61,24 @@ static void AudioSessionPropertyListenerCallback(void *udata, AudioSessionProper
 	}
 }
 
-@implementation Audio
+@implementation MKAudio
 
 + (void) initializeAudio {
 	NSLog(@"Audio: Initializing...");
-	audioSingleton = [[Audio alloc] init];
-	[[Audio audioOutput] setupDevice];
-	[[Audio audioInput] setupDevice];
+	audioSingleton = [[MKAudio alloc] init];
+	[[MKAudio audioOutput] setupDevice];
+	[[MKAudio audioInput] setupDevice];
 }
 
-+ (AudioInput *) audioInput {
++ (MKAudioInput *) audioInput {
 	return [audioSingleton audioInput];
 }
 
-+ (AudioOutput *) audioOutput {
++ (MKAudioOutput *) audioOutput {
 	return [audioSingleton audioOutput];
 }
 
-+ (Audio *) audio {
++ (MKAudio *) audio {
 	return audioSingleton;
 }
 
@@ -173,10 +174,10 @@ static void AudioSessionPropertyListenerCallback(void *udata, AudioSessionProper
 	NSLog(@"Audio: Current hardware sample rate = %.2fHz.", fval);
 
 	if (audioInputAvailable) {
-		ai = [[AudioInput alloc] init];
+		ai = [[MKAudioInput alloc] init];
 	}
 
-	ao = [[AudioOutput alloc] init];
+	ao = [[MKAudioOutput alloc] init];
 
 	return self;
 }
@@ -187,11 +188,11 @@ static void AudioSessionPropertyListenerCallback(void *udata, AudioSessionProper
 	[ao release];
 }
 
-- (AudioInput *) audioInput {
+- (MKAudioInput *) audioInput {
 	return ai;
 }
 
-- (AudioOutput *) audioOutput {
+- (MKAudioOutput *) audioOutput {
 	return ao;
 }
 

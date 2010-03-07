@@ -28,13 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Connection.h"
-#import "ServerModel.h"
-#import "ServerModelItem.h"
+#import <MumbleKit/MKConnection.h>
+#import <MumbleKit/MKServerModel.h>
 
 @interface ServerViewController : UITableViewController {
-	Connection *connection;
-	ServerModel *model;
+	MKConnection *connection;
+	MKServerModel *model;
 	NSString *serverHostName;
 	NSUInteger serverPortNumber;
 	BOOL serverSyncReceived;

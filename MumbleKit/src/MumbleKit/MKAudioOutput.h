@@ -1,4 +1,5 @@
 /* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+   Copyright (C) 2005-2010 Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
 
@@ -28,28 +29,37 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface CryptState : NSObject {
-	NSUInteger numGood;
-	NSUInteger numLate;
-	NSUInteger numLost;
-	NSUInteger numResync;
-	NSUInteger numRemoteGood;
-	NSUInteger numRemoteLate;
-	NSUInteger numRemoteLost;
-	NSUInteger numRemoteResync;
-	unsigned char decryptHistory[0x100];
+#import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKAudioOutputUser.h>
+#import <MumbleKit/MKReadWriteLock.h>
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKConnection.h>
 
-	BOOL initialized;
+#import <AudioUnit/AudioUnit.h>
+#import <AudioUnit/AUComponent.h>
+#import <AudioToolbox/AudioToolbox.h>
+
+@class MKUser;
+
+@interface MKAudioOutput : NSObject {
+	AudioUnit audioUnit;
+	int sampleSize;
+	int frameSize;
+	int mixerFrequency;
+	int numChannels;
+	float *speakerVolume;
+
+	MKReadWriteLock *outputLock;
+	NSMutableDictionary *outputs;
 }
 
 - (id) init;
 - (void) dealloc;
 
-- (BOOL) valid;
-- (void) generateKey;
-- (void) setKey:(NSData *)key eiv:(NSData *)enc div:(NSData *)dec;
-- (void) setDecryptIV:(NSData *)dec;
-- (NSData *) encryptData:(NSData *)data;
-- (NSData *) decryptData:(NSData *)data;
+- (BOOL) setupDevice;
+
+- (void) removeBuffer:(MKAudioOutputUser *)u;
+- (BOOL) mixFrames: (void *)frames amount:(unsigned int)nframes;
+- (void) addFrameToBufferWithUser:(MKUser *)user data:(NSData *)data sequence:(NSUInteger)seq type:(MKMessageType)msgType;
 
 @end

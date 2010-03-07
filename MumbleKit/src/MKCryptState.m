@@ -1,4 +1,5 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2005-2009, Thorvald Natvig <thorvald@natvig.com>
+   Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,111 +29,59 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "User.h"
-#import "RWLock.h"
-#import "Channel.h"
+/*
+ * This code implements OCB-AES128.
+ * In the US, OCB is covered by patents. The inventor has given a license
+ * to all programs distributed under the GPL.
+ * Mumble is BSD (revised) licensed, meaning you can use the code in a
+ * closed-source program. If you do, you'll have to either replace
+ * OCB with something else or get yourself a license.
+ */
 
-@implementation User
+#import <MumbleKit/MKCryptState.h>
+
+@implementation MKCryptState
+
+- (id) init {
+	int i;
+
+	self = [super init];
+	if (self == nil)
+		return nil;
+
+	for (i = 0; i < 0x100; i++)
+		decryptHistory[i] = 0;
+
+	initialized = NO;
+	numGood = numLost = numResync = 0;
+
+	return self;
+}
 
 - (void) dealloc {
-	if (userName)
-		[userName release];
 	[super dealloc];
+	NSLog(@"CryptState: Dealloc.");
 }
 
-#pragma mark -
-
-- (NSUInteger) treeDepth {
-	return depth;
+- (BOOL) valid {
+	return initialized;
 }
 
-- (void) setTreeDepth:(NSUInteger)treeDepth {
-	depth = treeDepth;
+- (void) generateKey {
 }
 
-#pragma mark -
-
-- (void) setSession:(NSUInteger)session {
-	userSession = session;
+- (void) setKey:(NSData *)key eiv:(NSData *)enc div:(NSData *)dec {
 }
 
-- (NSUInteger) session {
-	return userSession;
+- (void) setDecryptIV:(NSData *)dec {
 }
 
-- (void) setUserName:(NSString *)name {
-	if (userName)
-		[userName release];
-	userName = [name copy];
+- (NSData *) encryptData:(NSData *)data {
+	return nil;
 }
 
-- (NSString *) userName {
-	return userName;
+- (NSData *) decryptData:(NSData *)data {
+	return nil;
 }
-
-- (void) setTalking:(TalkingState)flag {
-	talkState = flag;
-}
-
-- (TalkingState) talkingState {
-	return talkState;
-}
-
-- (void) setMute:(BOOL)flag {
-	muteState = flag;
-}
-
-- (BOOL) muted {
-	return muteState;
-}
-
-- (void) setDeaf:(BOOL)flag {
-	deafState = flag;
-}
-
-- (BOOL) deafened {
-	return deafState;
-}
-
-- (void) setSuppress:(BOOL)flag {
-	suppressState = flag;
-}
-
-- (BOOL) suppressed {
-	return suppressState;
-}
-
-- (void) setLocalMute:(BOOL)flag {
-	localMuteState = flag;
-}
-
-- (BOOL) localMuted {
-	return localMuteState;
-}
-
-- (void) setSelfMute:(BOOL)flag {
-	selfMuteState = flag;
-}
-
-- (BOOL) selfMuted {
-	return selfMuteState;
-}
-
-- (void) setSelfDeaf:(BOOL)flag {
-	selfDeafState = flag;
-}
-
-- (BOOL) selfDeafened {
-	return selfDeafState;
-}
-
-- (void) setChannel:(Channel *)chan {
-	channel = chan;
-}
-
-- (Channel *) channel {
-	return channel;
-}
-
 
 @end

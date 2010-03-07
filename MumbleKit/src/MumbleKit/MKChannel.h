@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,30 +28,64 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class AudioInput;
-@class AudioOutput;
+@class MKUser;
 
-#define SAMPLE_RATE 48000
+@interface MKChannel : NSObject {
+	MKChannel *channelParent;
 
-typedef enum {
-	Speex,
-	CELT,
-} CodecFormat;
+	NSUInteger channelId;
+	NSString *channelName;
+	NSInteger position;
 
-@interface Audio : NSObject {
-	AudioInput *ai;
-	AudioOutput *ao;
+	BOOL inheritACL;
+	BOOL temporary;
+
+	@public
+	NSMutableArray *channelList;
+	NSMutableArray *userList;
+	NSMutableArray *ACLList;
+	NSMutableArray *linkedList;
+	NSUInteger depth;
 }
 
-+ (void) initializeAudio;
-+ (AudioInput *) audioInput;
-+ (AudioOutput *) audioOutput;
-+ (Audio *) audio;
-
-/* 'private' methods. */
 - (id) init;
 - (void) dealloc;
-- (AudioInput *) audioInput;
-- (AudioOutput *) audioOutput;
+
+#pragma mark -
+
+- (void) addChannel:(MKChannel *)chan;
+- (void) removeChannel:(MKChannel *)chan;
+- (void) addUser:(MKUser *)user;
+- (void) removeUser:(MKUser *)user;
+- (NSUInteger) numChildren;
+
+#pragma mark -
+
+- (NSUInteger) treeDepth;
+- (void) setTreeDepth:(NSUInteger)depth;
+
+#pragma mark -
+
+- (BOOL) linkedToChannel:(MKChannel *)chan;
+- (void) linkToChannel:(MKChannel *)chan;
+- (void) unlinkFromChannel:(MKChannel *)chan;
+- (void) unlinkAll;
+
+#pragma mark -
+
+- (NSString *) channelName;
+- (void) setChannelName:(NSString *)name;
+
+- (void) setParent:(MKChannel *)chan;
+- (MKChannel *) parent;
+
+- (void) setChannelId:(NSUInteger)chanId;
+- (NSUInteger) channelId;
+
+- (void) setTemporary:(BOOL)flag;
+- (BOOL) temporary;
+
+- (NSInteger) position;
+- (void) setPosition:(NSInteger)pos;
 
 @end

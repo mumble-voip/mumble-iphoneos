@@ -28,71 +28,111 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class Channel;
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKReadWriteLock.h>
+#import <MumbleKit/MKChannel.h>
 
-typedef enum _TalkingState {
-	TalkingStateOff = 0,
-	TalkingStateTalking,
-	TalkingStateWhisperChannel,
-	TalkingStateWhisperTalk,
-} TalkingState;
+@implementation MKUser
 
-@interface User : NSObject {
-	@protected
-		BOOL muteState;
-		BOOL deafState;
-		BOOL suppressState;
-		BOOL localMuteState;
-		BOOL selfMuteState;
-		BOOL selfDeafState;
-		TalkingState talkState;
-		NSUInteger userSession;
-		NSString *userName;
-		NSUInteger depth;
-		Channel *channel;
-
-	@public
-		int sequence;
-		int frames;
+- (void) dealloc {
+	if (userName)
+		[userName release];
+	[super dealloc];
 }
 
-- (void) dealloc;
+#pragma mark -
+
+- (NSUInteger) treeDepth {
+	return depth;
+}
+
+- (void) setTreeDepth:(NSUInteger)treeDepth {
+	depth = treeDepth;
+}
 
 #pragma mark -
 
-- (NSUInteger) treeDepth;
-- (void) setTreeDepth:(NSUInteger)depth;
+- (void) setSession:(NSUInteger)session {
+	userSession = session;
+}
 
-#pragma mark -
+- (NSUInteger) session {
+	return userSession;
+}
 
-- (void) setSession:(NSUInteger)session;
-- (NSUInteger) session;
+- (void) setUserName:(NSString *)name {
+	if (userName)
+		[userName release];
+	userName = [name copy];
+}
 
-- (void) setUserName:(NSString *)name;
-- (NSString *) userName;
+- (NSString *) userName {
+	return userName;
+}
 
-- (void) setTalking:(TalkingState)flag;
-- (TalkingState) talkingState;
+- (void) setTalking:(MKTalkingState)flag {
+	talkState = flag;
+}
 
-- (void) setMute:(BOOL)flag;
-- (BOOL) muted;
+- (MKTalkingState) talkingState {
+	return talkState;
+}
 
-- (void) setDeaf:(BOOL)flag;
-- (BOOL) deafened;
+- (void) setMute:(BOOL)flag {
+	muteState = flag;
+}
 
-- (void) setSuppress:(BOOL)flag;
-- (BOOL) suppressed;
+- (BOOL) muted {
+	return muteState;
+}
 
-- (void) setLocalMute:(BOOL)flag;
-- (BOOL) localMuted;
+- (void) setDeaf:(BOOL)flag {
+	deafState = flag;
+}
 
-- (void) setSelfMute:(BOOL)flag;
-- (BOOL) selfMuted;
+- (BOOL) deafened {
+	return deafState;
+}
 
-- (void) setSelfDeaf:(BOOL)flag;
-- (BOOL) selfDeafened;
+- (void) setSuppress:(BOOL)flag {
+	suppressState = flag;
+}
 
-- (void) setChannel:(Channel *)chan;
-- (Channel *) channel;
+- (BOOL) suppressed {
+	return suppressState;
+}
+
+- (void) setLocalMute:(BOOL)flag {
+	localMuteState = flag;
+}
+
+- (BOOL) localMuted {
+	return localMuteState;
+}
+
+- (void) setSelfMute:(BOOL)flag {
+	selfMuteState = flag;
+}
+
+- (BOOL) selfMuted {
+	return selfMuteState;
+}
+
+- (void) setSelfDeaf:(BOOL)flag {
+	selfDeafState = flag;
+}
+
+- (BOOL) selfDeafened {
+	return selfDeafState;
+}
+
+- (void) setChannel:(MKChannel *)chan {
+	channel = chan;
+}
+
+- (MKChannel *) channel {
+	return channel;
+}
+
 
 @end

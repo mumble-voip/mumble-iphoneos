@@ -29,14 +29,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AudioOutputSpeech.h"
-#import "PacketDataStream.h"
+#import <MumbleKit/MKAudioOutputSpeech.h>
+#import <MumbleKit/MKPacketDataStream.h>
 
 #include <pthread.h>
 
-@implementation AudioOutputSpeech
+@implementation MKAudioOutputSpeech
 
-- (id) initWithUser:(User *)u sampleRate:(NSUInteger)freq messageType:(MessageType)type {
+- (id) initWithUser:(MKUser *)u sampleRate:(NSUInteger)freq messageType:(MKMessageType)type {
 	self = [super init];
 	if (self == nil)
 		return nil;
@@ -103,11 +103,11 @@
 		celt_mode_destroy(celtMode);
 }
 
-- (User *) user {
+- (MKUser *) user {
 	return user;
 }
 
-- (MessageType) messageType {
+- (MKMessageType) messageType {
 	return messageType;
 }
 
@@ -123,7 +123,7 @@
 		return;
 	}
 
-	PacketDataStream *pds = [[PacketDataStream alloc] initWithData:data];
+	MKPacketDataStream *pds = [[MKPacketDataStream alloc] initWithData:data];
 	[pds next];
 
 	int nframes = 0;
@@ -214,7 +214,7 @@
 				spx_int32_t startofs = 0;
 
 				if (jitter_buffer_get(jitter, &jbp, frameSize, &startofs) == JITTER_BUFFER_OK) {
-					PacketDataStream *pds = [[PacketDataStream alloc] initWithBuffer:(unsigned char *)jbp.data length:jbp.len];
+					MKPacketDataStream *pds = [[MKPacketDataStream alloc] initWithBuffer:(unsigned char *)jbp.data length:jbp.len];
 
 					missCount = 0;
 					flags = (unsigned char)[pds next];

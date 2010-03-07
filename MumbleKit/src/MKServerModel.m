@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "ServerModel.h"
+#import <MumbleKit/MKServerModel.h>
 
 #define STUB \
 	NSLog(@"%@: %s", [self class], __FUNCTION__)
@@ -40,7 +40,7 @@ static NSInteger stringSort(NSString *str1, NSString *str2, void *reverse) {
 		return [str1 compare:str2];
 }
 
-static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
+static NSInteger channelSort(MKChannel *chan1, MKChannel *chan2, void *reverse) {
 	if ([chan1 position] != [chan2 position]) {
 		return reverse ? ([chan1 position] > [chan2 position]) : ([chan2 position] > [chan1 position]);
 	} else {
@@ -48,22 +48,22 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
 	}
 }
 
-@implementation ServerModel
+@implementation MKServerModel
 
 - (id) init {
 	self = [super init];
 	if (self == nil)
 		return nil;
 
-	userMapLock = [[RWLock alloc] init];
+	userMapLock = [[MKReadWriteLock alloc] init];
 	userMap = [[NSMutableDictionary alloc] init];
 
-	channelMapLock = [[RWLock alloc] init];
+	channelMapLock = [[MKReadWriteLock alloc] init];
 	channelMap = [[NSMutableDictionary alloc] init];
 
 	array = [[NSMutableArray alloc] init];
 
-	root = [[Channel alloc] init];
+	root = [[MKChannel alloc] init];
 	[root setChannelId:0];
 	[root setChannelName:@"Root"];
 	[channelMap setObject:root forKey:[NSNumber numberWithUnsignedInt:0]];
@@ -81,15 +81,15 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
 	[self addChannelTreeToArray:root depth:0];
 }
 
-- (void) addChannelTreeToArray:(Channel *)tree depth:(NSUInteger)currentDepth {
+- (void) addChannelTreeToArray:(MKChannel *)tree depth:(NSUInteger)currentDepth {
 	[array addObject:tree];
 	
-	for (Channel *c in tree->channelList) {
+	for (MKChannel *c in tree->channelList) {
 		[c setTreeDepth:currentDepth+1];
 		[array addObject:c];
 		[self addChannelTreeToArray:c depth:currentDepth+1];
 	}
-	for (User *u in tree->userList) {
+	for (MKUser *u in tree->userList) {
 		[array addObject:u];
 		[u setTreeDepth:currentDepth+1];
 	}
@@ -116,8 +116,8 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
  * is owned by the User module itself, and should not be retained or otherwise fiddled
  * with.
  */
-- (User *) addUserWithSession:(NSUInteger)userSession name:(NSString *)userName {
-	User *user = [[User alloc] init];
+- (MKUser *) addUserWithSession:(NSUInteger)userSession name:(NSString *)userName {
+	MKUser *user = [[MKUser alloc] init];
 	[user setSession:userSession];
 	[user setUserName:userName];
 
@@ -131,39 +131,39 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
 	return user;
 }
 
-- (User *) userWithSession:(NSUInteger)session {
+- (MKUser *) userWithSession:(NSUInteger)session {
 	[userMapLock readLock];
-	User *u = [userMap objectForKey:[NSNumber numberWithUnsignedInt:session]];
+	MKUser *u = [userMap objectForKey:[NSNumber numberWithUnsignedInt:session]];
 	[userMapLock unlock];
 	return u;
 }
 
-- (User *) userWithHash:(NSString *)hash {
+- (MKUser *) userWithHash:(NSString *)hash {
 	NSLog(@"userWithHash: notimpl.");
 	return nil;
 }
 
-- (void) renameUser:(User *)user to:(NSString *)newName {
+- (void) renameUser:(MKUser *)user to:(NSString *)newName {
 	STUB;
 }
 
-- (void) setIdForUser:(User *)user to:(NSUInteger)newId {
+- (void) setIdForUser:(MKUser *)user to:(NSUInteger)newId {
 	STUB;
 }
 
-- (void) setHashForUser:(User *)user to:(NSString *)newHash {
+- (void) setHashForUser:(MKUser *)user to:(NSString *)newHash {
 	STUB;
 }
 
-- (void) setFriendNameForUser:(User *)user to:(NSString *)newFriendName {
+- (void) setFriendNameForUser:(MKUser *)user to:(NSString *)newFriendName {
 	STUB;
 }
 
-- (void) setCommentForUser:(User *) to:(NSString *)newComment {
+- (void) setCommentForUser:(MKUser *) to:(NSString *)newComment {
 	STUB;
 }
 
-- (void) setSeenCommentForUser:(User *)user {
+- (void) setSeenCommentForUser:(MKUser *)user {
 	STUB;
 }
 
@@ -173,7 +173,7 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
  * @param  user   The user to move.
  * @param  chan   The channel to move the user to.
  */
-- (void) moveUser:(User *)user toChannel:(Channel *)chan {
+- (void) moveUser:(MKUser *)user toChannel:(MKChannel *)chan {
 	STUB;
 }
 
@@ -181,21 +181,21 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
  * Remove a user from the model (in case a user leaves).
  * This cleans up all references of the user in the model.
  */
-- (void) removeUser:(User *)user {
+- (void) removeUser:(MKUser *)user {
 	STUB;
 }
 
 #pragma mark -
 
-- (Channel *) rootChannel {
+- (MKChannel *) rootChannel {
 	return root;
 }
 
 /*
  * Add a channel.
  */
-- (Channel *) addChannelWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(Channel *)parent {
-	Channel *chan = [[Channel alloc] init];
+- (MKChannel *) addChannelWithId:(NSUInteger)chanId name:(NSString *)chanName parent:(MKChannel *)parent {
+	MKChannel *chan = [[MKChannel alloc] init];
 	[chan setChannelId:chanId];
 	[chan setChannelName:chanName];
 	[chan setParent:parent];
@@ -211,42 +211,42 @@ static NSInteger channelSort(Channel *chan1, Channel *chan2, void *reverse) {
 	return chan;
 }
 
-- (Channel *) channelWithId:(NSUInteger)chanId {
+- (MKChannel *) channelWithId:(NSUInteger)chanId {
 	[channelMapLock readLock];
-	Channel *c = [channelMap objectForKey:[NSNumber numberWithUnsignedInt:chanId]];
+	MKChannel *c = [channelMap objectForKey:[NSNumber numberWithUnsignedInt:chanId]];
 	[channelMapLock unlock];
 	return c;
 }
 
-- (void) renameChannel:(Channel *)chan to:(NSString *)newName {
+- (void) renameChannel:(MKChannel *)chan to:(NSString *)newName {
 	STUB;
 }
 
-- (void) repositionChannel:(Channel *)chan to:(NSInteger)pos {
+- (void) repositionChannel:(MKChannel *)chan to:(NSInteger)pos {
 	STUB;
 }
 
-- (void) setCommentForChannel:(Channel *)chan to:(NSString *)newComment {
+- (void) setCommentForChannel:(MKChannel *)chan to:(NSString *)newComment {
 	STUB;
 }
 
-- (void) moveChannel:(Channel *)chan toChannel:(Channel *)newParent {
+- (void) moveChannel:(MKChannel *)chan toChannel:(MKChannel *)newParent {
 	STUB;
 }
 
-- (void) removeChannel:(Channel *)chan {
+- (void) removeChannel:(MKChannel *)chan {
 	STUB;
 }
 
-- (void) linkChannel:(Channel *)chan withChannels:(NSArray *)channelLinks {
+- (void) linkChannel:(MKChannel *)chan withChannels:(NSArray *)channelLinks {
 	STUB;
 }
 
-- (void) unlinkChannel:(Channel *)chan fromChannels:(NSArray *)channelLinks {
+- (void) unlinkChannel:(MKChannel *)chan fromChannels:(NSArray *)channelLinks {
 	STUB;
 }
 
-- (void) unlinkAllFromChannel:(Channel *)chan {
+- (void) unlinkAllFromChannel:(MKChannel *)chan {
 	STUB;
 }
 

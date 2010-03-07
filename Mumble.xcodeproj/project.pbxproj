@@ -14,8 +14,6 @@
 		2822DDF810F16B1100A5D72C /* libCELT.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2822DDF710F16B0600A5D72C /* libCELT.a */; };
 		2822DE0C10F16B3400A5D72C /* libSpeexDSP.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2822DE0B10F16B2E00A5D72C /* libSpeexDSP.a */; };
 		2822DE0D10F16B3800A5D72C /* libSpeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2822DE0210F16B2700A5D72C /* libSpeex.a */; };
-		282E231910ED386E00383BE1 /* RWLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 282E231810ED386E00383BE1 /* RWLock.m */; };
-		284AB37410F8DCD8008D05D5 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 284AB37310F8DCD8008D05D5 /* Channel.m */; };
 		285FD35A106D072A00A7A967 /* ad.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD268106D072A00A7A967 /* ad.png */; };
 		285FD35B106D072A00A7A967 /* ae.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD269106D072A00A7A967 /* ae.png */; };
 		285FD35C106D072A00A7A967 /* af.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD26A106D072A00A7A967 /* af.png */; };
@@ -259,7 +257,6 @@
 		285FD44A106D072A00A7A967 /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD358106D072A00A7A967 /* zm.png */; };
 		285FD44B106D072A00A7A967 /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = 285FD359106D072A00A7A967 /* zw.png */; };
 		285FD5A8106D35E700A7A967 /* WelcomeScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285FD5A7106D35E700A7A967 /* WelcomeScreenController.m */; };
-		2861428810ED294600D2B9FA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861428710ED294600D2B9FA /* User.m */; };
 		2863C91E106D87F600F07F5F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2863C91D106D87F600F07F5F /* CFNetwork.framework */; };
 		2863CA0A106E098700F07F5F /* LanServerListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2863CA09106E098700F07F5F /* LanServerListDataSource.m */; };
 		286930EF10CAFFA30064D737 /* AboutDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 286930EE10CAFFA30064D737 /* AboutDialog.m */; };
@@ -269,31 +266,22 @@
 		286C4576106D743A00B8F9A4 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 286C4575106D743A00B8F9A4 /* AboutViewController.xib */; };
 		286C45DB106D789100B8F9A4 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 286C45DA106D789100B8F9A4 /* icon.png */; };
 		286D27C510DEA04400F02B0F /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 286D27C410DEA04400F02B0F /* PublicServerList.m */; };
-		2870417F10F902F600ABD7DE /* ServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2870417E10F902F600ABD7DE /* ServerModel.m */; };
+		28750BBF11432416002885AF /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28750BBE1143240B002885AF /* libMumbleKit.a */; };
 		287EC48610EACD9000F79184 /* WelcomeScreenController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287EC48510EACD9000F79184 /* WelcomeScreenController.xib */; };
 		287EC49410EACE2900F79184 /* PublicServerListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287EC49310EACE2900F79184 /* PublicServerListController.xib */; };
 		287EC59A10EAE26E00F79184 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 287EC59910EAE26E00F79184 /* Version.m */; };
 		28859A5710A8A74E00156CD8 /* smallft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28859A5510A8A74E00156CD8 /* smallft.cpp */; };
 		28872C0D10DBFC4E00EDFA60 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28872C0C10DBFC4E00EDFA60 /* Continents.plist */; };
-		2892D5C710EEC92D00C18781 /* AudioOutputSpeech.m in Sources */ = {isa = PBXBuildFile; fileRef = 2892D5C610EEC92D00C18781 /* AudioOutputSpeech.m */; };
-		2892D5D810EECB3200C18781 /* AudioOutputUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2892D5D710EECB3200C18781 /* AudioOutputUser.m */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28978FDC114311460099BE69 /* ServerModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28978FDA114311460099BE69 /* ServerModelTests.m */; };
 		28979013114311FF0099BE69 /* ServerModelTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28978FD8114311460099BE69 /* ServerModelTests-Info.plist */; };
 		2898E03F10DE93B600C0877B /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2898E03E10DE93B600C0877B /* Countries.plist */; };
 		28990E3210DED28200636A79 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 28990E3110DED28200636A79 /* Default.png */; };
 		28990E6810DEDC2200636A79 /* Services.m in Sources */ = {isa = PBXBuildFile; fileRef = 28990E6710DEDC2200636A79 /* Services.m */; };
-		289B17A110E6ADD8005DC61C /* PacketDataStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 289B17A010E6ADD8005DC61C /* PacketDataStream.m */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28B24F151071058B0027F2B1 /* Mumble.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 28B24F131071058B0027F2B1 /* Mumble.pb.m */; };
 		28B24F161071058B0027F2B1 /* Mumble.proto in Resources */ = {isa = PBXBuildFile; fileRef = 28B24F141071058B0027F2B1 /* Mumble.proto */; };
-		28B9A40811426FE900C91D13 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861428710ED294600D2B9FA /* User.m */; };
-		28B9A40911426FE900C91D13 /* Channel.m in Sources */ = {isa = PBXBuildFile; fileRef = 284AB37310F8DCD8008D05D5 /* Channel.m */; };
-		28B9A40A11426FE900C91D13 /* ServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2870417E10F902F600ABD7DE /* ServerModel.m */; };
 		28B9A4211142709B00C91D13 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
-		28B9A48D1142747000C91D13 /* RWLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 282E231810ED386E00383BE1 /* RWLock.m */; };
-		28BD0C5210B2F36500D85A8B /* CryptState.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BD0C5110B2F36500D85A8B /* CryptState.m */; };
-		28BD0CA710B3096900D85A8B /* Audio.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BD0CA610B3096900D85A8B /* Audio.m */; };
 		28BE230C10E13D1A00F1A7A5 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE230A10E13D1A00F1A7A5 /* CountryServerListController.m */; };
 		28BE230D10E13D1A00F1A7A5 /* CountryServerListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28BE230B10E13D1A00F1A7A5 /* CountryServerListController.xib */; };
 		28BE246C10E155B300F1A7A5 /* ServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE246A10E155B300F1A7A5 /* ServerViewController.m */; };
@@ -323,11 +311,8 @@
 		28BE269010E17EF000F1A7A5 /* PDFImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE268F10E17EF000F1A7A5 /* PDFImageLoader.m */; };
 		28C286E10D94DF7D0034E888 /* PublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* PublicServerListController.m */; };
 		28CB5A7610F2B9B7004D82C1 /* libProtocolBuffers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CB5A6F10F2B99D004D82C1 /* libProtocolBuffers.a */; };
-		28CDBDC610AF51F10085DD42 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 28CDBDC510AF51F10085DD42 /* Connection.m */; };
-		28D0897410A7361200091054 /* AudioOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D0897310A7361200091054 /* AudioOutput.m */; };
 		28D089A610A73C6600091054 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D089A510A73C6600091054 /* AudioToolbox.framework */; };
 		28D20FCD10E3D53D006042C4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28D20FCC10E3D53D006042C4 /* Security.framework */; };
-		28D60DDA10A8729E0091C2B3 /* AudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D60DD910A8729E0091C2B3 /* AudioInput.m */; };
 		28E2F07B10EC0ECA004ECEC3 /* Descriptor.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E2F07910EC0ECA004ECEC3 /* Descriptor.pb.m */; };
 		28E2F07C10EC0ECA004ECEC3 /* ObjectivecDescriptor.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = 28E2F07A10EC0ECA004ECEC3 /* ObjectivecDescriptor.pb.m */; };
 /* End PBXBuildFile section */
@@ -375,6 +360,20 @@
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = CELT;
 		};
+		28750BBD1143240B002885AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28750BB91143240B002885AF /* MumbleKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = MumbleKit;
+		};
+		28750C121143253F002885AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28750BB91143240B002885AF /* MumbleKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = MumbleKit;
+		};
 		28CB5A6E10F2B99D004D82C1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28CB5A6410F2B99D004D82C1 /* ProtocolBuffers.xcodeproj */;
@@ -414,11 +413,6 @@
 		2822DDEF10F16B0600A5D72C /* CELT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CELT.xcodeproj; path = 3rdparty/celtbuild/CELT.xcodeproj; sourceTree = "<group>"; };
 		2822DDFA10F16B2700A5D72C /* Speex.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Speex.xcodeproj; path = 3rdparty/speexbuild/Speex.xcodeproj; sourceTree = "<group>"; };
 		2822DE0310F16B2E00A5D72C /* SpeexDSP.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SpeexDSP.xcodeproj; path = 3rdparty/speexdspbuild/SpeexDSP.xcodeproj; sourceTree = "<group>"; };
-		282E231710ED386E00383BE1 /* RWLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLock.h; sourceTree = "<group>"; };
-		282E231810ED386E00383BE1 /* RWLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWLock.m; sourceTree = "<group>"; };
-		284AB37210F8DCD8008D05D5 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Channel.h; sourceTree = "<group>"; };
-		284AB37310F8DCD8008D05D5 /* Channel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Channel.m; sourceTree = "<group>"; };
-		284F906B10A8A59400897B27 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		285FD268106D072A00A7A967 /* ad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ad.png; sourceTree = "<group>"; };
 		285FD269106D072A00A7A967 /* ae.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ae.png; sourceTree = "<group>"; };
 		285FD26A106D072A00A7A967 /* af.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = af.png; sourceTree = "<group>"; };
@@ -664,8 +658,6 @@
 		285FD5A6106D35E700A7A967 /* WelcomeScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenController.h; sourceTree = "<group>"; };
 		285FD5A7106D35E700A7A967 /* WelcomeScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenController.m; sourceTree = "<group>"; };
 		286141BB10ECD07D00D2B9FA /* ObjectivecDescriptor.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectivecDescriptor.pb.h; sourceTree = "<group>"; };
-		2861428610ED294600D2B9FA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		2861428710ED294600D2B9FA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		2863C91D106D87F600F07F5F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		2863CA08106E098700F07F5F /* LanServerListDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListDataSource.h; sourceTree = "<group>"; };
 		2863CA09106E098700F07F5F /* LanServerListDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListDataSource.m; sourceTree = "<group>"; };
@@ -679,18 +671,13 @@
 		286C45DA106D789100B8F9A4 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Resources/icons/icon.png; sourceTree = "<group>"; };
 		286D27C310DEA04400F02B0F /* PublicServerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerList.h; sourceTree = "<group>"; };
 		286D27C410DEA04400F02B0F /* PublicServerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicServerList.m; sourceTree = "<group>"; };
-		2870417D10F902F600ABD7DE /* ServerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerModel.h; sourceTree = "<group>"; };
-		2870417E10F902F600ABD7DE /* ServerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerModel.m; sourceTree = "<group>"; };
+		28750BB91143240B002885AF /* MumbleKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MumbleKit.xcodeproj; path = MumbleKit/MumbleKit.xcodeproj; sourceTree = "<group>"; };
 		287EC48510EACD9000F79184 /* WelcomeScreenController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenController.xib; sourceTree = "<group>"; };
 		287EC49310EACE2900F79184 /* PublicServerListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PublicServerListController.xib; sourceTree = "<group>"; };
 		287EC59910EAE26E00F79184 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
 		28859A5510A8A74E00156CD8 /* smallft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = smallft.cpp; path = Source/smallft.cpp; sourceTree = "<group>"; };
 		28859A5610A8A74E00156CD8 /* smallft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = smallft.h; path = Source/smallft.h; sourceTree = "<group>"; };
 		28872C0C10DBFC4E00EDFA60 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Continents.plist; path = Resources/serverlist/Continents.plist; sourceTree = "<group>"; };
-		2892D5C510EEC92D00C18781 /* AudioOutputSpeech.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutputSpeech.h; sourceTree = "<group>"; };
-		2892D5C610EEC92D00C18781 /* AudioOutputSpeech.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutputSpeech.m; sourceTree = "<group>"; };
-		2892D5D610EECB3200C18781 /* AudioOutputUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutputUser.h; sourceTree = "<group>"; };
-		2892D5D710EECB3200C18781 /* AudioOutputUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutputUser.m; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28978FD8114311460099BE69 /* ServerModelTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ServerModelTests-Info.plist"; sourceTree = "<group>"; };
 		28978FD9114311460099BE69 /* ServerModelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerModelTests.h; sourceTree = "<group>"; };
@@ -699,17 +686,12 @@
 		28990E3110DED28200636A79 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/icons/Default.png; sourceTree = "<group>"; };
 		28990E6610DEDC2200636A79 /* Services.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Services.h; sourceTree = "<group>"; };
 		28990E6710DEDC2200636A79 /* Services.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Services.m; sourceTree = "<group>"; };
-		289B179F10E6ADD8005DC61C /* PacketDataStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketDataStream.h; sourceTree = "<group>"; };
-		289B17A010E6ADD8005DC61C /* PacketDataStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PacketDataStream.m; sourceTree = "<group>"; };
 		28A0AAE50D9B0CCF005BE974 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = Source/MainWindow.xib; sourceTree = "<group>"; };
 		28B24F121071058B0027F2B1 /* Mumble.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mumble.pb.h; sourceTree = "<group>"; };
 		28B24F131071058B0027F2B1 /* Mumble.pb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mumble.pb.m; sourceTree = "<group>"; };
 		28B24F141071058B0027F2B1 /* Mumble.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mumble.proto; sourceTree = "<group>"; };
-		28BD0C5010B2F36500D85A8B /* CryptState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptState.h; sourceTree = "<group>"; };
-		28BD0C5110B2F36500D85A8B /* CryptState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptState.m; sourceTree = "<group>"; };
 		28BD0C7C10B305DB00D85A8B /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
-		28BD0CA610B3096900D85A8B /* Audio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Audio.m; sourceTree = "<group>"; };
 		28BE230910E13D1A00F1A7A5 /* CountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryServerListController.h; sourceTree = "<group>"; };
 		28BE230A10E13D1A00F1A7A5 /* CountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryServerListController.m; sourceTree = "<group>"; };
 		28BE230B10E13D1A00F1A7A5 /* CountryServerListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryServerListController.xib; sourceTree = "<group>"; };
@@ -743,14 +725,8 @@
 		28C286DF0D94DF7D0034E888 /* PublicServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerListController.h; sourceTree = "<group>"; };
 		28C286E00D94DF7D0034E888 /* PublicServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicServerListController.m; sourceTree = "<group>"; };
 		28CB5A6410F2B99D004D82C1 /* ProtocolBuffers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ProtocolBuffers.xcodeproj; path = 3rdparty/protobufbuild/ProtocolBuffers.xcodeproj; sourceTree = "<group>"; };
-		28CDBDC410AF51F10085DD42 /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
-		28CDBDC510AF51F10085DD42 /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
-		28D0897210A7361200091054 /* AudioOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioOutput.h; sourceTree = "<group>"; };
-		28D0897310A7361200091054 /* AudioOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioOutput.m; sourceTree = "<group>"; };
 		28D089A510A73C6600091054 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		28D20FCC10E3D53D006042C4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		28D60DD810A8729E0091C2B3 /* AudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioInput.h; sourceTree = "<group>"; };
-		28D60DD910A8729E0091C2B3 /* AudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioInput.m; sourceTree = "<group>"; };
 		28D613E6107105D800FA808A /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28E2F07810EC0ECA004ECEC3 /* Descriptor.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Descriptor.pb.h; sourceTree = "<group>"; };
 		28E2F07910EC0ECA004ECEC3 /* Descriptor.pb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Descriptor.pb.m; sourceTree = "<group>"; };
@@ -764,6 +740,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28750BBF11432416002885AF /* libMumbleKit.a in Frameworks */,
 				28CB5A7610F2B9B7004D82C1 /* libProtocolBuffers.a in Frameworks */,
 				2822DE0D10F16B3800A5D72C /* libSpeex.a in Frameworks */,
 				2822DE0C10F16B3400A5D72C /* libSpeexDSP.a in Frameworks */,
@@ -791,8 +768,6 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				287EC49010EACDFF00F79184 /* PacketDataStream */,
-				28872D9E10DC274500EDFA60 /* Audio */,
 				28872D9210DC272400EDFA60 /* WelcomeScreen */,
 				286930EC10CAFF7B0064D737 /* About */,
 				28872D8610DC26AE00EDFA60 /* PublicServerList */,
@@ -801,18 +776,12 @@
 				1D3623250D0F684500981E51 /* AppDelegate.m */,
 				2863CA08106E098700F07F5F /* LanServerListDataSource.h */,
 				2863CA09106E098700F07F5F /* LanServerListDataSource.m */,
-				28CDBDC410AF51F10085DD42 /* Connection.h */,
-				28CDBDC510AF51F10085DD42 /* Connection.m */,
-				28BD0C5010B2F36500D85A8B /* CryptState.h */,
-				28BD0C5110B2F36500D85A8B /* CryptState.m */,
 				28990E6610DEDC2200636A79 /* Services.h */,
 				28990E6710DEDC2200636A79 /* Services.m */,
 				28BE268E10E17EF000F1A7A5 /* PDFImageLoader.h */,
 				28BE268F10E17EF000F1A7A5 /* PDFImageLoader.m */,
 				28BD0C7C10B305DB00D85A8B /* Version.h */,
 				287EC59910EAE26E00F79184 /* Version.m */,
-				282E231710ED386E00383BE1 /* RWLock.h */,
-				282E231810ED386E00383BE1 /* RWLock.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -856,12 +825,6 @@
 				28BE246B10E155B300F1A7A5 /* ServerViewController.xib */,
 				28BE246910E155B300F1A7A5 /* ServerViewController.h */,
 				28BE246A10E155B300F1A7A5 /* ServerViewController.m */,
-				2861428610ED294600D2B9FA /* User.h */,
-				2861428710ED294600D2B9FA /* User.m */,
-				284AB37210F8DCD8008D05D5 /* Channel.h */,
-				284AB37310F8DCD8008D05D5 /* Channel.m */,
-				2870417D10F902F600ABD7DE /* ServerModel.h */,
-				2870417E10F902F600ABD7DE /* ServerModel.m */,
 			);
 			name = ServerView;
 			sourceTree = "<group>";
@@ -1128,13 +1091,12 @@
 			name = About;
 			sourceTree = "<group>";
 		};
-		287EC49010EACDFF00F79184 /* PacketDataStream */ = {
+		28750BBA1143240B002885AF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				289B179F10E6ADD8005DC61C /* PacketDataStream.h */,
-				289B17A010E6ADD8005DC61C /* PacketDataStream.m */,
+				28750BBE1143240B002885AF /* libMumbleKit.a */,
 			);
-			name = PacketDataStream;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		28872D8610DC26AE00EDFA60 /* PublicServerList */ = {
@@ -1160,23 +1122,6 @@
 				285FD5A7106D35E700A7A967 /* WelcomeScreenController.m */,
 			);
 			name = WelcomeScreen;
-			sourceTree = "<group>";
-		};
-		28872D9E10DC274500EDFA60 /* Audio */ = {
-			isa = PBXGroup;
-			children = (
-				284F906B10A8A59400897B27 /* Audio.h */,
-				28BD0CA610B3096900D85A8B /* Audio.m */,
-				28D0897210A7361200091054 /* AudioOutput.h */,
-				28D0897310A7361200091054 /* AudioOutput.m */,
-				28D60DD810A8729E0091C2B3 /* AudioInput.h */,
-				28D60DD910A8729E0091C2B3 /* AudioInput.m */,
-				2892D5C510EEC92D00C18781 /* AudioOutputSpeech.h */,
-				2892D5C610EEC92D00C18781 /* AudioOutputSpeech.m */,
-				2892D5D610EECB3200C18781 /* AudioOutputUser.h */,
-				2892D5D710EECB3200C18781 /* AudioOutputUser.m */,
-			);
-			name = Audio;
 			sourceTree = "<group>";
 		};
 		28978FD7114311460099BE69 /* ServerModel */ = {
@@ -1273,6 +1218,7 @@
 		28E516B610F0495F00AAE419 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				28750BB91143240B002885AF /* MumbleKit.xcodeproj */,
 				28CB5A6410F2B99D004D82C1 /* ProtocolBuffers.xcodeproj */,
 				2822DE0310F16B2E00A5D72C /* SpeexDSP.xcodeproj */,
 				2822DDFA10F16B2700A5D72C /* Speex.xcodeproj */,
@@ -1353,6 +1299,7 @@
 				2822DE1110F16B4B00A5D72C /* PBXTargetDependency */,
 				2822DE1310F16B4B00A5D72C /* PBXTargetDependency */,
 				28CB5A7510F2B9A8004D82C1 /* PBXTargetDependency */,
+				28750C131143253F002885AF /* PBXTargetDependency */,
 			);
 			name = Mumble;
 			productName = Mumble;
@@ -1404,6 +1351,10 @@
 					ProjectRef = 2822DDEF10F16B0600A5D72C /* CELT.xcodeproj */;
 				},
 				{
+					ProductGroup = 28750BBA1143240B002885AF /* Products */;
+					ProjectRef = 28750BB91143240B002885AF /* MumbleKit.xcodeproj */;
+				},
+				{
 					ProductGroup = 28CB5A6510F2B99D004D82C1 /* Products */;
 					ProjectRef = 28CB5A6410F2B99D004D82C1 /* ProtocolBuffers.xcodeproj */;
 				},
@@ -1444,6 +1395,13 @@
 			fileType = archive.ar;
 			path = libSpeexDSP.a;
 			remoteRef = 2822DE0A10F16B2E00A5D72C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28750BBE1143240B002885AF /* libMumbleKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMumbleKit.a;
+			remoteRef = 28750BBD1143240B002885AF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		28CB5A6F10F2B99D004D82C1 /* libProtocolBuffers.a */ = {
@@ -1791,12 +1749,7 @@
 				28C286E10D94DF7D0034E888 /* PublicServerListController.m in Sources */,
 				285FD5A8106D35E700A7A967 /* WelcomeScreenController.m in Sources */,
 				2863CA0A106E098700F07F5F /* LanServerListDataSource.m in Sources */,
-				28D0897410A7361200091054 /* AudioOutput.m in Sources */,
-				28D60DDA10A8729E0091C2B3 /* AudioInput.m in Sources */,
 				28859A5710A8A74E00156CD8 /* smallft.cpp in Sources */,
-				28CDBDC610AF51F10085DD42 /* Connection.m in Sources */,
-				28BD0C5210B2F36500D85A8B /* CryptState.m in Sources */,
-				28BD0CA710B3096900D85A8B /* Audio.m in Sources */,
 				286930EF10CAFFA30064D737 /* AboutDialog.m in Sources */,
 				2869323E10CB0EF30064D737 /* AboutViewController.m in Sources */,
 				286D27C510DEA04400F02B0F /* PublicServerList.m in Sources */,
@@ -1804,16 +1757,9 @@
 				28BE230C10E13D1A00F1A7A5 /* CountryServerListController.m in Sources */,
 				28BE246C10E155B300F1A7A5 /* ServerViewController.m in Sources */,
 				28BE269010E17EF000F1A7A5 /* PDFImageLoader.m in Sources */,
-				289B17A110E6ADD8005DC61C /* PacketDataStream.m in Sources */,
 				287EC59A10EAE26E00F79184 /* Version.m in Sources */,
 				28E2F07B10EC0ECA004ECEC3 /* Descriptor.pb.m in Sources */,
 				28E2F07C10EC0ECA004ECEC3 /* ObjectivecDescriptor.pb.m in Sources */,
-				2861428810ED294600D2B9FA /* User.m in Sources */,
-				282E231910ED386E00383BE1 /* RWLock.m in Sources */,
-				2892D5C710EEC92D00C18781 /* AudioOutputSpeech.m in Sources */,
-				2892D5D810EECB3200C18781 /* AudioOutputUser.m in Sources */,
-				284AB37410F8DCD8008D05D5 /* Channel.m in Sources */,
-				2870417F10F902F600ABD7DE /* ServerModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1821,10 +1767,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28B9A48D1142747000C91D13 /* RWLock.m in Sources */,
-				28B9A40811426FE900C91D13 /* User.m in Sources */,
-				28B9A40911426FE900C91D13 /* Channel.m in Sources */,
-				28B9A40A11426FE900C91D13 /* ServerModel.m in Sources */,
 				28978FDC114311460099BE69 /* ServerModelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1846,6 +1788,11 @@
 			isa = PBXTargetDependency;
 			name = CELT;
 			targetProxy = 2822DE1210F16B4B00A5D72C /* PBXContainerItemProxy */;
+		};
+		28750C131143253F002885AF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MumbleKit;
+			targetProxy = 28750C121143253F002885AF /* PBXContainerItemProxy */;
 		};
 		28CB5A7510F2B9A8004D82C1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1880,6 +1827,7 @@
 					"${PROJECT_DIR}/3rdparty/celt/libcelt//**",
 					"${PROJECT_DIR}/3rdparty/speex/include//**",
 					"${PROJECT_DIR}/3rdparty/protobuf/objectivec/Classes//**",
+					"${PROJECT_DIR}/MumbleKit/src//**",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				LIBRARY_SEARCH_PATHS = (

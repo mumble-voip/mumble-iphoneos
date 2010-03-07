@@ -28,13 +28,21 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Connection.h"
-#import "PacketDataStream.h"
-#import "User.h"
-#import "AudioOutput.h"
+#import <MumbleKit/MKUtils.h>
+#import <MumbleKit/MKConnection.h>
+#import <MumbleKit/MKPacketDataStream.h>
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKAudioOutput.h>
+
+#import <CFNetwork/CFNetwork.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+
 
 static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType event, void *udata) {
-	Connection *c = (Connection *) udata;
+	MKConnection *c = (MKConnection *) udata;
 
 	switch (event) {
 
@@ -94,7 +102,7 @@ static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType 
 }
 
 static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType event, void *udata) {
-	Connection *c = (Connection *) udata;
+	MKConnection *c = (MKConnection *) udata;
 
 	switch (event) {
 		case kCFStreamEventHasBytesAvailable:
@@ -112,11 +120,11 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	}
 }
 
-@implementation Connection
+@implementation MKConnection
 
 @synthesize delegate;
 
--(id) init {
+- (id) init {
 	self = [super init];
 	if (self == nil)
 		return nil;
@@ -259,7 +267,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	CFRelease(sslDictionary);
 }
 
-- (void) sendMessageWithType:(MessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len {
+- (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len {
 	UInt16 type = CFSwapInt16HostToBig((UInt16)messageType);
 	UInt32 length = CFSwapInt32HostToBig(len);
 
@@ -268,7 +276,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	CFWriteStreamWrite(writeStream, buf, len);
 }
 
-- (void) sendMessageWithType:(MessageType)messageType data:(NSData *)data {
+- (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data {
 	[self sendMessageWithType:messageType buffer:(unsigned char *)[data bytes] length:[data length]];
 }
 
@@ -307,7 +315,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 			return;
 		}
 
-		packetType = (MessageType) CFSwapInt16BigToHost(*(UInt16 *)(&buffer[0]));
+		packetType = (MKMessageType) CFSwapInt16BigToHost(*(UInt16 *)(&buffer[0]));
 		packetLength = (int) CFSwapInt32BigToHost(*(UInt32 *)(&buffer[2]));
 
 		packetBufferOffset = 0;
@@ -420,7 +428,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		case ChannelStateMessage: {
 			MPChannelState *chs = [MPChannelState parseFromData:data];
 			if ([delegate respondsToSelector:@selector(handleChannelStateMessage:)]);
-				[delegate handleChannelStateMesage:chs];
+				[delegate handleChannelStateMessage:chs];
 			break;
 		}
 		case UserRemoveMessage: {
@@ -509,9 +517,9 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		}
 		case UDPTunnelMessage: {
 			unsigned char *buf = (unsigned char *)[data bytes];
-			UDPMessageType messageType = ((buf[0] >> 5) & 0x7);
+			MKUDPMessageType messageType = ((buf[0] >> 5) & 0x7);
 			unsigned int messageFlags = buf[0] & 0x1f;
-			PacketDataStream *pds = [[PacketDataStream alloc] initWithBuffer:buf+1 length:[data length]-1]; // fixme(-1)?
+			MKPacketDataStream *pds = [[MKPacketDataStream alloc] initWithBuffer:buf+1 length:[data length]-1]; // fixme(-1)?
 
 			switch (messageType) {
 				case UDPVoiceCELTAlphaMessage:
@@ -534,8 +542,8 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	}
 }
 
-- (void) handleVoicePacketOfType:(UDPMessageType)msgType flags:(NSUInteger)msgflags datastream:(PacketDataStream *)pds {
-	NSUInteger session = [pds getUnsignedInt];
+- (void) handleVoicePacketOfType:(MKUDPMessageType)msgType flags:(NSUInteger)msgflags datastream:(MKPacketDataStream *)pds {
+	MK_UNUSED NSUInteger session = [pds getUnsignedInt];
 	NSUInteger seq = [pds getUnsignedInt];
 
 	NSMutableData *voicePacketData = [[NSMutableData alloc] initWithCapacity:[pds left]+1];
@@ -545,8 +553,8 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	bytes[0] = (unsigned char)msgflags;
 	memcpy(bytes+1, [pds dataPtr], [pds left]);
 
-	User *user = nil;//[User lookupBySession:session];
-	AudioOutput *ao = [Audio audioOutput];
+	MKUser *user = nil;//[User lookupBySession:session];
+	MKAudioOutput *ao = [MKAudio audioOutput];
 	[ao addFrameToBufferWithUser:user data:voicePacketData sequence:seq type:msgType];
 
 	[voicePacketData release];

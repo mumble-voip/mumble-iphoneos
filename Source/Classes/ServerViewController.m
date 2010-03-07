@@ -31,8 +31,8 @@
 #import "ServerViewController.h"
 #import "PDFImageLoader.h"
 #import "Version.h"
-#import "User.h"
 
+#import <MumbleKit/MKUser.h>
 #include <celt.h>
 
 @implementation ServerViewController
@@ -47,12 +47,11 @@
 	serverHostName = host;
 	serverPortNumber = port;
 	
-	connection = [[Connection alloc] init];
+	connection = [[MKConnection alloc] init];
 	[connection setDelegate:self];
 	[connection connectToHost:serverHostName port:serverPortNumber];
-	[[[UIApplication sharedApplication] delegate] setConnection:connection];
 
-	model = [[ServerModel alloc] init];
+	model = [[MKServerModel alloc] init];
 	return self;
 }
 
@@ -106,7 +105,7 @@
  * Called when the connection is ready for use. We
  * use this to send our Version and Authenticate messages.
  */
-- (void) connectionOpened:(Connection *)conn {
+- (void) connectionOpened:(MKConnection *)conn {
 	/* OK. We're connected. */
 	NSLog(@"ServerViewController: connectionOpened");
 
@@ -186,7 +185,7 @@
 	}
 
 	NSUInteger session = [msg session];
-	User *user = [model userWithSession:session];
+	MKUser *user = [model userWithSession:session];
 	if (user == nil) {
 		if ([msg hasName]) {
 			NSLog(@"Adding user....!");
@@ -212,12 +211,12 @@
 	}
 	
 	if ([msg hasChannelId]) {
-		Channel *chan = [model channelWithId:[msg channelId]];
+		MKChannel *chan = [model channelWithId:[msg channelId]];
 		if (chan == nil) {
 			NSLog(@"ServerViewController: UserState with invalid channelId.");
 		}
 		
-		Channel *oldChan = [user channel];
+		MKChannel *oldChan = [user channel];
 		if (chan != oldChan) {
 			[model moveUser:user toChannel:chan];
 			NSLog(@"Moved user '%@' to channel '%@'", [user userName], [chan channelName]);
@@ -252,8 +251,8 @@
 		return;
 	}
 
-	Channel *chan = [model channelWithId:[msg channelId]];
-	Channel *parent = [msg hasParent] ? [model channelWithId:[msg parent]] : NULL;
+	MKChannel *chan = [model channelWithId:[msg channelId]];
+	MKChannel *parent = [msg hasParent] ? [model channelWithId:[msg parent]] : NULL;
 
 	if (!chan) {
 		if ([msg hasParent] && [msg hasName]) {
@@ -306,7 +305,7 @@
 		return;
 	}
 
-	Channel *chan = [model channelWithId:[msg channelId]];
+	MKChannel *chan = [model channelWithId:[msg channelId]];
 	if (chan && [chan channelId] != 0) {
 		[model removeChannel:chan];
 		if (serverSyncReceived == YES) {
@@ -353,12 +352,12 @@
     }
 	
 	id object = [model objectAtIndex:[indexPath indexAtPosition:1]];
-	if ([object class] == [Channel class]) {
-		Channel *c = (Channel *)object;
+	if ([object class] == [MKChannel class]) {
+		MKChannel *c = (MKChannel *)object;
 		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
 		cell.textLabel.text = [c channelName];
-	} else if ([object class] == [User class]) {
-		User *u = (User *)object;
+	} else if ([object class] == [MKUser class]) {
+		MKUser *u = (MKUser *)object;
 		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
 		cell.textLabel.text = [u userName];
 	}

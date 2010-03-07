@@ -1,5 +1,4 @@
 /* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
-   Copyright (C) 2005-2010 Thorvald Natvig <thorvald@natvig.com>
 
    All rights reserved.
 
@@ -29,47 +28,30 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Connection.h"
-#import "Audio.h"
-#import "User.h"
-#import "AudioOutputUser.h"
+@class MKAudioInput;
+@class MKAudioOutput;
 
-@interface AudioOutputSpeech : AudioOutputUser {
-	UDPMessageType messageType;
-	NSUInteger bufferOffset;
-	NSUInteger bufferFilled;
-	NSUInteger outputSize;
-	NSUInteger lastConsume;
-	NSUInteger frameSize;
-	BOOL lastAlive;
-	BOOL hasTerminator;
+#define SAMPLE_RATE 48000
 
-	float *fadeIn;
-	float *fadeOut;
+typedef enum {
+	Speex,
+	CELT,
+} MKCodecFormat;
 
-	JitterBuffer *jitter;
-	NSInteger missCount;
-	NSInteger missedFrames;
-
-	NSMutableArray *frames;
-	unsigned char flags;
-
-	User *user;
-	float powerMin, powerMax;
-	float averageAvailable;
-
-	CELTMode *celtMode;
-	CELTDecoder *celtDecoder;
-
-	pthread_mutex_t jitterMutex;
+@interface MKAudio : NSObject {
+	MKAudioInput *ai;
+	MKAudioOutput *ao;
 }
 
-- (id) initWithUser:(User *)user sampleRate:(NSUInteger)freq messageType:(MessageType)type;
++ (void) initializeAudio;
++ (MKAudioInput *) audioInput;
++ (MKAudioOutput *) audioOutput;
++ (MKAudio *) audio;
+
+/* 'private' methods. */
+- (id) init;
 - (void) dealloc;
-
-- (User *) user;
-- (MessageType) messageType;
-
-- (void) addFrame:(NSData *)data forSequence:(NSUInteger)seq;
+- (MKAudioInput *) audioInput;
+- (MKAudioOutput *) audioOutput;
 
 @end

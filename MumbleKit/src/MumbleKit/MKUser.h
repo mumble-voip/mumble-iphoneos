@@ -28,102 +28,71 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*
- * RWLock - Simple ObjC wrapper around the pthreads read/write lock.
- */
+@class MKChannel;
 
-#import "RWLock.h"
+typedef enum _TalkingState {
+	TalkingStateOff = 0,
+	TalkingStateTalking,
+	TalkingStateWhisperChannel,
+	TalkingStateWhisperTalk,
+} MKTalkingState;
 
-@implementation RWLock
+@interface MKUser : NSObject {
+	@protected
+		BOOL muteState;
+		BOOL deafState;
+		BOOL suppressState;
+		BOOL localMuteState;
+		BOOL selfMuteState;
+		BOOL selfDeafState;
+		MKTalkingState talkState;
+		NSUInteger userSession;
+		NSString *userName;
+		NSUInteger depth;
+		MKChannel *channel;
 
-- (id) init {
-	int err;
-
-	self = [super init];
-	if (self == nil)
-		return nil;
-
-	err = pthread_rwlock_init(&rwlock, NULL);
-	if (err != 0) {
-		NSLog(@"RWLock: Unable to initialize rwlock. Error=%i", err);
-		return nil;
-	}
-
-	return self;
+	@public
+		int sequence;
+		int frames;
 }
 
-- (void) dealloc {
-	int err;
+- (void) dealloc;
 
-	[super dealloc];
+#pragma mark -
 
-	err = pthread_rwlock_destroy(&rwlock);
-	if (err != 0) {
-		NSLog(@"RWLock: Unable to destroy rwlock.");
-	}
-}
+- (NSUInteger) treeDepth;
+- (void) setTreeDepth:(NSUInteger)depth;
 
-/*
- * Try to acquire a write lock. Returns immediately.
- */
-- (BOOL) tryWriteLock {
-	int err;
+#pragma mark -
 
-	err = pthread_rwlock_trywrlock(&rwlock);
-	if (err != 0) {
-		NSLog(@"RWLock: tryWriteLock failed: %i (%s).", err, strerror(err));
-		return NO;
-	}
+- (void) setSession:(NSUInteger)session;
+- (NSUInteger) session;
 
-	return YES;
-}
+- (void) setUserName:(NSString *)name;
+- (NSString *) userName;
 
-/*
- * Acquire a write lock. Block until we can get it.
- */
-- (void) writeLock {
-	int err;
+- (void) setTalking:(MKTalkingState)flag;
+- (MKTalkingState) talkingState;
 
-	err = pthread_rwlock_wrlock(&rwlock);
-	if (err != 0) {
-		NSLog(@"writeLock failed: %i (%s)", err, strerror(err));
-	}
+- (void) setMute:(BOOL)flag;
+- (BOOL) muted;
 
-	assert(err == 0);
-}
+- (void) setDeaf:(BOOL)flag;
+- (BOOL) deafened;
 
-/*
- * Try to acquire a read lock. Returns immediately.
- */
-- (BOOL) tryReadLock {
-	int err;
+- (void) setSuppress:(BOOL)flag;
+- (BOOL) suppressed;
 
-	err = pthread_rwlock_tryrdlock(&rwlock);
-	if (err != 0) {
-		return NO;
-	}
+- (void) setLocalMute:(BOOL)flag;
+- (BOOL) localMuted;
 
-	return YES;
-}
+- (void) setSelfMute:(BOOL)flag;
+- (BOOL) selfMuted;
 
-/*
- * Acquire a read lock. Block until it succeeds.
- */
-- (void) readLock {
-	int err;
+- (void) setSelfDeaf:(BOOL)flag;
+- (BOOL) selfDeafened;
 
-	err = pthread_rwlock_rdlock(&rwlock);
-	assert(err == 0);
-}
-
-/*
- * Unlock.
- */
-- (void) unlock {
-	int err;
-
-	err = pthread_rwlock_unlock(&rwlock);
-	assert(err == 0);
-}
+- (void) setChannel:(MKChannel *)chan;
+- (MKChannel *) channel;
 
 @end
