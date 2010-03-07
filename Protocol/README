@@ -30,10 +30,9 @@ recommended that you build the one found in the protobuf submodule:
 
  3rdparty/protobuf/
 
-No special parameters or anything need to be configured, simply run:
+To build a working protobuf compiler, simply execute:
 
- $ ./configure
- $ make
+ $ ./build-protoc.sh
 
 And you should have a working protoc executable in
 
