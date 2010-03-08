@@ -21,9 +21,6 @@
 		28886ACD10F167910060BD16 /* preprocess.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A6D10F167910060BD16 /* preprocess.c */; };
 		28886AD210F167910060BD16 /* resample_sse.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7210F167910060BD16 /* resample_sse.h */; };
 		28886AD310F167910060BD16 /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7310F167910060BD16 /* resample.c */; };
-		28886AD410F167910060BD16 /* sb_celp.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7410F167910060BD16 /* sb_celp.c */; };
-		28886AD510F167910060BD16 /* sb_celp.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7510F167910060BD16 /* sb_celp.h */; };
-		28886AD610F167910060BD16 /* scal.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7610F167910060BD16 /* scal.c */; };
 		28886AD710F167910060BD16 /* smallft.c in Sources */ = {isa = PBXBuildFile; fileRef = 28886A7710F167910060BD16 /* smallft.c */; };
 		28886AD810F167910060BD16 /* smallft.h in Headers */ = {isa = PBXBuildFile; fileRef = 28886A7810F167910060BD16 /* smallft.h */; };
 /* End PBXBuildFile section */
@@ -43,9 +40,6 @@
 		28886A6D10F167910060BD16 /* preprocess.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = preprocess.c; sourceTree = "<group>"; };
 		28886A7210F167910060BD16 /* resample_sse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = resample_sse.h; sourceTree = "<group>"; };
 		28886A7310F167910060BD16 /* resample.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = resample.c; sourceTree = "<group>"; };
-		28886A7410F167910060BD16 /* sb_celp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sb_celp.c; sourceTree = "<group>"; };
-		28886A7510F167910060BD16 /* sb_celp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sb_celp.h; sourceTree = "<group>"; };
-		28886A7610F167910060BD16 /* scal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scal.c; sourceTree = "<group>"; };
 		28886A7710F167910060BD16 /* smallft.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = smallft.c; sourceTree = "<group>"; };
 		28886A7810F167910060BD16 /* smallft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smallft.h; sourceTree = "<group>"; };
 		D2AAC07E0554694100DB518D /* libSpeexDSP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSpeexDSP.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,9 +98,6 @@
 				28886A6D10F167910060BD16 /* preprocess.c */,
 				28886A7210F167910060BD16 /* resample_sse.h */,
 				28886A7310F167910060BD16 /* resample.c */,
-				28886A7410F167910060BD16 /* sb_celp.c */,
-				28886A7510F167910060BD16 /* sb_celp.h */,
-				28886A7610F167910060BD16 /* scal.c */,
 				28886A7710F167910060BD16 /* smallft.c */,
 				28886A7810F167910060BD16 /* smallft.h */,
 			);
@@ -124,7 +115,6 @@
 				28886AA110F167910060BD16 /* fftwrap.h in Headers */,
 				28886AA310F167910060BD16 /* filterbank.h in Headers */,
 				28886AD210F167910060BD16 /* resample_sse.h in Headers */,
-				28886AD510F167910060BD16 /* sb_celp.h in Headers */,
 				28886AD810F167910060BD16 /* smallft.h in Headers */,
 				2862FAA710F16ABD00EDDFA1 /* speex_jitter.h in Headers */,
 				2862FAA810F16ABD00EDDFA1 /* speex_preprocess.h in Headers */,
@@ -183,8 +173,6 @@
 				28886AC510F167910060BD16 /* mdf.c in Sources */,
 				28886ACD10F167910060BD16 /* preprocess.c in Sources */,
 				28886AD310F167910060BD16 /* resample.c in Sources */,
-				28886AD410F167910060BD16 /* sb_celp.c in Sources */,
-				28886AD610F167910060BD16 /* scal.c in Sources */,
 				28886AD710F167910060BD16 /* smallft.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

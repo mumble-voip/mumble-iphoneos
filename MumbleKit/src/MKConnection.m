@@ -35,11 +35,19 @@
 #import <MumbleKit/MKAudioOutput.h>
 
 #import <CFNetwork/CFNetwork.h>
+
+#import "NSInvocation(MumbleKitAdditions).h"
+
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 
+/*
+ * The SecureTransport.h header is not available on the iPhone, so
+ * these constants are lifted from the Mac OS X version of the header.
+ */
+#define errSSLXCertChainInvalid -9807
 
 static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType event, void *udata) {
 	MKConnection *c = (MKConnection *) udata;
@@ -60,13 +68,13 @@ static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType 
 				c->socket = *(int *)CFDataGetBytePtr(nativeHandle);
 				CFRelease(nativeHandle);
 			} else {
-				NSLog(@"Connection: Unable to get socket file descriptor from stream. Breakage may occur.");
+				NSLog(@"MKConnection: Unable to get socket file descriptor from stream. Breakage may occur.");
 			}
 
 			if (c->socket != -1) {
 				int val = 1;
 				setsockopt(c->socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
-				NSLog(@"Connection: TCP_NODELAY=1");
+				NSLog(@"MKConnection: TCP_NODELAY=1");
 			}
 			break;
 		}
@@ -122,14 +130,11 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 
 @implementation MKConnection
 
-@synthesize delegate;
-
 - (id) init {
 	self = [super init];
 	if (self == nil)
 		return nil;
 
-	forceAllowedCertificateList = nil;
 	packetLength = -1;
 	connectionEstablished = NO;
 	socket = -1;
@@ -232,12 +237,30 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	return connectionEstablished;
 }
 
-- (void) setDelegate:(id)messageHandler {
-	delegate = messageHandler;
+#pragma mark -
+
+- (void) setDelegate:(id<MKConnectionDelegate>)delegate {
+	_delegate = delegate;
 }
 
+- (id<MKConnectionDelegate>) delegate {
+	return _delegate;
+}
+
+- (void) setMessageHandler:(id<MKMessageHandler>)messageHandler {
+	_msgHandler = messageHandler;
+}
+
+- (id<MKMessageHandler>) messageHandler {
+	return _msgHandler;
+}
+
+#pragma mark -
+
 - (void) setupSsl {
-	CFMutableDictionaryRef sslDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFMutableDictionaryRef sslDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+																	 &kCFTypeDictionaryKeyCallBacks,
+																	 &kCFTypeDictionaryValueCallBacks);
 
 	if (sslDictionary) {
 		CFDictionaryAddValue(sslDictionary, kCFStreamSSLLevel, kCFStreamSocketSecurityLevelTLSv1);
@@ -347,172 +370,221 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	if (streamError.domain == kCFStreamErrorDomainSSL) {
 		[self handleSslError:streamError];
 	} else if (streamError.domain == kCFStreamErrorDomainPOSIX) {
-		/* yay, posix error! */
-		NSLog(@"Connection: Error: %s", strerror(streamError.error));
+		NSLog(@"MKConnection: Error: %s", strerror(streamError.error));
 	} else {
 		NSLog(@"domain = %u", streamError.domain);
-		NSLog(@"Connection: Unexpected error. (domain=%u)", streamError.domain);
+		NSLog(@"MKConnection: Unexpected error. (domain=%u)", streamError.domain);
 	}
 }
 
-- (void) handleSslError:(CFStreamError)streamError {
+- (void) handleSslError:(CFStreamError)streamError {	
 	switch (streamError.error) {
-		/*
-		 * An invalid certificate chain was encountered. This error
-		 * is pretty typical amongst Mumble servers, because many
-		 * server operators use self-signed certificates.
-		 */
 		case errSSLXCertChainInvalid: {
-			/*
-			 * Get a list of our peer certificates, so we can pass them to
-			 * our delegate.
-			 */
-			SecTrustRef trust = (SecTrustRef )CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerTrust);
+			SecTrustRef trust = (SecTrustRef) CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerTrust);
 			SecTrustResultType trustResult;
 			if (SecTrustEvaluate(trust, &trustResult) != noErr) {
 				NSLog(@"SecTrustEvalute: failure.");
 			}
-			NSLog(@"resultType = %i", trustResult);
-			CFRelease(trust);
 
-			NSArray *peerCertificates = [self peerCertificates];
-			if ([delegate respondsToSelector:@selector(invalidSslCertificateChain:)]) {
-				[delegate performSelectorOnMainThread:@selector(invalidSslCertificateChain:) withObject:peerCertificates waitUntilDone:NO];
-			} else {
-				NSLog(@"Connection: Delegate has no 'invalidSslCertificateChain:' method.");
+			switch (trustResult) {
+				case kSecTrustResultInvalid:
+					/* Invalid setting or result. Indicates the SecTrustEvaluate() did not finish completely. */
+					break;
+					
+				case kSecTrustResultProceed:
+					/* May be trusted for the purposes designated. ('Always Trust' in Keychain) */
+					 break;
+					
+				case kSecTrustResultConfirm:
+					/* User confirmation is required before proceeding. ('Ask Permission' in Keychain) */
+					break;
+					
+				case kSecTrustResultDeny:
+					/* This certificate is not trusted. ('Never Trust' in Keychain) */
+					break;
+					
+				case kSecTrustResultUnspecified:
+					/* No trust setting specified. ('Use System Policy' in Keychain) */
+					break;
+					
+				case kSecTrustResultRecoverableTrustFailure:
+					/* A recoverable trust failure. */
+					break;
+				
+				case kSecTrustResultFatalTrustFailure:
+					/* Fatal trust failure. Trust cannot be established without replacing the certificate.
+					 * This error is thrown when the certificate is corrupt. */
+					break;
+				
+				case kSecTrustResultOtherError:
+					/* A non-trust related error. Possibly internal error in SecTrustEvaluate(). */
+					break;
 			}
-			break;
+			
+			CFRelease(trust);
+			
+			NSInvocation *invocation = [NSInvocation invocationWithTarget:_delegate selector:@selector(connection:trustFailureInCertificateChain:)];
+			[invocation setArgument:&self atIndex:2];
+			[invocation setArgument:[NSInvocation nilPointerLocation] atIndex:3];
+			[invocation invokeOnMainThread];
+			NSLog(@"invoked %p", invocation);
 		}
 	}
 }
 
 - (void) messageRecieved: (NSData *)data {
+	NSInvocation *invocation;
+	
+	/* No message handler has been assigned. Don't propagate. */
+	if (! _msgHandler)
+		return;
 
 	switch (packetType) {
 		case VersionMessage: {
 			MPVersion *v = [MPVersion parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleVersionMessage:)])
-				[delegate handleVersionMessage:v];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleVersionMessage:)];
+			[invocation setArgument:&v atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case AuthenticateMessage: {
 			MPAuthenticate *a = [MPAuthenticate parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleAuthenticateMessage:)])
-				[delegate handleAuthenticateMessage:a];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleAuthenticateMessage:)];
+			[invocation setArgument:&a atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case PingMessage: {
 			MPPing *p = [MPPing parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handlePingMessage:)])
-				[delegate handlePingMessage:p];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handlePingMessage:)];
+			[invocation setArgument:&p atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case RejectMessage: {
 			MPReject *r = [MPReject parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleRejectMessage:)])
-				[delegate handleRejectMessage:r];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleRejectMessage:)];
+			[invocation setArgument:&r atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ServerSyncMessage: {
 			MPServerSync *ss = [MPServerSync parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleServerSyncMessage:)])
-				[delegate handleServerSyncMessage:ss];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleServerSyncMessage:)];
+			[invocation setArgument:&ss atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ChannelRemoveMessage: {
 			MPChannelRemove *chrm = [MPChannelRemove parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleChannelRemoveMessage:)])
-				[delegate handleChannelRemoveMessage:chrm];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleChannelRemoveMessage:)];
+			[invocation setArgument:&chrm atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ChannelStateMessage: {
 			MPChannelState *chs = [MPChannelState parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleChannelStateMessage:)]);
-				[delegate handleChannelStateMessage:chs];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleChannelStateMessage:)];
+			[invocation setArgument:&chs atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case UserRemoveMessage: {
 			MPUserRemove *urm = [MPUserRemove parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleUserRemoveMessage:)])
-				[delegate handleUserRemoveMessage:urm];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleUserRemoveMessage:)];
+			[invocation setArgument:&urm atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case UserStateMessage: {
 			MPUserState *us = [MPUserState parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleUserStateMessage:)])
-				[delegate handleUserStateMessage:us];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleUserStateMessage:)];
+			[invocation setArgument:&us atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case BanListMessage: {
 			MPBanList *bl = [MPBanList parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleBanListMessage:)])
-				[delegate handleBanListMessage:bl];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleBanListMessage:)];
+			[invocation setArgument:&bl atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case TextMessageMessage: {
 			MPTextMessage *tm = [MPTextMessage parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleTextMessageMessage:)])
-				[delegate handleTextMessageMessage:tm];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleTextMessageMessage:)];
+			[invocation setArgument:&tm atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case PermissionDeniedMessage: {
 			MPPermissionDenied *pm = [MPPermissionDenied parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handlePermissionDeniedMessage:)])
-				[delegate handlePermissionDeniedMessage:pm];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handlePermissionDeniedMessage:)];
+			[invocation setArgument:&pm atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ACLMessage: {
 			MPACL *acl = [MPACL parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleACLMessage:)])
-				[delegate handleACLMessage:acl];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleACLMessage:)];
+			[invocation setArgument:&acl atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case QueryUsersMessage: {
 			MPQueryUsers *qu = [MPQueryUsers parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleQueryUsersMessage:)])
-				[delegate handleQueryUsersMessage:qu];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleQueryUsersMessage:)];
+			[invocation setArgument:&qu atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case CryptSetupMessage: {
 			MPCryptSetup *cs = [MPCryptSetup parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleCryptSetupMessage:)])
-				[delegate handleCryptSetupMessage:cs];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleCryptSetupMessage:)];
+			[invocation setArgument:&cs atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ContextActionAddMessage: {
 			MPContextActionAdd *caa = [MPContextActionAdd parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleContextActionAddMessage:)])
-				[delegate handleContextActionAddMessage:caa];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleContextActionAddMessage:)];
+			[invocation setArgument:&caa atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case ContextActionMessage: {
 			MPContextAction *ca = [MPContextAction parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleContextActionMessage:)])
-				[delegate handleContextActionMessage:ca];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleContextActionMessage:)];
+			[invocation setArgument:&ca atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case UserListMessage: {
 			MPUserList *ul = [MPUserList parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleUserListMessage:)])
-				[delegate handleUserListMessage:ul];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleUserListMessage:)];
+			[invocation setArgument:&ul atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case VoiceTargetMessage: {
 			MPVoiceTarget *vt = [MPVoiceTarget parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleVoiceTargetMessage:)])
-				[delegate handleVoiceTargetMessage:vt];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleVoiceTargetMessage:)];
+			[invocation setArgument:&vt atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case PermissionQueryMessage: {
 			MPPermissionQuery *pq = [MPPermissionQuery parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handlePermissionQueryMessage:)])
-				[delegate handlePermissionQueryMessage:pq];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handlePermissionQueryMessage:)];
+			[invocation setArgument:&pq atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case CodecVersionMessage: {
 			MPCodecVersion *cvm = [MPCodecVersion parseFromData:data];
-			if ([delegate respondsToSelector:@selector(handleCodecVersionMessage:)])
-				[delegate handleCodecVersionMessage:cvm];
+			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleCodecVersionMessage:)];
+			[invocation setArgument:&cvm atIndex:2];
+			[invocation invokeOnMainThread];
 			break;
 		}
 		case UDPTunnelMessage: {

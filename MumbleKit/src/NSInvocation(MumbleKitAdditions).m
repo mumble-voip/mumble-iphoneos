@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,18 +28,34 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKConnection.h>
-#import <MumbleKit/MKServerModel.h>
+#import "NSInvocation(MumbleKitAdditions).h"
 
-@interface ServerViewController : UITableViewController <MKConnectionDelegate, MKMessageHandler> {
-	MKConnection *connection;
-	MKServerModel *model;
-	NSString *serverHostName;
-	NSUInteger serverPortNumber;
-	BOOL serverSyncReceived;
+@implementation NSInvocation (MumbleKitAdditions)
+
+static void *_nilPointerLocation = nil;
+
++ (NSInvocation *) invocationWithTarget:(id)target selector:(SEL)selector {
+	NSInvocation *invocation = nil;
+	
+	if ([target respondsToSelector:selector]) {
+		NSMethodSignature *ms = [target methodSignatureForSelector:selector];
+		invocation = [NSInvocation invocationWithMethodSignature:ms];
+		[invocation setTarget:target];
+		[invocation setSelector:selector];
+	} else {
+		NSLog(@"NSInvocation(MumbleKitAdditions): Target %@ (%p) does not respond to selector %@. Returning nil.",
+			  NSStringFromClass(target), target, NSStringFromSelector(selector));
+	}
+		
+	return invocation;
 }
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
-- (void)dealloc;
++ (void **) nilPointerLocation {
+	return &_nilPointerLocation;
+}
+
+- (void) invokeOnMainThread {
+	[self performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:NO];
+}
 
 @end

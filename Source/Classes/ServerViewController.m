@@ -49,54 +49,45 @@
 	
 	connection = [[MKConnection alloc] init];
 	[connection setDelegate:self];
+	[connection setMessageHandler:self];
 	[connection connectToHost:serverHostName port:serverPortNumber];
 
 	model = [[MKServerModel alloc] init];
+
 	return self;
 }
 
-- (void)dealloc {
+- (void) dealloc {
     [super dealloc];
 }
 
 
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
+- (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-
-	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-#pragma mark Connection delegate methods
-
-/*
- * invalidSslCertificateChain.
- */
-- (void) invalidSslCertificateChain:(NSArray *)certificateChain {
-
-	NSString *title = @"Unable to validate server certificate";
-	NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
-
-	[connection setForceAllowedCertificates:certificateChain];
-
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-	[alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
+- (void) viewDidUnload {
 }
 
 - (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	/* ok clicked. */
 	if (buttonIndex == 1) {
 		[connection reconnect];
-	} else {
-		[connection setForceAllowedCertificates:nil];
 	}
+}
+
+#pragma mark MKConnection delegate methods
+
+- (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
+	NSLog(@"invalidCertificateChain");
+	
+	NSString *title = @"Unable to validate server certificate";
+	NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
+
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+	[alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
 }
 
 /*
@@ -128,11 +119,13 @@
 	[connection sendMessageWithType:VersionMessage data:data];
 
 	MPAuthenticate_Builder *authenticate = [MPAuthenticate builder];
-	[authenticate setUsername:@"iPhoneOS-user"];
+	[authenticate setUsername:@"Tukoff43"];
 	[authenticate addCeltVersions:bitstream];
 	data = [[authenticate build] data];
 	[connection sendMessageWithType:AuthenticateMessage data:data];
 }
+
+#pragma mark MKMessageHandler methods
 
 /*
  * Version message.
@@ -238,8 +231,13 @@
 	[[self tableView] reloadData];
 }
 
+/*
+ * A user leaving the server.
+ */
 - (void) handleUserRemoveMessage:(MPUserRemove *)msg {
 	NSLog(@"ServerViewController: Recieved UserRemove message");
+	[model removeUser:[model userWithSession:[msg session]]];
+	[[self tableView] reloadData];
 }
 
 - (void) handleChannelStateMessage:(MPChannelState *)msg {
@@ -322,7 +320,7 @@
 	}
 
 	NSLog(@"ServerSync: Our session=%u", [msg session]);
-	
+
 	[[self tableView] reloadData];
 	NSLog(@"reloadedData...");
 }

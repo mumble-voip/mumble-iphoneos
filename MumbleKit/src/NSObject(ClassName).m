@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,18 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKConnection.h>
-#import <MumbleKit/MKServerModel.h>
+#import "NSObject(ClassName).h"
 
-@interface ServerViewController : UITableViewController <MKConnectionDelegate, MKMessageHandler> {
-	MKConnection *connection;
-	MKServerModel *model;
-	NSString *serverHostName;
-	NSUInteger serverPortNumber;
-	BOOL serverSyncReceived;
-}
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
-- (void)dealloc;
+@implementation NSObject (ClassName)
 
 @end

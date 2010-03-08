@@ -30,12 +30,6 @@
 
 #import "Mumble.pb.h"
 
-/*
- * The SecureTransport.h header is not available on the iPhone, so
- * these constants are lifted from the Mac OS X version of the header.
- */
-#define errSSLXCertChainInvalid -9807
-
 @class MKConnection;
 @class MKPacketDataStream;
 
@@ -71,11 +65,19 @@ typedef enum {
 	CodecVersionMessage
 } MKMessageType;
 
-@protocol MKMessageHandler
-
+/*
+ * MKConnectionDelegate
+ */
+@protocol MKConnectionDelegate
 - (void) connectionOpened:(MKConnection *)conn;
 - (void) connectionClosed:(MKConnection *)conn;
+- (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain;
+@end
 
+/*
+ * MKMessageHandler
+ */
+@protocol MKMessageHandler
 - (void) handleAuthenticateMessage: (MPAuthenticate *)msg;
 - (void) handleBanListMessage: (MPBanList *)msg;
 - (void) handleRejectMessage: (MPReject *)msg;
@@ -97,14 +99,12 @@ typedef enum {
 - (void) handleVoiceTargetMessage: (MPVoiceTarget *)msg;
 - (void) handlePermissionQueryMessage: (MPPermissionQuery *)msg;
 - (void) handleCodecVersionMessage: (MPCodecVersion *)msg;
-
 @end
 
 @interface MKConnection : NSObject {
 	@protected
 		CFWriteStreamRef writeStream;
 		CFReadStreamRef readStream;
-		id delegate;
 		MKMessageType packetType;
 		int packetLength;
 		int packetBufferOffset;
@@ -112,13 +112,14 @@ typedef enum {
 		NSString *hostname;
 		NSUInteger port;
 		NSArray *forceAllowedCertificateList;
-
+	
+		id _msgHandler;
+		id _delegate;
+	
 	@public
 		BOOL connectionEstablished;
 		int socket;
 }
-
-@property (assign) id delegate;
 
 - (id) init;
 - (void) dealloc;
@@ -128,7 +129,10 @@ typedef enum {
 - (void) closeStreams;
 - (BOOL) connected;
 
-- (void) setDelegate: (id<MKMessageHandler>)messageHandler;
+- (void) setMessageHandler: (id<MKMessageHandler>)messageHandler;
+- (id) messageHandler;
+- (void) setDelegate: (id<MKConnectionDelegate>)delegate;
+- (id) delegate;
 
 - (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len;
 - (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data;
@@ -141,12 +145,5 @@ typedef enum {
 - (void) handleError: (CFStreamError)streamError;
 - (void) handleSslError: (CFStreamError)streamError;
 - (void) handleVoicePacketOfType:(MKUDPMessageType)messageType flags:(NSUInteger)messageFlags datastream:(MKPacketDataStream *)pds;
-
-/* Access the connection's peer certificates. */
-- (NSArray *) peerCertificates;
-
-/* Mechanism to force invalid certificates through. */
-- (void) setForceAllowedCertificates:(NSArray *)forcedCerts;
-- (NSArray *) forceAllowedCertificates;
 
 @end
