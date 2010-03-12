@@ -94,6 +94,7 @@ static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType 
 		}
 
 		case kCFStreamEventErrorOccurred: {
+			NSLog(@"ERROR!");
 			CFStreamError err = CFWriteStreamGetError(writeStream);
 			[c handleError:err];
 			break;
@@ -138,6 +139,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	packetLength = -1;
 	connectionEstablished = NO;
 	socket = -1;
+	_ignoreSSLVerification = NO;
 
 	return self;
 }
@@ -199,7 +201,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 
 	CFReadStreamScheduleWithRunLoop(readStream, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
 
-	[self setupSsl];
+	[self _setupSsl];
 
 	if (! CFWriteStreamOpen(writeStream)) {
 		NSLog(@"Connection: Unable to open write stream.");
@@ -257,37 +259,36 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 
 #pragma mark -
 
-- (void) setupSsl {
+/*
+ * Setup our CFStreams for SSL.
+ */
+- (void) _setupSsl {
 	CFMutableDictionaryRef sslDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
 																	 &kCFTypeDictionaryKeyCallBacks,
 																	 &kCFTypeDictionaryValueCallBacks);
 
 	if (sslDictionary) {
 		CFDictionaryAddValue(sslDictionary, kCFStreamSSLLevel, kCFStreamSocketSecurityLevelTLSv1);
-
 		/*
-		 * The following three properties have been replaced by 'CFStreamSSLValidatesCertificateChain'.
+		 * The CFNetwork headers dictates that using the following properties:
+		 *
+		 *  - kCFStreamSSLAllowsExpiredCertificates
+		 *  - kCFStreamSSLAllowsExpiredRoots
+		 *  - kCFSTreamSSLAllowsAnyRoot
+		 *
+		 * has been deprecated in favor of using kCFStreamSSLValidatesCertificateChain.
 		 */
-#if 0
-		 CFDictionaryAddValue(sslDictionary, kCFStreamSSLAllowsExpiredCertificates, kCFBooleanFalse);
-		 CFDictionaryAddValue(sslDictionary, kCFStreamSSLAllowsExpiredRoots, kCFBooleanFalse);
-		 CFDictionaryAddValue(sslDictionary, kCFStreamSSLAllowsAnyRoot, kCFBooleanFalse);
-#endif
-		NSLog(@"forceAllowedCertificates = %i", [forceAllowedCertificateList count]);
-
-		/* Check if we should force through a particular list of certificates no matter what. */
-		if ([forceAllowedCertificateList count] > 0) {
-			NSLog(@"Connection: Disabling automatic validation of certificate chain.");
-			CFDictionaryAddValue(sslDictionary, kCFStreamSSLValidatesCertificateChain, kCFBooleanFalse);
-		} else {
-			CFDictionaryAddValue(sslDictionary, kCFStreamSSLValidatesCertificateChain, kCFBooleanTrue);
-		}
+		CFDictionaryAddValue(sslDictionary, kCFStreamSSLValidatesCertificateChain, _ignoreSSLVerification ? kCFBooleanFalse : kCFBooleanTrue);
 	}
-
+	
 	CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, sslDictionary);
 	CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, sslDictionary);
 
 	CFRelease(sslDictionary);
+}
+
+- (void) setIgnoreSSLVerification:(BOOL)flag {
+	_ignoreSSLVerification = flag;
 }
 
 - (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len {
@@ -306,21 +307,6 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 - (NSArray *) peerCertificates {
 	NSArray *peerCertificates = (NSArray *)CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerCertificates);
 	return [peerCertificates autorelease];
-}
-
-/*
- * Mechanism to force invalid certificates through.
- */
-- (void) setForceAllowedCertificates:(NSArray *)forcedCerts {
-	NSLog(@"setForceAllowedCertificates to list of length = %i", [forcedCerts count]);
-	if (forceAllowedCertificateList)
-		[forceAllowedCertificateList release];
-	forceAllowedCertificateList = [[forcedCerts copy] retain];
-}
-
--(NSArray *) forceAllowedCertificates {
-	NSLog(@"Bla.... length at the moment = %i", [forceAllowedCertificateList count]);
-	return forceAllowedCertificateList;
 }
 
 -(void) dataReady {
@@ -420,14 +406,14 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 					/* A non-trust related error. Possibly internal error in SecTrustEvaluate(). */
 					break;
 			}
-			
+
 			CFRelease(trust);
-			
+
+			NSArray *certificates = (NSArray *) CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerCertificates);
 			NSInvocation *invocation = [NSInvocation invocationWithTarget:_delegate selector:@selector(connection:trustFailureInCertificateChain:)];
 			[invocation setArgument:&self atIndex:2];
-			[invocation setArgument:[NSInvocation nilPointerLocation] atIndex:3];
+			[invocation setArgument:&certificates atIndex:3];
 			[invocation invokeOnMainThread];
-			NSLog(@"invoked %p", invocation);
 		}
 	}
 }
@@ -600,7 +586,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 					[self handleVoicePacketOfType:messageType flags:messageFlags datastream:pds];
 					break;
 				default:
-					NSLog(@"Connection: Unknown UDPTunnel packet received. Discarding...");
+					NSLog(@"MKConnection: Unknown UDPTunnel packet received. Discarding...");
 					break;
 			}
 
@@ -608,7 +594,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 			break;
 		}
 		default: {
-			NSLog(@"Connection: Unknown packet type recieved. Discarding.");
+			NSLog(@"MKConnection: Unknown packet type recieved. Discarding.");
 			break;
 		}
 	}

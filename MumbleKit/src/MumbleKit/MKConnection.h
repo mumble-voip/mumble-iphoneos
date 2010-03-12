@@ -111,8 +111,8 @@ typedef enum {
 		NSMutableData *packetBuffer;
 		NSString *hostname;
 		NSUInteger port;
-		NSArray *forceAllowedCertificateList;
-	
+
+		BOOL _ignoreSSLVerification;
 		id _msgHandler;
 		id _delegate;
 	
@@ -134,13 +134,15 @@ typedef enum {
 - (void) setDelegate: (id<MKConnectionDelegate>)delegate;
 - (id) delegate;
 
+- (void) setIgnoreSSLVerification:(BOOL)flag;
+
 - (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len;
 - (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data;
 
 - (void) dataReady;
 - (void) messageRecieved: (NSData *)data;
 
-- (void) setupSsl;
+- (void) _setupSsl;
 
 - (void) handleError: (CFStreamError)streamError;
 - (void) handleSslError: (CFStreamError)streamError;

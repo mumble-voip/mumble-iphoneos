@@ -70,8 +70,10 @@
 }
 
 - (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	/* ok clicked. */
+	/* OK clicked. */
 	if (buttonIndex == 1) {
+		/* For now, simply ignore the SSL verification. */
+		[connection setIgnoreSSLVerification:YES];
 		[connection reconnect];
 	}
 }
@@ -79,7 +81,16 @@
 #pragma mark MKConnection delegate methods
 
 - (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
-	NSLog(@"invalidCertificateChain");
+/*	OSStatus err;
+	SecCertificateRef cert;
+	NSMutableDictionary *operation = [NSMutableDictionary dictionary];
+	[operation setObject:kSecClassCertificate forKey:kSecClass];
+	[operation setObject:[chain objectAtIndex:0] forKey:kSecValueRef];
+	err = SecItemAdd(operation, &cert);
+	if (err != noErr) {
+		NSLog(@"error = %i", err);
+	}*/
+			  
 	
 	NSString *title = @"Unable to validate server certificate";
 	NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
