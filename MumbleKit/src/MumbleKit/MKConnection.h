@@ -102,23 +102,20 @@ typedef enum {
 @end
 
 @interface MKConnection : NSObject {
-	@protected
-		CFWriteStreamRef writeStream;
-		CFReadStreamRef readStream;
-		MKMessageType packetType;
-		int packetLength;
-		int packetBufferOffset;
-		NSMutableData *packetBuffer;
-		NSString *hostname;
-		NSUInteger port;
+	MKMessageType packetType;
+	int packetLength;
+	int packetBufferOffset;
+	NSMutableData *packetBuffer;
+	NSString *hostname;
+	NSUInteger port;
 
-		BOOL _ignoreSSLVerification;
-		id _msgHandler;
-		id _delegate;
-	
-	@public
-		BOOL connectionEstablished;
-		int socket;
+	NSOutputStream *_outputStream;
+	NSInputStream *_inputStream;
+	BOOL _connectionEstablished;
+	BOOL _ignoreSSLVerification;
+	id _msgHandler;
+	id _delegate;
+	int _socket;
 }
 
 - (id) init;
@@ -135,6 +132,7 @@ typedef enum {
 - (id) delegate;
 
 - (void) setIgnoreSSLVerification:(BOOL)flag;
+- (NSArray *) certificates;
 
 - (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len;
 - (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data;
@@ -144,8 +142,9 @@ typedef enum {
 
 - (void) _setupSsl;
 
-- (void) handleError: (CFStreamError)streamError;
-- (void) handleSslError: (CFStreamError)streamError;
+- (void) handleError: (NSError *)streamError;
+- (void) handleSslError: (NSError *)streamError;
+
 - (void) handleVoicePacketOfType:(MKUDPMessageType)messageType flags:(NSUInteger)messageFlags datastream:(MKPacketDataStream *)pds;
 
 @end

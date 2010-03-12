@@ -47,87 +47,9 @@
  * The SecureTransport.h header is not available on the iPhone, so
  * these constants are lifted from the Mac OS X version of the header.
  */
-#define errSSLXCertChainInvalid -9807
-
-static void writeStreamCallback(CFWriteStreamRef writeStream, CFStreamEventType event, void *udata) {
-	MKConnection *c = (MKConnection *) udata;
-
-	switch (event) {
-
-		case kCFStreamEventOpenCompleted: {
-			/*
-			 * The OpenCompleted is a bad indicator of 'ready to use' for a
-			 * TLS socket, since it will fire even before the TLS handshake
-			 * has even begun. Instead, we rely on the first CanAcceptBytes
-			 * event we receive to determine that a connection was established.
-			 *
-			 * We only use this event to extract our underlying socket.
-			 */
-			CFDataRef nativeHandle = CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySocketNativeHandle);
-			if (nativeHandle) {
-				c->socket = *(int *)CFDataGetBytePtr(nativeHandle);
-				CFRelease(nativeHandle);
-			} else {
-				NSLog(@"MKConnection: Unable to get socket file descriptor from stream. Breakage may occur.");
-			}
-
-			if (c->socket != -1) {
-				int val = 1;
-				setsockopt(c->socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
-				NSLog(@"MKConnection: TCP_NODELAY=1");
-			}
-			break;
-		}
-
-		case kCFStreamEventCanAcceptBytes: {
-			if (! c->connectionEstablished) {
-				/*
-				 * OK, so we seem to have established our connection.
-				 *
-				 * First we need to check if we were told to ignore invalid
-				 * certificates in the certificate chain.
-				 */
-				c->connectionEstablished = YES;
-				[[c delegate] performSelectorOnMainThread:@selector(connectionOpened:) withObject:c waitUntilDone:NO];
-			}
-			break;
-		}
-
-		case kCFStreamEventErrorOccurred: {
-			NSLog(@"ERROR!");
-			CFStreamError err = CFWriteStreamGetError(writeStream);
-			[c handleError:err];
-			break;
-		}
-
-		case kCFStreamEventEndEncountered:
-			NSLog(@"Connection: WriteStream -> EndEncountered");
-			break;
-
-		default:
-			NSLog(@"Connection: WriteStream -> Unknown event!");
-			break;
-	}
-}
-
-static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType event, void *udata) {
-	MKConnection *c = (MKConnection *) udata;
-
-	switch (event) {
-		case kCFStreamEventHasBytesAvailable:
-			[c dataReady];
-			break;
-
-		case kCFStreamEventOpenCompleted:
-		case kCFStreamEventErrorOccurred:
-		case kCFStreamEventEndEncountered:
-		default:
-			/*
-			 * Implemented in writeStreamCallback.
-			 */
-			break;
-	}
-}
+#define errSSLProtocol             -9800
+#define errSSLXCertChainInvalid    -9807
+#define errSSLLast                 -9849
 
 @implementation MKConnection
 
@@ -137,8 +59,8 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		return nil;
 
 	packetLength = -1;
-	connectionEstablished = NO;
-	socket = -1;
+	_connectionEstablished = NO;
+	_socket = -1;
 	_ignoreSSLVerification = NO;
 
 	return self;
@@ -152,91 +74,125 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 - (void) connectToHost:(NSString *)hostName port:(NSUInteger)portNumber {
 
 	packetLength = -1;
-	connectionEstablished = NO;
+	_connectionEstablished = NO;
 
 	hostname = hostName;
 	port = portNumber;
 
-	CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, (CFStringRef)hostname, port, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault,
+									   (CFStringRef)hostname, port,
+									   (CFReadStreamRef *) &_inputStream,
+									   (CFWriteStreamRef *) &_outputStream);
 
-	if (readStream == NULL || writeStream == NULL) {
-		NSLog(@"Connection: Unable to create stream pair.");
+	if (_inputStream == nil || _outputStream == nil) {
+		NSLog(@"MKConnection: Unable to create stream pair.");
 		return;
 	}
 
-	CFOptionFlags writeEvents = kCFStreamEventOpenCompleted |
-	                            kCFStreamEventCanAcceptBytes |
-	                            kCFStreamEventErrorOccurred |
-	                            kCFStreamEventEndEncountered;
+	[_inputStream setDelegate:self];
+	[_outputStream setDelegate:self];
 
-	CFStreamClientContext wctx;
-	wctx.version = 0;
-	wctx.info = self;
-	wctx.retain = NULL;
-	wctx.release = NULL;
-	wctx.copyDescription = NULL;
-
-	if (! CFWriteStreamSetClient(writeStream, writeEvents, writeStreamCallback, &wctx)) {
-		NSLog(@"Connection: Unable to set client for CFWriteStream.");
-	}
-
-	CFWriteStreamScheduleWithRunLoop(writeStream, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
-
-	CFOptionFlags readEvents = kCFStreamEventOpenCompleted |
-	                           kCFStreamEventHasBytesAvailable |
-							   kCFStreamEventErrorOccurred |
-	                           kCFStreamEventEndEncountered;
-
-	CFStreamClientContext rctx;
-	rctx.version = 0;
-	rctx.info = (void *)self;
-	rctx.retain = NULL;
-	rctx.release = NULL;
-	rctx.copyDescription = NULL;
-
-	if (! CFReadStreamSetClient(readStream, readEvents, (void *)readStreamCallback, &rctx)) {
-		NSLog(@"Connection: Unable to set client for CFReadStream.");
-		return;
-	}
-
-	CFReadStreamScheduleWithRunLoop(readStream, CFRunLoopGetMain(), kCFRunLoopDefaultMode);
+	[_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	[_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 
 	[self _setupSsl];
 
-	if (! CFWriteStreamOpen(writeStream)) {
-		NSLog(@"Connection: Unable to open write stream.");
-	}
-
-	if (! CFReadStreamOpen(readStream)) {
-		NSLog(@"Connection: Unable to open read stream.");
-	}
+	[_inputStream open];
+	[_outputStream open];
 }
 
 - (void) closeStreams {
-	NSLog(@"Connection: Closing streams.");
+	NSLog(@"MKConnection: Closing streams.");
 
-	if (writeStream) {
-		CFWriteStreamClose(writeStream);
-		CFRelease(writeStream);
-		writeStream = nil;
+	if (_inputStream) {
+		[_inputStream close];
+		[_inputStream release];
+		_inputStream = nil;
 	}
 
-	if (readStream) {
-		CFReadStreamClose(readStream);
-		CFRelease(readStream);
-		readStream = nil;
+	if (_outputStream) {
+		[_outputStream close];
+		[_outputStream release];
+		_outputStream = nil;
 	}
 }
 
 - (void) reconnect {
 	[self closeStreams];
 
-	NSLog(@"Connection: Reconnecting...");
+	NSLog(@"MKConnection: Reconnecting...");
 	[self connectToHost:hostname port:port];
 }
 
 - (BOOL) connected {
-	return connectionEstablished;
+	return _connectionEstablished;
+}
+
+#pragma mark NSStream event handlers
+
+- (void) stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
+
+	if (stream == _inputStream) {
+		if (eventCode == NSStreamEventHasBytesAvailable)
+			[self dataReady];
+		return;
+	}
+
+	switch (eventCode) {
+		case NSStreamEventOpenCompleted: {
+			/*
+			 * The OpenCompleted is a bad indicator of 'ready to use' for a
+			 * TLS socket, since it will fire even before the TLS handshake
+			 * has even begun. Instead, we rely on the first CanAcceptBytes
+			 * event we receive to determine that a connection was established.
+			 *
+			 * We only use this event to extract our underlying socket.
+			 */
+			CFDataRef nativeHandle = CFWriteStreamCopyProperty((CFWriteStreamRef) _outputStream, kCFStreamPropertySocketNativeHandle);
+			if (nativeHandle) {
+				_socket = *(int *)CFDataGetBytePtr(nativeHandle);
+				CFRelease(nativeHandle);
+			} else {
+				NSLog(@"MKConnection: Unable to get socket file descriptor from stream. Breakage may occur.");
+			}
+
+			if (_socket != -1) {
+				int val = 1;
+				setsockopt(_socket, IPPROTO_TCP, TCP_NODELAY, &val, sizeof(val));
+				NSLog(@"MKConnection: TCP_NODELAY=1");
+			}
+			break;
+		}
+
+		case NSStreamEventHasSpaceAvailable: {
+			if (! _connectionEstablished) {
+				/*
+				 * OK, so we seem to have established our connection.
+				 *
+				 * First we need to check if we were told to ignore invalid
+				 * certificates in the certificate chain.
+				 */
+				_connectionEstablished = YES;
+				[_delegate performSelectorOnMainThread:@selector(connectionOpened:) withObject:self waitUntilDone:NO];
+			}
+			break;
+		}
+
+		case NSStreamEventErrorOccurred: {
+			NSLog(@"MKConnection: ErrorOccurred");
+			NSError *err = [_outputStream streamError];
+			[self handleError:err];
+			break;
+		}
+
+		case NSStreamEventEndEncountered:
+			NSLog(@"MKConnection: EndEncountered");
+			break;
+
+		default:
+			NSLog(@"MKConnection: Unknown event (%u)", eventCode);
+			break;
+	}
 }
 
 #pragma mark -
@@ -281,8 +237,8 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 		CFDictionaryAddValue(sslDictionary, kCFStreamSSLValidatesCertificateChain, _ignoreSSLVerification ? kCFBooleanFalse : kCFBooleanTrue);
 	}
 	
-	CFWriteStreamSetProperty(writeStream, kCFStreamPropertySSLSettings, sslDictionary);
-	CFReadStreamSetProperty(readStream, kCFStreamPropertySSLSettings, sslDictionary);
+	CFWriteStreamSetProperty((CFWriteStreamRef) _outputStream, kCFStreamPropertySSLSettings, sslDictionary);
+	CFReadStreamSetProperty((CFReadStreamRef) _inputStream, kCFStreamPropertySSLSettings, sslDictionary);
 
 	CFRelease(sslDictionary);
 }
@@ -291,26 +247,26 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	_ignoreSSLVerification = flag;
 }
 
+- (NSArray *) certificates {
+	NSArray *certs = (NSArray *) CFWriteStreamCopyProperty((CFWriteStreamRef) _outputStream, kCFStreamPropertySSLPeerCertificates);
+	return [certs autorelease];
+}
+
 - (void) sendMessageWithType:(MKMessageType)messageType buffer:(unsigned char *)buf length:(NSUInteger)len {
 	UInt16 type = CFSwapInt16HostToBig((UInt16)messageType);
 	UInt32 length = CFSwapInt32HostToBig(len);
 
-	CFWriteStreamWrite(writeStream, (unsigned char *)&type, sizeof(UInt16));
-	CFWriteStreamWrite(writeStream, (unsigned char *)&length, sizeof(UInt32));
-	CFWriteStreamWrite(writeStream, buf, len);
+	[_outputStream write:(unsigned char *)&type maxLength:sizeof(UInt16)];
+	[_outputStream write:(unsigned char *)&length maxLength:sizeof(UInt32)];
+	[_outputStream	write:buf maxLength:len];
 }
 
 - (void) sendMessageWithType:(MKMessageType)messageType data:(NSData *)data {
 	[self sendMessageWithType:messageType buffer:(unsigned char *)[data bytes] length:[data length]];
 }
 
-- (NSArray *) peerCertificates {
-	NSArray *peerCertificates = (NSArray *)CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerCertificates);
-	return [peerCertificates autorelease];
-}
-
 -(void) dataReady {
-	char buffer[6];
+	unsigned char buffer[6];
 
 	if (! packetBuffer) {
 		packetBuffer = [[NSMutableData alloc] initWithLength:0];
@@ -318,8 +274,7 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 
 	/* We aren't currently retrieveing a packet. */
 	if (packetLength == -1) {
-		CFIndex availableBytes = CFReadStreamRead(readStream, (UInt8 *) &buffer[0], 6);
-
+		NSInteger availableBytes = [_inputStream read:&buffer[0] maxLength:6];
 		if (availableBytes < 6) {
 			return;
 		}
@@ -335,11 +290,11 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	if (packetLength > 0) {
 		UInt8 *packetBytes = [packetBuffer mutableBytes];
 		if (! packetBytes) {
-			NSLog(@"Connection: NSMutableData is stubborn.");
+			NSLog(@"MKConnection: NSMutableData is stubborn.");
 			return;
 		}
 
-		CFIndex availableBytes = CFReadStreamRead(readStream, packetBytes + packetBufferOffset, packetLength);
+		NSInteger availableBytes = [_inputStream read:packetBytes + packetBufferOffset maxLength:packetLength];
 		packetLength -= availableBytes;
 		packetBufferOffset += availableBytes;
 	}
@@ -352,75 +307,63 @@ static void readStreamCallback(CFReadStreamRef *readStream, CFStreamEventType ev
 	}
 }
 
-- (void) handleError:(CFStreamError)streamError {
-	if (streamError.domain == kCFStreamErrorDomainSSL) {
+- (void) handleError:(NSError *)streamError {
+	NSInteger errorCode = [streamError code];
+
+	/* Is the error an SSL-related error? (OSStatus errors are negative, so the
+	 * greater than and less than signs are sort-of reversed here. */
+	if (errorCode <= errSSLProtocol && errorCode > errSSLLast) {
 		[self handleSslError:streamError];
-	} else if (streamError.domain == kCFStreamErrorDomainPOSIX) {
-		NSLog(@"MKConnection: Error: %s", strerror(streamError.error));
-	} else {
-		NSLog(@"domain = %u", streamError.domain);
-		NSLog(@"MKConnection: Unexpected error. (domain=%u)", streamError.domain);
 	}
+
+	NSLog(@"MKConnection: Error: %@", streamError);
 }
 
-- (void) handleSslError:(CFStreamError)streamError {	
-	switch (streamError.error) {
-		case errSSLXCertChainInvalid: {
-			SecTrustRef trust = (SecTrustRef) CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerTrust);
-			SecTrustResultType trustResult;
-			if (SecTrustEvaluate(trust, &trustResult) != noErr) {
-				NSLog(@"SecTrustEvalute: failure.");
-			}
+- (void) handleSslError:(NSError *)streamError {
 
-			switch (trustResult) {
-				case kSecTrustResultInvalid:
-					/* Invalid setting or result. Indicates the SecTrustEvaluate() did not finish completely. */
-					break;
-					
-				case kSecTrustResultProceed:
-					/* May be trusted for the purposes designated. ('Always Trust' in Keychain) */
-					 break;
-					
-				case kSecTrustResultConfirm:
-					/* User confirmation is required before proceeding. ('Ask Permission' in Keychain) */
-					break;
-					
-				case kSecTrustResultDeny:
-					/* This certificate is not trusted. ('Never Trust' in Keychain) */
-					break;
-					
-				case kSecTrustResultUnspecified:
-					/* No trust setting specified. ('Use System Policy' in Keychain) */
-					break;
-					
-				case kSecTrustResultRecoverableTrustFailure:
-					/* A recoverable trust failure. */
-					break;
-				
-				case kSecTrustResultFatalTrustFailure:
-					/* Fatal trust failure. Trust cannot be established without replacing the certificate.
-					 * This error is thrown when the certificate is corrupt. */
-					break;
-				
-				case kSecTrustResultOtherError:
-					/* A non-trust related error. Possibly internal error in SecTrustEvaluate(). */
-					break;
-			}
-
-			CFRelease(trust);
-
-			NSArray *certificates = (NSArray *) CFWriteStreamCopyProperty(writeStream, kCFStreamPropertySSLPeerCertificates);
-			NSInvocation *invocation = [NSInvocation invocationWithTarget:_delegate selector:@selector(connection:trustFailureInCertificateChain:)];
-			[invocation setArgument:&self atIndex:2];
-			[invocation setArgument:&certificates atIndex:3];
-			[invocation invokeOnMainThread];
+	if ([streamError code] == errSSLXCertChainInvalid) {
+		SecTrustRef trust = (SecTrustRef) CFWriteStreamCopyProperty((CFWriteStreamRef) _outputStream, kCFStreamPropertySSLPeerTrust);
+		SecTrustResultType trustResult;
+		if (SecTrustEvaluate(trust, &trustResult) != noErr) {
+			/* Unable to evaluate trust. */
 		}
+
+		switch (trustResult) {
+			/* Invalid setting or result. Indicates the SecTrustEvaluate() did not finish completely. */
+			case kSecTrustResultInvalid:
+			/* May be trusted for the purposes designated. ('Always Trust' in Keychain) */
+			case kSecTrustResultProceed:
+			/* User confirmation is required before proceeding. ('Ask Permission' in Keychain) */
+			case kSecTrustResultConfirm:
+			/* This certificate is not trusted. ('Never Trust' in Keychain) */
+			case kSecTrustResultDeny:
+			/* No trust setting specified. ('Use System Policy' in Keychain) */
+			case kSecTrustResultUnspecified:
+			/* Fatal trust failure. Trust cannot be established without replacing the certificate.
+			 * This error is thrown when the certificate is corrupt. */
+			case kSecTrustResultFatalTrustFailure:
+			/* A non-trust related error. Possibly internal error in SecTrustEvaluate(). */
+			case kSecTrustResultOtherError:
+				break;
+
+			/* A recoverable trust failure. */
+			case kSecTrustResultRecoverableTrustFailure: {
+				NSArray *certificates = [self certificates];
+				NSInvocation *invocation = [NSInvocation invocationWithTarget:_delegate selector:@selector(connection:trustFailureInCertificateChain:)];
+				[invocation setArgument:&self atIndex:2];
+				[invocation setArgument:&certificates atIndex:3];
+				[invocation invokeOnMainThread];
+				break;
+			}
+		}
+
+		CFRelease(trust);
 	}
 }
 
 - (void) messageRecieved: (NSData *)data {
 	NSInvocation *invocation;
-	
+
 	/* No message handler has been assigned. Don't propagate. */
 	if (! _msgHandler)
 		return;
