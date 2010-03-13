@@ -67,8 +67,9 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
 	[self closeStreams];
+
+	[super dealloc];
 }
 
 - (void) connectToHost:(NSString *)hostName port:(NSUInteger)portNumber {
@@ -115,6 +116,9 @@
 		[_outputStream release];
 		_outputStream = nil;
 	}
+
+	[_pingTimer invalidate];
+	_pingTimer = nil;
 }
 
 - (void) reconnect {
@@ -166,14 +170,17 @@
 
 		case NSStreamEventHasSpaceAvailable: {
 			if (! _connectionEstablished) {
-				/*
-				 * OK, so we seem to have established our connection.
-				 *
-				 * First we need to check if we were told to ignore invalid
-				 * certificates in the certificate chain.
-				 */
 				_connectionEstablished = YES;
-				[_delegate performSelectorOnMainThread:@selector(connectionOpened:) withObject:self waitUntilDone:NO];
+
+				/* First, schedule our ping timer. */
+				NSInvocation *timerInvocation = [NSInvocation invocationWithTarget:self selector:@selector(_pingTimerFired)];
+				_pingTimer = [NSTimer timerWithTimeInterval:MKConnectionPingInterval invocation:timerInvocation repeats:YES];
+				[[NSRunLoop currentRunLoop] addTimer:_pingTimer forMode:NSRunLoopCommonModes];
+
+				/* Invoke connectionOpened: on our delegate. */
+				NSInvocation *delegateInvoker = [NSInvocation invocationWithTarget:_delegate selector:@selector(connectionOpened:)];
+				[delegateInvoker setArgument:&self atIndex:2];
+				[delegateInvoker invokeOnMainThread];
 			}
 			break;
 		}
@@ -236,7 +243,7 @@
 		 */
 		CFDictionaryAddValue(sslDictionary, kCFStreamSSLValidatesCertificateChain, _ignoreSSLVerification ? kCFBooleanFalse : kCFBooleanTrue);
 	}
-	
+
 	CFWriteStreamSetProperty((CFWriteStreamRef) _outputStream, kCFStreamPropertySSLSettings, sslDictionary);
 	CFReadStreamSetProperty((CFReadStreamRef) _inputStream, kCFStreamPropertySSLSettings, sslDictionary);
 
@@ -305,6 +312,36 @@
 		[packetBuffer setLength:0]; // fixme(mkrautz): Is this one needed?
 		packetLength = -1;
 	}
+}
+
+/*
+ * Ping timer fired.
+ */
+- (void) _pingTimerFired {
+	NSData *data;
+	MPPing_Builder *ping = [MPPing builder];
+
+	[ping setTimestamp:0];
+	[ping setGood:0];
+	[ping setLate:0];
+	[ping setLost:0];
+	[ping setResync:0];
+
+	[ping setUdpPingAvg:0.0f];
+	[ping setUdpPingVar:0.0f];
+	[ping setUdpPackets:0];
+	[ping setTcpPingAvg:0.0f];
+	[ping setTcpPingVar:0.0f];
+	[ping setTcpPackets:0];
+
+	data = [[ping build] data];
+	[self sendMessageWithType:PingMessage data:data];
+
+	NSLog(@"MKConnection: Sent ping message.");
+}
+
+- (void) _pingResponseFromServer:(MPPing *)pingMessage {
+	NSLog(@"MKConnection: pingResponseFromServer");
 }
 
 - (void) handleError:(NSError *)streamError {
@@ -380,13 +417,6 @@
 			MPAuthenticate *a = [MPAuthenticate parseFromData:data];
 			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handleAuthenticateMessage:)];
 			[invocation setArgument:&a atIndex:2];
-			[invocation invokeOnMainThread];
-			break;
-		}
-		case PingMessage: {
-			MPPing *p = [MPPing parseFromData:data];
-			invocation = [NSInvocation invocationWithTarget:_msgHandler selector:@selector(handlePingMessage:)];
-			[invocation setArgument:&p atIndex:2];
 			[invocation invokeOnMainThread];
 			break;
 		}
@@ -534,6 +564,11 @@
 			}
 
 			[pds release];
+			break;
+		}
+		case PingMessage: {
+			MPPing *p = [MPPing parseFromData:data];
+			[self _pingResponseFromServer:p];
 			break;
 		}
 		default: {

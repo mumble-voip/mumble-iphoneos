@@ -30,6 +30,8 @@
 
 #import "Mumble.pb.h"
 
+#define MKConnectionPingInterval 5.0f
+
 @class MKConnection;
 @class MKPacketDataStream;
 
@@ -90,7 +92,6 @@ typedef enum {
 - (void) handleTextMessageMessage: (MPTextMessage *)msg;
 - (void) handleACLMessage: (MPACL *)msg;
 - (void) handleQueryUsersMessage: (MPQueryUsers *)msg;
-- (void) handlePingMessage: (MPPing *)msg;
 - (void) handleCryptSetupMessage: (MPCryptSetup *)msg;
 - (void) handleContextActionMessage: (MPContextAction *)msg;
 - (void) handleContextActionAddMessage: (MPContextActionAdd *)add;
@@ -109,6 +110,7 @@ typedef enum {
 	NSString *hostname;
 	NSUInteger port;
 
+	NSTimer *_pingTimer;
 	NSOutputStream *_outputStream;
 	NSInputStream *_inputStream;
 	BOOL _connectionEstablished;
@@ -141,6 +143,10 @@ typedef enum {
 - (void) messageRecieved: (NSData *)data;
 
 - (void) _setupSsl;
+
+- (void) _pingTimerFired;
+- (void) _pingResponseFromServer:(MPPing *)pingMessage;
+
 
 - (void) handleError: (NSError *)streamError;
 - (void) handleSslError: (NSError *)streamError;
