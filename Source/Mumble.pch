@@ -36,25 +36,8 @@
 # warning "This project uses features only available in iPhone SDK 3.0 and later."
 #endif
 
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-
 #ifdef __OBJC__
 # import <Foundation/Foundation.h>
 # import <UIKit/UIKit.h>
-# import <CFNetwork/CFNetwork.h>
 #endif
 
-#import <AudioUnit/AudioUnit.h>
-#import <AudioUnit/AUComponent.h>
-#import <AudioToolbox/AudioToolbox.h>
-
-#include <speex/speex.h>
-#include <speex/speex_preprocess.h>
-#include <speex/speex_echo.h>
-#include <speex/speex_resampler.h>
-#include <speex/speex_jitter.h>
-#include <speex/speex_types.h>
-#include <celt.h>

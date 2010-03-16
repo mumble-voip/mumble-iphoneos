@@ -1,2 +1,0 @@
-import "google/protobuf/objectivec-descriptor.proto";
-option (google.protobuf.objectivec_file_options).class_prefix = "MP";

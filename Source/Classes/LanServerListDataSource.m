@@ -28,6 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import <CFNetwork/CFNetwork.h>
 #import "LanServerListDataSource.h"
 
 static void LanServerListBrowserCallback(CFNetServiceBrowserRef browser, CFOptionFlags flags, CFTypeRef netService, CFStreamError *error, void *udata) {

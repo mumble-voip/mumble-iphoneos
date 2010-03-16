@@ -1,4 +1,4 @@
-(Last-Updated: Jan 4 2010)
+(Last-Updated: March 16 2010)
 
 Mumble for the iPhone and iPod touch
 ====================================
@@ -18,13 +18,19 @@ To build this you need the iPhoneOS 3.0 SDK from Apple and an
 Intel Mac running Mac OS X 10.5 or later.
 
 Before starting your build, you will need to check out the re-
-quired submodules.
+quired submodules (that is, only MumbleKit)
 
  $ git submodule init
  $ git submodule update
 
-This will fetch known "working" snapshot of CELT, Speex and
-Protocol Buffers for Objective C.
+Once finished, make do the same in the MumbleKit submodule:
+
+ $ cd MumbleKit
+ $ git submodule init
+ $ git submodule update
+
+This will fetch known "working" snapshot of the required submodules
+for MumbleKit. (CELT, Speex and Protocol Buffers for Objective C)
 
 Once this is done, you should be able to open up the Xcode
 project file for Mumble (Mumble.xcodeproj) in the root of

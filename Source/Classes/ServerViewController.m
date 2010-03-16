@@ -33,7 +33,7 @@
 #import "Version.h"
 
 #import <MumbleKit/MKUser.h>
-#include <celt.h>
+#include <MumbleKit/celt/celt.h>
 
 @implementation ServerViewController
 
