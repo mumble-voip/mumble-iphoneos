@@ -28,14 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "WelcomeScreenController.h"
+#import "WelcomeScreenPhone.h"
 
 #import "PublicServerListController.h"
 #import "ServerViewController.h"
 
 #import "AboutDialog.h"
 
-@implementation WelcomeScreenController
+@implementation WelcomeScreenPhone
 
 - (void)dealloc {
     [super dealloc];

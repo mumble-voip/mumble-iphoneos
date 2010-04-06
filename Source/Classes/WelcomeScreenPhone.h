@@ -28,48 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AppDelegate.h"
-
-
-#import "WelcomeScreenPhone.h"
-#import "WelcomeScreenPad.h"
-
-#import <MumbleKit/MKAudio.h>
-
-@implementation AppDelegate
-
-@synthesize window;
-@synthesize navigationController;
-
-- (void) applicationDidFinishLaunching:(UIApplication *)application {
-
-	[window addSubview:[navigationController view]];
-	[window makeKeyAndVisible];
-
-	/* Show our welcome screen. */
-	UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
-	if (idiom == UIUserInterfaceIdiomPad) {
-		NSLog(@"iPad detected.");
-		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
-		[navigationController pushViewController:welcomeScreen animated:YES];
-		[welcomeScreen release];
-	} else if (idiom == UIUserInterfaceIdiomPhone) {
-		NSLog(@"iPhone detected.");
-		WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] initWithNibName:@"WelcomeScreenPhone" bundle:nil];
-		[navigationController pushViewController:welcomeScreen animated:YES];
-		[welcomeScreen release];
-	}
-
-	[MKAudio initializeAudio];
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-}
-
-- (void)dealloc {
-	[navigationController release];
-	[window release];
-	[super dealloc];
+@interface WelcomeScreenPhone : UITableViewController {
 }
 
 @end

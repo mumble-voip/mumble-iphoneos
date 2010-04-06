@@ -11,6 +11,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
+		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
+		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
 		2861C273116BE905002B8514 /* AboutDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C259116BE905002B8514 /* AboutDialog.m */; };
 		2861C274116BE905002B8514 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* AboutViewController.m */; };
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
@@ -25,8 +27,8 @@
 		2861C27E116BE905002B8514 /* ServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C26C116BE905002B8514 /* ServerViewController.m */; };
 		2861C27F116BE905002B8514 /* ServerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C26D116BE905002B8514 /* ServerViewController.xib */; };
 		2861C280116BE905002B8514 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C26F116BE905002B8514 /* Version.m */; };
-		2861C281116BE905002B8514 /* WelcomeScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C271116BE905002B8514 /* WelcomeScreenController.m */; };
-		2861C282116BE905002B8514 /* WelcomeScreenController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C272116BE905002B8514 /* WelcomeScreenController.xib */; };
+		2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C271116BE905002B8514 /* WelcomeScreenPhone.m */; };
+		2861C282116BE905002B8514 /* WelcomeScreenPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */; };
 		2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B1116BE9B7002B8514 /* CFNetwork.framework */; };
 		2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B5116BE9BA002B8514 /* Security.framework */; };
@@ -349,6 +351,9 @@
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPad.h; sourceTree = "<group>"; };
+		285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPad.m; sourceTree = "<group>"; };
+		285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenPad.xib; sourceTree = "<group>"; };
 		2861C258116BE905002B8514 /* AboutDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutDialog.h; sourceTree = "<group>"; };
 		2861C259116BE905002B8514 /* AboutDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutDialog.m; sourceTree = "<group>"; };
 		2861C25A116BE905002B8514 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -373,9 +378,9 @@
 		2861C26D116BE905002B8514 /* ServerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerViewController.xib; sourceTree = "<group>"; };
 		2861C26E116BE905002B8514 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		2861C26F116BE905002B8514 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
-		2861C270116BE905002B8514 /* WelcomeScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenController.h; sourceTree = "<group>"; };
-		2861C271116BE905002B8514 /* WelcomeScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenController.m; sourceTree = "<group>"; };
-		2861C272116BE905002B8514 /* WelcomeScreenController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenController.xib; sourceTree = "<group>"; };
+		2861C270116BE905002B8514 /* WelcomeScreenPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPhone.h; sourceTree = "<group>"; };
+		2861C271116BE905002B8514 /* WelcomeScreenPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPhone.m; sourceTree = "<group>"; };
+		2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenPhone.xib; sourceTree = "<group>"; };
 		2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MumbleKit.xcodeproj; path = MumbleKit/MumbleKit.xcodeproj; sourceTree = "<group>"; };
 		2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2861C2B1116BE9B7002B8514 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -726,9 +731,12 @@
 				2861C26D116BE905002B8514 /* ServerViewController.xib */,
 				2861C26E116BE905002B8514 /* Version.h */,
 				2861C26F116BE905002B8514 /* Version.m */,
-				2861C270116BE905002B8514 /* WelcomeScreenController.h */,
-				2861C271116BE905002B8514 /* WelcomeScreenController.m */,
-				2861C272116BE905002B8514 /* WelcomeScreenController.xib */,
+				2861C270116BE905002B8514 /* WelcomeScreenPhone.h */,
+				2861C271116BE905002B8514 /* WelcomeScreenPhone.m */,
+				2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */,
+				285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */,
+				285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */,
+				285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1201,7 +1209,7 @@
 				2861C278116BE905002B8514 /* CountryServerListController.xib in Resources */,
 				2861C27D116BE905002B8514 /* PublicServerListController.xib in Resources */,
 				2861C27F116BE905002B8514 /* ServerViewController.xib in Resources */,
-				2861C282116BE905002B8514 /* WelcomeScreenController.xib in Resources */,
+				2861C282116BE905002B8514 /* WelcomeScreenPhone.xib in Resources */,
 				2861C3E5116BEA12002B8514 /* Contributors.html in Resources */,
 				2861C3E6116BEA12002B8514 /* Legal.html in Resources */,
 				2861C3E7116BEA12002B8514 /* authenticated.pdf in Resources */,
@@ -1496,6 +1504,7 @@
 				2861C508116BEA12002B8514 /* Continents.plist in Resources */,
 				2861C509116BEA12002B8514 /* Countries.plist in Resources */,
 				285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */,
+				285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1517,7 +1526,8 @@
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,
 				2861C27E116BE905002B8514 /* ServerViewController.m in Sources */,
 				2861C280116BE905002B8514 /* Version.m in Sources */,
-				2861C281116BE905002B8514 /* WelcomeScreenController.m in Sources */,
+				2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */,
+				285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
