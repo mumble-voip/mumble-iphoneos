@@ -30,9 +30,14 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface WelcomeScreenPad : UIViewController {
-
+	IBOutlet UIBarButtonItem *publicServersButton;
+	IBOutlet UIBarButtonItem *favouritesButton;
+	IBOutlet UIBarButtonItem *lanServersButton;
 }
+
+- (IBAction) publicServerListClicked:(id)sender;
+- (IBAction) favouritesClicked:(id)sender;
+- (IBAction) lanServerListClicked:(id)sender;
 
 @end

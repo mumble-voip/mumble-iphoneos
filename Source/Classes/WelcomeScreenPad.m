@@ -29,6 +29,7 @@
 */
 
 #import "WelcomeScreenPad.h"
+#import "PublicServerListController.h"
 
 
 @implementation WelcomeScreenPad
@@ -76,5 +77,16 @@
     [super dealloc];
 }
 
+- (IBAction) publicServerListClicked:(id)sender {
+	PublicServerListController *public = [[PublicServerListController alloc] init];
+	UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:public];
+	[popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+}
+
+- (IBAction) favouritesClicked:(id)sender {
+}
+
+- (IBAction) lanServerListClicked:(id)sender {
+}
 
 @end
