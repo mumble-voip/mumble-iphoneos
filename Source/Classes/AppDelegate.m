@@ -46,8 +46,15 @@
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
 
-	/* Show our welcome screen. */
-	UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
+	// If we're running on anything below OS 3.2, UIDevice does not
+	// respond to the userInterfaceIdiom method. We must assume we're
+	// running on an iPhone or iPod Touch.
+	UIDevice *device = [UIDevice currentDevice];
+	UIUserInterfaceIdiom idiom = UIUserInterfaceIdiomPhone;
+	if ([device respondsToSelector:@selector(userInterfaceIdiom)]) {
+		idiom = [[UIDevice currentDevice] userInterfaceIdiom];
+	}
+
 	if (idiom == UIUserInterfaceIdiomPad) {
 		NSLog(@"iPad detected.");
 		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
