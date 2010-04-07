@@ -79,8 +79,12 @@
 
 - (IBAction) publicServerListClicked:(id)sender {
 	PublicServerListController *public = [[PublicServerListController alloc] init];
-	UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:public];
-	[popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+
+	Class UIPopoverControllerClass = NSClassFromString(@"UIPopoverController");
+	if (UIPopoverControllerClass) {
+		UIPopoverController *popover = [[UIPopoverControllerClass alloc] initWithContentViewController:public];
+		[popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+	}
 }
 
 - (IBAction) favouritesClicked:(id)sender {
