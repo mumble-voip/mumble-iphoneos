@@ -132,7 +132,7 @@
 			[self.navigationController pushViewController:serverList animated:YES];
 		}
 		else if (indexPath.row == 3) {
-			ServerViewController *serverView = [[[ServerViewController alloc] initWithHostname:@"localhost" port:64738] autorelease];
+			ServerViewController *serverView = [[[ServerViewController alloc] initWithHostname:@"mumble.sasquash.dk" port:64801] autorelease];
 			[self.navigationController pushViewController:serverView animated:YES];
 		}
 	}

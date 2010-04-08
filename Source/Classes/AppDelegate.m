@@ -30,7 +30,6 @@
 
 #import "AppDelegate.h"
 
-
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
 
