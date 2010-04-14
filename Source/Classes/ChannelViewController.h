@@ -28,28 +28,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKConnection.h>
-#import <MumbleKit/MKServerModel.h>
+#import <MumbleKit/MKChannel.h>
 
 typedef enum {
-	ServerViewSectionActions    = 0,
-} ServerViewSection;
+	ChannelViewSectionSubChannels    = 0,
+	ChannelViewSectionUsers          = 1,
+} ChannelViewSection;
 
-typedef enum {
-	ServerViewActionsChannels   = 0,
-} ServerViewActions;
-
-@interface ServerViewController : UITableViewController <MKConnectionDelegate, MKMessageHandler> {
-	MKConnection *connection;
-	MKServerModel *model;
-	NSString *serverHostName;
-	NSUInteger serverPortNumber;
-	BOOL serverSyncReceived;
-
-	MKChannel *currentChannel;
+@interface ChannelViewController : UITableViewController {
+	MKChannel *_channel;
 }
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
-- (void)dealloc;
+- (id) initWithChannel:(MKChannel *)channel;
+- (void) dealloc;
 
 @end

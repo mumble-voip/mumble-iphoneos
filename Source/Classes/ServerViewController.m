@@ -28,6 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import "ChannelViewController.h"
 #import "ServerViewController.h"
 #import "PDFImageLoader.h"
 #import "Version.h"
@@ -55,7 +56,6 @@
 
 	model = [[MKServerModel alloc] init];
 
-	self.navigationItem.title = @"Connecting...";
 	serverSyncReceived = NO;
 
 	return self;
@@ -67,25 +67,15 @@
 
 #pragma mark
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
+- (void) viewDidLoad {
+	[super viewDidLoad];
 
-- (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
-
-	// Hide our toolbar.
-	[[self navigationController] setToolbarHidden:YES animated:YES];
+	self.navigationItem.title = @"Connecting...";
+	UIBarButtonItem *disconnectButton = [[[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)] autorelease];
+	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
 }
 
 #pragma mark
-
-- (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void) viewDidUnload {
-}
 
 - (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
 	/* OK clicked. */
@@ -94,6 +84,13 @@
 		[connection setIgnoreSSLVerification:YES];
 		[connection reconnect];
 	}
+}
+
+#pragma mark Actions
+
+- (void) disconnectClicked:(id)sender {
+	// Disconnect from the server.
+	[connection closeStreams];
 }
 
 #pragma mark MKConnection delegate methods
@@ -372,12 +369,8 @@
 	currentChannel = [model rootChannel];
 	serverSyncReceived = YES;
 	[[self tableView] reloadData];
-	self.navigationItem.title = [currentChannel channelName];
-	[[self navigationController] setToolbarHidden:NO animated:YES];
 
-	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	UIBarButtonItem *joinChannel = [[UIBarButtonItem alloc] initWithTitle:@"Join Channel" style:UIBarButtonItemStyleBordered target:nil action:nil];
-	[[[self navigationController] toolbar] setItems:[NSArray arrayWithObjects: flexSpace, joinChannel, flexSpace, nil] animated:NO];
+	self.navigationItem.title = [[model rootChannel] channelName];
 	[[self navigationController] setToolbarHidden:NO animated:YES];
 }
 
@@ -387,68 +380,58 @@
 #pragma mark Table View methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
-	if ([[currentChannel users] count] > 0) {
-		return 2;
-	} else {
-		return 1;
-	}
+	return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (! serverSyncReceived) {
-		return nil;
+	if (section == ServerViewSectionActions) {
+		return @"Actions";
 	}
 
-	if (section == 0) {
-		return @"Channels";
-	} else if (section == 1) {
-		return @"Users";
-	}
+	return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (! serverSyncReceived)
-		return 0;
-
-	/* Channels section. */
-	if (section == 0) {
-		return [[currentChannel subchannels] count];
-	} else if (section == 1) {
-		return [[currentChannel users] count];
+	if (section == ServerViewSectionActions) {
+		// Only show 'channels' for now.
+		return 1;
 	}
 
 	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    static NSString *CellIdentifier = @"serverViewCell";
-
+	static NSString *CellIdentifier = @"serverViewCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	NSUInteger section = [indexPath indexAtPosition:0];
+	ServerViewSection section = [indexPath indexAtPosition:0];
 	NSUInteger row = [indexPath indexAtPosition:1];
 
-	if (section == 0) {
-		MKChannel *childChannel = [[currentChannel subchannels] objectAtIndex:row];
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
-		cell.textLabel.text = [childChannel channelName];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	} else if (section == 1) {
-		MKUser *user = [[currentChannel users] objectAtIndex:row];
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
-		cell.textLabel.text = [user userName];
-		cell.accessoryType = UITableViewCellAccessoryNone;
+	if (section == ServerViewSectionActions) {
+		if (row == ServerViewActionsChannels) {
+			cell.textLabel.text = @"Channels";
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
 	}
 
     return cell;
+
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	ServerViewSection section = [indexPath indexAtPosition:0];
+	NSUInteger row = [indexPath indexAtPosition:1];
+
+	if (section == ServerViewSectionActions) {
+		if (row == ServerViewActionsChannels) {
+			ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[model rootChannel]];
+			[self.navigationController pushViewController:channelView animated:YES];
+			[channelView release];
+		}
+	}
 }
 
 @end
