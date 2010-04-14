@@ -37,6 +37,8 @@
 	NSString *serverHostName;
 	NSUInteger serverPortNumber;
 	BOOL serverSyncReceived;
+
+	MKChannel *currentChannel;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port;

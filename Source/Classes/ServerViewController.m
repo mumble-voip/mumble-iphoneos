@@ -33,6 +33,7 @@
 #import "Version.h"
 
 #import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKConnection.h>
 #include <MumbleKit/celt/celt.h>
 
 @implementation ServerViewController
@@ -46,13 +47,16 @@
 
 	serverHostName = host;
 	serverPortNumber = port;
-	
+
 	connection = [[MKConnection alloc] init];
 	[connection setDelegate:self];
 	[connection setMessageHandler:self];
 	[connection connectToHost:serverHostName port:serverPortNumber];
 
 	model = [[MKServerModel alloc] init];
+
+	self.navigationItem.title = @"Connecting...";
+	serverSyncReceived = NO;
 
 	return self;
 }
@@ -61,6 +65,20 @@
     [super dealloc];
 }
 
+#pragma mark
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+
+	// Hide our toolbar.
+	[[self navigationController] setToolbarHidden:YES animated:YES];
+}
+
+#pragma mark
 
 - (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -81,22 +99,48 @@
 #pragma mark MKConnection delegate methods
 
 - (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
-/*	OSStatus err;
-	SecCertificateRef cert;
-	NSMutableDictionary *operation = [NSMutableDictionary dictionary];
-	[operation setObject:kSecClassCertificate forKey:kSecClass];
-	[operation setObject:[chain objectAtIndex:0] forKey:kSecValueRef];
-	err = SecItemAdd(operation, &cert);
-	if (err != noErr) {
-		NSLog(@"error = %i", err);
-	}*/
-			  
-	
 	NSString *title = @"Unable to validate server certificate";
 	NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
 
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 	[alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
+- (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
+
+	NSString *title = @"Connection Rejected";
+	NSString *msg = nil;
+
+	switch (reason) {
+		case MKRejectReasonNone:
+			msg = @"No reason";
+			break;
+		case MKRejectReasonWrongVersion:
+			msg = @"Version mismatch between client and server.";
+			break;
+		case MKRejectReasonInvalidUsername:
+			msg = @"Invalid username";
+			break;
+		case MKRejectReasonWrongUserPassword:
+			msg = @"Wrong user password";
+			break;
+		case MKRejectReasonWrongServerPassword:
+			msg = @"Wrong server password";
+			break;
+		case MKRejectReasonUsernameInUse:
+			msg = @"Username already in use";
+			break;
+		case MKRejectReasonServerIsFull:
+			msg = @"Server is full";
+			break;
+		case MKRejectReasonNoCertificate:
+			msg = @"A certificate is needed to connect to this server";
+			break;
+	}
+
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 }
@@ -213,32 +257,32 @@
 	if (newUser) {
 		NSLog(@"%@ connected.", [user userName]);
 	}
-	
+
 	if ([msg hasChannelId]) {
 		MKChannel *chan = [model channelWithId:[msg channelId]];
 		if (chan == nil) {
 			NSLog(@"ServerViewController: UserState with invalid channelId.");
 		}
-		
+
 		MKChannel *oldChan = [user channel];
 		if (chan != oldChan) {
 			[model moveUser:user toChannel:chan];
 			NSLog(@"Moved user '%@' to channel '%@'", [user userName], [chan channelName]);
 		}
 	}
-	
+
 	if ([msg hasName]) {
 		[model renameUser:user to:[msg name]];
 	}
-	
+
 	if ([msg hasTexture]) {
 		NSLog(@"ServerViewController: User has texture.. Discarding.");
 	}
-	
+
 	if ([msg hasComment]) {
 		NSLog(@"ServerViewControler: User has comment... Discarding.");
 	}
-	
+
 	[[self tableView] reloadData];
 }
 
@@ -253,7 +297,6 @@
 
 - (void) handleChannelStateMessage:(MPChannelState *)msg {
 	NSLog(@"ServerViewController: Received ChannelState message");
-	BOOL updateModel = NO;
 
 	if (![msg hasChannelId]) {
 		NSLog(@"ServerViewController: ChannelState without channelId.");
@@ -270,7 +313,6 @@
 			if ([msg hasTemporary]) {
 				[chan setTemporary:[msg temporary]];
 			}
-			updateModel = YES;
 		} else {
 			return;
 		}
@@ -279,29 +321,25 @@
 	if (parent) {
 		NSLog(@"Moving %@ to %@", [chan channelName], [parent channelName]);
 		[model moveChannel:chan toChannel:parent];
-		updateModel = YES;
 	}
 
 	if ([msg hasName]) {
 		[model renameChannel:chan to:[msg name]];
-		updateModel = YES;
 	}
 
 	if ([msg hasDescription]) {
 		[model setCommentForChannel:chan to:[msg description]];
-		updateModel = YES;
 	}
 
 	if ([msg hasPosition]) {
 		[model repositionChannel:chan to:[msg position]];
-		updateModel = YES;
 	}
-	
+
 	/*
 	 * Handle links.
 	 */
 
-	if (serverSyncReceived == YES && updateModel == YES) {
+	if (serverSyncReceived == YES) {
 		[[self tableView] reloadData];
 	}
 }
@@ -331,9 +369,16 @@
 	}
 
 	NSLog(@"ServerSync: Our session=%u", [msg session]);
-
+	currentChannel = [model rootChannel];
+	serverSyncReceived = YES;
 	[[self tableView] reloadData];
-	NSLog(@"reloadedData...");
+	self.navigationItem.title = [currentChannel channelName];
+	[[self navigationController] setToolbarHidden:NO animated:YES];
+
+	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	UIBarButtonItem *joinChannel = [[UIBarButtonItem alloc] initWithTitle:@"Join Channel" style:UIBarButtonItemStyleBordered target:nil action:nil];
+	[[[self navigationController] toolbar] setItems:[NSArray arrayWithObjects: flexSpace, joinChannel, flexSpace, nil] animated:NO];
+	[[self navigationController] setToolbarHidden:NO animated:YES];
 }
 
 - (void) handlePermissionQueryMessage:(MPPermissionQuery *)perm {
@@ -342,13 +387,38 @@
 #pragma mark Table View methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+
+	if ([[currentChannel users] count] > 0) {
+		return 2;
+	} else {
+		return 1;
+	}
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	if (! serverSyncReceived) {
+		return nil;
+	}
+
+	if (section == 0) {
+		return @"Channels";
+	} else if (section == 1) {
+		return @"Users";
+	}
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger numRows = [model count];
-	NSLog(@"ServerViewController: numRows = %i", numRows);
-	return numRows;
+	if (! serverSyncReceived)
+		return 0;
+
+	/* Channels section. */
+	if (section == 0) {
+		return [[currentChannel subchannels] count];
+	} else if (section == 1) {
+		return [[currentChannel users] count];
+	}
+
+	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -359,20 +429,21 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-	
-	id object = [model objectAtIndex:[indexPath indexAtPosition:1]];
-	if ([object class] == [MKChannel class]) {
-		MKChannel *c = (MKChannel *)object;
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
-		cell.textLabel.text = [c channelName];
-	} else if ([object class] == [MKUser class]) {
-		MKUser *u = (MKUser *)object;
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
-		cell.textLabel.text = [u userName];
-	}
 
-	cell.indentationWidth = 6.0f;
-	cell.indentationLevel = [object treeDepth];
+	NSUInteger section = [indexPath indexAtPosition:0];
+	NSUInteger row = [indexPath indexAtPosition:1];
+
+	if (section == 0) {
+		MKChannel *childChannel = [[currentChannel subchannels] objectAtIndex:row];
+		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
+		cell.textLabel.text = [childChannel channelName];
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	} else if (section == 1) {
+		MKUser *user = [[currentChannel users] objectAtIndex:row];
+		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
+		cell.textLabel.text = [user userName];
+		cell.accessoryType = UITableViewCellAccessoryNone;
+	}
 
     return cell;
 }
