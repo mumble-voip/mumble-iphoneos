@@ -31,11 +31,9 @@
 #import "ChannelViewController.h"
 #import "ServerViewController.h"
 #import "PDFImageLoader.h"
-#import "Version.h"
 
 #import <MumbleKit/MKUser.h>
 #import <MumbleKit/MKConnection.h>
-#include <MumbleKit/celt/celt.h>
 
 @implementation ServerViewController
 
@@ -51,18 +49,23 @@
 
 	connection = [[MKConnection alloc] init];
 	[connection setDelegate:self];
-	[connection setMessageHandler:self];
+
+	model = [[MKServerModel alloc] initWithConnection:connection];
+	[model addDelegate:self];
+
 	[connection connectToHost:serverHostName port:serverPortNumber];
-
-	model = [[MKServerModel alloc] init];
-
-	serverSyncReceived = NO;
 
 	return self;
 }
 
 - (void) dealloc {
     [super dealloc];
+
+	[model removeDelegate:self];
+	[model release];
+
+	[connection closeStreams];
+	[connection release];
 }
 
 #pragma mark
@@ -152,232 +155,38 @@
 	/* OK. We're connected. */
 	NSLog(@"ServerViewController: connectionOpened");
 
-	/* Get CELT bitstream version. */
-	celt_int32 bitstream;
-	CELTMode *mode = celt_mode_create(48000, 100, NULL);
-	celt_mode_info(mode, CELT_GET_BITSTREAM_VERSION, &bitstream);
-	celt_mode_destroy(mode);
-
-	NSLog(@"CELT bitstream = 0x%x", bitstream);
-
-	NSData *data;
-	MPVersion_Builder *version = [MPVersion builder];
-	UIDevice *dev = [UIDevice currentDevice];
-	[version setVersion: [Version hex]];
-	[version setRelease: [Version string]];
-	[version setOs: [dev systemName]];
-	[version setOsVersion: [dev systemVersion]];
-	data = [[version build] data];
-	[connection sendMessageWithType:VersionMessage data:data];
-
-	MPAuthenticate_Builder *authenticate = [MPAuthenticate builder];
-	[authenticate setUsername:@"Tukoff43"];
-	[authenticate addCeltVersions:bitstream];
-	data = [[authenticate build] data];
-	[connection sendMessageWithType:AuthenticateMessage data:data];
+	[conn authenticateWithUsername:@"MumbleiPhoneUser" password:nil];
 }
 
-#pragma mark MKMessageHandler methods
+///////////////////////////////////////////////////////////////////
+#pragma mark MKServerModel delegate methods
+///////////////////////////////////////////////////////////////////
 
-/*
- * Version message.
- *
- * Sent from the server to us on connect.
- */
--(void)handleVersionMessage: (MPVersion *)msg {
-	NSLog(@"ServerViewController: Recieved Version message..");
-
-	if ([msg hasVersion])
-		NSLog(@"Version = 0x%x", [msg version]);
-	if ([msg hasRelease])
-		NSLog(@"Release = %@", [msg release]);
-	if ([msg hasOs])
-		NSLog(@"OS = %@", [msg os]);
-	if ([ msg hasOsVersion])
-		NSLog(@"OSVersion = %@", [msg osVersion]);
+//
+// We've successfuly joined the server.
+//
+- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
+	NSLog(@"ServerViewController: joinedServerAsUser:");
 }
 
-/*
- * CryptSetup...
- * bleh...
- */
--(void) handleCryptSetupMessage:(MPCryptSetup *)setup {
-	NSLog(@"ServerViewController: Received CryptSetup packet...");
+//
+// A user joined the server.
+//
+- (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
+	NSLog(@"ServerViewController: userJoined.");
 }
 
-/*
- * CodecVersion message...
- *
- * Used to tell us which version of CELT to use.
- */
--(void) handleCodecVersionMessage:(MPCodecVersion *)codec {
-	NSLog(@"ServerViewController: Received CodecVersion message");
-
-	if ([codec hasAlpha])
-		NSLog(@"alpha = 0x%x", [codec alpha]);
-	if ([codec hasBeta])
-		NSLog(@"beta = 0x%x", [codec beta]);
-	if ([codec hasPreferAlpha])
-		NSLog(@"preferAlpha = %i", [codec preferAlpha]);
+//
+// A user left the server.
+//
+- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
+	NSLog(@"ServerViewController: userLeft.");
 }
 
-- (void) handleUserStateMessage:(MPUserState *)msg {
-	NSLog(@"ServerViewController: Recieved UserState message");
-	BOOL newUser = NO;
 
-	if (![msg hasSession]) {
-		return;
-	}
-
-	NSUInteger session = [msg session];
-	MKUser *user = [model userWithSession:session];
-	if (user == nil) {
-		if ([msg hasName]) {
-			NSLog(@"Adding user....!");
-			user = [model addUserWithSession:session name:[msg name]];
-			if (serverSyncReceived == YES)
-				[[self tableView] reloadData];
-		} else {
-			return;
-		}
-	}
-
-	if ([msg hasUserId]) {
-		[model setIdForUser:user to:[msg userId]];
-	}
-
-	if ([msg hasHash]) {
-		[model setHashForUser:user to:[msg hash]];
-		/* Check if user is a friend? */
-	}
-
-	if (newUser) {
-		NSLog(@"%@ connected.", [user userName]);
-	}
-
-	if ([msg hasChannelId]) {
-		MKChannel *chan = [model channelWithId:[msg channelId]];
-		if (chan == nil) {
-			NSLog(@"ServerViewController: UserState with invalid channelId.");
-		}
-
-		MKChannel *oldChan = [user channel];
-		if (chan != oldChan) {
-			[model moveUser:user toChannel:chan];
-			NSLog(@"Moved user '%@' to channel '%@'", [user userName], [chan channelName]);
-		}
-	}
-
-	if ([msg hasName]) {
-		[model renameUser:user to:[msg name]];
-	}
-
-	if ([msg hasTexture]) {
-		NSLog(@"ServerViewController: User has texture.. Discarding.");
-	}
-
-	if ([msg hasComment]) {
-		NSLog(@"ServerViewControler: User has comment... Discarding.");
-	}
-
-	[[self tableView] reloadData];
-}
-
-/*
- * A user leaving the server.
- */
-- (void) handleUserRemoveMessage:(MPUserRemove *)msg {
-	NSLog(@"ServerViewController: Recieved UserRemove message");
-	[model removeUser:[model userWithSession:[msg session]]];
-	[[self tableView] reloadData];
-}
-
-- (void) handleChannelStateMessage:(MPChannelState *)msg {
-	NSLog(@"ServerViewController: Received ChannelState message");
-
-	if (![msg hasChannelId]) {
-		NSLog(@"ServerViewController: ChannelState without channelId.");
-		return;
-	}
-
-	MKChannel *chan = [model channelWithId:[msg channelId]];
-	MKChannel *parent = [msg hasParent] ? [model channelWithId:[msg parent]] : NULL;
-
-	if (!chan) {
-		if ([msg hasParent] && [msg hasName]) {
-			NSLog(@"Adding new channel....");
-			chan = [model addChannelWithId:[msg channelId] name:[msg name] parent:parent];
-			if ([msg hasTemporary]) {
-				[chan setTemporary:[msg temporary]];
-			}
-		} else {
-			return;
-		}
-	}
-
-	if (parent) {
-		NSLog(@"Moving %@ to %@", [chan channelName], [parent channelName]);
-		[model moveChannel:chan toChannel:parent];
-	}
-
-	if ([msg hasName]) {
-		[model renameChannel:chan to:[msg name]];
-	}
-
-	if ([msg hasDescription]) {
-		[model setCommentForChannel:chan to:[msg description]];
-	}
-
-	if ([msg hasPosition]) {
-		[model repositionChannel:chan to:[msg position]];
-	}
-
-	/*
-	 * Handle links.
-	 */
-
-	if (serverSyncReceived == YES) {
-		[[self tableView] reloadData];
-	}
-}
-
-- (void) handleChannelRemoveMessage:(MPChannelRemove *)msg {
-	NSLog(@"ServerViewController: ChannelRemove message");
-
-	if (! [msg hasChannelId]) {
-		NSLog(@"ServerViewController: ChannelRemove without channelId.");
-		return;
-	}
-
-	MKChannel *chan = [model channelWithId:[msg channelId]];
-	if (chan && [chan channelId] != 0) {
-		[model removeChannel:chan];
-		if (serverSyncReceived == YES) {
-			[[self tableView] reloadData];
-		}
-	}
-}
-
-- (void) handleServerSyncMessage:(MPServerSync *)msg {
-	NSLog(@"ServerViewController: Recieved ServerSync message");
-	if (![msg hasSession]) {
-		NSLog(@"ServerViewController: Invalid ServerSync recieved.");
-		return;
-	}
-
-	NSLog(@"ServerSync: Our session=%u", [msg session]);
-	currentChannel = [model rootChannel];
-	serverSyncReceived = YES;
-	[[self tableView] reloadData];
-
-	self.navigationItem.title = [[model rootChannel] channelName];
-	[[self navigationController] setToolbarHidden:NO animated:YES];
-}
-
-- (void) handlePermissionQueryMessage:(MPPermissionQuery *)perm {
-}
-
+///////////////////////////////////////////////////////////////////
 #pragma mark Table View methods
+///////////////////////////////////////////////////////////////////
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;

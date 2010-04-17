@@ -27,7 +27,6 @@
 		2861C27D116BE905002B8514 /* PublicServerListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C26A116BE905002B8514 /* PublicServerListController.xib */; };
 		2861C27E116BE905002B8514 /* ServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C26C116BE905002B8514 /* ServerViewController.m */; };
 		2861C27F116BE905002B8514 /* ServerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C26D116BE905002B8514 /* ServerViewController.xib */; };
-		2861C280116BE905002B8514 /* Version.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C26F116BE905002B8514 /* Version.m */; };
 		2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C271116BE905002B8514 /* WelcomeScreenPhone.m */; };
 		2861C282116BE905002B8514 /* WelcomeScreenPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */; };
 		2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
@@ -382,8 +381,6 @@
 		2861C26B116BE905002B8514 /* ServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerViewController.h; sourceTree = "<group>"; };
 		2861C26C116BE905002B8514 /* ServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerViewController.m; sourceTree = "<group>"; };
 		2861C26D116BE905002B8514 /* ServerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServerViewController.xib; sourceTree = "<group>"; };
-		2861C26E116BE905002B8514 /* Version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
-		2861C26F116BE905002B8514 /* Version.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Version.m; sourceTree = "<group>"; };
 		2861C270116BE905002B8514 /* WelcomeScreenPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPhone.h; sourceTree = "<group>"; };
 		2861C271116BE905002B8514 /* WelcomeScreenPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPhone.m; sourceTree = "<group>"; };
 		2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenPhone.xib; sourceTree = "<group>"; };
@@ -740,8 +737,6 @@
 				2861C26B116BE905002B8514 /* ServerViewController.h */,
 				2861C26C116BE905002B8514 /* ServerViewController.m */,
 				2861C26D116BE905002B8514 /* ServerViewController.xib */,
-				2861C26E116BE905002B8514 /* Version.h */,
-				2861C26F116BE905002B8514 /* Version.m */,
 				2861C270116BE905002B8514 /* WelcomeScreenPhone.h */,
 				2861C271116BE905002B8514 /* WelcomeScreenPhone.m */,
 				2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */,
@@ -1542,7 +1537,6 @@
 				2861C27B116BE905002B8514 /* PublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,
 				2861C27E116BE905002B8514 /* ServerViewController.m in Sources */,
-				2861C280116BE905002B8514 /* Version.m in Sources */,
 				2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */,
 				285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */,
 				281A25D3116E1F2D002F6C56 /* NSInvocation(MumbleKitAdditions).m in Sources */,

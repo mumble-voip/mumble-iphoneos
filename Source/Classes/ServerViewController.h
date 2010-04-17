@@ -39,14 +39,11 @@ typedef enum {
 	ServerViewActionsChannels   = 0,
 } ServerViewActions;
 
-@interface ServerViewController : UITableViewController <MKConnectionDelegate, MKMessageHandler> {
+@interface ServerViewController : UITableViewController <MKConnectionDelegate, MKServerModelDelegate> {
 	MKConnection *connection;
 	MKServerModel *model;
 	NSString *serverHostName;
 	NSUInteger serverPortNumber;
-	BOOL serverSyncReceived;
-
-	MKChannel *currentChannel;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
