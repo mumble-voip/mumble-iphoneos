@@ -72,10 +72,8 @@
 
 - (void) viewDidLoad {
 	[super viewDidLoad];
-
 	self.navigationItem.title = @"Connecting...";
-	UIBarButtonItem *disconnectButton = [[[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)] autorelease];
-	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
+	[self.navigationItem setHidesBackButton:YES animated:YES];
 }
 
 #pragma mark
@@ -165,22 +163,47 @@
 //
 // We've successfuly joined the server.
 //
-- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
+- (void) serverModel:(MKServerModel *)server joinedServerAsUser:(MKUser *)user {
 	NSLog(@"ServerViewController: joinedServerAsUser:");
+
+/*
+	self.navigationItem.title = [[server rootChannel] channelName];
+
+	UIBarButtonItem *disconnectButton = [[[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)] autorelease];
+	[[self navigationItem] setLeftBarButtonItem:disconnectButton];*/
+
+	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[model rootChannel]];
+	[[[[UIApplication sharedApplication] delegate] window] addSubview:channelView.view];
+
+	NSLog(@"switched active window.");
 }
 
 //
 // A user joined the server.
 //
-- (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
+- (void) serverModel:(MKServerModel *)server userJoined:(MKUser *)user {
 	NSLog(@"ServerViewController: userJoined.");
 }
 
 //
 // A user left the server.
 //
-- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
+- (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
 	NSLog(@"ServerViewController: userLeft.");
+}
+
+//
+// A channel was added.
+//
+- (void) serverModel:(MKServerModel *)server channelAdded:(MKChannel *)channel {
+	NSLog(@"ServerViewController: channelAdded.");
+}
+
+//
+// A channel was removed.
+//
+- (void) serverModel:(MKServerModel *)server channelRemoved:(MKChannel *)channel {
+	NSLog(@"ServerViewController: channelRemoved.");
 }
 
 

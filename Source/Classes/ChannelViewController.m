@@ -42,6 +42,11 @@
 
 	_channel = channel;
 
+	// fixme(mkrautz): Move this to ChannelPickerController.
+	UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
+	[self setTabBarItem:tabBarItem];
+	[tabBarItem release];
+
 	return self;
 }
 
@@ -49,31 +54,43 @@
 	return [super dealloc];
 }
 
-#pragma mark View lifecycle
+#pragma mark -
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
 
 - (void) viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
+}
 
-	self.navigationItem.title = [_channel channelName];
+- (void)viewDidUnload {
+	[super viewDidUnload];
+}
 
-	UIBarButtonItem *flexSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
-	UIBarButtonItem *joinChannel = [[[UIBarButtonItem alloc] initWithTitle:@"Join Channel" style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
-	[[[self navigationController] toolbar] setItems:[NSArray arrayWithObjects: flexSpace, joinChannel, flexSpace, nil] animated:NO];
-	[[self navigationController] setToolbarHidden:NO animated:NO];}
+- (void) viewWillAppear:(BOOL)flag {
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+	self.navigationItem.title = [[_channel channelName] copy];
+	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	UIBarButtonItem *joinChannel = [[UIBarButtonItem alloc] initWithTitle:@"Join Channel" style:UIBarButtonItemStyleBordered target:nil action:nil];
+
+	[self.navigationController setToolbarHidden:NO animated:NO];
+	[self.navigationController.toolbar setItems:[NSArray arrayWithObjects: flexSpace, joinChannel, flexSpace, nil] animated:NO];
+}
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
-
-#pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
 	if ([[_channel subchannels] count] > 0) {
 		return 2;
 	} else {
-		return 1;
+		return 0;
 	}
 }
 
@@ -85,6 +102,16 @@
 	}
 
 	return 0;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	if (section == ChannelViewSectionSubChannels) {
+		return @"Subchannels";
+	} else if (section == ChannelViewSectionUsers) {
+		return @"Users";
+	}
+
+	return nil;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -112,7 +139,6 @@
     return cell;
 }
 
-#pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -127,17 +153,4 @@
 	}
 }
 
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-}
-
-
 @end
-
