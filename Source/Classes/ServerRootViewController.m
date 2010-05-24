@@ -31,6 +31,7 @@
 #import "ServerRootViewController.h"
 #import "ChannelViewController.h"
 #import "LogViewController.h"
+#import "UserViewController.h"
 
 @implementation ServerRootViewController
 
@@ -132,7 +133,7 @@
 	//
 	// Channel view
 	//
-	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[server rootChannel]];
+	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[server rootChannel] serverModel:server];
 	UINavigationController *channelNavController = [[UINavigationController alloc] initWithRootViewController:channelView];
 	[channelView release];
 	UITabBarItem *channelBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
@@ -149,7 +150,21 @@
 	[logNavController setTabBarItem:logBarItem];
 	[logBarItem release];
 
-	[self setViewControllers:[NSArray arrayWithObjects:channelNavController, logNavController, nil]];
+	//
+	// User view
+	//
+	UserViewController *userView = [[UserViewController alloc] initWithServerModel:_model];
+	UINavigationController *userNavController = [[UINavigationController alloc] initWithRootViewController:userView];
+	[userView release];
+	UITabBarItem *userBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2];
+	[userNavController setTabBarItem:userBarItem];
+	[userBarItem release];
+
+	[self setViewControllers:[NSArray arrayWithObjects:channelNavController, userNavController, logNavController, nil]];
+
+	[channelNavController release];
+	[logNavController release];
+	[userNavController release];
 }
 
 //

@@ -28,25 +28,62 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKChannel.h>
-#import <MumbleKit/MKServerModel.h>
+#import "UserViewController.h"
 
-typedef enum {
-	ChannelViewSectionSubChannels    = 0,
-	ChannelViewSectionUsers          = 1,
-	ChannelViewSectionActions        = 2,
-} ChannelViewSection;
+@implementation UserViewController
 
-typedef enum {
-	ChannelViewActionJoinChannel     = 0,
-} ChannelViewAction;
 
-@interface ChannelViewController : UITableViewController {
-	MKChannel *_channel;
-	MKServerModel *_model;
+#pragma mark -
+#pragma mark Initialization
+
+- (id) initWithServerModel:(MKServerModel *)model {
+	self = [super init];
+	if (self == nil)
+		return nil;
+
+	_model = model;
+
+	return self;
 }
 
-- (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model;
-- (void) dealloc;
+- (void) dealloc {
+    [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return 1;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return 0;
+}
+
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    static NSString *CellIdentifier = @"Cell";
+
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+
+    // Configure the cell...
+
+    return cell;
+}
+
+#pragma mark -
+#pragma mark Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
 
 @end
+

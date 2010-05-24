@@ -325,6 +325,7 @@
 		2861C507116BEA12002B8514 /* talking_whisper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E1116BEA12002B8514 /* talking_whisper.pdf */; };
 		2861C508116BEA12002B8514 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E3116BEA12002B8514 /* Continents.plist */; };
 		2861C509116BEA12002B8514 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E4116BEA12002B8514 /* Countries.plist */; };
+		2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2874FAF411AAA2AD00FF8823 /* UserViewController.m */; };
 		287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* ServerRootViewController.m */; };
 		287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
 		287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* ChannelViewController.xib */; };
@@ -684,6 +685,8 @@
 		2861C3E1116BEA12002B8514 /* talking_whisper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = talking_whisper.pdf; sourceTree = "<group>"; };
 		2861C3E3116BEA12002B8514 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Continents.plist; sourceTree = "<group>"; };
 		2861C3E4116BEA12002B8514 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Countries.plist; sourceTree = "<group>"; };
+		2874FAF311AAA2AD00FF8823 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
+		2874FAF411AAA2AD00FF8823 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		287852D9117BC866009E26B1 /* ServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewController.h; sourceTree = "<group>"; };
 		287852DA117BC866009E26B1 /* ServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
@@ -761,6 +764,8 @@
 				28A4CCD2117E064B006EB479 /* LogViewController.m */,
 				28A4CCF3117E1D4D006EB479 /* LogEntry.h */,
 				28A4CCF4117E1D4D006EB479 /* LogEntry.m */,
+				2874FAF311AAA2AD00FF8823 /* UserViewController.h */,
+				2874FAF411AAA2AD00FF8823 /* UserViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1558,6 +1563,7 @@
 				287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */,
 				28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */,
 				28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */,
+				2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

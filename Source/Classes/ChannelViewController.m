@@ -35,12 +35,13 @@
 
 #pragma mark -
 
-- (id) initWithChannel:(MKChannel *)channel {
+- (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model {
 	self = [super initWithNibName:@"ChannelViewController" bundle:nil];
 	if (! self)
 		return nil;
 
 	_channel = channel;
+	_model = model;
 
 	// fixme(mkrautz): Move this to ChannelPickerController.
 	UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
@@ -72,13 +73,7 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-	self.navigationItem.title = [[_channel channelName] copy];
-	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	UIBarButtonItem *joinChannel = [[UIBarButtonItem alloc] initWithTitle:@"Join Channel" style:UIBarButtonItemStyleBordered target:nil action:nil];
-
-	[self.navigationController setToolbarHidden:NO animated:NO];
-	[self.navigationController.toolbar setItems:[NSArray arrayWithObjects: flexSpace, joinChannel, flexSpace, nil] animated:NO];
-}
+ }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -87,11 +82,7 @@
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	if ([[_channel subchannels] count] > 0) {
-		return 2;
-	} else {
-		return 0;
-	}
+	return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -99,6 +90,8 @@
 		return [[_channel subchannels] count];
 	} else if (section == ChannelViewSectionUsers) {
 		return [[_channel users] count];
+	} else if (section == ChannelViewSectionActions) {
+		return 1;
 	}
 
 	return 0;
@@ -109,6 +102,8 @@
 		return @"Subchannels";
 	} else if (section == ChannelViewSectionUsers) {
 		return @"Users";
+	} else if (section == ChannelViewSectionActions) {
+		return @"Actions";
 	}
 
 	return nil;
@@ -134,6 +129,11 @@
 		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
 		cell.textLabel.text = [channelUser userName];
 		cell.accessoryType = UITableViewCellAccessoryNone;
+	} else if (section == ChannelViewSectionActions) {
+		// Join Channel
+		if (row == 0) {
+			cell.textLabel.text = @"Join Channel";
+		}
 	}
 
     return cell;
@@ -147,9 +147,13 @@
 
 	if (section == ChannelViewSectionSubChannels) {
 		MKChannel *childChannel = [[_channel subchannels] objectAtIndex:row];
-		ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:childChannel];
+		ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:childChannel serverModel:_model];
 		[self.navigationController pushViewController:channelView animated:YES];
 		[channelView release];
+	} else if (section == ChannelViewSectionActions) {
+		if (row == ChannelViewActionJoinChannel) {
+			[_model joinChannel:_channel];
+		}
 	}
 }
 
