@@ -29,9 +29,12 @@
 */
 
 #import <MumbleKit/MKServerModel.h>
+#import <MumbleKit/MKChannel.h>
 
 @interface UserViewController : UITableViewController {
 	MKServerModel *_model;
+	NSMutableArray *_channelUsers;
+	MKChannel *_currentChannel;
 }
 
 @end

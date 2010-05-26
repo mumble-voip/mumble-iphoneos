@@ -29,6 +29,7 @@
 */
 
 #import "UserViewController.h"
+#import "PDFImageLoader.h"
 
 @implementation UserViewController
 
@@ -42,13 +43,69 @@
 		return nil;
 
 	_model = model;
+	_currentChannel = [[_model connectedUser] channel];
+	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userTalkStateChanged:) name:@"MKUserTalkStateChanged" object:nil];
+	[_model addDelegate:self];
 
 	return self;
 }
 
 - (void) dealloc {
     [super dealloc];
+
+	[_model removeDelegate:self];
 }
+
+#pragma Server model handlers
+
+//
+// A user joined the server.
+//
+- (void) serverModel:(MKServerModel *)server userJoined:(MKUser *)user {
+	NSLog(@"ServerViewController: userJoined.");
+}
+
+//
+// A user left the server.
+//
+- (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[_channelUsers removeObjectAtIndex:userIndex];
+		[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+								withRowAnimation:UITableViewRowAnimationRight];
+	}
+}
+
+//
+// A user moved channel
+//
+- (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
+	// Did the user join this channel?
+	if (chan == _currentChannel) {
+		NSLog(@"user joined us!");
+		[_channelUsers addObject:user];
+		NSUInteger userIndex = [_channelUsers indexOfObject:user];
+		[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+								withRowAnimation:UITableViewRowAnimationLeft];
+	// Or did he leave it?
+	} else {
+		NSUInteger userIndex = [_channelUsers indexOfObject:user];
+		if (userIndex != NSNotFound) {
+			[_channelUsers removeObjectAtIndex:userIndex];
+			[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+									withRowAnimation:UITableViewRowAnimationRight];
+		}
+	}
+}
+
+- (void) userTalkStateChanged:(NSNotification *)notification {
+	MKUser *user = [notification object];
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+	[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 
 #pragma mark -
 #pragma mark Table view data source
@@ -57,11 +114,9 @@
 	return 1;
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 0;
+	return [_channelUsers count];
 }
-
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -73,7 +128,27 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    // Configure the cell...
+	NSUInteger row = [indexPath row];
+	MKUser *user = [_channelUsers objectAtIndex:row];
+
+	NSLog(@"Updating cell for %@", [user userName]);
+
+	cell.textLabel.text = [user userName];
+
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+
+	NSLog(@"talkImageName = %@", talkImageName);
+
+	cell.imageView.image = [PDFImageLoader imageFromPDF:talkImageName];
 
     return cell;
 }
