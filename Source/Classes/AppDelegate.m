@@ -45,6 +45,7 @@
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
 
+#if defined(__IPHONE_3_2)
 	// If we're running on anything below OS 3.2, UIDevice does not
 	// respond to the userInterfaceIdiom method. We must assume we're
 	// running on an iPhone or iPod Touch.
@@ -65,6 +66,11 @@
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	}
+#else
+	WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] initWithNibName:@"WelcomeScreenPhone" bundle:nil];
+	[navigationController pushViewController:welcomeScreen animated:YES];
+	[welcomeScreen release];
+#endif
 
 	[MKAudio initializeAudio];
 }
