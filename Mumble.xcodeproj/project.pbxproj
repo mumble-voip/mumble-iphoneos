@@ -10,6 +10,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		2807383711B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m in Sources */ = {isa = PBXBuildFile; fileRef = 2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
 		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
@@ -356,6 +357,8 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2807383511B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSInvocation(MumbleKitAdditions).h"; path = "Source/NSInvocation(MumbleKitAdditions).h"; sourceTree = "<group>"; };
+		2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSInvocation(MumbleKitAdditions).m"; path = "Source/NSInvocation(MumbleKitAdditions).m"; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPad.h; sourceTree = "<group>"; };
 		285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPad.m; sourceTree = "<group>"; };
@@ -774,6 +777,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2807383411B5760A00F9B9BE /* CategoryHack */ = {
+			isa = PBXGroup;
+			children = (
+				2807383511B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).h */,
+				2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */,
+			);
+			name = CategoryHack;
+			sourceTree = "<group>";
+		};
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -1126,6 +1138,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				2807383411B5760A00F9B9BE /* CategoryHack */,
 				2861C28C116BE90B002B8514 /* Dependencies */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1558,6 +1571,7 @@
 				28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */,
 				28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */,
 				2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */,
+				2807383711B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
