@@ -195,5 +195,13 @@
 	NSLog(@"ServerViewController: channelRemoved.");
 }
 
+#pragma mark -
+#pragma mark UIAlertView delegate
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	[_connection setIgnoreSSLVerification:YES];
+	[_connection reconnect];
+}
+
 
 @end
