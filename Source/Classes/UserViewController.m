@@ -103,7 +103,26 @@
 - (void) userTalkStateChanged:(NSNotification *)notification {
 	MKUser *user = [notification object];
 	NSUInteger userIndex = [_channelUsers indexOfObject:user];
-	[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+
+	if (userIndex == NSNotFound)
+		return;
+
+	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+
+	UIImageView *imageView = [cell imageView];
+	UIImage *image = [PDFImageLoader imageFromPDF:talkImageName];
+	[imageView setImage:image];
 }
 
 
@@ -131,8 +150,6 @@
 	NSUInteger row = [indexPath row];
 	MKUser *user = [_channelUsers objectAtIndex:row];
 
-	NSLog(@"Updating cell for %@", [user userName]);
-
 	cell.textLabel.text = [user userName];
 
 	MKTalkState talkState = [user talkState];
@@ -145,9 +162,6 @@
 		talkImageName = @"talking_whisper";
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
-
-	NSLog(@"talkImageName = %@", talkImageName);
-
 	cell.imageView.image = [PDFImageLoader imageFromPDF:talkImageName];
 
     return cell;
@@ -158,7 +172,5 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
-
-
 @end
 
