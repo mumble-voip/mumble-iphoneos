@@ -139,8 +139,6 @@
 
 // Row selected.
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-
 	NSDictionary *countryInfo = [publicServerList countryAtIndexPath:indexPath];
 	NSString *countryName = [countryInfo objectForKey:@"name"];
 	NSArray *countryServers = [countryInfo objectForKey:@"servers"];
