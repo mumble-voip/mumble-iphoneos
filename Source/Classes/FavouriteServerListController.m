@@ -43,16 +43,16 @@
 	self = [super init];
 	if (self == nil)
 		return nil;
-	
+
 	[[self navigationItem] setTitle:@"Favourites"];
 	
 	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
 	[[self navigationItem] setRightBarButtonItem:addButton];
 	[addButton release];
-	
+
 	_favouriteServers = [Database favourites];
 	[_favouriteServers retain];
-	
+
 	return self;
 }
 
@@ -103,18 +103,59 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[favServ displayName] delegate:self
+												  cancelButtonTitle:@"Cancel"
+												  destructiveButtonTitle:nil
+												  otherButtonTitles:@"Connect", @"Edit", nil];
+	[sheet showInView:[self tableView]];
+	[sheet release];
+}
+
+- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
+	NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+
+	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+
+	// Connect
+	if (index == 0) {
+		NSLog(@"Connect...");
+
+	// Edit
+	} else if (index == 1) {
+		[self presentEditDialogForFavourite:favServ];
+	}
 }
 
 #pragma mark -
-#pragma mark Add button target
+#pragma Modal edit dialog
 
-//
-// Action for someone clicking the '+' button on the Favourite Server listing.
-//
-- (void) addButtonClicked:(id)sender {
+- (void) presentNewFavouriteDialog {
 	UINavigationController *modalNav = [[UINavigationController alloc] init];
 
 	FavouriteServerEditViewController *editView = [[FavouriteServerEditViewController alloc] init];
+
+	_editMode = NO;
+	_editedServer = nil;
+
+	[editView setTarget:self];
+	[editView setDoneAction:@selector(doneButtonClicked:)];
+	[modalNav pushViewController:editView animated:NO];
+	[editView release];
+
+	[[self navigationController] presentModalViewController:modalNav animated:YES];
+	[modalNav release];
+}
+
+- (void) presentEditDialogForFavourite:(FavouriteServer *)favServ {
+	UINavigationController *modalNav = [[UINavigationController alloc] init];
+
+	FavouriteServerEditViewController *editView = [[FavouriteServerEditViewController alloc] initInEditMode:YES withContentOfFavouriteServer:favServ];
+
+	_editMode = YES;
+	_editedServer = favServ;
+
 	[editView setTarget:self];
 	[editView setDoneAction:@selector(doneButtonClicked:)];
 	[modalNav pushViewController:editView animated:NO];
@@ -125,6 +166,16 @@
 }
 
 #pragma mark -
+#pragma mark Add button target
+
+//
+// Action for someone clicking the '+' button on the Favourite Server listing.
+//
+- (void) addButtonClicked:(id)sender {
+	[self presentNewFavouriteDialog];
+}
+
+#pragma mark -
 #pragma mark Done button target (from Edit View)
 
 //
@@ -132,6 +183,9 @@
 //
 - (void) doneButtonClicked:(id)sender {
 	FavouriteServerEditViewController *editView = sender;
+
+	if (_editMode)
+		[_favouriteServers removeObject:_editedServer];
 
 	FavouriteServer *newServer = [editView copyFavouriteFromContent];
 	[_favouriteServers addObject:newServer];

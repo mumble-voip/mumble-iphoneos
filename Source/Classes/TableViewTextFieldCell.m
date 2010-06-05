@@ -67,6 +67,17 @@
 }
 
 #pragma mark -
+#pragma mark Action helper
+
+- (void) performValueChangedSelector {
+	id targ = [self target];
+	if ([targ respondsToSelector:_valueChangedAction])
+		[[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:targ argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+	else
+		NSLog(@"TableViewTextFieldCell: Target does not respond to given selector.");
+}
+
+#pragma mark -
 #pragma mark Layout
 
 - (void) layoutSubviews {
@@ -112,8 +123,28 @@
 	return [_textField placeholder];
 }
 
+- (void) setTextValue:(NSString *)val {
+	if ([val length] == 0)
+		val = nil;
+	[_textField setText:val];
+	[self performValueChangedSelector];
+}
+
 - (NSString *) textValue {
-	return [_textField text];
+	NSString *value = [[_textField text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if ([value length] == 0) {
+		return nil;
+	}
+	return value;
+}
+
+- (void) setIntValue:(int)val {
+	[_textField setText:[NSString stringWithFormat:@"%i", val]];
+	[self performValueChangedSelector];
+}
+
+- (int) intValue {
+	return [[_textField text] intValue];
 }
 
 - (void) setValueChangedAction:(SEL)selector {
@@ -128,12 +159,12 @@
 #pragma mark UITextFieldDelegate
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
-	// fixme(mkrautz): Xcode warns that this is deprecated?
-	id targ = [self target];
-	if ([targ respondsToSelector:_valueChangedAction])
-		[targ performSelector:_valueChangedAction withObject:self];
-	else
-		NSLog(@"TableViewTextFieldCell: Target does not respond to given selector.");
+	[self performValueChangedSelector];
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+	[self performValueChangedSelector];
+	return YES;
 }
 
 #pragma mark -

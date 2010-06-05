@@ -32,7 +32,6 @@
 
 @interface FavouriteServerEditViewController : UITableViewController {
 	BOOL _editMode;
-	FavouriteServer *_initialFavouriteContent;
 	FavouriteServer *_favourite;
 	id _target;
 	SEL _doneAction;

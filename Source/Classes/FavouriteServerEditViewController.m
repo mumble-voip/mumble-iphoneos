@@ -34,6 +34,16 @@
 #import "FavouriteServer.h"
 #import "TableViewTextFieldCell.h"
 
+//
+// Placeholder text for the edit view fields.
+//
+static NSString *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
+static NSString *FavouriteServerPlaceholderHostName     = @"Hostname or IP address";
+static NSString *FavouriteServerPlaceholderPort         = @"64738";
+static NSUInteger FavouriteServerPlaceholderPortInteger = 64738;
+static NSString *FavouriteServerPlaceholderUsername     = @"MumbleUser";
+static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
+
 @implementation FavouriteServerEditViewController
 
 #pragma mark -
@@ -45,10 +55,11 @@
 		return nil;
 
 	_editMode = editMode;
-	_initialFavouriteContent = favServ;
-	[_initialFavouriteContent retain];
-
-	_favourite = [[FavouriteServer alloc] init];
+	if (_editMode) {
+		_favourite = [favServ copy];
+	} else {
+		_favourite = [[FavouriteServer alloc] init];
+	}
 
 	return self;
 }
@@ -58,7 +69,6 @@
 }
 
 - (void) dealloc {
-	[_initialFavouriteContent release];
 	[_favourite release];
 	[super dealloc];
 }
@@ -135,33 +145,41 @@
 	if (section == 0) {
 		if (row == 0) {
 			[cell setLabel:@"Description"];
-			[cell setPlaceholder:@"Mumble Server of Doom"];
+			[cell setPlaceholder:FavouriteServerPlaceholderDisplayName];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
 			[cell setValueChangedAction:@selector(descriptionChanged:)];
+			[cell setTextValue:[_favourite displayName]];
 		} else if (row == 1) {
 			[cell setLabel:@"Address"];
-			[cell setPlaceholder:@"mumble.example.com"];
+			[cell setPlaceholder:FavouriteServerPlaceholderHostName];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setKeyboardType:UIKeyboardTypeURL];
 			[cell setValueChangedAction:@selector(hostnameChanged:)];
+			[cell setTextValue:[_favourite hostName]];
 		} else if (row == 2) {
 			[cell setLabel:@"Port"];
-			[cell setPlaceholder:@"64738"];
+			[cell setPlaceholder:FavouriteServerPlaceholderPort];
 			[cell setKeyboardType:UIKeyboardTypeNumberPad];
 			[cell setValueChangedAction:@selector(portChanged:)];
+			if ([_favourite port] != 0)
+				[cell setIntValue:[_favourite port]];
+			else
+				[cell setTextValue:nil];
 		}
 	// Identity
 	} else if (section == 1) {
 		if (row == 0) {
 			[cell setLabel:@"Username"];
-			[cell setPlaceholder:@"luser"];
+			[cell setPlaceholder:FavouriteServerPlaceholderUsername];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setValueChangedAction:@selector(usernameChanged:)];
+			[cell setTextValue:[_favourite userName]];
 		} else if (row == 1) {
 			[cell setLabel:@"Password"];
-			[cell setPlaceholder:@"Optional"];
+			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
 			[cell setSecureTextEntry:YES];
 			[cell setValueChangedAction:@selector(passwordChanged:)];
+			// fixme(mkrautz): Grab value from keychain?
 		}
 	}
 
@@ -203,6 +221,18 @@
 }
 
 - (void) doneClicked:(id)sender {
+	// Perform some basic tidying up. For example, for the port field, we
+	// want the default port number to be used if it wasn't filled out.
+	NSLog(@"%p", [_favourite displayName]);
+	if ([_favourite displayName] == nil) {
+		[_favourite setDisplayName:FavouriteServerPlaceholderDisplayName];
+	}
+	if ([_favourite port] == 0) {
+		[_favourite setPort:[FavouriteServerPlaceholderPort intValue]];
+	}
+
+	// Get rid of oureslves and call back to our target to tell it that
+	// we're done.
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 	if ([_target respondsToSelector:_doneAction]) {
 		[_target performSelector:_doneAction withObject:self];

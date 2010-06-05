@@ -47,7 +47,11 @@
 - (void) setPlaceholder:(NSString *)defaultValue;
 - (NSString *) placeholder;
 
+- (void) setTextValue:(NSString *)val;
 - (NSString *) textValue;
+
+- (void) setIntValue:(int)val;
+- (int) intValue;
 
 - (void) setValueChangedAction:(SEL)selector;
 - (SEL) valueChangedAction;

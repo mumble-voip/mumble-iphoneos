@@ -30,7 +30,7 @@
 
 #import "FavouriteServer.h"
 
-@interface FavouriteServerListController : UITableViewController {
+@interface FavouriteServerListController : UITableViewController <UIActionSheetDelegate> {
 	NSMutableArray *_favouriteServers;
 	BOOL _editMode;
 	FavouriteServer *_editedServer;
