@@ -32,6 +32,7 @@
 
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
+#import "Database.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -71,10 +72,12 @@
 	[welcomeScreen release];
 #endif
 
+	[Database initializeDatabase];
 	[MKAudio initializeAudio];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+	[Database teardown];
 }
 
 - (void)dealloc {

@@ -31,6 +31,7 @@
 #import "WelcomeScreenPhone.h"
 
 #import "PublicServerListController.h"
+#import "FavouriteServerListController.h"
 #import "ServerRootViewController.h"
 
 #import "AboutDialog.h"
@@ -130,9 +131,11 @@
 		if (indexPath.row == 0) {
 			PublicServerListController *serverList = [[[PublicServerListController alloc] init] autorelease];
 			[self.navigationController pushViewController:serverList animated:YES];
-		}
-		else if (indexPath.row == 3) {
-			ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:@"localhost" port:64820];
+		} else if (indexPath.row == 1) {
+			FavouriteServerListController *favList = [[[FavouriteServerListController alloc] init] autorelease];
+			[self.navigationController pushViewController:favList animated:YES];
+		} else if (indexPath.row == 3) {
+			ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:@"mumble.sasquash.dk" port:64801];
 			[self.navigationController presentModalViewController:serverRoot animated:YES];
 		}
 	}

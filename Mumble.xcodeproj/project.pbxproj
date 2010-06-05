@@ -325,6 +325,11 @@
 		2861C507116BEA12002B8514 /* talking_whisper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E1116BEA12002B8514 /* talking_whisper.pdf */; };
 		2861C508116BEA12002B8514 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E3116BEA12002B8514 /* Continents.plist */; };
 		2861C509116BEA12002B8514 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E4116BEA12002B8514 /* Countries.plist */; };
+		287225AA11BACEC5003830A3 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A111BACEC5003830A3 /* Database.m */; };
+		287225AB11BACEC5003830A3 /* FavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A411BACEC5003830A3 /* FavouriteServerListController.m */; };
+		287225AC11BACEC5003830A3 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */; };
+		287225AD11BACEC5003830A3 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */; };
+		287225AE11BACEC5003830A3 /* FavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A811BACEC5003830A3 /* FavouriteServer.m */; };
 		2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2874FAF411AAA2AD00FF8823 /* UserViewController.m */; };
 		287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* ServerRootViewController.m */; };
 		287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
@@ -689,6 +694,16 @@
 		2861C3E1116BEA12002B8514 /* talking_whisper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = talking_whisper.pdf; sourceTree = "<group>"; };
 		2861C3E3116BEA12002B8514 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Continents.plist; sourceTree = "<group>"; };
 		2861C3E4116BEA12002B8514 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Countries.plist; sourceTree = "<group>"; };
+		287225A011BACEC5003830A3 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		287225A111BACEC5003830A3 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		287225A211BACEC5003830A3 /* FavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServer.h; sourceTree = "<group>"; };
+		287225A311BACEC5003830A3 /* FavouriteServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerListController.h; sourceTree = "<group>"; };
+		287225A411BACEC5003830A3 /* FavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerListController.m; sourceTree = "<group>"; };
+		287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
+		287225A611BACEC5003830A3 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
+		287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerEditViewController.m; sourceTree = "<group>"; };
+		287225A811BACEC5003830A3 /* FavouriteServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServer.m; sourceTree = "<group>"; };
+		287225A911BACEC5003830A3 /* FavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerEditViewController.h; sourceTree = "<group>"; };
 		2874FAF311AAA2AD00FF8823 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		2874FAF411AAA2AD00FF8823 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		287852D9117BC866009E26B1 /* ServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewController.h; sourceTree = "<group>"; };
@@ -776,6 +791,16 @@
 				28A4CCF4117E1D4D006EB479 /* LogEntry.m */,
 				2874FAF311AAA2AD00FF8823 /* UserViewController.h */,
 				2874FAF411AAA2AD00FF8823 /* UserViewController.m */,
+				287225A011BACEC5003830A3 /* Database.h */,
+				287225A111BACEC5003830A3 /* Database.m */,
+				287225A211BACEC5003830A3 /* FavouriteServer.h */,
+				287225A811BACEC5003830A3 /* FavouriteServer.m */,
+				287225A311BACEC5003830A3 /* FavouriteServerListController.h */,
+				287225A411BACEC5003830A3 /* FavouriteServerListController.m */,
+				287225A611BACEC5003830A3 /* TableViewTextFieldCell.h */,
+				287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */,
+				287225A911BACEC5003830A3 /* FavouriteServerEditViewController.h */,
+				287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1602,6 +1627,11 @@
 				28F9178C11B9476B0030D649 /* FMDatabase.m in Sources */,
 				28F9178D11B9476B0030D649 /* FMDatabaseAdditions.m in Sources */,
 				28F9178F11B9476B0030D649 /* FMResultSet.m in Sources */,
+				287225AA11BACEC5003830A3 /* Database.m in Sources */,
+				287225AB11BACEC5003830A3 /* FavouriteServerListController.m in Sources */,
+				287225AC11BACEC5003830A3 /* TableViewTextFieldCell.m in Sources */,
+				287225AD11BACEC5003830A3 /* FavouriteServerEditViewController.m in Sources */,
+				287225AE11BACEC5003830A3 /* FavouriteServer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
