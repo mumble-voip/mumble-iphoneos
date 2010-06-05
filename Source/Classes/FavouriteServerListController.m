@@ -78,11 +78,12 @@
     static NSString *CellIdentifier = @"FavouriteServerCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
 
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
 	cell.textLabel.text = [favServ displayName];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%u", [favServ userName], [favServ hostName], [favServ port]];
 
     return cell;
 }
