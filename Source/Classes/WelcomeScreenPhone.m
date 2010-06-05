@@ -67,7 +67,7 @@
 // Customize the number of rows in the table view.
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0)
-		return 4;
+		return 3;
 	if (section == 2)
 		return 2;
 
@@ -105,10 +105,7 @@
 			cell.textLabel.text = @"Favourites";
 		} else if (indexPath.row == 2) {
 			cell.textLabel.text = @"LAN";
-		} else if (indexPath.row == 3) {
-			cell.textLabel.text = @"Local Server";
 		}
-
 	/* 'Other' section. */
 	} else if (indexPath.section == 2) {
 		if (indexPath.row == 0) {
@@ -134,9 +131,6 @@
 		} else if (indexPath.row == 1) {
 			FavouriteServerListController *favList = [[[FavouriteServerListController alloc] init] autorelease];
 			[self.navigationController pushViewController:favList animated:YES];
-		} else if (indexPath.row == 3) {
-			ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:@"mumble.sasquash.dk" port:64801];
-			[self.navigationController presentModalViewController:serverRoot animated:YES];
 		}
 	}
 
