@@ -68,15 +68,6 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 
 - (void) viewWillAppear:(BOOL)animated {
 	[[self navigationItem] setTitle:@"LAN Servers"];
-
-	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-	[activityIndicator startAnimating];
-	
-	UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-	self.navigationItem.rightBarButtonItem = rightButton;
-	
-	[rightButton release];
-	[activityIndicator release];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -91,11 +82,6 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 	[_netServices sortUsingFunction:NetServiceAlphabeticalSort context:nil];
 	NSInteger newIndex = [_netServices indexOfObject:netService];
 	[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
-
-	// No more services are coming.
-	if (!moreServices) {
-		[[self navigationItem] setRightBarButtonItem:nil];
-	}
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)netService moreComing:(BOOL)moreServices {
