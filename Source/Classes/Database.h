@@ -30,11 +30,14 @@
 
 #import <FMDatabase.h>
 
+@class FavouriteServer;
+
 @interface Database : NSObject
 
 + (void) initializeDatabase;
 + (void) teardown;
 
++ (void) saveFavourite:(FavouriteServer *)favServ;
 + (void) saveFavourites:(NSArray *)favourites;
 + (NSMutableArray *) favourites;
 

@@ -30,6 +30,11 @@
 
 #import "CountryServerListController.h"
 
+#import "Database.h"
+#import "FavouriteServer.h"
+#import "FavouriteServerListController.h"
+#import "FavouriteServerEditViewController.h"
+
 @implementation CountryServerListController
 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers {
@@ -37,103 +42,121 @@
 	if (self == nil)
 		return nil;
 
-	countryServers = [servers retain];
-	countryName = [[country copy] retain];
-
-	// Toolbar items
-	UIBarButtonItem *connectItem = [[[UIBarButtonItem alloc] initWithTitle:@"Connect" style:UIBarButtonItemStyleDone target:self action:@selector(connectClicked:)] autorelease];
-	UIBarButtonItem *moreInfoItem = [[[UIBarButtonItem alloc] initWithTitle:@"More Info" style:UIBarButtonItemStyleBordered	target:self action:@selector(moreInfoClicked:)] autorelease];
-	UIBarButtonItem *addFavItem = [[[UIBarButtonItem alloc] initWithTitle:@"Add as Favourite" style:UIBarButtonItemStyleBordered target:self action:@selector(addFavClicked:)] autorelease];
-
-	[self setToolbarItems:[NSArray arrayWithObjects:moreInfoItem, addFavItem, connectItem, nil] animated:NO];
+	_countryServers = [servers retain];
+	_countryName = [[country copy] retain];
 
 	return self;
 }
 
+- (void) dealloc {
+    [super dealloc];
+
+	[_countryName release];
+	[_countryServers release];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-	self.navigationItem.title = countryName;
+	[[self navigationItem] setTitle:_countryName];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-
-	// Hide our toolbar.
-	[[self navigationController] setToolbarHidden:YES animated:YES];
 }
 
-// Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-	// Release any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-}
-
-/*
- * Table View methods.
- */
+#pragma mark -
+#pragma mark Table view methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [countryServers count];
+	return [_countryServers count];
 }
 
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countryServer"];
+	static NSString *reuseIdentifier = @"PublicServer";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryServer"] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier] autorelease];
     }
 
-	// fixme(mkrautz): Implement a ServerCell.
-	NSDictionary *serverItem = [countryServers objectAtIndex:[indexPath indexAtPosition:1]];
+	// fixme(mkrautz): Implement a ServerCell?
+	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 	cell.textLabel.text = [serverItem objectForKey:@"name"];
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@:%@", [serverItem objectForKey:@"ip"], [serverItem objectForKey:@"port"]];
 
     return cell;
 }
 
+#pragma mark -
+#pragma mark Selection
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[[self navigationController] setToolbarHidden:NO animated:YES];
+	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+
+	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"] delegate:self
+											cancelButtonTitle:@"Cancel"
+											destructiveButtonTitle:nil
+											otherButtonTitles:@"Connect", @"Add as favourite", nil];
+	[sheet showInView:[self tableView]];
+	[sheet release];
 }
 
-/*
- * Toolbar actions.
- */
-- (void)connectClicked:(id)sender {
-	MUMBLE_UNUSED NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
+	NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+	
+	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+
+	// Connect
+	if (index == 0) {
+		NSLog(@"Connect...");
+
+	// Add as favourite
+	} else if (index == 1) {
+		[self presentAddAsFavouriteDialogForServer:serverItem];
+	}
 }
 
-- (void)moreInfoClicked:(id)sender {
-	MUMBLE_UNUSED NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+- (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem {
+	FavouriteServer *favServ = [[FavouriteServer alloc] init];
+	[favServ setDisplayName:[serverItem objectForKey:@"name"]];
+	[favServ setHostName:[serverItem objectForKey:@"ip"]];
+	[favServ setPort:[[serverItem objectForKey:@"port"] intValue]];
+
+	UINavigationController *modalNav = [[UINavigationController alloc] init];
+	FavouriteServerEditViewController *editView = [[FavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];
+
+	[editView setTarget:self];
+	[editView setDoneAction:@selector(doneButtonClicked:)];
+	[modalNav pushViewController:editView animated:NO];
+	[editView release];
+
+	[[self navigationController] presentModalViewController:modalNav animated:YES];
+
+	[modalNav release];
+	[favServ release];
 }
 
-- (void)addFavClicked:(id)sender {
-	MUMBLE_UNUSED NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+- (void) doneButtonClicked:(id)sender {
+	FavouriteServerEditViewController *editView = (FavouriteServerEditViewController *)sender;
+	FavouriteServer *favServ = [editView copyFavouriteFromContent];
+	[Database saveFavourite:favServ];
+	[favServ release];
+
+	FavouriteServerListController *favController = [[FavouriteServerListController alloc] init];
+	UINavigationController *navCtrl = [self navigationController];
+	[navCtrl popToRootViewControllerAnimated:NO];
+	[navCtrl pushViewController:favController animated:YES];
+	[favController release];
 }
 
-- (void)dealloc {
-    [super dealloc];
-	[countryName release];
-	[countryServers release];
-}
 
 @end
 

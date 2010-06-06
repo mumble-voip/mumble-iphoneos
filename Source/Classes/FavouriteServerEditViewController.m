@@ -55,7 +55,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 		return nil;
 
 	_editMode = editMode;
-	if (_editMode) {
+	if (favServ) {
 		_favourite = [favServ copy];
 	} else {
 		_favourite = [[FavouriteServer alloc] init];

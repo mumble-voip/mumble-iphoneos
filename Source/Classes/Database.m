@@ -80,6 +80,17 @@ static FMDatabase *db = nil;
 }
 
 //
+// Save single favourite
+//
++ (void) saveFavourite:(FavouriteServer *)favServ {
+	[db executeUpdate:@"REPLACE INTO `servers` (`name`, `hostname`, `port`, `username`) VALUES (?, ?, ?, ?)",
+		[favServ displayName],
+		[favServ hostName],
+		[NSString stringWithFormat:@"%u", [favServ port]],
+		[favServ userName]];
+}
+
+//
 // Save favourites
 //
 + (void) saveFavourites:(NSArray *)favourites {
@@ -88,11 +99,7 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"DELETE FROM `servers`"];
 
 	for (FavouriteServer *favServ in favourites) {
-		[db executeUpdate:@"REPLACE INTO `servers` (`name`, `hostname`, `port`, `username`) VALUES (?, ?, ?, ?)",
-			[favServ displayName],
-			[favServ hostName],
-			[NSString stringWithFormat:@"%u", [favServ port]],
-			[favServ userName]];
+		[Database saveFavourite:favServ];
 	}
 
 	[db commit];

@@ -39,4 +39,7 @@
 - (id) init;
 - (void) dealloc;
 
+- (void) presentNewFavouriteDialog;
+- (void) presentEditDialogForFavourite:(FavouriteServer *)favServ;
+
 @end
