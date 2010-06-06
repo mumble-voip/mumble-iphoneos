@@ -38,7 +38,7 @@
 @end
 
 
-@interface PublicServerList : NSObject {
+@interface PublicServerList : NSObject <NSXMLParserDelegate> {
 	NSURLRequest *urlRequest;
 	NSURLResponse *urlResponse;
 	NSMutableData *serverListData;
@@ -56,17 +56,18 @@
 }
 
 - (id) init;
+- (void) dealloc;
 
-/* Public methods. */
+#pragma mark Public methods
+
 - (void) load;
 - (void) setDelegate:(id)selector;
 
-/* Model methods. */
+#pragma mark Model access
+
 - (NSInteger) numberOfContinents;
 - (NSString *) continentNameAtIndex:(NSInteger)index;
 - (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index;
 - (NSDictionary *) countryAtIndexPath:(NSIndexPath *)indexPath;
-
-- (void) dealloc;
 
 @end

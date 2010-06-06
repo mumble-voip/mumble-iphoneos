@@ -33,16 +33,6 @@
 
 @implementation PublicServerList
 
-/*
- * Sorting function for NSString's sortArrayUsingFunction: method.
- */
-static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse) {
-	if (reverse)
-		return [str2 compare:str1];
-	else
-		return [str1 compare:str2];
-}
-
 - (id) init {
 	self = [super init];
 	if (self == nil)
@@ -52,6 +42,16 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 	countryNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Countries.plist", [[NSBundle mainBundle] resourcePath]]];
 
 	return self;
+}
+
+- (void) dealloc {
+	[super dealloc];
+
+	[modelContinents release];
+	[modelCountries release];
+
+	[continentNames release];
+	[countryNames release];
 }
 
 - (void) setDelegate:(id)selector {
@@ -64,9 +64,8 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 	[NSURLConnection connectionWithRequest:urlRequest delegate:self];
 }
 
-/*
- * NSConnection delegate methods.
- */
+#pragma mark -
+#pragma mark NSConnection delegate methods
 
 /*
  * Called when new data from the NSURLConnecting is available.
@@ -105,8 +104,7 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 	[parser release];
 
 	// Transform from NSDictionary representation to a NSArray-model
-	NSArray *continentCodes = [[continentNames allKeys] sortedArrayUsingFunction:alphabeticalSort context:nil];
-
+	NSArray *continentCodes = [[continentNames allKeys] sortedArrayUsingSelector:@selector(compare:)];
 	[modelContinents release];
 	modelContinents = [[NSMutableArray alloc] initWithCapacity:[continentCodes count]];
 	[modelCountries release];
@@ -116,7 +114,7 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 		[modelContinents addObject:[continentNames objectForKey:key]];
 
 		NSSet *countryCodeSet = [continentCountries objectForKey:key];
-		NSArray *countryCodes = [[countryCodeSet allObjects] sortedArrayUsingFunction:alphabeticalSort context:nil];
+		NSArray *countryCodes = [[countryCodeSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 
 		NSMutableArray *countries = [NSMutableArray arrayWithCapacity:[countryCodes count]];
 
@@ -144,9 +142,8 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 	}
 }
 
-/*
- * NSXMLParserDelegate delegate methods.
- */
+#pragma mark -
+#pragma mark NSXMLParserDelegate methods
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
 	if ([elementName isEqual:@"server"]) {
@@ -180,19 +177,8 @@ static NSInteger alphabeticalSort(NSString *str1, NSString *str2, void *reverse)
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
 }
 
-- (void) dealloc {
-	[super dealloc];
-
-	[modelContinents release];
-	[modelCountries release];
-
-	[continentNames release];
-	[countryNames release];
-}
-
-/*
- * Model access
- */
+#pragma mark -
+#pragma mark Model access
 
 - (NSInteger) numberOfContinents {
 	return [continentNames count];
