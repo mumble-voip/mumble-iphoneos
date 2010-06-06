@@ -28,50 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <CFNetwork/CFNetwork.h>
-#import "LanServerListDataSource.h"
+#import <UIKit/UIKit.h>
 
-static void LanServerListBrowserCallback(CFNetServiceBrowserRef browser, CFOptionFlags flags, CFTypeRef netService, CFStreamError *error, void *udata) {
-	MUMBLE_UNUSED LanServerListDataSource *ds = (LanServerListDataSource *)udata;
-	BOOL removeEntry = flags & kCFNetServiceFlagRemove;
-
-	if (removeEntry) {
-		NSLog(@"LanServerListDataSource: Service removed.");
-	} else {
-		NSLog(@"LanServerListDataSource: Service added.");
-	}
+@interface LanServerListController : UITableViewController <NSNetServiceBrowserDelegate, NSNetServiceDelegate> {
+	NSNetServiceBrowser *_browser;
+	NSMutableArray *_netServices;
 }
 
-@implementation LanServerListDataSource
-
-- (id) init {
-	self = [super init];
-	if (self == nil)
-		return nil;
-
-	CFNetServiceClientContext ctx = { 0, self, NULL, NULL, NULL };
-	CFStreamError err;
-
-	browser = CFNetServiceBrowserCreate(kCFAllocatorDefault, LanServerListBrowserCallback, &ctx);
-	if (! browser) {
-		NSLog(@"LanServerListDataSource: Unable to allocate net service browser.");
-		return nil;
-	}
-
-	CFNetServiceBrowserScheduleWithRunLoop(browser, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-
-	BOOL result = CFNetServiceBrowserSearchForServices(browser, CFSTR("local."), CFSTR("_mumble._tcp"), &err);
-	if (result == NO) {
-		NSLog(@"LanServerListDataSource: Unable to search for services.");
-		return nil;
-	}
-
-	return self;
-}
-
-- (void) dealloc {
-	[super dealloc];
-	CFRelease(browser);
-}
+- (id) init;
+- (void) dealloc;
 
 @end

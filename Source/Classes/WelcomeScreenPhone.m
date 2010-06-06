@@ -32,6 +32,8 @@
 
 #import "PublicServerListController.h"
 #import "FavouriteServerListController.h"
+#import "LanServerListController.h"
+
 #import "ServerRootViewController.h"
 
 #import "AboutDialog.h"
@@ -131,6 +133,9 @@
 		} else if (indexPath.row == 1) {
 			FavouriteServerListController *favList = [[[FavouriteServerListController alloc] init] autorelease];
 			[self.navigationController pushViewController:favList animated:YES];
+		} else if (indexPath.row == 2) {
+			LanServerListController *lanList = [[[LanServerListController alloc] init] autorelease];
+			[self.navigationController pushViewController:lanList animated:YES];
 		}
 	}
 

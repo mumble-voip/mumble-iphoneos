@@ -19,7 +19,6 @@
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
 		2861C276116BE905002B8514 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* AppDelegate.m */; };
 		2861C277116BE905002B8514 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C260116BE905002B8514 /* CountryServerListController.m */; };
-		2861C279116BE905002B8514 /* LanServerListDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C263116BE905002B8514 /* LanServerListDataSource.m */; };
 		2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C265116BE905002B8514 /* PDFImageLoader.m */; };
 		2861C27B116BE905002B8514 /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* PublicServerList.m */; };
 		2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* PublicServerListController.m */; };
@@ -93,6 +92,7 @@
 		287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* ChannelViewController.xib */; };
 		287A60AA117628FE00DD4FFB /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		289D25F511BC3B2800E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D25F311BC3B2800E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
@@ -138,8 +138,6 @@
 		2861C25E116BE905002B8514 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* CountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryServerListController.h; sourceTree = "<group>"; };
 		2861C260116BE905002B8514 /* CountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryServerListController.m; sourceTree = "<group>"; };
-		2861C262116BE905002B8514 /* LanServerListDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListDataSource.h; sourceTree = "<group>"; };
-		2861C263116BE905002B8514 /* LanServerListDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListDataSource.m; sourceTree = "<group>"; };
 		2861C264116BE905002B8514 /* PDFImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageLoader.h; sourceTree = "<group>"; };
 		2861C265116BE905002B8514 /* PDFImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageLoader.m; sourceTree = "<group>"; };
 		2861C266116BE905002B8514 /* PublicServerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerList.h; sourceTree = "<group>"; };
@@ -226,6 +224,8 @@
 		287A60561176201E00DD4FFB /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
 		287A60571176201E00DD4FFB /* ChannelViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChannelViewController.xib; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		289D25F311BC3B2800E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
+		289D25F411BC3B2800E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
 		28A4CCD2117E064B006EB479 /* LogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewController.m; sourceTree = "<group>"; };
 		28A4CCF3117E1D4D006EB479 /* LogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogEntry.h; sourceTree = "<group>"; };
@@ -275,8 +275,6 @@
 				2861C25E116BE905002B8514 /* AppDelegate.m */,
 				2861C25F116BE905002B8514 /* CountryServerListController.h */,
 				2861C260116BE905002B8514 /* CountryServerListController.m */,
-				2861C262116BE905002B8514 /* LanServerListDataSource.h */,
-				2861C263116BE905002B8514 /* LanServerListDataSource.m */,
 				2861C264116BE905002B8514 /* PDFImageLoader.h */,
 				2861C265116BE905002B8514 /* PDFImageLoader.m */,
 				2861C266116BE905002B8514 /* PublicServerList.h */,
@@ -314,6 +312,8 @@
 				287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */,
 				287225A911BACEC5003830A3 /* FavouriteServerEditViewController.h */,
 				287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */,
+				289D25F411BC3B2800E39F2C /* LanServerListController.h */,
+				289D25F311BC3B2800E39F2C /* LanServerListController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -632,7 +632,6 @@
 				2861C274116BE905002B8514 /* AboutViewController.m in Sources */,
 				2861C276116BE905002B8514 /* AppDelegate.m in Sources */,
 				2861C277116BE905002B8514 /* CountryServerListController.m in Sources */,
-				2861C279116BE905002B8514 /* LanServerListDataSource.m in Sources */,
 				2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */,
 				2861C27B116BE905002B8514 /* PublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,
@@ -652,6 +651,7 @@
 				287225AC11BACEC5003830A3 /* TableViewTextFieldCell.m in Sources */,
 				287225AD11BACEC5003830A3 /* FavouriteServerEditViewController.m in Sources */,
 				287225AE11BACEC5003830A3 /* FavouriteServer.m in Sources */,
+				289D25F511BC3B2800E39F2C /* LanServerListController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

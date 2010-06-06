@@ -58,10 +58,10 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
-
 	[Database saveFavourites:_favouriteServers];
 	[_favouriteServers release];
+
+	[super dealloc];
 }
 
 #pragma mark -
