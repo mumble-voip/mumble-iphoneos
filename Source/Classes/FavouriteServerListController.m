@@ -52,6 +52,7 @@
 
 	_favouriteServers = [Database favourites];
 	[_favouriteServers retain];
+	[_favouriteServers sortUsingSelector:@selector(compare:)];
 
 	return self;
 }
@@ -191,6 +192,7 @@
 	[_favouriteServers addObject:newServer];
 	[newServer release];
 	
+	[_favouriteServers sortUsingSelector:@selector(compare:)];
 	[[self tableView] reloadData];
 }
 

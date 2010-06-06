@@ -104,7 +104,7 @@ static FMDatabase *db = nil;
 + (NSMutableArray *) favourites {
 	NSMutableArray *favs = [[NSMutableArray alloc] init];
 
-	FMResultSet *res = [db executeQuery:@"SELECT `name`, `hostname`, `port`, `username` FROM `servers` ORDER BY `name`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `name`, `hostname`, `port`, `username` FROM `servers`"];
 
 	while ([res next]) {
 		FavouriteServer *fs = [[FavouriteServer alloc] init];

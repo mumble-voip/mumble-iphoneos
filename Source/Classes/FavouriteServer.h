@@ -53,4 +53,6 @@
 - (void) setUserName:(NSString *)userName;
 - (NSString *)userName;
 
+- (NSComparisonResult) compare:(FavouriteServer *)favServ;
+
 @end

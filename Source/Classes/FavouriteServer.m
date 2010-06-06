@@ -95,4 +95,8 @@
 	return _userName;
 }
 
+- (NSComparisonResult) compare:(FavouriteServer *)favServ {
+	return [_displayName caseInsensitiveCompare:[favServ displayName]];
+}
+
 @end
