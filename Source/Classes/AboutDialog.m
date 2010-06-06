@@ -50,8 +50,9 @@
 	return self;
 }
 - (void) dealloc {
-	[super dealloc];
 	[alert release];
+
+	[super dealloc];
 }
 
 - (void) show {

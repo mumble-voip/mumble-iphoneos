@@ -49,10 +49,10 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
-
 	[_countryName release];
 	[_countryServers release];
+
+	[super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

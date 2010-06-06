@@ -52,9 +52,8 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
-
 	[_model removeDelegate:self];
+	[super dealloc];
 }
 
 #pragma Server model handlers

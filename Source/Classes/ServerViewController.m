@@ -59,13 +59,13 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
-
 	[model removeDelegate:self];
 	[model release];
 
 	[connection closeStreams];
 	[connection release];
+
+	[super dealloc];
 }
 
 #pragma mark

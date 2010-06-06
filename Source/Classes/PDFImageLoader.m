@@ -45,8 +45,8 @@ static PDFImageLoader *pdfLoaderState = nil;
 }
 
 - (void) dealloc {
-	[super dealloc];
 	[files release];
+	[super dealloc];
 }
 
 - (UIImage *) imageFromPDF:(NSString *)filename {

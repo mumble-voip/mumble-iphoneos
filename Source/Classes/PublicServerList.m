@@ -45,13 +45,13 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
-
 	[modelContinents release];
 	[modelCountries release];
 
 	[continentNames release];
 	[countryNames release];
+
+	[super dealloc];
 }
 
 - (void) setDelegate:(id)selector {

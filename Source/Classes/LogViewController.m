@@ -50,10 +50,10 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
-
 	[_serverModel removeDelegate:self];
 	[_logEntries release];
+
+	[super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {

@@ -52,9 +52,9 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
 	[publicServerList release];
 	[activityIndicator release];
+	[super dealloc];
 }
 
 

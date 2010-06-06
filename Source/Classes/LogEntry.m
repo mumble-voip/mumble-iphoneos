@@ -45,9 +45,9 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
 	[_date release];
 	[_text release];
+	[super dealloc];
 }
 
 - (NSDate *) date {
