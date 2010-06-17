@@ -36,6 +36,10 @@
 
 #import <MumbleKit/MKAudio.h>
 
+@interface AppDelegate (Private)
+ - (void) setupAudio;
+@end
+
 @implementation AppDelegate
 
 @synthesize window;
@@ -73,17 +77,35 @@
 #endif
 
 	[Database initializeDatabase];
-	//[MKAudio initializeAudio];
+	[self setupAudio];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void) applicationWillTerminate:(UIApplication *)application {
 	[Database teardown];
 }
 
-- (void)dealloc {
+- (void) dealloc {
 	[navigationController release];
 	[window release];
 	[super dealloc];
+}
+
+- (void) setupAudio {
+	// Set up a good set of default audio settings.
+	MKAudioSettings settings;
+	settings.inputCodec = MKCodecFormatCELT;
+	settings.outputCodec = MKCodecFormatCELT;
+	settings.quality = 24000;
+	settings.audioPerPacket = 10;
+	settings.noiseSuppression = -42.0f;
+	settings.amplification = 20.0f;
+	settings.jitterBufferSize = 0; /* 10 ms */
+	settings.volume = 1.0f;
+	settings.outputDelay = 0; /* 10 ms */
+
+	MKAudio *audio = [MKAudio sharedAudio];
+	[audio updateAudioSettings:&settings];
+	[audio restart];
 }
 
 @end
