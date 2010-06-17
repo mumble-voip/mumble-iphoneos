@@ -39,7 +39,7 @@
 	if (self == nil)
 		return nil;
 
-	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble for iPhoneOS"];
+	NSString *aboutTitle = @"Mumble 0.1";
 	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
 
 	alert = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

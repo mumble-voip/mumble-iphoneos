@@ -37,8 +37,8 @@
 - (void) serverListError:(NSError *)error;
 @end
 
-
-@interface PublicServerList : NSObject <NSXMLParserDelegate> {
+// fixme(mkrautz): Come iOS SDK 4 public release, we should implement the NSXMLParserDelegate protocol.
+@interface PublicServerList : NSObject {
 	NSURLRequest *urlRequest;
 	NSURLResponse *urlResponse;
 	NSMutableData *serverListData;

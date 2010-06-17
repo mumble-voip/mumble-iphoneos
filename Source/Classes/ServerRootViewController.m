@@ -32,6 +32,7 @@
 #import "ChannelViewController.h"
 #import "LogViewController.h"
 #import "UserViewController.h"
+#import "PDFImageLoader.h"
 
 @implementation ServerRootViewController
 
@@ -48,6 +49,8 @@
 
 	[_connection connectToHost:host port:port];
 
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userTalkStateChanged:) name:@"MKUserTalkStateChanged" object:nil];
+	
 	return self;
 }
 
@@ -57,6 +60,13 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+	UIBarButtonItem *micItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
+	[[self navigationController] setToolbarItems:[NSArray arrayWithObjects:micItem, nil]];
+	[[self navigationController] setToolbarHidden:NO];
+	[micItem release];
 }
 
 #pragma mark MKConnection Delegate
@@ -79,7 +89,6 @@
 // The server rejected our connection.
 //
 - (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
-
 	NSString *title = @"Connection Rejected";
 	NSString *msg = nil;
 
@@ -128,43 +137,9 @@
 // We've successfuly joined the server.
 //
 - (void) serverModel:(MKServerModel *)server joinedServerAsUser:(MKUser *)user {
-	NSLog(@"joinedServerAsUser:");
-
-	//
-	// Channel view
-	//
-	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[server rootChannel] serverModel:server];
-	UINavigationController *channelNavController = [[UINavigationController alloc] initWithRootViewController:channelView];
-	[channelView release];
-	UITabBarItem *channelBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
-	[channelNavController setTabBarItem:channelBarItem];
-	[channelBarItem release];
-
-	//
-	// Log view
-	//
-	LogViewController *logView = [[LogViewController alloc] initWithServerModel:_model];
-	UINavigationController *logNavController = [[UINavigationController alloc] initWithRootViewController:logView];
-	[logView release];
-	UITabBarItem *logBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
-	[logNavController setTabBarItem:logBarItem];
-	[logBarItem release];
-
-	//
-	// User view
-	//
-	UserViewController *userView = [[UserViewController alloc] initWithServerModel:_model];
-	UINavigationController *userNavController = [[UINavigationController alloc] initWithRootViewController:userView];
-	[userView release];
-	UITabBarItem *userBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:2];
-	[userNavController setTabBarItem:userBarItem];
-	[userBarItem release];
-
-	[self setViewControllers:[NSArray arrayWithObjects:channelNavController, userNavController, logNavController, nil]];
-
-	[channelNavController release];
-	[logNavController release];
-	[userNavController release];
+	_currentChannel = [[_model connectedUser] channel];
+	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
+	[[self tableView] reloadData];
 }
 
 //
@@ -178,7 +153,39 @@
 // A user left the server.
 //
 - (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
-	NSLog(@"ServerViewController: userLeft.");
+	if (_currentChannel == nil)
+		return;
+
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[_channelUsers removeObjectAtIndex:userIndex];
+		[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+								withRowAnimation:UITableViewRowAnimationRight];
+	}
+}
+
+//
+// A user moved channel
+//
+- (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
+	if (_currentChannel == nil)
+		return;
+	
+	// Did the user join this channel?
+	if (chan == _currentChannel) {
+		[_channelUsers addObject:user];
+		NSUInteger userIndex = [_channelUsers indexOfObject:user];
+		[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+								withRowAnimation:UITableViewRowAnimationLeft];
+		// Or did he leave it?
+	} else {
+		NSUInteger userIndex = [_channelUsers indexOfObject:user];
+		if (userIndex != NSNotFound) {
+			[_channelUsers removeObjectAtIndex:userIndex];
+			[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+									withRowAnimation:UITableViewRowAnimationRight];
+		}
+	}
 }
 
 //
@@ -195,6 +202,77 @@
 	NSLog(@"ServerViewController: channelRemoved.");
 }
 
+//
+// User talk state changed
+//
+- (void) userTalkStateChanged:(NSNotification *)notification {
+	if (_currentChannel == nil)
+		return;
+	
+	MKUser *user = [notification object];
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+	
+	if (userIndex == NSNotFound)
+		return;
+	
+	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+	
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+	
+	UIImageView *imageView = [cell imageView];
+	UIImage *image = [PDFImageLoader imageFromPDF:talkImageName];
+	[imageView setImage:image];
+}
+
+#pragma mark -
+#pragma mark Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return [_channelUsers count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	
+    static NSString *CellIdentifier = @"Cell";
+	
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+	
+	NSUInteger row = [indexPath row];
+	MKUser *user = [_channelUsers objectAtIndex:row];
+	
+	cell.textLabel.text = [user userName];
+	
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+	cell.imageView.image = [PDFImageLoader imageFromPDF:talkImageName];
+	
+    return cell;
+}
+
 #pragma mark -
 #pragma mark UIAlertView delegate
 
@@ -202,6 +280,5 @@
 	[_connection setIgnoreSSLVerification:YES];
 	[_connection reconnect];
 }
-
 
 @end

@@ -30,7 +30,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LanServerListController : UITableViewController <NSNetServiceBrowserDelegate, NSNetServiceDelegate> {
+// fixme(mkrautz): Come iOS 4 public release, we should implment the protocols:
+//	- NSNetServiceBrowserDelegate
+//	- NSNetServiceDelegate
+@interface LanServerListController : UITableViewController {
 	NSNetServiceBrowser *_browser;
 	NSMutableArray *_netServices;
 }

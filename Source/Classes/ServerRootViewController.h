@@ -35,9 +35,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ServerRootViewController : UITabBarController {
+@interface ServerRootViewController : UITableViewController {
 	MKConnection *_connection;
 	MKServerModel *_model;
+	NSMutableArray *_channelUsers;
+	MKChannel *_currentChannel;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port;

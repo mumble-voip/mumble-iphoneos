@@ -34,6 +34,8 @@
 #import "FavouriteServer.h"
 #import "FavouriteServerEditViewController.h"
 
+#import "ServerRootViewController.h"
+
 @implementation FavouriteServerListController
 
 #pragma mark -
@@ -121,8 +123,12 @@
 
 	// Connect
 	if (index == 0) {
-		NSLog(@"Connect...");
-
+		UINavigationController *navCtrl = [[UINavigationController alloc] init];
+		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName] port:[favServ port]];
+		[navCtrl pushViewController:serverRoot animated:NO];
+		[[self navigationController] presentModalViewController:navCtrl animated:YES];
+		[serverRoot release];
+		[navCtrl release];
 	// Edit
 	} else if (index == 1) {
 		[self presentEditDialogForFavourite:favServ];

@@ -56,6 +56,12 @@
 	[super dealloc];
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
+	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
+	[disconnectButton release];
+}
+
 #pragma Server model handlers
 
 //
@@ -169,5 +175,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
+
+#pragma mark -
+#pragma mark UIBarButton target actions
+
+- (void) disconnectClicked:(id)sender {
+	NSLog(@"Disconnect clicked.");
+	[[self navigationController] popViewControllerAnimated:YES];
+}
+
 @end
 

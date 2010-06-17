@@ -10,7 +10,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		2807383711B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m in Sources */ = {isa = PBXBuildFile; fileRef = 2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */; };
+		2801584211C3B206006A2B86 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2A7116BE91B002B8514 /* libMumbleKit.a */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
 		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
@@ -116,6 +116,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = MumbleKit;
+		};
+		28D81F6411BFC4F50037D2C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D81E9311BFC22F0037D2C6;
+			remoteInfo = "MumbleKit (Mac OS X)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -255,6 +262,7 @@
 				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
 				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
 				28F9179211B9478F0030D649 /* libsqlite3.dylib in Frameworks */,
+				2801584211C3B206006A2B86 /* libMumbleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				2861C2A7116BE91B002B8514 /* libMumbleKit.a */,
+				28D81F6511BFC4F50037D2C6 /* MumbleKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -549,6 +558,13 @@
 			remoteRef = 2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		28D81F6511BFC4F50037D2C6 /* MumbleKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MumbleKit.framework;
+			remoteRef = 28D81F6411BFC4F50037D2C6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -642,7 +658,6 @@
 				28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */,
 				28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */,
 				2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */,
-				2807383711B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m in Sources */,
 				28F9178C11B9476B0030D649 /* FMDatabase.m in Sources */,
 				28F9178D11B9476B0030D649 /* FMDatabaseAdditions.m in Sources */,
 				28F9178F11B9476B0030D649 /* FMResultSet.m in Sources */,
@@ -672,22 +687,18 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/MumbleKit/build/${CONFIGURATION}-${PLATFORM_NAME}/**";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Mumble.pch;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/fmdb/src/";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/MumbleKit/src/",
+					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
-				OTHER_CFLAGS = (
-					"-framework",
-					MumbleKit,
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-framework",
-					MumbleKit,
-				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -700,20 +711,16 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "${PROJECT_DIR}/MumbleKit/build/${CONFIGURATION}-${PLATFORM_NAME}/**";
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Mumble.pch;
-				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/fmdb/src/";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/MumbleKit/src/",
+					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
-				OTHER_CFLAGS = (
-					"-framework",
-					MumbleKit,
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-framework",
-					MumbleKit,
-				);
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

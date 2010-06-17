@@ -73,7 +73,7 @@
 #endif
 
 	[Database initializeDatabase];
-	[MKAudio initializeAudio];
+	//[MKAudio initializeAudio];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
