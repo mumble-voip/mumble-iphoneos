@@ -135,6 +135,8 @@
 	ChannelViewSection section = [indexPath indexAtPosition:0];
 	NSUInteger row = [indexPath indexAtPosition:1];
 
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 	if (section == ChannelViewSectionSubChannels) {
 		MKChannel *childChannel = [[_channel subchannels] objectAtIndex:row];
 		ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:childChannel serverModel:_model];

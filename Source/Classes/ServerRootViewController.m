@@ -67,6 +67,12 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+	// Title
+	if (_currentChannel == nil)
+		[[self navigationItem] setTitle:@"Connecting..."];
+	else
+		[[self navigationItem] setTitle:[_currentChannel channelName]];
+
 	// Top bar
 	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
 	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
@@ -75,10 +81,12 @@
 	// Toolbar
 	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
 	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
+	UIBarButtonItem *usersButton = [[UIBarButtonItem alloc] initWithTitle:@"Users" style:UIBarButtonItemStyleBordered target:self action:@selector(usersButtonClicked:)];
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, nil]];
+	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, usersButton, nil]];
 	[channelsButton release];
 	[pttButton release];
+	[usersButton release];
 	[flexSpace release];
 	[[self navigationController] setToolbarHidden:NO];
 }
@@ -153,6 +161,7 @@
 - (void) serverModel:(MKServerModel *)server joinedServerAsUser:(MKUser *)user {
 	_currentChannel = [[_model connectedUser] channel];
 	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
+	[[self navigationItem] setTitle:[_currentChannel channelName]];
 	[[self tableView] reloadData];
 }
 
@@ -378,6 +387,11 @@
 
 	[navCtrl release];
 	[channelView release];
+}
+
+// User picker
+- (void) usersButtonClicked:(id)sender {
+	NSLog(@"users");
 }
 
 @end

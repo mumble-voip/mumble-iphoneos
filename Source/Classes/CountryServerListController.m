@@ -38,7 +38,7 @@
 @implementation CountryServerListController
 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers {
-	self = [super initWithNibName:@"CountryServerListController" bundle:nil];
+	self = [super init];
 	if (self == nil)
 		return nil;
 
