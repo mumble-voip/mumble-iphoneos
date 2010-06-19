@@ -52,7 +52,9 @@
 	[_connection connectToHost:host port:port];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userTalkStateChanged:) name:@"MKUserTalkStateChanged" object:nil];
-	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selfStartedTransmit:) name:@"MKAudioTransmitStarted" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selfStoppedTransmit:) name:@"MKAudioTransmitStopped" object:nil];
+
 	return self;
 }
 
@@ -240,6 +242,34 @@
 	
 	UIImageView *imageView = [cell imageView];
 	UIImage *image = [PDFImageLoader imageFromPDF:talkImageName];
+	[imageView setImage:image];
+}
+
+// We stopped transmitting
+- (void) selfStoppedTransmit:(NSNotification *)notification {
+	MKUser *user = [_model connectedUser];
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+
+	if (userIndex == NSNotFound)
+		return;
+
+	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+	UIImageView *imageView = [cell imageView];
+	UIImage *image = [PDFImageLoader imageFromPDF:@"talking_off"];
+	[imageView setImage:image];
+}
+
+// We started transmitting
+- (void) selfStartedTransmit:(NSNotification *)notification {
+	MKUser *user = [_model connectedUser];
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+
+	if (userIndex == NSNotFound)
+		return;
+
+	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+	UIImageView *imageView = [cell imageView];
+	UIImage *image = [PDFImageLoader imageFromPDF:@"talking_on"];
 	[imageView setImage:image];
 }
 
