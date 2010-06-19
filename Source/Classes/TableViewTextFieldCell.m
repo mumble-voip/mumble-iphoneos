@@ -37,6 +37,8 @@
 	if (self == nil)
 		return nil;
 
+	[self setSelectionStyle:UITableViewCellSelectionStyleNone];
+
 	UIView *view = self.contentView;
 
 	_label = [[UILabel alloc] init];
