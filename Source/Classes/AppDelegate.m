@@ -49,6 +49,9 @@
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
 
+	[self reloadPreferences];
+	[Database initializeDatabase];
+
 #if defined(__IPHONE_3_2)
 	// If we're running on anything below OS 3.2, UIDevice does not
 	// respond to the userInterfaceIdiom method. We must assume we're
@@ -75,9 +78,6 @@
 	[navigationController pushViewController:welcomeScreen animated:YES];
 	[welcomeScreen release];
 #endif
-
-	[Database initializeDatabase];
-	[self setupAudio];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -92,6 +92,8 @@
 
 - (void) setupAudio {
 	// Set up a good set of default audio settings.
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
 	MKAudioSettings settings;
 	settings.inputCodec = MKCodecFormatCELT;
 	settings.outputCodec = MKCodecFormatCELT;
@@ -100,12 +102,18 @@
 	settings.noiseSuppression = -42; /* -42 dB */
 	settings.amplification = 20.0f;
 	settings.jitterBufferSize = 0; /* 10 ms */
-	settings.volume = 1.0f;
+	settings.volume = [defaults floatForKey:@"AudioOutputVolume"];
 	settings.outputDelay = 0; /* 10 ms */
+	settings.enablePreprocessor = [defaults boolForKey:@"AudioInputPreprocessor"];
 
 	MKAudio *audio = [MKAudio sharedAudio];
 	[audio updateAudioSettings:&settings];
 	[audio restart];
+}
+
+// Reload application preferences...
+- (void) reloadPreferences {
+	[self setupAudio];
 }
 
 @end

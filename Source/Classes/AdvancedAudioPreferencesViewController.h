@@ -30,8 +30,7 @@
 
 #import <UIKit/UIKit.h>
 
-
-@interface PreferencesViewController : UITableViewController
+@interface AdvancedAudioPreferencesViewController : UITableViewController
 
 - (id) init;
 - (void) dealloc;

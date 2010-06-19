@@ -39,5 +39,7 @@
 - (void) applicationDidFinishLaunching:(UIApplication *)application;
 - (void) applicationWillTerminate:(UIApplication *)application;
 
+- (void) reloadPreferences;
+
 @end
 

@@ -28,16 +28,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "PreferencesViewController.h"
-#import "AppDelegate.h"
 #import "AdvancedAudioPreferencesViewController.h"
 
-@interface PreferencesViewController (Private)
-- (void) audioVolumeChanged:(UISlider *)volumeSlider;
-- (void) audioDuckingChanged:(UISwitch *)duckSwitch;
+@interface AdvancedAudioPreferencesViewController (Private)
+- (void) audioPreprocessorChanged:(UISwitch *)aSwitch;
 @end
 
-@implementation PreferencesViewController
+@implementation AdvancedAudioPreferencesViewController
 
 #pragma mark -
 #pragma mark Initialization
@@ -46,17 +43,11 @@
 	self = [super initWithStyle:UITableViewStyleGrouped];
 	if (self == nil)
 		return nil;
-
+	
 	return self;
 }
 
 - (void) dealloc {
-	// Sync user defaults to persistent storage
-	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	// Call our app delegate to reload preferences
-	[(AppDelegate *)[[UIApplication sharedApplication] delegate] reloadPreferences];
-
 	[super dealloc];
 }
 
@@ -64,7 +55,7 @@
 #pragma mark Looks
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setTitle:@"Preferences"];
+	[self setTitle:@"Advanced Audio"];
 }
 
 #pragma mark -
@@ -76,61 +67,44 @@
 
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	// Audio
+	// Audio Input
 	if (section == 0) {
-		return 3;
+		return 1;
 	}
-
+	
 	return 0;
 }
 
+
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"PreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-
-	// Audio section
+	
+	// Audio Input section
 	if ([indexPath section] == 0) {
-		// Volume
-		if ([indexPath row] == 0) {
-			UISlider *volSlider = [[UISlider alloc] init];
-			[volSlider setMaximumValue:1.0f];
-			[volSlider setMinimumValue:0.0f];
-			[volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
-			[[cell textLabel] setText:@"Volume"];
-			[cell setAccessoryView:volSlider];
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-			[volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-			[volSlider release];
-		}
-
 		// Ducking
-		if ([indexPath row] == 1) {
-			UISwitch *duckSwitch = [[UISwitch alloc] init];
-			[duckSwitch	setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"AudioDucking"]];
-			[[cell textLabel] setText:@"Duck Audio"];
-			[cell setAccessoryView:duckSwitch];
+		if ([indexPath row] == 0) {
+			UISwitch *preprocessSwitch = [[UISwitch alloc] init];
+			[preprocessSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"AudioInputPreprocessor"]];
+			[[cell textLabel] setText:@"Enable Preprocessor"];
+			[cell setAccessoryView:preprocessSwitch];
 			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-			[duckSwitch addTarget:self action:@selector(audioDuckingChanged:) forControlEvents:UIControlEventValueChanged];
-			[duckSwitch release];
+			[preprocessSwitch addTarget:self action:@selector(audioPreprocessorChanged:) forControlEvents:UIControlEventValueChanged];
+			[preprocessSwitch release];
 		}
-
-		// Advanced Audio
-		if ([indexPath row] == 2) {
-			[[cell textLabel] setText:@"Advanced Audio"];
-			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-		}
+		
 	}
 
     return cell;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == 0) // Audio
-		return @"Audio";
+	if (section == 0) // Audio Input
+		return @"Audio Input";
 
 	return @"Default";
 }
@@ -139,27 +113,13 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
-	if ([indexPath section] == 0) { // Audio
-		if ([indexPath row] == 2) { // Advanced Audio
-			AdvancedAudioPreferencesViewController *advAudio = [[AdvancedAudioPreferencesViewController alloc] init];
-			[[self navigationController] pushViewController:advAudio animated:YES];
-			[advAudio release];
-		}
-	}
 }
 
 #pragma mark -
 #pragma mark Change notification
 
-- (void) audioVolumeChanged:(UISlider *)volumeSlider {
-	[[NSUserDefaults standardUserDefaults] setFloat:[volumeSlider value] forKey:@"AudioOutputVolume"];
-}
-
-- (void) audioDuckingChanged:(UISwitch *)duckSwitch {
-	[[NSUserDefaults standardUserDefaults] setBool:[duckSwitch isOn] forKey:@"AudioDucking"];
+- (void) audioPreprocessorChanged:(UISwitch *)aSwitch {
+	[[NSUserDefaults standardUserDefaults] setBool:[aSwitch isOn] forKey:@"AudioInputPreprocessor"];
 }
 
 @end
-
