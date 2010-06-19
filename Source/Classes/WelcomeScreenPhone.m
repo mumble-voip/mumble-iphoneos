@@ -34,6 +34,8 @@
 #import "FavouriteServerListController.h"
 #import "LanServerListController.h"
 
+#import "PreferencesViewController.h"
+
 #import "ServerRootViewController.h"
 
 #import "AboutDialog.h"
@@ -141,7 +143,12 @@
 
 	/* Other section. */
 	if (indexPath.section == 2) {
-		if (indexPath.row == 1) {
+		if (indexPath.row == 0) { // Preferences
+			[tableView deselectRowAtIndexPath:indexPath animated:YES];
+			PreferencesViewController *preferences = [[PreferencesViewController alloc] init];
+			[[self navigationController] pushViewController:preferences animated:YES];
+			[preferences release];
+		} else if (indexPath.row == 1) { // About
 			[tableView deselectRowAtIndexPath:indexPath animated:YES];
 			[AboutDialog show];
 		}
