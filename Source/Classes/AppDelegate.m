@@ -97,7 +97,7 @@
 	settings.outputCodec = MKCodecFormatCELT;
 	settings.quality = 24000;
 	settings.audioPerPacket = 10;
-	settings.noiseSuppression = -42.0f;
+	settings.noiseSuppression = -42; /* -42 dB */
 	settings.amplification = 20.0f;
 	settings.jitterBufferSize = 0; /* 10 ms */
 	settings.volume = 1.0f;
