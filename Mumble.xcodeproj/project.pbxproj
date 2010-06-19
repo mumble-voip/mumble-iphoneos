@@ -11,7 +11,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
-		2813339F11BB1A5A001A9EA6 /* toobar-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 2813339E11BB1A5A001A9EA6 /* toobar-gear.png */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
@@ -92,7 +91,6 @@
 		287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */; };
 		287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		288BA83811BEEFB600404371 /* toolbar-mic.png in Resources */ = {isa = PBXBuildFile; fileRef = 288BA83711BEEFB600404371 /* toolbar-mic.png */; };
 		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
@@ -135,7 +133,6 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
-		2813339E11BB1A5A001A9EA6 /* toobar-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "toobar-gear.png"; path = "glyphish/toobar-gear.png"; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
@@ -234,7 +231,6 @@
 		287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
 		287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		288BA83711BEEFB600404371 /* toolbar-mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "toolbar-mic.png"; path = "glyphish/toolbar-mic.png"; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
@@ -342,15 +338,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2813339811BB1A48001A9EA6 /* Glyphish */ = {
-			isa = PBXGroup;
-			children = (
-				2813339E11BB1A5A001A9EA6 /* toobar-gear.png */,
-				288BA83711BEEFB600404371 /* toolbar-mic.png */,
-			);
-			name = Glyphish;
-			sourceTree = "<group>";
-		};
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -382,7 +369,6 @@
 		2861C2BE116BEA11002B8514 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				2813339811BB1A48001A9EA6 /* Glyphish */,
 				2861C2BF116BEA11002B8514 /* authenticated.pdf */,
 				2861C2C0116BEA11002B8514 /* channel.pdf */,
 				2861C2C1116BEA11002B8514 /* channel_active.pdf */,
@@ -639,8 +625,6 @@
 				285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */,
 				287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */,
-				2813339F11BB1A5A001A9EA6 /* toobar-gear.png in Resources */,
-				288BA83811BEEFB600404371 /* toolbar-mic.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
