@@ -10,8 +10,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
-		2813339F11BB1A5A001A9EA6 /* toobar-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 2813339E11BB1A5A001A9EA6 /* toobar-gear.png */; };
+		2801584211C3B206006A2B86 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2A7116BE91B002B8514 /* libMumbleKit.a */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
 		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
@@ -19,6 +18,7 @@
 		2861C274116BE905002B8514 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* AboutViewController.m */; };
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
 		2861C276116BE905002B8514 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* AppDelegate.m */; };
+		2861C277116BE905002B8514 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C260116BE905002B8514 /* CountryServerListController.m */; };
 		2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C265116BE905002B8514 /* PDFImageLoader.m */; };
 		2861C27B116BE905002B8514 /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* PublicServerList.m */; };
 		2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* PublicServerListController.m */; };
@@ -81,37 +81,28 @@
 		2861C507116BEA12002B8514 /* talking_whisper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E1116BEA12002B8514 /* talking_whisper.pdf */; };
 		2861C508116BEA12002B8514 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E3116BEA12002B8514 /* Continents.plist */; };
 		2861C509116BEA12002B8514 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E4116BEA12002B8514 /* Countries.plist */; };
+		287225AA11BACEC5003830A3 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A111BACEC5003830A3 /* Database.m */; };
+		287225AB11BACEC5003830A3 /* FavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A411BACEC5003830A3 /* FavouriteServerListController.m */; };
+		287225AC11BACEC5003830A3 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */; };
+		287225AD11BACEC5003830A3 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */; };
+		287225AE11BACEC5003830A3 /* FavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287225A811BACEC5003830A3 /* FavouriteServer.m */; };
+		2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2874FAF411AAA2AD00FF8823 /* UserViewController.m */; };
 		287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* ServerRootViewController.m */; };
 		287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
 		287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* ChannelViewController.xib */; };
 		287A60AA117628FE00DD4FFB /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
-		287BA29011B96C960010E031 /* Database.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* Database.m */; };
-		287BA33B11B97C470010E031 /* FavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* FavouriteServer.m */; };
-		287BA34011B97EEE0010E031 /* FavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* FavouriteServerListController.m */; };
-		287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */; };
-		287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		288BA83811BEEFB600404371 /* toolbar-mic.png in Resources */ = {isa = PBXBuildFile; fileRef = 288BA83711BEEFB600404371 /* toolbar-mic.png */; };
-		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
+		289D25F511BC3B2800E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D25F311BC3B2800E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
-		28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2A7116BE91B002B8514 /* libMumbleKit.a */; };
-		28C6EF0A11BBF38100E426C8 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C6EF0911BBF38100E426C8 /* CountryServerListController.m */; };
-		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
-		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
-		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
-		28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F9175411B946D10030D649 /* libsqlite3.dylib */; };
+		28F9178C11B9476B0030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9178611B9476B0030D649 /* FMDatabase.m */; };
+		28F9178D11B9476B0030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9178811B9476B0030D649 /* FMDatabaseAdditions.m */; };
+		28F9178F11B9476B0030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9178B11B9476B0030D649 /* FMResultSet.m */; };
+		28F9179211B9478F0030D649 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F9179111B9478F0030D649 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2809ABAE11BFC524006BCD26 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 28D81E9311BFC22F0037D2C6;
-			remoteInfo = "MumbleKit (Mac OS X)";
-		};
 		2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
@@ -126,15 +117,21 @@
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = MumbleKit;
 		};
+		28D81F6411BFC4F50037D2C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28D81E9311BFC22F0037D2C6;
+			remoteInfo = "MumbleKit (Mac OS X)";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
-		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
-		2813339E11BB1A5A001A9EA6 /* toobar-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "toobar-gear.png"; path = "glyphish/toobar-gear.png"; sourceTree = "<group>"; };
+		2807383511B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSInvocation(MumbleKitAdditions).h"; path = "Source/NSInvocation(MumbleKitAdditions).h"; sourceTree = "<group>"; };
+		2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSInvocation(MumbleKitAdditions).m"; path = "Source/NSInvocation(MumbleKitAdditions).m"; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPad.h; sourceTree = "<group>"; };
 		285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPad.m; sourceTree = "<group>"; };
@@ -147,6 +144,7 @@
 		2861C25D116BE905002B8514 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		2861C25E116BE905002B8514 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* CountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryServerListController.h; sourceTree = "<group>"; };
+		2861C260116BE905002B8514 /* CountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryServerListController.m; sourceTree = "<group>"; };
 		2861C264116BE905002B8514 /* PDFImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageLoader.h; sourceTree = "<group>"; };
 		2861C265116BE905002B8514 /* PDFImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageLoader.m; sourceTree = "<group>"; };
 		2861C266116BE905002B8514 /* PublicServerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerList.h; sourceTree = "<group>"; };
@@ -215,38 +213,38 @@
 		2861C3E1116BEA12002B8514 /* talking_whisper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = talking_whisper.pdf; sourceTree = "<group>"; };
 		2861C3E3116BEA12002B8514 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Continents.plist; sourceTree = "<group>"; };
 		2861C3E4116BEA12002B8514 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Countries.plist; sourceTree = "<group>"; };
+		287225A011BACEC5003830A3 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
+		287225A111BACEC5003830A3 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
+		287225A211BACEC5003830A3 /* FavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServer.h; sourceTree = "<group>"; };
+		287225A311BACEC5003830A3 /* FavouriteServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerListController.h; sourceTree = "<group>"; };
+		287225A411BACEC5003830A3 /* FavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerListController.m; sourceTree = "<group>"; };
+		287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
+		287225A611BACEC5003830A3 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
+		287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerEditViewController.m; sourceTree = "<group>"; };
+		287225A811BACEC5003830A3 /* FavouriteServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServer.m; sourceTree = "<group>"; };
+		287225A911BACEC5003830A3 /* FavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerEditViewController.h; sourceTree = "<group>"; };
+		2874FAF311AAA2AD00FF8823 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
+		2874FAF411AAA2AD00FF8823 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		287852D9117BC866009E26B1 /* ServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewController.h; sourceTree = "<group>"; };
 		287852DA117BC866009E26B1 /* ServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
 		287A60571176201E00DD4FFB /* ChannelViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChannelViewController.xib; sourceTree = "<group>"; };
-		287BA28E11B96C960010E031 /* Database.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Database.h; sourceTree = "<group>"; };
-		287BA28F11B96C960010E031 /* Database.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Database.m; sourceTree = "<group>"; };
-		287BA33911B97C470010E031 /* FavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServer.h; sourceTree = "<group>"; };
-		287BA33A11B97C470010E031 /* FavouriteServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServer.m; sourceTree = "<group>"; };
-		287BA33E11B97EEE0010E031 /* FavouriteServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerListController.h; sourceTree = "<group>"; };
-		287BA33F11B97EEE0010E031 /* FavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerListController.m; sourceTree = "<group>"; };
-		287BA3A411B996D90010E031 /* FavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteServerEditViewController.h; sourceTree = "<group>"; };
-		287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerEditViewController.m; sourceTree = "<group>"; };
-		287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
-		287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		288BA83711BEEFB600404371 /* toolbar-mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "toolbar-mic.png"; path = "glyphish/toolbar-mic.png"; sourceTree = "<group>"; };
-		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
-		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
+		289D25F311BC3B2800E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
+		289D25F411BC3B2800E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
 		28A4CCD2117E064B006EB479 /* LogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogViewController.m; sourceTree = "<group>"; };
 		28A4CCF3117E1D4D006EB479 /* LogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogEntry.h; sourceTree = "<group>"; };
 		28A4CCF4117E1D4D006EB479 /* LogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogEntry.m; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ../MainWindow.xib; sourceTree = "<group>"; };
-		28C6EF0911BBF38100E426C8 /* CountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryServerListController.m; sourceTree = "<group>"; };
-		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
-		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
-		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
-		28F9174411B946250030D649 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = Dependencies/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
-		28F9174611B946250030D649 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = Dependencies/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
-		28F9174711B946250030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
-		28F9175411B946D10030D649 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		28F9178511B9476B0030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
+		28F9178611B9476B0030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
+		28F9178711B9476B0030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		28F9178811B9476B0030D649 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = Dependencies/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		28F9178A11B9476B0030D649 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = Dependencies/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
+		28F9178B11B9476B0030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
+		28F9179111B9478F0030D649 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -263,8 +261,8 @@
 				2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */,
 				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
 				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
-				28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */,
-				28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */,
+				28F9179211B9478F0030D649 /* libsqlite3.dylib in Frameworks */,
+				2801584211C3B206006A2B86 /* libMumbleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,7 +282,7 @@
 				2861C25D116BE905002B8514 /* AppDelegate.h */,
 				2861C25E116BE905002B8514 /* AppDelegate.m */,
 				2861C25F116BE905002B8514 /* CountryServerListController.h */,
-				28C6EF0911BBF38100E426C8 /* CountryServerListController.m */,
+				2861C260116BE905002B8514 /* CountryServerListController.m */,
 				2861C264116BE905002B8514 /* PDFImageLoader.h */,
 				2861C265116BE905002B8514 /* PDFImageLoader.m */,
 				2861C266116BE905002B8514 /* PublicServerList.h */,
@@ -310,20 +308,20 @@
 				28A4CCD2117E064B006EB479 /* LogViewController.m */,
 				28A4CCF3117E1D4D006EB479 /* LogEntry.h */,
 				28A4CCF4117E1D4D006EB479 /* LogEntry.m */,
-				287BA28E11B96C960010E031 /* Database.h */,
-				287BA28F11B96C960010E031 /* Database.m */,
-				287BA33911B97C470010E031 /* FavouriteServer.h */,
-				287BA33A11B97C470010E031 /* FavouriteServer.m */,
-				287BA33E11B97EEE0010E031 /* FavouriteServerListController.h */,
-				287BA33F11B97EEE0010E031 /* FavouriteServerListController.m */,
-				287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */,
-				287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */,
-				287BA3A411B996D90010E031 /* FavouriteServerEditViewController.h */,
-				287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */,
-				289D254A11BC28BC00E39F2C /* LanServerListController.h */,
-				289D254B11BC28BC00E39F2C /* LanServerListController.m */,
-				2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */,
-				2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */,
+				2874FAF311AAA2AD00FF8823 /* UserViewController.h */,
+				2874FAF411AAA2AD00FF8823 /* UserViewController.m */,
+				287225A011BACEC5003830A3 /* Database.h */,
+				287225A111BACEC5003830A3 /* Database.m */,
+				287225A211BACEC5003830A3 /* FavouriteServer.h */,
+				287225A811BACEC5003830A3 /* FavouriteServer.m */,
+				287225A311BACEC5003830A3 /* FavouriteServerListController.h */,
+				287225A411BACEC5003830A3 /* FavouriteServerListController.m */,
+				287225A611BACEC5003830A3 /* TableViewTextFieldCell.h */,
+				287225A511BACEC5003830A3 /* TableViewTextFieldCell.m */,
+				287225A911BACEC5003830A3 /* FavouriteServerEditViewController.h */,
+				287225A711BACEC5003830A3 /* FavouriteServerEditViewController.m */,
+				289D25F411BC3B2800E39F2C /* LanServerListController.h */,
+				289D25F311BC3B2800E39F2C /* LanServerListController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -337,19 +335,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2813339811BB1A48001A9EA6 /* Glyphish */ = {
+		2807383411B5760A00F9B9BE /* CategoryHack */ = {
 			isa = PBXGroup;
 			children = (
-				2813339E11BB1A5A001A9EA6 /* toobar-gear.png */,
-				288BA83711BEEFB600404371 /* toolbar-mic.png */,
+				2807383511B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).h */,
+				2807383611B5761E00F9B9BE /* NSInvocation(MumbleKitAdditions).m */,
 			);
-			name = Glyphish;
+			name = CategoryHack;
 			sourceTree = "<group>";
 		};
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				28F9173911B9460D0030D649 /* fmdb */,
+				28F9178311B9475D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
 			name = Dependencies;
@@ -359,7 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				2861C2A7116BE91B002B8514 /* libMumbleKit.a */,
-				2809ABAF11BFC524006BCD26 /* MumbleKit.framework */,
+				28D81F6511BFC4F50037D2C6 /* MumbleKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -377,7 +375,6 @@
 		2861C2BE116BEA11002B8514 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				2813339811BB1A48001A9EA6 /* Glyphish */,
 				2861C2BF116BEA11002B8514 /* authenticated.pdf */,
 				2861C2C0116BEA11002B8514 /* channel.pdf */,
 				2861C2C1116BEA11002B8514 /* channel_active.pdf */,
@@ -448,15 +445,15 @@
 			path = Resources/serverlist;
 			sourceTree = "<group>";
 		};
-		28F9173911B9460D0030D649 /* fmdb */ = {
+		28F9178311B9475D0030D649 /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
-				28F9174111B946250030D649 /* FMDatabase.h */,
-				28F9174211B946250030D649 /* FMDatabase.m */,
-				28F9174311B946250030D649 /* FMDatabaseAdditions.h */,
-				28F9174411B946250030D649 /* FMDatabaseAdditions.m */,
-				28F9174611B946250030D649 /* FMResultSet.h */,
-				28F9174711B946250030D649 /* FMResultSet.m */,
+				28F9178511B9476B0030D649 /* FMDatabase.h */,
+				28F9178611B9476B0030D649 /* FMDatabase.m */,
+				28F9178711B9476B0030D649 /* FMDatabaseAdditions.h */,
+				28F9178811B9476B0030D649 /* FMDatabaseAdditions.m */,
+				28F9178A11B9476B0030D649 /* FMResultSet.h */,
+				28F9178B11B9476B0030D649 /* FMResultSet.m */,
 			);
 			name = fmdb;
 			sourceTree = "<group>";
@@ -464,6 +461,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				2807383411B5760A00F9B9BE /* CategoryHack */,
 				2861C28C116BE90B002B8514 /* Dependencies */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -497,7 +495,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				28F9175411B946D10030D649 /* libsqlite3.dylib */,
+				28F9179111B9478F0030D649 /* libsqlite3.dylib */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
 				2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */,
@@ -534,7 +532,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble-iPhoneOS4" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
@@ -553,18 +551,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2809ABAF11BFC524006BCD26 /* MumbleKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MumbleKit.framework;
-			remoteRef = 2809ABAE11BFC524006BCD26 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		2861C2A7116BE91B002B8514 /* libMumbleKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libMumbleKit.a;
 			remoteRef = 2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28D81F6511BFC4F50037D2C6 /* MumbleKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MumbleKit.framework;
+			remoteRef = 28D81F6411BFC4F50037D2C6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -634,8 +632,6 @@
 				285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */,
 				287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */,
-				2813339F11BB1A5A001A9EA6 /* toobar-gear.png in Resources */,
-				288BA83811BEEFB600404371 /* toolbar-mic.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +647,7 @@
 				2861C273116BE905002B8514 /* AboutDialog.m in Sources */,
 				2861C274116BE905002B8514 /* AboutViewController.m in Sources */,
 				2861C276116BE905002B8514 /* AppDelegate.m in Sources */,
+				2861C277116BE905002B8514 /* CountryServerListController.m in Sources */,
 				2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */,
 				2861C27B116BE905002B8514 /* PublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,
@@ -660,17 +657,16 @@
 				287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */,
 				28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */,
 				28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */,
-				28F9174811B946250030D649 /* FMDatabase.m in Sources */,
-				28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */,
-				28F9174B11B946250030D649 /* FMResultSet.m in Sources */,
-				287BA29011B96C960010E031 /* Database.m in Sources */,
-				287BA33B11B97C470010E031 /* FavouriteServer.m in Sources */,
-				287BA34011B97EEE0010E031 /* FavouriteServerListController.m in Sources */,
-				287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */,
-				287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */,
-				28C6EF0A11BBF38100E426C8 /* CountryServerListController.m in Sources */,
-				289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */,
-				2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */,
+				2874FAF511AAA2AD00FF8823 /* UserViewController.m in Sources */,
+				28F9178C11B9476B0030D649 /* FMDatabase.m in Sources */,
+				28F9178D11B9476B0030D649 /* FMDatabaseAdditions.m in Sources */,
+				28F9178F11B9476B0030D649 /* FMResultSet.m in Sources */,
+				287225AA11BACEC5003830A3 /* Database.m in Sources */,
+				287225AB11BACEC5003830A3 /* FavouriteServerListController.m in Sources */,
+				287225AC11BACEC5003830A3 /* TableViewTextFieldCell.m in Sources */,
+				287225AD11BACEC5003830A3 /* FavouriteServerEditViewController.m in Sources */,
+				287225AE11BACEC5003830A3 /* FavouriteServer.m in Sources */,
+				289D25F511BC3B2800E39F2C /* LanServerListController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +700,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -726,7 +722,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -740,9 +736,9 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -755,10 +751,10 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -775,7 +771,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble-iPhoneOS4" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
