@@ -73,9 +73,11 @@
 	[disconnectButton release];
 
 	// Toolbar
+	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
 	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[self setToolbarItems:[NSArray arrayWithObjects:flexSpace, pttButton, flexSpace, nil]];
+	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, nil]];
+	[channelsButton release];
 	[pttButton release];
 	[flexSpace release];
 	[[self navigationController] setToolbarHidden:NO];
@@ -183,20 +185,47 @@
 	if (_currentChannel == nil)
 		return;
 
-	// Did the user join this channel?
-	if (chan == _currentChannel) {
-		[_channelUsers addObject:user];
-		NSUInteger userIndex = [_channelUsers indexOfObject:user];
-		[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
-								withRowAnimation:UITableViewRowAnimationLeft];
+	// Was this ourselves? If so, we need to rebuild the our user table view
+	if (user != [server connectedUser]) {
+		// Did the user join this channel?
+		if (chan == _currentChannel) {
+			[_channelUsers addObject:user];
+			NSUInteger userIndex = [_channelUsers indexOfObject:user];
+			[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+									withRowAnimation:UITableViewRowAnimationLeft];
 		// Or did he leave it?
-	} else {
-		NSUInteger userIndex = [_channelUsers indexOfObject:user];
-		if (userIndex != NSNotFound) {
-			[_channelUsers removeObjectAtIndex:userIndex];
-			[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
-									withRowAnimation:UITableViewRowAnimationRight];
+		} else {
+			NSUInteger userIndex = [_channelUsers indexOfObject:user];
+			if (userIndex != NSNotFound) {
+				[_channelUsers removeObjectAtIndex:userIndex];
+				[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+										withRowAnimation:UITableViewRowAnimationRight];
+			}
 		}
+
+	// We were moved
+	} else {
+		NSUInteger numUsers = [_channelUsers count];
+		[_channelUsers release];
+		_channelUsers = nil;
+
+		NSMutableArray *array = [[NSMutableArray alloc] init];
+		for (NSUInteger i = 0; i < numUsers; i++) {
+			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+		}
+		[[self tableView] deleteRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationRight];
+
+		_currentChannel = chan;
+		_channelUsers = [[chan users] mutableCopy];
+
+		[array removeAllObjects];
+		numUsers = [_channelUsers count];
+		for (NSUInteger i = 0; i < numUsers; i++) {
+			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+		}
+		[[self tableView] insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationLeft];
+
+		[array release];
 	}
 }
 
@@ -324,19 +353,31 @@
 #pragma mark -
 #pragma mark Target/actions
 
+// Disconnect from the server
 - (void) disconnectClicked:(id)sender {
 	[_connection closeStreams];
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
+// Push-to-Talk button
 - (void) pushToTalkClicked:(id)sender {
-	NSLog(@"PushToTalk");
-
 	static BOOL toggle = NO;
 	toggle = !toggle;
 
 	MKAudio *audio = [MKAudio sharedAudio];
 	[audio setForceTransmit:toggle];
+}
+
+// Channel picker
+- (void) channelsButtonClicked:(id)sender {
+	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[_model rootChannel] serverModel:_model];
+	UINavigationController *navCtrl = [[UINavigationController alloc] init];
+
+	[navCtrl pushViewController:channelView animated:NO];
+	[[self navigationController] presentModalViewController:navCtrl animated:YES];
+
+	[navCtrl release];
+	[channelView release];
 }
 
 @end

@@ -33,8 +33,6 @@
 
 @implementation ChannelViewController
 
-#pragma mark -
-
 - (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model {
 	self = [super initWithNibName:@"ChannelViewController" bundle:nil];
 	if (! self)
@@ -42,11 +40,6 @@
 
 	_channel = channel;
 	_model = model;
-
-	// fixme(mkrautz): Move this to ChannelPickerController.
-	UITabBarItem *tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
-	[self setTabBarItem:tabBarItem];
-	[tabBarItem release];
 
 	return self;
 }
@@ -61,15 +54,12 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) viewDidLoad {
-	[super viewDidLoad];
-}
-
-- (void)viewDidUnload {
-	[super viewDidUnload];
-}
-
 - (void) viewWillAppear:(BOOL)flag {
+	[[self navigationItem] setTitle:[_channel channelName]];
+
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+	[[self navigationItem] setRightBarButtonItem:doneButton];
+	[doneButton release];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -153,8 +143,16 @@
 	} else if (section == ChannelViewSectionActions) {
 		if (row == ChannelViewActionJoinChannel) {
 			[_model joinChannel:_channel];
+			[[self navigationController] dismissModalViewControllerAnimated:YES];
 		}
 	}
+}
+
+#pragma mark -
+#pragma mark Target/actions
+
+- (void) doneButtonClicked:(id)button {
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 @end
