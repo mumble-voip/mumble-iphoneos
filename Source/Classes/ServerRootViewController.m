@@ -28,6 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import <MumbleKit/MKAudio.h>
+
 #import "ServerRootViewController.h"
 #import "ChannelViewController.h"
 #import "LogViewController.h"
@@ -62,11 +64,19 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-	UIBarButtonItem *micItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
-	[[self navigationController] setToolbarItems:[NSArray arrayWithObjects:micItem, nil]];
+- (void) viewWillAppear:(BOOL)animated {
+	// Top bar
+	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
+	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
+	[disconnectButton release];
+
+	// Toolbar
+	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
+	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	[self setToolbarItems:[NSArray arrayWithObjects:flexSpace, pttButton, flexSpace, nil]];
+	[pttButton release];
+	[flexSpace release];
 	[[self navigationController] setToolbarHidden:NO];
-	[micItem release];
 }
 
 #pragma mark MKConnection Delegate
@@ -170,7 +180,7 @@
 - (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
 	if (_currentChannel == nil)
 		return;
-	
+
 	// Did the user join this channel?
 	if (chan == _currentChannel) {
 		[_channelUsers addObject:user];
@@ -245,19 +255,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	
+
     static NSString *CellIdentifier = @"Cell";
-	
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-	
+
 	NSUInteger row = [indexPath row];
 	MKUser *user = [_channelUsers objectAtIndex:row];
-	
+
 	cell.textLabel.text = [user userName];
-	
+
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
 	if (talkState == MKTalkStatePassive)
@@ -279,6 +289,24 @@
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	[_connection setIgnoreSSLVerification:YES];
 	[_connection reconnect];
+}
+
+#pragma mark -
+#pragma mark Target/actions
+
+- (void) disconnectClicked:(id)sender {
+	[_connection closeStreams];
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
+}
+
+- (void) pushToTalkClicked:(id)sender {
+	NSLog(@"PushToTalk");
+
+	static BOOL toggle = NO;
+	toggle = !toggle;
+
+	MKAudio *audio = [MKAudio sharedAudio];
+	[audio setForceTransmit:toggle];
 }
 
 @end
