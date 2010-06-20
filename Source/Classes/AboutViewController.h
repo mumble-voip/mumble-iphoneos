@@ -30,5 +30,5 @@
 
 @interface AboutViewController : UIViewController
 - (id) initWithContent:(NSString *)content;
-
+- (void) dealloc;
 @end

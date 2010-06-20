@@ -30,6 +30,10 @@
 
 #import "AboutViewController.h"
 
+@interface AboutViewController (Private)
+- (void) doneButtonClicked:(UIBarButtonItem *)doneButton;
+@end
+
 @implementation AboutViewController
 
 - (id) initWithContent:(NSString *)content {
@@ -54,6 +58,20 @@
 	}
 
 	return self;
+}
+
+- (void) dealloc {
+	[super dealloc];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+	[[self navigationItem] setRightBarButtonItem:doneButton];
+	[doneButton release];
+}
+
+- (void) doneButtonClicked:(UIBarButtonItem *)doneButton {
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 @end

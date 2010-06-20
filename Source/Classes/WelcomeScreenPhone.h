@@ -29,6 +29,13 @@
 */
 
 @interface WelcomeScreenPhone : UITableViewController {
+	UIAlertView *_aboutView;
+	NSInteger _aboutWebsiteButton;
+	NSInteger _aboutContribButton;
+	NSInteger _aboutLegalButton;
 }
+
+- (id) init;
+- (void) dealloc;
 
 @end

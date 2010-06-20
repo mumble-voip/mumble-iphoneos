@@ -38,32 +38,46 @@
 
 #import "ServerRootViewController.h"
 
-#import "AboutDialog.h"
+#import "AboutViewController.h"
+
+
+@interface WelcomeScreenPhone (Private)
+- (void) presentAboutDialog;
+@end
+
 
 @implementation WelcomeScreenPhone
 
-- (void)dealloc {
+- (id) init {
+	self = [super initWithNibName:@"WelcomeScreenPhone" bundle:nil];
+	if (self == nil)
+		return nil;
+
+	return self;
+}
+
+- (void) dealloc {
     [super dealloc];
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
 	[super viewDidLoad];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void) viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
 	self.navigationItem.title = @"Mumble";
 	self.navigationController.toolbarHidden = YES;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 }
 
-/*
- * TableView
- */
+#pragma mark -
+#pragma mark TableView
+
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
 	return 3;
 }
@@ -89,12 +103,12 @@
 	return @"Unknown";
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return 35.0;
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
 	if (!cell) {
@@ -125,7 +139,8 @@
 }
 
 // Override to support row selection in the table view.
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 	/* Servers section. */
 	if (indexPath.section == 0) {
@@ -144,14 +159,47 @@
 	/* Other section. */
 	if (indexPath.section == 2) {
 		if (indexPath.row == 0) { // Preferences
-			[tableView deselectRowAtIndexPath:indexPath animated:YES];
 			PreferencesViewController *preferences = [[PreferencesViewController alloc] init];
 			[[self navigationController] pushViewController:preferences animated:YES];
 			[preferences release];
 		} else if (indexPath.row == 1) { // About
-			[tableView deselectRowAtIndexPath:indexPath animated:YES];
-			[AboutDialog show];
+			[self presentAboutDialog];
 		}
+	}
+}
+
+#pragma mark -
+#pragma mark About Dialog
+
+- (void) presentAboutDialog {
+	NSString *aboutTitle = @"Mumble 0.1";
+	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
+
+	_aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	_aboutWebsiteButton = [_aboutView addButtonWithTitle:@"Website"];
+	_aboutContribButton = [_aboutView addButtonWithTitle:@"Contributors"];
+	_aboutLegalButton = [_aboutView addButtonWithTitle:@"Legal"];
+	[_aboutView show];
+	[_aboutView release];
+}
+
+- (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == _aboutWebsiteButton) {
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumble.info/"]];
+	} else if (buttonIndex == _aboutContribButton) {
+		AboutViewController *contribView = [[AboutViewController alloc] initWithContent:@"Contributors"];
+		UINavigationController *navController = [[UINavigationController alloc] init];
+		[navController pushViewController:contribView animated:NO];
+		[contribView release];
+		[[self navigationController] presentModalViewController:navController animated:YES];
+		[navController release];
+	} else if (buttonIndex == _aboutLegalButton) {
+		AboutViewController *legalView = [[AboutViewController alloc] initWithContent:@"Legal"];
+		UINavigationController *navController = [[UINavigationController alloc] init];
+		[navController pushViewController:legalView animated:NO];
+		[legalView release];
+		[[self navigationController] presentModalViewController:navController animated:YES];
+		[navController release];
 	}
 }
 
