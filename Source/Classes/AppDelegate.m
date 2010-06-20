@@ -107,6 +107,7 @@
 	settings.volume = [defaults floatForKey:@"AudioOutputVolume"];
 	settings.outputDelay = 0; /* 10 ms */
 	settings.enablePreprocessor = [defaults boolForKey:@"AudioInputPreprocessor"];
+	settings.enableBenchmark = YES;
 
 	MKAudio *audio = [MKAudio sharedAudio];
 	[audio updateAudioSettings:&settings];
