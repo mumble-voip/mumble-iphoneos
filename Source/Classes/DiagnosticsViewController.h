@@ -31,8 +31,16 @@
 #import <UIKit/UIKit.h>
 
 @interface DiagnosticsViewController : UITableViewController {
+	UITableViewCell *_deviceCell;
+	UITableViewCell *_osCell;
+	UITableViewCell *_udidCell;
+
 	UITableViewCell *_preprocessorCell;
+
 	NSTimer *_updateTimer;
 }
+
+- (id) init;
+- (void) dealloc;
 
 @end

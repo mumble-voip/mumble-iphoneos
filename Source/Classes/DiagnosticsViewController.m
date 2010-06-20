@@ -30,11 +30,17 @@
 
 #import <MumbleKit/MKAudio.h>
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 #import "DiagnosticsViewController.h"
 
+@interface DiagnosticsViewController (Private)
+- (void) updateDiagnostics:(NSTimer *)timer;
+- (NSString *) deviceString;
+@end
 
 @implementation DiagnosticsViewController
-
 
 #pragma mark -
 #pragma mark Initialization
@@ -44,17 +50,41 @@
 	if (self == nil)
 		return nil;
 
-	_preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"preprocCell"];
+	UIDevice *device = [UIDevice currentDevice];
+
+	_deviceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_deviceCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_deviceCell textLabel] setText:@"Device"];
+	[[_deviceCell detailTextLabel] setText:[self deviceString]];
+
+	_osCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_osCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_osCell textLabel] setText:@"System"];
+	[[_osCell detailTextLabel] setText:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]]];
+
+	_udidCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_udidCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_udidCell textLabel] setText:@"UDID"];
+	[[_udidCell detailTextLabel] setText:[device uniqueIdentifier]];
+
+	// Audio
+	_preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_preprocessorCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_preprocessorCell textLabel] setText:@"Preprocessor"];
 	[[_preprocessorCell detailTextLabel] setText:@"∞ µs"];
 
 	_updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
+	[self updateDiagnostics:nil];
 	
 	return self;
 }
 
 - (void) dealloc {
 	[_updateTimer invalidate];
+
+	[_deviceCell release];
+	[_osCell release];
+	[_udidCell release];
 
 	[_preprocessorCell release];
 
@@ -77,7 +107,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) // System
-		return 0;
+		return 3;
 	if (section == 1) // Audio
 		return 1;
 	return 0;
@@ -92,20 +122,42 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell *cell = nil;
-
 	if ([indexPath section] == 0) { // System
+		if ([indexPath row] == 0) { // Device
+			return _deviceCell;
+		} else if ([indexPath row] == 1) { // OS
+			return _osCell;
+		} else if ([indexPath row] == 2) { // UDID
+			return _udidCell;
+		}
 	} else if ([indexPath section] == 1) { // Audio
 		if ([indexPath row] == 0) { // Preprocessor
 			return _preprocessorCell;
 		}
 	}
-
-    return cell;
+	return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
+
+#pragma mark -
+#pragma mark Device query
+
+- (NSString *) deviceString {
+	NSString *devString = nil;
+	char *devName = NULL;
+	size_t size = 0;
+
+	sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+	devName = malloc(size);
+	sysctlbyname("hw.machine", devName, &size, NULL, 0);
+	devString = [NSString stringWithUTF8String:devName];
+	free(devName);
+
+	return devString;
+}
+
 
 #pragma mark -
 #pragma mark Update
