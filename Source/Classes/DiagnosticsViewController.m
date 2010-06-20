@@ -253,12 +253,13 @@
 
 	MKAudioBenchmark bench;
 	[[MKAudio sharedAudio] getBenchmarkData:&bench];
+	UIDevice *device = [UIDevice currentDevice];
 
 	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 	// System
 	[dict setObject:[self deviceString] forKey:@"device"];
-	[dict setObject:[[UIDevice currentDevice] systemName] forKey:@"operating-system"];
-	[dict setObject:[[UIDevice currentDevice] uniqueIdentifier] forKey:@"udid"];
+	[dict setObject:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]] forKey:@"operating-system"];
+	[dict setObject:[device uniqueIdentifier] forKey:@"udid"];
 	// Build
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
