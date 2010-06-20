@@ -35,6 +35,10 @@
 	UITableViewCell *_osCell;
 	UITableViewCell *_udidCell;
 
+	UITableViewCell *_versionCell;
+	UITableViewCell *_gitRevCell;
+	UITableViewCell *_buildDateCell;
+
 	UITableViewCell *_preprocessorCell;
 
 	NSTimer *_updateTimer;

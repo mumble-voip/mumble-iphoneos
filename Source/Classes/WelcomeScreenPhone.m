@@ -174,7 +174,7 @@
 #pragma mark About Dialog
 
 - (void) presentAboutDialog {
-	NSString *aboutTitle = @"Mumble 0.1";
+	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
 
 	_aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];

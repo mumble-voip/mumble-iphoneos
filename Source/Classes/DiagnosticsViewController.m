@@ -52,26 +52,48 @@
 
 	UIDevice *device = [UIDevice currentDevice];
 
+	// System
 	_deviceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_deviceCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_deviceCell textLabel] setText:@"Device"];
 	[[_deviceCell detailTextLabel] setText:[self deviceString]];
+	[[_deviceCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	_osCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_osCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_osCell textLabel] setText:@"System"];
 	[[_osCell detailTextLabel] setText:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]]];
+	[[_osCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	_udidCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_udidCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_udidCell textLabel] setText:@"UDID"];
 	[[_udidCell detailTextLabel] setText:[device uniqueIdentifier]];
+	[[_udidCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+
+	// Build
+	_versionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_versionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_versionCell textLabel] setText:@"Version"];
+	[[_versionCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+
+	_gitRevCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_gitRevCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_gitRevCell textLabel] setText:@"Git Revision"];
+	[[_gitRevCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+
+	_buildDateCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_buildDateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_buildDateCell textLabel] setText:@"Build Date"];
+	[[_buildDateCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"]];
+	[[_buildDateCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	// Audio
 	_preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_preprocessorCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_preprocessorCell textLabel] setText:@"Preprocessor"];
 	[[_preprocessorCell detailTextLabel] setText:@"∞ µs"];
+	[[_preprocessorCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	_updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
 	[self updateDiagnostics:nil];
@@ -85,6 +107,10 @@
 	[_deviceCell release];
 	[_osCell release];
 	[_udidCell release];
+
+	[_versionCell release];
+	[_gitRevCell release];
+	[_buildDateCell release];
 
 	[_preprocessorCell release];
 
@@ -102,13 +128,15 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) // System
 		return 3;
-	if (section == 1) // Audio
+	if (section == 1) // Build
+		return 3;
+	if (section == 2) // Audio
 		return 1;
 	return 0;
 }
@@ -117,6 +145,8 @@
 	if (section == 0)
 		return @"System";
 	if (section == 1)
+		return @"Build";
+	if (section == 2)
 		return @"Audio";
 	return @"Default";
 }
@@ -130,7 +160,15 @@
 		} else if ([indexPath row] == 2) { // UDID
 			return _udidCell;
 		}
-	} else if ([indexPath section] == 1) { // Audio
+	} else if ([indexPath section] == 1) { // Build
+		if ([indexPath row] == 0) { // Version
+			return _versionCell;
+		} else if ([indexPath row] == 1) { // Git Revision
+			return _gitRevCell;
+		} else if ([indexPath row] == 2) { // Build Date
+			return _buildDateCell;
+		}
+	} else if ([indexPath section] == 2) { // Audio
 		if ([indexPath row] == 0) { // Preprocessor
 			return _preprocessorCell;
 		}
@@ -157,7 +195,6 @@
 
 	return devString;
 }
-
 
 #pragma mark -
 #pragma mark Update
