@@ -37,7 +37,16 @@
 
 @interface DiagnosticsViewController (Private)
 - (void) updateDiagnostics:(NSTimer *)timer;
+
 - (NSString *) deviceString;
+
+- (void) submitButtonClicked:(UIBarButtonItem *)submitButton;
+
+- (void) setSubmitButton;
+- (void) setActivityIndicator;
+
+- (NSData *) formEncodedDictionary:(NSDictionary *)dict boundary:(NSString *)boundary;
+- (void) submitDiagnostics;
 @end
 
 @implementation DiagnosticsViewController
@@ -122,6 +131,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
 	[[self navigationItem] setTitle:@"Diagnostics"];
+	[self setSubmitButton];
 }
 
 #pragma mark -
@@ -197,7 +207,24 @@
 }
 
 #pragma mark -
-#pragma mark Update
+#pragma mark Helpers
+
+- (void) setSubmitButton {
+	// Submit button
+	UIBarButtonItem *submitButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleDone target:self action:@selector(submitButtonClicked:)];
+	[[self navigationItem] setRightBarButtonItem:submitButton];
+	[submitButton release];
+}
+
+- (void) setActivityIndicator {
+	// Swap submit button for activity indicator
+	UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+	[activity startAnimating];
+	UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:activity];
+	[[self navigationItem] setRightBarButtonItem:rightButton];
+	[rightButton release];
+	[activity release];
+}
 
 - (void) updateDiagnostics:(NSTimer *)timer {
 	MKAudio *audio = [MKAudio sharedAudio];
@@ -208,5 +235,64 @@
 	[[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
 }
 
-@end
+- (NSData *) formEncodedDictionary:(NSDictionary *)dict boundary:(NSString *)boundary {
+	NSMutableData *data = [[NSMutableData alloc] init];
 
+	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
+		[data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+		[data appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", (NSString *)key] dataUsingEncoding:NSUTF8StringEncoding]];
+		[data appendData:[(NSString *)object dataUsingEncoding:NSUTF8StringEncoding]];
+	}];
+	[data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+
+	return [data autorelease];
+}
+
+- (void) submitDiagnostics {
+	static NSString *boundary = @"DFfsafwEFQFQWEfq";
+
+	MKAudioBenchmark bench;
+	[[MKAudio sharedAudio] getBenchmarkData:&bench];
+
+	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+	// System
+	[dict setObject:[self deviceString] forKey:@"device"];
+	[dict setObject:[[UIDevice currentDevice] systemName] forKey:@"operating-system"];
+	[dict setObject:[[UIDevice currentDevice] uniqueIdentifier] forKey:@"udid"];
+	// Build
+	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
+	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
+	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] forKey:@"build-date"];
+	// Audio
+	[dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
+
+	NSURL *url = [NSURL URLWithString:@"https://mumble-iphoneos.appspot.com/diagnostics"];
+	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0f];
+	[req setHTTPMethod:@"POST"];
+	[req setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+	[req setHTTPBody:[self formEncodedDictionary:dict boundary:boundary]];
+	[NSURLConnection connectionWithRequest:req delegate:self];
+
+	[dict release];
+}
+
+#pragma mark -
+#pragma mark NSURLConnection delegate
+
+- (void) connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {												
+	[self setSubmitButton];
+}
+
+- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	[self setSubmitButton];
+}
+
+#pragma mark -
+#pragma mark Target/actions
+
+- (void) submitButtonClicked:(UIBarButtonItem *)submitButton {
+	[self setActivityIndicator];
+	[self submitDiagnostics];
+}
+
+@end
