@@ -11,6 +11,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
+		280CC0C111D030ED00A806A5 /* libOpenSSL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 280CC0C011D030D600A806A5 /* libOpenSSL.a */; };
+		280CC12C11D0358900A806A5 /* Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CC12B11D0358900A806A5 /* Certificate.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
@@ -111,6 +113,20 @@
 			remoteGlobalIDString = 28D81E9311BFC22F0037D2C6;
 			remoteInfo = "MumbleKit (Mac OS X)";
 		};
+		280CC0BF11D030D600A806A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = "OpenSSL (iOS)";
+		};
+		280CC10711D0316E00A806A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = "OpenSSL (iOS)";
+		};
 		2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
@@ -133,6 +149,9 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
+		280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenSSL.xcodeproj; path = Dependencies/opensslbuild/OpenSSL.xcodeproj; sourceTree = "<group>"; };
+		280CC12A11D0358900A806A5 /* Certificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Certificate.h; sourceTree = "<group>"; };
+		280CC12B11D0358900A806A5 /* Certificate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Certificate.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
@@ -263,6 +282,7 @@
 				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
 				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
 				28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */,
+				280CC0C111D030ED00A806A5 /* libOpenSSL.a in Frameworks */,
 				28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +345,8 @@
 				281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */,
 				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
 				2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */,
+				280CC12A11D0358900A806A5 /* Certificate.h */,
+				280CC12B11D0358900A806A5 /* Certificate.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -338,10 +360,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		280CC0B911D030D600A806A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				280CC0C011D030D600A806A5 /* libOpenSSL.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
 				28F9173911B9460D0030D649 /* fmdb */,
+				280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
 			name = Dependencies;
@@ -515,6 +546,7 @@
 			);
 			dependencies = (
 				2861C2A9116BE920002B8514 /* PBXTargetDependency */,
+				280CC10811D0316E00A806A5 /* PBXTargetDependency */,
 			);
 			name = Mumble;
 			productName = Mumble;
@@ -536,6 +568,10 @@
 					ProductGroup = 2861C28F116BE91B002B8514 /* Products */;
 					ProjectRef = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 				},
+				{
+					ProductGroup = 280CC0B911D030D600A806A5 /* Products */;
+					ProjectRef = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -550,6 +586,13 @@
 			fileType = wrapper.framework;
 			path = MumbleKit.framework;
 			remoteRef = 2809ABAE11BFC524006BCD26 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		280CC0C011D030D600A806A5 /* libOpenSSL.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOpenSSL.a;
+			remoteRef = 280CC0BF11D030D600A806A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2861C2A7116BE91B002B8514 /* libMumbleKit.a */ = {
@@ -644,7 +687,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(date +%d-%m-%Y\\ %T\\ %Z)\ndefaults write ${PLIST} MumbleBuildDate -string \"${builddate}\" ";
+			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(date +%d-%m-%Y\\ %T\\ %Z)\ndefaults write ${PLIST} MumbleBuildDate -string \"${builddate}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -679,12 +722,18 @@
 				2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */,
 				281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */,
 				2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */,
+				280CC12C11D0358900A806A5 /* Certificate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		280CC10811D0316E00A806A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "OpenSSL (iOS)";
+			targetProxy = 280CC10711D0316E00A806A5 /* PBXContainerItemProxy */;
+		};
 		2861C2A9116BE920002B8514 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MumbleKit;
@@ -707,6 +756,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/openssl/include/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";
@@ -729,6 +779,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/openssl/include/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";

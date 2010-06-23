@@ -1,0 +1,2 @@
+// fix missing sig_atomic_t in ui_openssl.c
+#include <sys/signal.h>
