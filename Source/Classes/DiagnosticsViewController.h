@@ -38,6 +38,7 @@
 	UITableViewCell *_versionCell;
 	UITableViewCell *_gitRevCell;
 	UITableViewCell *_buildDateCell;
+	UITableViewCell *_sinceLaunchCell;
 
 	UITableViewCell *_preprocessorCell;
 

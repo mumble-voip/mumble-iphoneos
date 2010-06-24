@@ -33,7 +33,6 @@
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
 #import "Database.h"
-#import "Certificate.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -47,6 +46,8 @@
 @synthesize navigationController;
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
+	_launchDate = [[NSDate alloc] init];
+
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
 
@@ -80,6 +81,7 @@
 }
 
 - (void) dealloc {
+	[_launchDate release];
 	[navigationController release];
 	[window release];
 	[super dealloc];
@@ -110,6 +112,11 @@
 // Reload application preferences...
 - (void) reloadPreferences {
 	[self setupAudio];
+}
+
+// Time since we launched
+- (NSTimeInterval) timeIntervalSinceLaunch {
+	return [[NSDate date] timeIntervalSinceDate:_launchDate];
 }
 
 @end

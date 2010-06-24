@@ -31,6 +31,7 @@
 @interface AppDelegate : NSObject <UIApplicationDelegate> {
 	UIWindow *window;
 	UINavigationController *navigationController;
+	NSDate *_launchDate;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -40,6 +41,7 @@
 - (void) applicationWillTerminate:(UIApplication *)application;
 
 - (void) reloadPreferences;
+- (NSTimeInterval) timeIntervalSinceLaunch;
 
 @end
 

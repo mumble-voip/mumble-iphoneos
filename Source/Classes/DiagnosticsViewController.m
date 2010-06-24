@@ -33,6 +33,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
+#import "AppDelegate.h"
 #import "DiagnosticsViewController.h"
 
 @interface DiagnosticsViewController (Private)
@@ -80,7 +81,7 @@
 	[[_udidCell detailTextLabel] setText:[device uniqueIdentifier]];
 	[[_udidCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	// Build
+	// Application
 	_versionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_versionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_versionCell textLabel] setText:@"Version"];
@@ -96,6 +97,12 @@
 	[[_buildDateCell textLabel] setText:@"Build Date"];
 	[[_buildDateCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"]];
 	[[_buildDateCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+
+	_sinceLaunchCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+	[_sinceLaunchCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_sinceLaunchCell textLabel] setText:@"Time Since Launch"];
+	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
+	[[_sinceLaunchCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	// Audio
 	_preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
@@ -144,8 +151,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) // System
 		return 3;
-	if (section == 1) // Build
-		return 3;
+	if (section == 1) // Application
+		return 4;
 	if (section == 2) // Audio
 		return 1;
 	return 0;
@@ -155,7 +162,7 @@
 	if (section == 0)
 		return @"System";
 	if (section == 1)
-		return @"Build";
+		return @"Application";
 	if (section == 2)
 		return @"Audio";
 	return @"Default";
@@ -170,13 +177,15 @@
 		} else if ([indexPath row] == 2) { // UDID
 			return _udidCell;
 		}
-	} else if ([indexPath section] == 1) { // Build
+	} else if ([indexPath section] == 1) { // Application
 		if ([indexPath row] == 0) { // Version
 			return _versionCell;
 		} else if ([indexPath row] == 1) { // Git Revision
 			return _gitRevCell;
 		} else if ([indexPath row] == 2) { // Build Date
 			return _buildDateCell;
+		} else if ([indexPath row] == 3) { // Time since launch
+			return _sinceLaunchCell;
 		}
 	} else if ([indexPath section] == 2) { // Audio
 		if ([indexPath row] == 0) { // Preprocessor
@@ -233,6 +242,7 @@
 	[audio getBenchmarkData:&data];
 
 	[[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
+	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
 }
 
 - (NSData *) formEncodedDictionary:(NSDictionary *)dict boundary:(NSString *)boundary {
@@ -260,10 +270,11 @@
 	[dict setObject:[self deviceString] forKey:@"device"];
 	[dict setObject:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]] forKey:@"operating-system"];
 	[dict setObject:[device uniqueIdentifier] forKey:@"udid"];
-	// Build
+	// Application
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] forKey:@"build-date"];
+	[dict setObject:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
 	// Audio
 	[dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
 
