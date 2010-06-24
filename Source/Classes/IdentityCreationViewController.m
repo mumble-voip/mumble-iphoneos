@@ -149,19 +149,18 @@
 
 		// Generate a certificate for this identity.
 		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:_identityName email:_emailAddress];
-		NSData *pkcs12 = [cert exportPKCS12WithPassword:@"EmptyPassword"];
+		NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
 		if (pkcs12 == nil) {
 			NSLog(@"Certificate generation failed.");
 		} else {
-			NSArray *items;
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"EmptyPassword", kSecImportExportPassphrase, nil];
+			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
+			NSArray *items = nil;
 			err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
-			if (err == noErr) {
-				NSLog(@"Success!");
+			if (err == errSecSuccess) {
+				NSLog(@"item count = %u", [items count]);
 			} else {
-				NSLog(@"Failure! err=%i", err);
+				NSLog(@"IdentityCreationViewController: SecPKCS12Import failed: err=%i", err);
 			}
-			NSLog(@"item count = %u", [items count]);
 		}
 
 		dispatch_async(dispatch_get_main_queue(), ^{
