@@ -28,19 +28,36 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
+#import "UINavigationController-AnimationAdditions.h"
 
-#define MUMBLE_UNUSED __attribute__((unused))
+static CGFloat kAnimationAdditionsDefaultDuration = 1.0f;
 
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
+@implementation UINavigationController (AnimationAdditions)
 
-#include <TargetConditionals.h>
+- (void) pushViewController:(UIViewController *)controller usingTransition:(UIViewAnimationTransition)transition withDuration:(CGFloat)duration {
+	[UIView beginAnimations:nil context:NULL];
+	[self pushViewController:controller animated:NO];
+	[UIView setAnimationDuration:duration];
+	[UIView setAnimationBeginsFromCurrentState:YES];        
+	[UIView setAnimationTransition:transition forView:[self view] cache:YES];
+	[UIView commitAnimations];
+}
 
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <QuartzCore/QuartzCore.h>
-#endif
+- (void) popViewControllerUsingTransition:(UIViewAnimationTransition)transition withDuration:(CGFloat)duration {
+	[UIView beginAnimations:nil context:NULL];
+	[self popViewControllerAnimated:NO];
+	[UIView setAnimationDuration:duration];
+	[UIView setAnimationBeginsFromCurrentState:YES];        
+	[UIView setAnimationTransition:transition forView:[self view] cache:YES];
+	[UIView commitAnimations];
+}
 
+- (void) pushViewController:(UIViewController *)controller usingTransition:(UIViewAnimationTransition)transition {
+	[self pushViewController:controller usingTransition:transition withDuration:kAnimationAdditionsDefaultDuration];
+}
+
+- (void) popViewControllerUsingTransition:(UIViewAnimationTransition)transition {
+	[self popViewControllerUsingTransition:transition withDuration:kAnimationAdditionsDefaultDuration];
+}
+
+@end

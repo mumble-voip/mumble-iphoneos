@@ -33,14 +33,13 @@
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
 #import "Database.h"
+#import "Certificate.h"
 
 #import <MumbleKit/MKAudio.h>
-
 
 @interface AppDelegate (Private)
  - (void) setupAudio;
 @end
-
 
 @implementation AppDelegate
 
@@ -54,7 +53,6 @@
 	[self reloadPreferences];
 	[Database initializeDatabase];
 
-#if defined(__IPHONE_3_2)
 	// If we're running on anything below OS 3.2, UIDevice does not
 	// respond to the userInterfaceIdiom method. We must assume we're
 	// running on an iPhone or iPod Touch.
@@ -75,11 +73,6 @@
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	}
-#else
-	WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
-	[navigationController pushViewController:welcomeScreen animated:YES];
-	[welcomeScreen release];
-#endif
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {

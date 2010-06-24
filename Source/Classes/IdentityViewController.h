@@ -1,5 +1,4 @@
 /* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
-   Copyright (c) 2005-2010 Thorvald Natvig, <thorvald@natvig.com>
 
    All rights reserved.
 
@@ -29,13 +28,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface Certificate : NSObject {
-	NSData *_derCert;
-	NSData *_derKey;
+@interface IdentityViewController : UITableViewController {
 }
 
-+ (Certificate *) selfSignedCertificateWithName:(NSString *)name email:(NSString *)email;
-- (NSData *) derEncodedCertificate;
-- (NSData *) derEncodedKey;
+- (id) init;
+- (void) dealloc;
 
 @end

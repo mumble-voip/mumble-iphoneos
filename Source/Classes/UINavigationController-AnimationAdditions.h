@@ -28,19 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
+@interface UINavigationController (AnimationAdditions)
 
-#define MUMBLE_UNUSED __attribute__((unused))
+- (void) pushViewController:(UIViewController *)controller usingTransition:(UIViewAnimationTransition)transition withDuration:(CGFloat)duration;
+- (void) popViewControllerUsingTransition:(UIViewAnimationTransition)transition withDuration:(CGFloat)duration;
 
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
+- (void) pushViewController:(UIViewController *)controller usingTransition:(UIViewAnimationTransition)transition;
+- (void) popViewControllerUsingTransition:(UIViewAnimationTransition)transition;
 
-#include <TargetConditionals.h>
-
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <QuartzCore/QuartzCore.h>
-#endif
-
+@end

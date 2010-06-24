@@ -35,6 +35,7 @@
 #import "LanServerListController.h"
 #import "DiagnosticsViewController.h"
 #import "PreferencesViewController.h"
+#import "IdentityViewController.h"
 #import "ServerRootViewController.h"
 #import "AboutViewController.h"
 
@@ -85,7 +86,7 @@
 	if (section == 0)
 		return 3;
 	if (section == 1)
-		return 3;
+		return 4;
 
 	return 0;
 }
@@ -125,8 +126,10 @@
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"Preferences";
 		} else if (indexPath.row == 1) {
-			cell.textLabel.text = @"Diagnostics";
+			cell.textLabel.text = @"Identities";
 		} else if (indexPath.row == 2) {
+			cell.textLabel.text = @"Diagnostics";
+		} else if (indexPath.row == 3) {
 			cell.textLabel.text = @"About";
 		}
 	}
@@ -160,11 +163,15 @@
 			PreferencesViewController *preferences = [[PreferencesViewController alloc] init];
 			[[self navigationController] pushViewController:preferences animated:YES];
 			[preferences release];
-		} else if (indexPath.row == 1) { // Diagnostics
+		} else if (indexPath.row == 1) { // Identities
+			IdentityViewController *ident = [[IdentityViewController alloc] init];
+			[[self navigationController] pushViewController:ident animated:YES];
+			[ident release];
+		} else if (indexPath.row == 2) { // Diagnostics
 			DiagnosticsViewController *diag = [[DiagnosticsViewController alloc] init];
 			[[self navigationController] pushViewController:diag animated:YES];
 			[diag release];
-		} else if (indexPath.row == 2) { // About
+		} else if (indexPath.row == 3) { // About
 			[self presentAboutDialog];
 		}
 	}

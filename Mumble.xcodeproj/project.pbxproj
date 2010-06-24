@@ -11,8 +11,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
-		280CC0C111D030ED00A806A5 /* libOpenSSL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 280CC0C011D030D600A806A5 /* libOpenSSL.a */; };
-		280CC12C11D0358900A806A5 /* Certificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 280CC12B11D0358900A806A5 /* Certificate.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
@@ -83,6 +81,14 @@
 		2861C507116BEA12002B8514 /* talking_whisper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E1116BEA12002B8514 /* talking_whisper.pdf */; };
 		2861C508116BEA12002B8514 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E3116BEA12002B8514 /* Continents.plist */; };
 		2861C509116BEA12002B8514 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E4116BEA12002B8514 /* Countries.plist */; };
+		2876394911D28945009DB8B6 /* IdentityViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 2876394811D28945009DB8B6 /* IdentityViewController.m */; };
+		2876396711D28A25009DB8B6 /* IdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2876394811D28945009DB8B6 /* IdentityViewController.m */; };
+		2876398611D28BA8009DB8B6 /* IdentityCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */; };
+		287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */; };
+		287639FF11D2A242009DB8B6 /* IdentityCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */; };
+		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
+		28763A9511D2B056009DB8B6 /* DefaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 28763A9411D2B056009DB8B6 /* DefaultAvatar.png */; };
+		28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */; };
 		287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* ServerRootViewController.m */; };
 		287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
 		287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* ChannelViewController.xib */; };
@@ -113,20 +119,6 @@
 			remoteGlobalIDString = 28D81E9311BFC22F0037D2C6;
 			remoteInfo = "MumbleKit (Mac OS X)";
 		};
-		280CC0BF11D030D600A806A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = "OpenSSL (iOS)";
-		};
-		280CC10711D0316E00A806A5 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = "OpenSSL (iOS)";
-		};
 		2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
@@ -149,9 +141,6 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
-		280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OpenSSL.xcodeproj; path = Dependencies/opensslbuild/OpenSSL.xcodeproj; sourceTree = "<group>"; };
-		280CC12A11D0358900A806A5 /* Certificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Certificate.h; sourceTree = "<group>"; };
-		280CC12B11D0358900A806A5 /* Certificate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Certificate.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
@@ -234,6 +223,17 @@
 		2861C3E1116BEA12002B8514 /* talking_whisper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = talking_whisper.pdf; sourceTree = "<group>"; };
 		2861C3E3116BEA12002B8514 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Continents.plist; sourceTree = "<group>"; };
 		2861C3E4116BEA12002B8514 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Countries.plist; sourceTree = "<group>"; };
+		2876394711D28945009DB8B6 /* IdentityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityViewController.h; sourceTree = "<group>"; };
+		2876394811D28945009DB8B6 /* IdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityViewController.m; sourceTree = "<group>"; };
+		2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityCreationViewController.h; sourceTree = "<group>"; };
+		2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityCreationViewController.m; sourceTree = "<group>"; };
+		287639F711D29D99009DB8B6 /* IdentityCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityCreationProgressView.h; sourceTree = "<group>"; };
+		287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityCreationProgressView.m; sourceTree = "<group>"; };
+		287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = IdentityCreationProgressView.xib; path = Resources/IdentityCreationProgressView.xib; sourceTree = "<group>"; };
+		28763A4411D2AA91009DB8B6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		28763A9411D2B056009DB8B6 /* DefaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DefaultAvatar.png; path = Resources/DefaultAvatar.png; sourceTree = "<group>"; };
+		28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController-AnimationAdditions.m"; sourceTree = "<group>"; };
+		28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController-AnimationAdditions.h"; sourceTree = "<group>"; };
 		287852D9117BC866009E26B1 /* ServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewController.h; sourceTree = "<group>"; };
 		287852DA117BC866009E26B1 /* ServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
@@ -281,8 +281,8 @@
 				2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */,
 				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
 				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
+				28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */,
 				28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */,
-				280CC0C111D030ED00A806A5 /* libOpenSSL.a in Frameworks */,
 				28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,8 +345,14 @@
 				281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */,
 				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
 				2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */,
-				280CC12A11D0358900A806A5 /* Certificate.h */,
-				280CC12B11D0358900A806A5 /* Certificate.m */,
+				2876394711D28945009DB8B6 /* IdentityViewController.h */,
+				2876394811D28945009DB8B6 /* IdentityViewController.m */,
+				2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */,
+				2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */,
+				287639F711D29D99009DB8B6 /* IdentityCreationProgressView.h */,
+				287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */,
+				28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */,
+				28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -360,19 +366,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		280CC0B911D030D600A806A5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				280CC0C011D030D600A806A5 /* libOpenSSL.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
 				28F9173911B9460D0030D649 /* fmdb */,
-				280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
 			name = Dependencies;
@@ -509,6 +506,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				28763A9411D2B056009DB8B6 /* DefaultAvatar.png */,
+				287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */,
 				2861C2BB116BEA11002B8514 /* about */,
 				2861C2BE116BEA11002B8514 /* icons */,
 				2861C3E2116BEA12002B8514 /* serverlist */,
@@ -520,6 +519,7 @@
 			isa = PBXGroup;
 			children = (
 				28F9175411B946D10030D649 /* libsqlite3.dylib */,
+				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
 				2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */,
@@ -546,7 +546,6 @@
 			);
 			dependencies = (
 				2861C2A9116BE920002B8514 /* PBXTargetDependency */,
-				280CC10811D0316E00A806A5 /* PBXTargetDependency */,
 			);
 			name = Mumble;
 			productName = Mumble;
@@ -568,10 +567,6 @@
 					ProductGroup = 2861C28F116BE91B002B8514 /* Products */;
 					ProjectRef = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 				},
-				{
-					ProductGroup = 280CC0B911D030D600A806A5 /* Products */;
-					ProjectRef = 280CC0B811D030D600A806A5 /* OpenSSL.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -586,13 +581,6 @@
 			fileType = wrapper.framework;
 			path = MumbleKit.framework;
 			remoteRef = 2809ABAE11BFC524006BCD26 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280CC0C011D030D600A806A5 /* libOpenSSL.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libOpenSSL.a;
-			remoteRef = 280CC0BF11D030D600A806A5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		2861C2A7116BE91B002B8514 /* libMumbleKit.a */ = {
@@ -669,6 +657,9 @@
 				285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */,
 				287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */,
+				2876394911D28945009DB8B6 /* IdentityViewController.m in Resources */,
+				287639FF11D2A242009DB8B6 /* IdentityCreationProgressView.xib in Resources */,
+				28763A9511D2B056009DB8B6 /* DefaultAvatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -696,6 +687,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2876396711D28A25009DB8B6 /* IdentityViewController.m in Sources */,
 				287A60AA117628FE00DD4FFB /* ChannelViewController.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				2861C274116BE905002B8514 /* AboutViewController.m in Sources */,
@@ -722,18 +714,15 @@
 				2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */,
 				281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */,
 				2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */,
-				280CC12C11D0358900A806A5 /* Certificate.m in Sources */,
+				2876398611D28BA8009DB8B6 /* IdentityCreationViewController.m in Sources */,
+				287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */,
+				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		280CC10811D0316E00A806A5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "OpenSSL (iOS)";
-			targetProxy = 280CC10711D0316E00A806A5 /* PBXContainerItemProxy */;
-		};
 		2861C2A9116BE920002B8514 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MumbleKit;

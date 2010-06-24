@@ -28,19 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
+@interface IdentityCreationViewController : UITableViewController {
+	NSString *_identityName;
+	NSString *_emailAddress;
+}
 
-#define MUMBLE_UNUSED __attribute__((unused))
+- (id) init;
+- (void) dealloc;
 
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
-
-#include <TargetConditionals.h>
-
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <QuartzCore/QuartzCore.h>
-#endif
-
+@end

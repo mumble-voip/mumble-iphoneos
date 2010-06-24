@@ -28,19 +28,57 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
+#import "IdentityCreationProgressView.h"
 
-#define MUMBLE_UNUSED __attribute__((unused))
+@implementation IdentityCreationProgressView
 
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
+- (id) initWithName:(NSString *)name email:(NSString *)email delegate:(id)delegate {
+	self = [super initWithNibName:@"IdentityCreationProgressView" bundle:nil];
+	if (self == nil)
+		return nil;
+
+	_identityName = [name copy];
+	_emailAddress = [email copy];
+	_delegate = delegate;
+
+	return self;
+}
+
+- (void) dealloc {
+	[_identityName release];
+	[_emailAddress release];
+
+	[super dealloc];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	[[self navigationItem] setTitle:@"Creating Identity"];
+	[[self navigationItem] setHidesBackButton:YES];
+
+	[[_imageView layer] setBackgroundColor:[[UIColor whiteColor] CGColor]];
+	[[_imageView layer] setMasksToBounds:YES];
+	[[_imageView layer] setCornerRadius:10.0f];
+	[[_imageView layer] setBorderWidth:1.0f];
+	[[_imageView layer] setBorderColor:[[UIColor colorWithRed:0.298 green:0.337 blue:0.424 alpha:1.0] CGColor]];
+
+#if 1
+	[[_imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+	[[_imageView layer] setShadowOffset:CGSizeMake(-1.0f, 1.0f)];
+	[[_imageView layer] setShadowOpacity:1.0f];
+	[[_imageView layer] setShadowRadius:1.0f];
 #endif
 
-#include <TargetConditionals.h>
+	[_imageView setImage:[UIImage imageNamed:@"DefaultAvatar"]];
 
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <QuartzCore/QuartzCore.h>
-#endif
+	[_nameLabel	setText:_identityName];
+	[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
 
+	[_activityIndicator startAnimating];
+}
+
+- (void) cancelButtonClicked:(UIButton *)cancelButon {
+	if ([_delegate respondsToSelector:@selector(identityCreationProgressViewDidCancel:)])
+		[_delegate identityCreationProgressViewDidCancel:self];
+}
+
+@end

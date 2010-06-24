@@ -4,6 +4,3 @@
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
 	url = http://github.com/kballard/fmdb.git
-[submodule "Dependencies/openssl"]
-	path = Dependencies/openssl
-	url = git://github.com/mkrautz/openssl-mirror.git

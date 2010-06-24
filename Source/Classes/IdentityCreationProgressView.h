@@ -28,19 +28,26 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
+@class IdentityCreationProgressView;
 
-#define MUMBLE_UNUSED __attribute__((unused))
+@protocol IdentityCreationProgressViewDelegate
+- (void) identityCreationProgressViewDidCancel:(IdentityCreationProgressView *)progressView;
+@end
 
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
+@interface IdentityCreationProgressView : UIViewController {
+	IBOutlet UIActivityIndicatorView *_activityIndicator;
+	IBOutlet UIImageView *_imageView;
+	IBOutlet UILabel *_nameLabel;
+	IBOutlet UILabel *_emailLabel;
+	IBOutlet UIButton *_cancelButton;
 
-#include <TargetConditionals.h>
+	NSString *_identityName;
+	NSString *_emailAddress;
+	id _delegate;
+}
 
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <QuartzCore/QuartzCore.h>
-#endif
+- (id) initWithName:(NSString *)name email:(NSString *)email delegate:(id)delegate;
+- (void) dealloc;
+- (IBAction) cancelButtonClicked:(UIButton *)cancelButon;
 
+@end
