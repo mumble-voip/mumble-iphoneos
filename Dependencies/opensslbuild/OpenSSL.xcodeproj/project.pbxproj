@@ -100,7 +100,6 @@
 		28CB1DFA11D01C9800ACF085 /* x_val.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197311D01C9500ACF085 /* x_val.c */; };
 		28CB1DFB11D01C9800ACF085 /* x_x509.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197411D01C9500ACF085 /* x_x509.c */; };
 		28CB1DFC11D01C9800ACF085 /* x_x509a.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197511D01C9500ACF085 /* x_x509a.c */; };
-		28CB1DFD11D01C9800ACF085 /* bf_cbc.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197B11D01C9500ACF085 /* bf_cbc.c */; };
 		28CB1DFE11D01C9800ACF085 /* bf_cfb64.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197C11D01C9500ACF085 /* bf_cfb64.c */; };
 		28CB1DFF11D01C9800ACF085 /* bf_ecb.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197D11D01C9500ACF085 /* bf_ecb.c */; };
 		28CB1E0011D01C9800ACF085 /* bf_enc.c in Sources */ = {isa = PBXBuildFile; fileRef = 28CB197E11D01C9500ACF085 /* bf_enc.c */; };
@@ -859,7 +858,6 @@
 		28CB197311D01C9500ACF085 /* x_val.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x_val.c; sourceTree = "<group>"; };
 		28CB197411D01C9500ACF085 /* x_x509.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x_x509.c; sourceTree = "<group>"; };
 		28CB197511D01C9500ACF085 /* x_x509a.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x_x509a.c; sourceTree = "<group>"; };
-		28CB197B11D01C9500ACF085 /* bf_cbc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bf_cbc.c; sourceTree = "<group>"; };
 		28CB197C11D01C9500ACF085 /* bf_cfb64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bf_cfb64.c; sourceTree = "<group>"; };
 		28CB197D11D01C9500ACF085 /* bf_ecb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bf_ecb.c; sourceTree = "<group>"; };
 		28CB197E11D01C9500ACF085 /* bf_enc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bf_enc.c; sourceTree = "<group>"; };
@@ -1778,7 +1776,6 @@
 			isa = PBXGroup;
 			children = (
 				28CB197711D01C9500ACF085 /* asm */,
-				28CB197B11D01C9500ACF085 /* bf_cbc.c */,
 				28CB197C11D01C9500ACF085 /* bf_cfb64.c */,
 				28CB197D11D01C9500ACF085 /* bf_ecb.c */,
 				28CB197E11D01C9500ACF085 /* bf_enc.c */,
@@ -3163,7 +3160,6 @@
 				28CB1DFA11D01C9800ACF085 /* x_val.c in Sources */,
 				28CB1DFB11D01C9800ACF085 /* x_x509.c in Sources */,
 				28CB1DFC11D01C9800ACF085 /* x_x509a.c in Sources */,
-				28CB1DFD11D01C9800ACF085 /* bf_cbc.c in Sources */,
 				28CB1DFE11D01C9800ACF085 /* bf_cfb64.c in Sources */,
 				28CB1DFF11D01C9800ACF085 /* bf_ecb.c in Sources */,
 				28CB1E0011D01C9800ACF085 /* bf_enc.c in Sources */,
