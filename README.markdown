@@ -2,7 +2,7 @@ Mumble for iOS (iPhone, iPod touch and iPad)
 ============================================
 
 This is the source code of Mumble (a gaming-focused social
-voice chat utility) for iPhone OS-based devices.
+voice chat utility) for iOS-based devices.
 
 The desktop version of Mumble runs on Windows, Mac OS X, Linux
 and various other Unix-like systems. Visit its website at:
@@ -15,8 +15,8 @@ Building it
 To build this you need the iOS 4.0 SDK from Apple and an
 Intel Mac (or equivalent :)) running Mac OS X 10.6 (or later).
 
-Before starting your build, you will need to check out the re-
-quired submodules:
+Before starting your build, you will need to check out the
+required submodules:
 
         $ git submodule init
         $ git submodule update
