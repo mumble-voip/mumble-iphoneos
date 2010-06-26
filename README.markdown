@@ -1,7 +1,5 @@
-(Last-Updated: March 16 2010)
-
-Mumble for the iPhone and iPod touch
-====================================
+Mumble for iOS (iPhone, iPod touch and iPad)
+============================================
 
 This is the source code of Mumble (a gaming-focused social
 voice chat utility) for iPhone OS-based devices.
@@ -14,23 +12,24 @@ and various other Unix-like systems. Visit its website at:
 Building it
 ===========
 
-To build this you need the iPhoneOS 3.0 SDK from Apple and an
-Intel Mac running Mac OS X 10.5 or later.
+To build this you need the iOS 4.0 SDK from Apple and an
+Intel Mac (or equivalent :)) running Mac OS X 10.6 (or later).
 
 Before starting your build, you will need to check out the re-
 quired submodules:
 
- $ git submodule init
- $ git submodule update
+        $ git submodule init
+        $ git submodule update
 
 Once finished, make do the same in the MumbleKit submodule:
 
- $ cd MumbleKit
- $ git submodule init
- $ git submodule update
+        $ cd MumbleKit
+        $ git submodule init
+        $ git submodule update
 
 This will fetch known "working" snapshot of the required submodules
-for MumbleKit. (CELT, Speex and Protocol Buffers for Objective C)
+for MumbleKit. (CELT, Speex, Protocol Buffers for Objective C and
+OpenSSL)
 
 Once this is done, you should be able to open up the Xcode
 project file for Mumble (Mumble.xcodeproj) in the root of
