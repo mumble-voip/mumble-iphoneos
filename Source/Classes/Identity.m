@@ -28,14 +28,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface IdentityViewController : UITableViewController {
-	NSArray *_identities;
-	NSMutableArray *_certificateItems;
+#import "Identity.h"
 
-	NSUInteger _currentView;
-}
+@implementation Identity
 
-- (id) init;
-- (void) dealloc;
+@synthesize persistentId = _persistentId;
+@synthesize userName = _userName;
+@synthesize fullName = _fullName;
+@synthesize emailAddress = _emailAddress;
 
 @end

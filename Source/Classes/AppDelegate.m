@@ -45,6 +45,7 @@
 @synthesize window;
 @synthesize navigationController;
 
+
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
 	_launchDate = [[NSDate alloc] init];
 
@@ -53,6 +54,7 @@
 
 	[self reloadPreferences];
 	[Database initializeDatabase];
+	[Database showStoredIdentities];
 
 	// If we're running on anything below OS 3.2, UIDevice does not
 	// respond to the userInterfaceIdiom method. We must assume we're
@@ -64,12 +66,12 @@
 	}
 
 	if (idiom == UIUserInterfaceIdiomPad) {
-		NSLog(@"iPad detected.");
+		NSLog(@"UIUserInterfaceIdiomPad detected.");
 		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	} else if (idiom == UIUserInterfaceIdiomPhone) {
-		NSLog(@"iPhone detected.");
+		NSLog(@"UIUserInterfaceIdiomPhone detected.");
 		WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];

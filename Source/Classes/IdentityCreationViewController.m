@@ -33,6 +33,8 @@
 #import "IdentityCreationProgressView.h"
 #import "UINavigationController-AnimationAdditions.h"
 #import "IdentityViewController.h"
+#import "Database.h"
+#import "Identity.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -46,8 +48,8 @@
 	if (self == nil)
 		return nil;
 
-	_identityName = @"Phony Name";
-	_emailAddress = @"phony@example.com";
+	_identityName = @"Joe Schmoe";
+	_emailAddress = @"joe@schmoe.ca";
 
 	return self;
 }
@@ -81,7 +83,7 @@
 		return 0;
 	if (section == 1) // Identity
 		return 2;
-	
+
 	return 0;
 }
 
@@ -102,7 +104,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath section] == 1) { // Identity 
+	if ([indexPath section] == 1) { // Identity
 		NSUInteger row = [indexPath row];
 		static NSString *CellIdentifier = @"IdentityCreationTextFieldCell";
 		TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -128,7 +130,7 @@
 
 		return cell;
 	}
-    
+
 	return nil;
 }
 
@@ -156,10 +158,52 @@
 			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
 			NSArray *items = nil;
 			err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
-			if (err == errSecSuccess) {
+			if (err == errSecSuccess && [items count] > 0) {
+				NSDictionary *pkcsDict = [items objectAtIndex:0];
 				NSLog(@"item count = %u", [items count]);
+
+				// Get trust
+				SecTrustRef trust = (SecTrustRef)[pkcsDict objectForKey:(id)kSecImportItemTrust];
+				NSLog(@"trust = %p", trust);
+
+				// Get the SecIdentityRef
+				SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
+				NSLog(@"identity = %p", identity);
+
+#if 0
+				// Get all current identities
+				NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+											kSecClassIdentity, kSecClass,
+									   kCFBooleanTrue, kSecReturnPersistentRef, nil];
+				CFTypeRef result = NULL;
+				err = SecItemCopyMatching((CFDictionaryRef)query, &result);
+				if (err == noErr) {
+					NSLog(@"query success!");
+					NSLog(@"%p .... ", result);
+					NSLog(@"%@ ... ", NSStringFromClass([(id)result class]));
+				}
+#endif
+
+				// Add identity
+				NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
+									   (id)identity, kSecValueRef,
+									   kCFBooleanTrue, kSecReturnPersistentRef, nil];
+				NSData *data = nil;
+				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
+				if (err == noErr) {
+					if (data != nil) {
+						Identity *ident = [[Identity alloc] init];
+						ident.persistentId = data;
+						ident.userName = @"Tukoff";
+						[Database saveIdentity:ident];
+						[ident release];
+						NSLog(@"Stored identity...");
+					}
+				} else {
+					NSLog(@"Failed to add identity to keychain. err=%i", (int)err);
+				}
 			} else {
-				NSLog(@"IdentityCreationViewController: SecPKCS12Import failed: err=%i", err);
+				NSLog(@"IdentityCreationViewController: SecPKCS12Import failed: err=%i", (int)err);
 			}
 		}
 

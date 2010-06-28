@@ -11,6 +11,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
+		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
@@ -141,6 +142,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
+		281D1BA311D66E3C006BE21C /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		281D1BA411D66E3C006BE21C /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
@@ -293,6 +296,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				28BF8E1C11D93A1900B72770 /* Database */,
 				285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				2861C25A116BE905002B8514 /* AboutViewController.h */,
@@ -327,10 +331,6 @@
 				28A4CCD2117E064B006EB479 /* LogViewController.m */,
 				28A4CCF3117E1D4D006EB479 /* LogEntry.h */,
 				28A4CCF4117E1D4D006EB479 /* LogEntry.m */,
-				287BA28E11B96C960010E031 /* Database.h */,
-				287BA28F11B96C960010E031 /* Database.m */,
-				287BA33911B97C470010E031 /* FavouriteServer.h */,
-				287BA33A11B97C470010E031 /* FavouriteServer.m */,
 				287BA33E11B97EEE0010E031 /* FavouriteServerListController.h */,
 				287BA33F11B97EEE0010E031 /* FavouriteServerListController.m */,
 				287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */,
@@ -465,6 +465,19 @@
 			);
 			name = serverlist;
 			path = Resources/serverlist;
+			sourceTree = "<group>";
+		};
+		28BF8E1C11D93A1900B72770 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				287BA28E11B96C960010E031 /* Database.h */,
+				287BA28F11B96C960010E031 /* Database.m */,
+				287BA33911B97C470010E031 /* FavouriteServer.h */,
+				287BA33A11B97C470010E031 /* FavouriteServer.m */,
+				281D1BA311D66E3C006BE21C /* Identity.h */,
+				281D1BA411D66E3C006BE21C /* Identity.m */,
+			);
+			name = Database;
 			sourceTree = "<group>";
 		};
 		28F9173911B9460D0030D649 /* fmdb */ = {
@@ -678,7 +691,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(date +%d-%m-%Y\\ %T\\ %Z)\ndefaults write ${PLIST} MumbleBuildDate -string \"${builddate}\"";
+			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\nexport PATH=$PATH:$HOME/.local/bin\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%d %H:%M:%S\")')\ndefaults write ${PLIST} MumbleBuildDate -string \"${builddate}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -717,6 +730,7 @@
 				2876398611D28BA8009DB8B6 /* IdentityCreationViewController.m in Sources */,
 				287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */,
 				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
+				281D1BA511D66E3C006BE21C /* Identity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,14 +28,16 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface IdentityViewController : UITableViewController {
-	NSArray *_identities;
-	NSMutableArray *_certificateItems;
-
-	NSUInteger _currentView;
+@interface Identity : NSObject {
+	NSData *_persistentId;
+	NSString *_userName;
+	NSString *_fullName;
+	NSString *_emailAddress;
 }
 
-- (id) init;
-- (void) dealloc;
+@property (copy) NSData *persistentId;
+@property (copy) NSString *userName;
+@property (copy) NSString *fullName;
+@property (copy) NSString *emailAddress;
 
 @end

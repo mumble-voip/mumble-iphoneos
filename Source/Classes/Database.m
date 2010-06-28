@@ -30,6 +30,7 @@
 
 #import "Database.h"
 #import "FavouriteServer.h"
+#import "Identity.h"
 
 static FMDatabase *db = nil;
 
@@ -38,7 +39,7 @@ static FMDatabase *db = nil;
 //
 // Initialize the database.
 //
-+ (void) initializeDatabase {	
++ (void) initializeDatabase {
 	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																	   NSUserDomainMask,
 																	   YES);
@@ -57,13 +58,20 @@ static FMDatabase *db = nil;
 		db = nil;
 		return;
 	}
-	
+
 	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `servers` "
 					  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
 					  @" `name` TEXT,"
 					  @" `hostname` TEXT,"
 					  @" `port` INTEGER DEFAULT 64738,"
 					  @" `username` TEXT)"];
+
+	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `identities` "
+	                  @"(`persistent` BLOB PRIMARY KEY,"
+					  @" `username` TEXT,"
+					  @" `avatar` BLOB)"];
+	[db executeUpdate:@"ALTER TABLE `identities` ADD COLUMN `fullname` TEXT"];
+	[db executeUpdate:@"ALTER TABLE `identities` ADD COLUMN `email` TEXT"];
 
 	[db executeUpdate:@"VACUUM"];
 
@@ -121,10 +129,44 @@ static FMDatabase *db = nil;
 		[fs setUserName:[res stringForColumnIndex:3]];
 		[favs addObject:fs];
 	}
-	
+
 	[res close];
 
 	return [favs autorelease];
+}
+
+//
+// Store identity
+//
+
++ (void) saveIdentity:(Identity *)ident {
+	[db executeUpdate:@"REPLACE INTO `identities` (`persistent`, `username`, `fullname`, `email`) VALUES (?, ?, ?, ?)",
+			ident.persistentId, ident.userName, nil, nil];
+}
+
++ (NSArray *) identities {
+	NSMutableArray *idents = [[NSMutableArray alloc] init];
+	FMResultSet *res = [db executeQuery:@"SELECT `persistent`, `username`, `fullname`, `email` FROM `identities`"];
+	while ([res next]) {
+		Identity *ident = [[Identity alloc] init];
+		ident.persistentId = [res dataForColumnIndex:0];
+		ident.userName = [res stringForColumnIndex:1];
+		ident.fullName = [res stringForColumnIndex:2];
+		ident.emailAddress = [res stringForColumnIndex:3];
+		[idents addObject:ident];
+	}
+	[res close];
+	return [idents autorelease];
+}
+
++ (void) showStoredIdentities {
+	FMResultSet *res = [db executeQuery:@"SELECT `username`, `persistent` FROM `identities`"];
+	while ([res next]) {
+		NSString *boom = [[NSString alloc] initWithData:[res dataForColumnIndex:1] encoding:NSUTF8StringEncoding];
+		NSLog(@"username=%@, persistent=%@", [res stringForColumnIndex:0], boom);
+		[boom release];
+	}
+	[res close];
 }
 
 @end

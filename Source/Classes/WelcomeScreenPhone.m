@@ -165,6 +165,8 @@
 			[preferences release];
 		} else if (indexPath.row == 1) { // Identities
 			IdentityViewController *ident = [[IdentityViewController alloc] init];
+			//CertificateViewController *ident = [[CertificateViewController alloc] init];
+			//IdentitiesTabBarController *ident = [[IdentitiesTabBarController alloc] init];
 			[[self navigationController] pushViewController:ident animated:YES];
 			[ident release];
 		} else if (indexPath.row == 2) { // Diagnostics

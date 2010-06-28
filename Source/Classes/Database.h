@@ -31,6 +31,7 @@
 #import <FMDatabase.h>
 
 @class FavouriteServer;
+@class Identity;
 
 @interface Database : NSObject
 
@@ -40,5 +41,8 @@
 + (void) saveFavourite:(FavouriteServer *)favServ;
 + (void) saveFavourites:(NSArray *)favourites;
 + (NSMutableArray *) favourites;
+
++ (void) saveIdentity:(Identity *)ident;
++ (NSArray *) identities;
 
 @end
