@@ -111,7 +111,7 @@
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
 	NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-	
+
 	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
 	// Connect
@@ -147,7 +147,7 @@
 - (void) doneButtonClicked:(id)sender {
 	FavouriteServerEditViewController *editView = (FavouriteServerEditViewController *)sender;
 	FavouriteServer *favServ = [editView copyFavouriteFromContent];
-	[Database saveFavourite:favServ];
+	[Database storeFavourite:favServ];
 	[favServ release];
 
 	FavouriteServerListController *favController = [[FavouriteServerListController alloc] init];

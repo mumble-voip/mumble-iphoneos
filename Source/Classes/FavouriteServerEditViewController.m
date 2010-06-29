@@ -78,19 +78,19 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	
+
 	// View title
 	if (!_editMode) {
 		[[self navigationItem] setTitle:@"New Favourite"];
 	} else {
 		[[self navigationItem] setTitle:@"Edit Favourite"];
 	}
-	
+
 	// Cancel button
-	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)]; 
+	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
 	[[self navigationItem] setLeftBarButtonItem:cancelButton];
 	[cancelButton release];
-	
+
 	// Done
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)];
 	[[self navigationItem] setRightBarButtonItem:doneButton];
@@ -129,13 +129,13 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {	
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"FavouriteServerEditCell";
 	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil) {
 		cell = [[[TableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
     }
-	
+
 	[cell setTarget:self];
 
 	NSUInteger section = [indexPath section];

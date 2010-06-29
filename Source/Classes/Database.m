@@ -88,45 +88,70 @@ static FMDatabase *db = nil;
 }
 
 //
-// Save single favourite
+// Store a single favourite
 //
-+ (void) saveFavourite:(FavouriteServer *)favServ {
-	[db executeUpdate:@"REPLACE INTO `servers` (`name`, `hostname`, `port`, `username`) VALUES (?, ?, ?, ?)",
-		[favServ displayName],
-		[favServ hostName],
-		[NSString stringWithFormat:@"%u", [favServ port]],
-		[favServ userName]];
++ (void) storeFavourite:(FavouriteServer *)favServ {
+	// If the favourite already has a private key, update the currently stored entity
+	if ([favServ hasPrimaryKey]) {
+		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `username`=? WHERE `id`=?",
+			[favServ displayName],
+			[favServ hostName],
+			[NSString stringWithFormat:@"%u", [favServ port]],
+			[favServ userName],
+			[NSNumber numberWithInt:[favServ primaryKey]]];
+	// If it isn't already stored, store it and update the object's pkey.
+	} else {
+		// We're already inside a transaction if we were called from within
+		// storeFavourites. If that isn't the case, make sure we start a new
+		// transaction.
+		BOOL newTransaction = ![db inTransaction];
+		if (newTransaction)
+			[db beginTransaction];
+		[db executeUpdate:@"INSERT INTO `servers` (`name`, `hostname`, `port`, `username`) VALUES (?, ?, ?, ?)",
+			[favServ displayName],
+			[favServ hostName],
+			[NSString stringWithFormat:@"%u", [favServ port]],
+			[favServ userName]];
+		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
+		[res next];
+		[favServ setPrimaryKey:[res intForColumnIndex:0]];
+		if (newTransaction)
+			[db commit];
+	}
+}
+
+// Delete a particular favourite
++ (void) deleteFavourite:(FavouriteServer *)favServ {
+	NSAssert([favServ hasPrimaryKey], @"Cannot delete a FavouriteServer not originated from the database.");
+	[db executeUpdate:@"DELETE FROM `servers` WHERE `id`=?", [NSNumber numberWithInt:[favServ primaryKey]]];
 }
 
 //
 // Save favourites
 //
-+ (void) saveFavourites:(NSArray *)favourites {
++ (void) storeFavourites:(NSArray *)favourites {
 	[db beginTransaction];
-
-	[db executeUpdate:@"DELETE FROM `servers`"];
-
 	for (FavouriteServer *favServ in favourites) {
-		[Database saveFavourite:favServ];
+		[Database storeFavourite:favServ];
 	}
-
 	[db commit];
 }
 
 //
-// Get list of favourites
+// Fetch all favourites
 //
-+ (NSMutableArray *) favourites {
++ (NSMutableArray *) fetchAllFavourites {
 	NSMutableArray *favs = [[NSMutableArray alloc] init];
 
-	FMResultSet *res = [db executeQuery:@"SELECT `name`, `hostname`, `port`, `username` FROM `servers`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `username` FROM `servers`"];
 
 	while ([res next]) {
 		FavouriteServer *fs = [[FavouriteServer alloc] init];
-		[fs setDisplayName:[res stringForColumnIndex:0]];
-		[fs setHostName:[res stringForColumnIndex:1]];
-		[fs setPort:[res intForColumnIndex:2]];
-		[fs setUserName:[res stringForColumnIndex:3]];
+		[fs setPrimaryKey:[res intForColumnIndex:0]];
+		[fs setDisplayName:[res stringForColumnIndex:1]];
+		[fs setHostName:[res stringForColumnIndex:2]];
+		[fs setPort:[res intForColumnIndex:3]];
+		[fs setUserName:[res stringForColumnIndex:4]];
 		[favs addObject:fs];
 	}
 

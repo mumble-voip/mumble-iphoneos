@@ -38,9 +38,10 @@
 + (void) initializeDatabase;
 + (void) teardown;
 
-+ (void) saveFavourite:(FavouriteServer *)favServ;
-+ (void) saveFavourites:(NSArray *)favourites;
-+ (NSMutableArray *) favourites;
++ (void) storeFavourite:(FavouriteServer *)favServ;
++ (void) deleteFavourite:(FavouriteServer *)favServ;
++ (void) storeFavourites:(NSArray *)favourites;
++ (NSMutableArray *) fetchAllFavourites;
 
 + (void) saveIdentity:(Identity *)ident;
 + (NSArray *) identities;

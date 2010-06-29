@@ -32,9 +32,19 @@
 
 @implementation Identity
 
+@synthesize primaryKey = _pkey;
 @synthesize persistentId = _persistentId;
 @synthesize userName = _userName;
 @synthesize fullName = _fullName;
 @synthesize emailAddress = _emailAddress;
+
+- (id) init {
+	self = [super init];
+	return self;
+}
+
+- (void) hasPrimaryKey {
+	return _pkey != -1;
+}
 
 @end

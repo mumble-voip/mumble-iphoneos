@@ -28,9 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Foundation/Foundation.h>
-
 @interface FavouriteServer : NSObject <NSCopying> {
+	NSInteger _pkey;
 	NSString *_displayName;
 	NSString *_hostName;
 	NSUInteger _port;
@@ -41,17 +40,13 @@
 - (id) init;
 - (void) dealloc;
 
-- (void) setDisplayName:(NSString *)displayName;
-- (NSString *) displayName;
+@property (assign)  NSInteger   primaryKey;
+@property (copy)    NSString    *displayName;
+@property (copy)    NSString    *hostName;
+@property (assign)  NSUInteger  port;
+@property (copy)    NSString    *userName;
 
-- (void) setHostName:(NSString *)hostName;
-- (NSString *) hostName;
-
-- (void) setPort:(NSUInteger)port;
-- (NSUInteger) port;
-
-- (void) setUserName:(NSString *)userName;
-- (NSString *)userName;
+- (BOOL) hasPrimaryKey;
 
 - (NSComparisonResult) compare:(FavouriteServer *)favServ;
 

@@ -47,20 +47,19 @@
 		return nil;
 
 	[[self navigationItem] setTitle:@"Favourites"];
-	
+
 	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
 	[[self navigationItem] setRightBarButtonItem:addButton];
 	[addButton release];
 
-	_favouriteServers = [Database favourites];
-	[_favouriteServers retain];
+	_favouriteServers = [[Database fetchAllFavourites] retain];
 	[_favouriteServers sortUsingSelector:@selector(compare:)];
 
 	return self;
 }
 
 - (void) dealloc {
-	[Database saveFavourites:_favouriteServers];
+	[Database storeFavourites:_favouriteServers];
 	[_favouriteServers release];
 
 	[super dealloc];
@@ -97,6 +96,13 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
+		NSUInteger row = [indexPath row];
+
+		// Drop it from the database
+		FavouriteServer *favServ = [_favouriteServers objectAtIndex:row];
+		[Database deleteFavourite:favServ];
+
+		// And remove it from our locally sorted array
 		[_favouriteServers removeObjectAtIndex:[indexPath row]];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
     }
@@ -197,7 +203,7 @@
 	FavouriteServer *newServer = [editView copyFavouriteFromContent];
 	[_favouriteServers addObject:newServer];
 	[newServer release];
-	
+
 	[_favouriteServers sortUsingSelector:@selector(compare:)];
 	[[self tableView] reloadData];
 }

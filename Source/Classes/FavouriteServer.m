@@ -32,16 +32,23 @@
 
 @implementation FavouriteServer
 
+@synthesize primaryKey = _pkey;
+@synthesize displayName = _displayName;
+@synthesize hostName = _hostName;
+@synthesize port = _port;
+@synthesize userName = _userName;
+
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName {
 	self = [super init];
 	if (self == nil)
 		return nil;
-	
+
+	_pkey = -1;
 	_displayName = [displayName copy];
 	_hostName = [hostName copy];
 	_port = port;
 	_userName = [userName copy];
-	
+
 	return self;
 }
 
@@ -57,42 +64,14 @@
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	return [[FavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName];
+	FavouriteServer *favServ = [[FavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName];
+	if ([self hasPrimaryKey])
+		[favServ setPrimaryKey:[self primaryKey]];
+	return favServ;
 }
 
-- (void) setDisplayName:(NSString *)displayName {
-	[_displayName release];
-	_displayName = [displayName copy];
-}
-
-- (NSString *) displayName {
-	return _displayName;
-}
-
-- (void) setHostName:(NSString *)hostName {
-	[_hostName release];
-	_hostName = [hostName copy];
-}
-
-- (NSString *) hostName {
-	return _hostName;
-}
-
-- (void) setPort:(NSUInteger)port {
-	_port = port;
-}
-
-- (NSUInteger) port {
-	return _port;
-}
-
-- (void) setUserName:(NSString *)userName {
-	[_userName release];
-	_userName = [userName copy];
-}
-
-- (NSString *)userName {
-	return _userName;
+- (BOOL) hasPrimaryKey {
+	return _pkey != -1;
 }
 
 - (NSComparisonResult) compare:(FavouriteServer *)favServ {
