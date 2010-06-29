@@ -193,9 +193,9 @@
 				if (err == noErr) {
 					if (data != nil) {
 						Identity *ident = [[Identity alloc] init];
-						ident.persistentId = data;
+						ident.persistent = data;
 						ident.userName = @"Tukoff";
-						[Database saveIdentity:ident];
+						[Database storeIdentity:ident];
 						[ident release];
 						NSLog(@"Stored identity...");
 					}

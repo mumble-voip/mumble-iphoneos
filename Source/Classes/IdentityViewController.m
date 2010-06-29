@@ -113,7 +113,7 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 		[self animateDeleteRowsCount:deleteCount withRowAnimation:UITableViewRowAnimationRight];
 
 		_currentView = currentView;
-		_identities = [[Database identities] retain];
+		_identities = [[Database fetchAllIdentities] retain];
 		[self animateInsertRowsCount:[_identities count] withRowAnimation:UITableViewRowAnimationLeft];
 
 	// View changed to certificate view

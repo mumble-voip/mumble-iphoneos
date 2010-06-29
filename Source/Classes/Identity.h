@@ -30,14 +30,14 @@
 
 @interface Identity : NSObject {
 	NSInteger _pkey;
-	NSData *_persistentId;
+	NSData *_persistent;
 	NSString *_userName;
 	NSString *_fullName;
 	NSString *_emailAddress;
 }
 
 @property (assign) NSInteger primaryKey;
-@property (copy) NSData *persistentId;
+@property (copy) NSData *persistent;
 @property (copy) NSString *userName;
 @property (copy) NSString *fullName;
 @property (copy) NSString *emailAddress;
