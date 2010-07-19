@@ -106,10 +106,10 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2A7116BE91B002B8514 /* libMumbleKit.a */; };
 		28C6EF0A11BBF38100E426C8 /* CountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C6EF0911BBF38100E426C8 /* CountryServerListController.m */; };
+		28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 28F8B04211D97E0B006EFCBC /* sqlite3.c */; };
 		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
 		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
-		28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F9175411B946D10030D649 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -261,13 +261,15 @@
 		28A4CCF4117E1D4D006EB479 /* LogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogEntry.m; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ../MainWindow.xib; sourceTree = "<group>"; };
 		28C6EF0911BBF38100E426C8 /* CountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryServerListController.m; sourceTree = "<group>"; };
+		28F8B04211D97E0B006EFCBC /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = Dependencies/sqlite/sqlite3.c; sourceTree = "<group>"; };
+		28F8B04311D97E0B006EFCBC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = Dependencies/sqlite/sqlite3.h; sourceTree = "<group>"; };
+		28F8B04411D97E0B006EFCBC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = Dependencies/sqlite/sqlite3ext.h; sourceTree = "<group>"; };
 		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
 		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
 		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		28F9174411B946250030D649 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = Dependencies/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		28F9174611B946250030D649 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = Dependencies/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
 		28F9174711B946250030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
-		28F9175411B946D10030D649 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -285,7 +287,6 @@
 				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
 				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
 				28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */,
-				28F9175511B946D10030D649 /* libsqlite3.dylib in Frameworks */,
 				28B436F411C3B18C00EBFD11 /* libMumbleKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,6 +370,7 @@
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				28F8B04011D97E00006EFCBC /* sqlite */,
 				28F9173911B9460D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
@@ -480,6 +482,16 @@
 			name = Database;
 			sourceTree = "<group>";
 		};
+		28F8B04011D97E00006EFCBC /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				28F8B04211D97E0B006EFCBC /* sqlite3.c */,
+				28F8B04311D97E0B006EFCBC /* sqlite3.h */,
+				28F8B04411D97E0B006EFCBC /* sqlite3ext.h */,
+			);
+			name = sqlite;
+			sourceTree = "<group>";
+		};
 		28F9173911B9460D0030D649 /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
@@ -531,7 +543,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				28F9175411B946D10030D649 /* libsqlite3.dylib */,
 				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
@@ -731,6 +742,7 @@
 				287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */,
 				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
 				281D1BA511D66E3C006BE21C /* Identity.m in Sources */,
+				28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,7 +771,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/openssl/include/",
+					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";
@@ -767,6 +779,7 @@
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphonesimulator4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 			};
 			name = Debug;
 		};
@@ -782,7 +795,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/openssl/include/",
+					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";
@@ -790,6 +803,7 @@
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphonesimulator4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

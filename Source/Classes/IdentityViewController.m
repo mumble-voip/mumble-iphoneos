@@ -222,24 +222,25 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 
 - (void) deleteIdentityForRow:(NSUInteger)row {
 	NSLog(@"IdentityViewController: deleteIdentityForRow not implemented.");
+	Identity *ident = [_identities objectAtIndex:row];
+	[Database deleteIdentity:ident];
+	[ident release];
+	[_identities removeObjectAtIndex:row];
 }
 
 - (void) deleteCertificateForRow:(NSUInteger)row {
 	// Delete a certificate from the keychain
 	NSDictionary *dict = [_certificateItems objectAtIndex:row];
 	NSLog(@"Attempting to delete %@", [dict objectForKey:kSecAttrLabel]);
-
-	NSData *persis = [dict objectForKey:kSecValuePersistentRef];
-	NSLog(@"class = %@", NSStringFromClass([persis class]));
+	// This goes against what the documentation says for this fucntion, but Apple has stated that
+	// this is the intended way to delete via a persistent ref through a rdar.
 	NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-						kSecClassIdentity, kSecClass,
-						//[NSArray arrayWithObject:persis],            kSecMatchItemList,
-						[dict objectForKey:kSecAttrDescription], kSecAttrDescription,
+							[dict objectForKey:kSecValuePersistentRef], kSecValuePersistentRef,
 						nil];
-	NSLog(@"persistentRef = %@", [dict objectForKey:kSecValuePersistentRef]);
 	OSStatus err = SecItemDelete((CFDictionaryRef)op);
 	if (err == noErr) {
 		[_certificateItems removeObjectAtIndex:row];
+		NSLog(@"IdentityViewController: Successfully removed certificate.");
 	} else {
 		NSLog(@"CertificateViewController: Failed to SecItemDelete identity. err=%i", (int)err);
 	}
@@ -287,7 +288,7 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 			[items release];
 		}
 	}
-#if 1
+#if 0
 	if (_certificateItems) {
 		[_certificateItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 			// Assume obj is a dictionary

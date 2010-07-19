@@ -34,12 +34,20 @@
 
 static FMDatabase *db = nil;
 
+@interface Database (Private)
++ (BOOL) enableForeignKeySupport;
+@end
+
+
 @implementation Database
 
 //
 // Initialize the database.
 //
 + (void) initializeDatabase {
+
+	NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
+
 	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
 																	   NSUserDomainMask,
 																	   YES);
@@ -59,20 +67,28 @@ static FMDatabase *db = nil;
 		return;
 	}
 
-	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `servers` "
-					  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
-					  @" `name` TEXT,"
-					  @" `hostname` TEXT,"
-					  @" `port` INTEGER DEFAULT 64738,"
-					  @" `username` TEXT)"];
+	if ([Database enableForeignKeySupport] == NO) {
+		NSLog(@"Databse: No foreign key support found in SQLite. Bad things *will* happen.");
+	}
+
+	//[Database dropAllTables];
 
 	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `identities` "
-	                  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+					  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
 					  @" `username` TEXT,"
 					  @" `fullname` TEXT,"
 					  @" `email` TEXT,"
 					  @" `avatar` BLOB,"
-	                  @" `persistent` BLOB)"];
+					  @" `persistent` BLOB)"];
+
+	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `servers` "
+					  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+					  @" `name` TEXT,"
+					  @" `hostname` TEXT,"
+	                  @" `port` INTEGER DEFAULT 64738)"];
+
+	[db executeUpdate:@"ALTER TABLE `servers` ADD `identity` "
+					  @"INTEGER DEFAULT NULL REFERENCES identities(id) ON DELETE SET DEFAULT"];
 
 	[db executeUpdate:@"VACUUM"];
 
@@ -82,40 +98,76 @@ static FMDatabase *db = nil;
 }
 
 //
+// Enable foreign key support in SQLite
+//
++ (BOOL) enableForeignKeySupport {
+	FMResultSet *res;
+	BOOL supported;
+
+	// Check for foreign key support in SQLite
+	res = [db executeQuery:@"PRAGMA foreign_keys"];
+	[res next];
+	supported = [res intForColumnIndex:0] == 0;
+	[res close];
+
+	if (!supported) {
+		return NO;
+	}
+
+	[db executeUpdate:@"PRAGMA foreign_keys = ON"];
+
+	// Check for foreign key support in SQLite
+	res = [db executeQuery:@"PRAGMA foreign_keys"];
+	[res next];
+	supported = [res intForColumnIndex:0] == 1;
+	[res close];
+
+	return supported;
+}
+
+//
 // Tear down the database
 //
 + (void) teardown {
 	[db release];
 }
 
++ (void) dropAllTables {
+	[db executeUpdate:@"DROP TABLE `identities`"];
+	[db executeUpdate:@"DROP TABLE `servers`"];
+}
+
 //
 // Store a single favourite
 //
 + (void) storeFavourite:(FavouriteServer *)favServ {
-	// If the favourite already has a private key, update the currently stored entity
+	// If the favourite already has a primary key, update the currently stored entity
 	if ([favServ hasPrimaryKey]) {
-		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `username`=? WHERE `id`=?",
+		NSLog(@"update!");
+		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `identity`=? WHERE `id`=?",
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
-			[favServ userName],
+			nil,
 			[NSNumber numberWithInt:[favServ primaryKey]]];
 	// If it isn't already stored, store it and update the object's pkey.
 	} else {
 		// We're already inside a transaction if we were called from within
 		// storeFavourites. If that isn't the case, make sure we start a new
 		// transaction.
+		NSLog(@"insert!");
 		BOOL newTransaction = ![db inTransaction];
 		if (newTransaction)
 			[db beginTransaction];
-		[db executeUpdate:@"INSERT INTO `servers` (`name`, `hostname`, `port`, `username`) VALUES (?, ?, ?, ?)",
+		[db executeUpdate:@"INSERT INTO `servers` (`name`, `hostname`, `port`, `identity`) VALUES (?, ?, ?, ?)",
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
-			[favServ userName]];
+			nil];
 		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
 		[res next];
 		[favServ setPrimaryKey:[res intForColumnIndex:0]];
+		NSLog(@"%i...", [favServ primaryKey]);
 		if (newTransaction)
 			[db commit];
 	}
@@ -144,7 +196,7 @@ static FMDatabase *db = nil;
 + (NSMutableArray *) fetchAllFavourites {
 	NSMutableArray *favs = [[NSMutableArray alloc] init];
 
-	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `username` FROM `servers`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `identity` FROM `servers`"];
 
 	while ([res next]) {
 		FavouriteServer *fs = [[FavouriteServer alloc] init];
@@ -152,7 +204,6 @@ static FMDatabase *db = nil;
 		[fs setDisplayName:[res stringForColumnIndex:1]];
 		[fs setHostName:[res stringForColumnIndex:2]];
 		[fs setPort:[res intForColumnIndex:3]];
-		[fs setUserName:[res stringForColumnIndex:4]];
 		[favs addObject:fs];
 	}
 
@@ -166,7 +217,7 @@ static FMDatabase *db = nil;
 //
 + (void) storeIdentity:(Identity *)ident {
 	NSLog(@"StoreIdentity..");
-	// If the favourite already has a private key, update the currently stored entity
+	// If the favourite already has a primary key, update the currently stored entity
 	if ([ident hasPrimaryKey]) {
 		// If it isn't already stored, store it and update the object's pkey.
 		[db executeUpdate:@"UPDATE `identities` SET `username`=?, `fullname`=?, `email`=?, `avatar`=?, `persistent`=? WHERE `id`=?",
@@ -204,13 +255,14 @@ static FMDatabase *db = nil;
 //
 + (NSArray *) fetchAllIdentities {
 	NSMutableArray *idents = [[NSMutableArray alloc] init];
-	FMResultSet *res = [db executeQuery:@"SELECT `persistent`, `username`, `fullname`, `email` FROM `identities`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `persistent`, `username`, `fullname`, `email` FROM `identities`"];
 	while ([res next]) {
 		Identity *ident = [[Identity alloc] init];
-		ident.persistent = [res dataForColumnIndex:0];
-		ident.userName = [res stringForColumnIndex:1];
-		ident.fullName = [res stringForColumnIndex:2];
-		ident.emailAddress = [res stringForColumnIndex:3];
+		ident.primaryKey = [res intForColumnIndex:0];
+		ident.persistent = [res dataForColumnIndex:1];
+		ident.userName = [res stringForColumnIndex:2];
+		ident.fullName = [res stringForColumnIndex:3];
+		ident.emailAddress = [res stringForColumnIndex:4];
 		[idents addObject:ident];
 	}
 	[res close];

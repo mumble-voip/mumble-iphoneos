@@ -38,6 +38,13 @@
 
 #import <MumbleKit/MKCertificate.h>
 
+static void ShowAlertDialog(NSString *title, NSString *msg) {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alert show];
+	});
+}
+
 @implementation IdentityCreationViewController
 
 #pragma mark -
@@ -153,57 +160,37 @@
 		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:_identityName email:_emailAddress];
 		NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
 		if (pkcs12 == nil) {
-			NSLog(@"Certificate generation failed.");
+			ShowAlertDialog(@"Unable to generate certificate",
+							@"Mumble was unable to generate a certificate for the your identity.");
 		} else {
 			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
 			NSArray *items = nil;
 			err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
 			if (err == errSecSuccess && [items count] > 0) {
 				NSDictionary *pkcsDict = [items objectAtIndex:0];
-				NSLog(@"item count = %u", [items count]);
-
-				// Get trust
-				SecTrustRef trust = (SecTrustRef)[pkcsDict objectForKey:(id)kSecImportItemTrust];
-				NSLog(@"trust = %p", trust);
-
 				// Get the SecIdentityRef
 				SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
-				NSLog(@"identity = %p", identity);
-
-#if 0
-				// Get all current identities
-				NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-											kSecClassIdentity, kSecClass,
-									   kCFBooleanTrue, kSecReturnPersistentRef, nil];
-				CFTypeRef result = NULL;
-				err = SecItemCopyMatching((CFDictionaryRef)query, &result);
-				if (err == noErr) {
-					NSLog(@"query success!");
-					NSLog(@"%p .... ", result);
-					NSLog(@"%@ ... ", NSStringFromClass([(id)result class]));
-				}
-#endif
-
-				// Add identity
 				NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-									   (id)identity, kSecValueRef,
-									   kCFBooleanTrue, kSecReturnPersistentRef, nil];
+				                        (id)identity, kSecValueRef,
+				                        kCFBooleanTrue, kSecReturnPersistentRef, nil];
 				NSData *data = nil;
 				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
-				if (err == noErr) {
-					if (data != nil) {
+				if (err == noErr && data != nil) {
 						Identity *ident = [[Identity alloc] init];
 						ident.persistent = data;
 						ident.userName = @"Tukoff";
 						[Database storeIdentity:ident];
 						[ident release];
 						NSLog(@"Stored identity...");
-					}
-				} else {
-					NSLog(@"Failed to add identity to keychain. err=%i", (int)err);
+				// This happens when a certificate with a duplicate subject name is added.
+				} else if (err == noErr && data == nil) {
+					ShowAlertDialog(@"Unable to add identity",
+									@"The certificate of the just-added identity could not be added to the certificate store because it "
+									@"has the same name as a certificate already found in the store.");
 				}
 			} else {
-				NSLog(@"IdentityCreationViewController: SecPKCS12Import failed: err=%i", (int)err);
+				ShowAlertDialog(@"Unable to import generated certificate",
+								@"Mumble was unable to import the generated certificate into the certificate store.");
 			}
 		}
 
