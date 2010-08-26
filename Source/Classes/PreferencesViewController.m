@@ -35,6 +35,7 @@
 @interface PreferencesViewController (Private)
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
 - (void) audioDuckingChanged:(UISwitch *)duckSwitch;
+- (void) forceTCPChanged:(UISwitch *)tcpSwitch;
 @end
 
 @implementation PreferencesViewController
@@ -71,7 +72,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+	return 2;
 }
 
 
@@ -79,6 +80,9 @@
 	// Audio
 	if (section == 0) {
 		return 3;
+	// Network
+	} else if (section == 1) {
+		return 1;
 	}
 
 	return 0;
@@ -123,6 +127,17 @@
 			[[cell textLabel] setText:@"Advanced Audio"];
 			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 		}
+	// Network
+	} else if ([indexPath section] == 1) {
+		if ([indexPath row] == 0) {
+			UISwitch *tcpSwitch = [[UISwitch alloc] init];
+			[tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"ForceTCP"]];
+			[[cell textLabel] setText:@"Force TCP"];
+			[cell setAccessoryView:tcpSwitch];
+			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+			[tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
+			[tcpSwitch release];
+		}
 	}
 
     return cell;
@@ -131,6 +146,8 @@
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	if (section == 0) // Audio
 		return @"Audio";
+	else if (section == 1) // Network
+		return @"Network";
 
 	return @"Default";
 }
@@ -159,6 +176,12 @@
 
 - (void) audioDuckingChanged:(UISwitch *)duckSwitch {
 	[[NSUserDefaults standardUserDefaults] setBool:[duckSwitch isOn] forKey:@"AudioDucking"];
+}
+
+// Network
+
+- (void) forceTCPChanged:(UISwitch *)tcpSwitch {
+	[[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"ForceTCP"];
 }
 
 @end

@@ -49,6 +49,7 @@
 
 	connection = [[MKConnection alloc] init];
 	[connection setDelegate:self];
+	[connection setForceTCP:[[NSUserDefaults standardUserDefaults] boolForKey:@"ForceTCP"]];
 
 	model = [[MKServerModel alloc] initWithConnection:connection];
 	[model addDelegate:self];
