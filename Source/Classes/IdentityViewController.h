@@ -31,8 +31,7 @@
 @interface IdentityViewController : UITableViewController {
 	NSMutableArray *_identities;
 	NSMutableArray *_certificateItems;
-
-	NSUInteger _currentView;
+	NSInteger      _currentView;
 }
 
 - (id) init;

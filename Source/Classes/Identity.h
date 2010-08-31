@@ -29,11 +29,11 @@
 */
 
 @interface Identity : NSObject {
-	NSInteger _pkey;
-	NSData *_persistent;
-	NSString *_userName;
-	NSString *_fullName;
-	NSString *_emailAddress;
+	NSInteger  _pkey;
+	NSData     *_persistent;
+	NSString   *_userName;
+	NSString   *_fullName;
+	NSString   *_emailAddress;
 }
 
 @property (assign) NSInteger primaryKey;

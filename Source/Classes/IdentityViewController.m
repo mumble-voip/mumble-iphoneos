@@ -33,16 +33,17 @@
 #import "Database.h"
 #import "Identity.h"
 
-static NSUInteger IdentityViewControllerIdentityView = 0;
-static NSUInteger IdentityViewControllerCertificateView = 1;
+static NSInteger IdentityViewControllerIdentityView = 0;
+static NSInteger IdentityViewControllerCertificateView = 1;
 
 @interface IdentityViewController (Private)
-- (void) setCurrentView:(NSUInteger)currentView;
+- (void) setCurrentView:(NSInteger)currentView;
 - (void) animateDeleteRowsCount:(NSUInteger)count withRowAnimation:(UITableViewRowAnimation)rowAnimation;
 - (void) animateInsertRowsCount:(NSUInteger)count withRowAnimation:(UITableViewRowAnimation)rowAnimation;
 - (void) deleteIdentityForRow:(NSUInteger)row;
 - (void) deleteCertificateForRow:(NSUInteger)row;
 - (void) fetchCertificates;
+- (void) viewChanged:(UISegmentedControl *)segmentedControl;
 @end
 
 @implementation IdentityViewController
@@ -54,6 +55,8 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 	self = [super init];
 	if (self == nil)
 		return nil;
+
+	_currentView = -1;
 
 	return self;
 }
@@ -84,6 +87,8 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 
 	[flexSpace release];
 	[barSegmented release];
+
+	[self viewChanged:segmentedControl];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -95,13 +100,11 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 	[self.navigationController setToolbarHidden:YES animated:NO];
 }
 
-- (void) setCurrentView:(NSUInteger)currentView {
-	// No change in view, the view just re-appeared.
-	if (currentView == _currentView) {
-		[self.tableView reloadData];
+- (void) setCurrentView:(NSInteger)currentView {
+	BOOL animate = (currentView != _currentView);
 
 	// View changed to identity view
-	} else if (currentView == IdentityViewControllerIdentityView) {
+	if (currentView == IdentityViewControllerIdentityView) {
 		self.navigationItem.title = @"Identities";
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
 		[self.navigationItem setRightBarButtonItem:addButton];
@@ -110,11 +113,13 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 		NSUInteger deleteCount = [_certificateItems count];
 		[_certificateItems release];
 		_certificateItems = nil;
-		[self animateDeleteRowsCount:deleteCount withRowAnimation:UITableViewRowAnimationRight];
+		if (animate)
+			[self animateDeleteRowsCount:deleteCount withRowAnimation:UITableViewRowAnimationRight];
 
 		_currentView = currentView;
 		_identities = [[Database fetchAllIdentities] retain];
-		[self animateInsertRowsCount:[_identities count] withRowAnimation:UITableViewRowAnimationLeft];
+		if (animate)
+			[self animateInsertRowsCount:[_identities count] withRowAnimation:UITableViewRowAnimationLeft];
 
 	// View changed to certificate view
 	} else if (currentView == IdentityViewControllerCertificateView) {
@@ -124,12 +129,17 @@ static NSUInteger IdentityViewControllerCertificateView = 1;
 		NSUInteger deleteCount = [_identities count];
 		[_identities release];
 		_identities = nil;
-		[self animateDeleteRowsCount:deleteCount withRowAnimation:UITableViewRowAnimationLeft];
+		if (animate)
+			[self animateDeleteRowsCount:deleteCount withRowAnimation:UITableViewRowAnimationLeft];
 
 		_currentView = currentView;
 		[self fetchCertificates];
-		[self animateInsertRowsCount:[_certificateItems count] withRowAnimation:UITableViewRowAnimationRight];
+		if (animate)
+			[self animateInsertRowsCount:[_certificateItems count] withRowAnimation:UITableViewRowAnimationRight];
 	}
+
+	if (!animate)
+		[self.tableView reloadData];
 }
 
 - (void) animateDeleteRowsCount:(NSUInteger)count withRowAnimation:(UITableViewRowAnimation)rowAnimation {
