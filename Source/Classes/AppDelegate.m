@@ -45,7 +45,6 @@
 @synthesize window;
 @synthesize navigationController;
 
-
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
 	_launchDate = [[NSDate alloc] init];
 
@@ -54,7 +53,6 @@
 
 	[self reloadPreferences];
 	[Database initializeDatabase];
-	[Database showStoredIdentities];
 
 	// If we're running on anything below OS 3.2, UIDevice does not
 	// respond to the userInterfaceIdiom method. We must assume we're

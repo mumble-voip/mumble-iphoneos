@@ -38,10 +38,13 @@
 
 @implementation ServerRootViewController
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port {
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
 	self = [super init];
 	if (! self)
 		return nil;
+
+	_username = [username copy];
+	_password = [password copy];
 
 	_connection = [[MKConnection alloc] init];
 	[_connection setDelegate:self];
@@ -59,6 +62,11 @@
 }
 
 - (void) dealloc {
+	[_username release];
+	[_password release];
+	[_model release];
+	[_connection release];
+
 	[super dealloc];
 }
 
@@ -150,7 +158,7 @@
 // An SSL connection has been opened to the server.  We should authenticate ourselves.
 //
 - (void) connectionOpened:(MKConnection *)conn {
-	[conn authenticateWithUsername:@"MumbleiPhoneUser" password:nil];
+	[conn authenticateWithUsername:_username password:_password];
 }
 
 #pragma mark MKServerModel Delegate

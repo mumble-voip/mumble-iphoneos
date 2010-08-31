@@ -85,7 +85,12 @@
 
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
 	cell.textLabel.text = [favServ displayName];
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%u", [favServ userName], [favServ hostName], [favServ port]];
+
+	NSString *hostName = [favServ hostName];
+	NSString *userName = [favServ userName];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%u",
+									userName ? userName : @"MumbleUser",
+									hostName ? hostName : @"(no server)", [favServ port]];
 
     return cell;
 }
@@ -130,7 +135,7 @@
 	// Connect
 	if (index == 0) {
 		UINavigationController *navCtrl = [[UINavigationController alloc] init];
-		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName] port:[favServ port]];
+		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName] port:[favServ port] username:[favServ userName] password:[favServ password]];
 		[navCtrl pushViewController:serverRoot animated:NO];
 		[[self navigationController] presentModalViewController:navCtrl animated:YES];
 		[serverRoot release];

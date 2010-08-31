@@ -90,6 +90,10 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `identity` "
 					  @"INTEGER DEFAULT NULL REFERENCES identities(id) ON DELETE SET DEFAULT"];
 
+	// fixme(mkrautz): This is a temporary solution for 0.1.
+	[db executeUpdate:@"ALTER TABLE `servers` ADD `username` TEXT"];
+	[db executeUpdate:@"ALTER TABLE `servers` ADD `password` TEXT"];
+
 	[db executeUpdate:@"VACUUM"];
 
 	if ([db hadError]) {
@@ -144,11 +148,13 @@ static FMDatabase *db = nil;
 	// If the favourite already has a primary key, update the currently stored entity
 	if ([favServ hasPrimaryKey]) {
 		NSLog(@"update!");
-		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `identity`=? WHERE `id`=?",
+		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `identity`=?, `username`=?, `password`=? WHERE `id`=?",
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
 			nil,
+			[favServ userName],
+			[favServ password],
 			[NSNumber numberWithInt:[favServ primaryKey]]];
 	// If it isn't already stored, store it and update the object's pkey.
 	} else {
@@ -159,11 +165,13 @@ static FMDatabase *db = nil;
 		BOOL newTransaction = ![db inTransaction];
 		if (newTransaction)
 			[db beginTransaction];
-		[db executeUpdate:@"INSERT INTO `servers` (`name`, `hostname`, `port`, `identity`) VALUES (?, ?, ?, ?)",
+		[db executeUpdate:@"INSERT INTO `servers` (`name`, `hostname`, `port`, `identity`, `username`, `password`) VALUES (?, ?, ?, ?, ?, ?)",
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
-			nil];
+			nil,
+			[favServ userName],
+			[favServ password]];
 		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
 		[res next];
 		[favServ setPrimaryKey:[res intForColumnIndex:0]];
@@ -196,7 +204,8 @@ static FMDatabase *db = nil;
 + (NSMutableArray *) fetchAllFavourites {
 	NSMutableArray *favs = [[NSMutableArray alloc] init];
 
-	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `identity` FROM `servers`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `identity`, `username`, `password` FROM `servers`"];
+	NSLog(@"resultSet = %p", res);
 
 	while ([res next]) {
 		FavouriteServer *fs = [[FavouriteServer alloc] init];
@@ -204,6 +213,8 @@ static FMDatabase *db = nil;
 		[fs setDisplayName:[res stringForColumnIndex:1]];
 		[fs setHostName:[res stringForColumnIndex:2]];
 		[fs setPort:[res intForColumnIndex:3]];
+		[fs setUserName:[res stringForColumnIndex:5]];
+		[fs setPassword:[res stringForColumnIndex:6]];
 		[favs addObject:fs];
 	}
 

@@ -86,7 +86,7 @@
 	if (section == 0)
 		return 3;
 	if (section == 1)
-		return 4;
+		return 3;
 
 	return 0;
 }
@@ -125,11 +125,13 @@
 	} else if (indexPath.section == 1) {
 		if (indexPath.row == 0) {
 			cell.textLabel.text = @"Preferences";
+#if 0
 		} else if (indexPath.row == 1) {
 			cell.textLabel.text = @"Identities";
-		} else if (indexPath.row == 2) {
+#endif
+		} else if (indexPath.row == 1) {
 			cell.textLabel.text = @"Diagnostics";
-		} else if (indexPath.row == 3) {
+		} else if (indexPath.row == 2) {
 			cell.textLabel.text = @"About";
 		}
 	}
@@ -163,17 +165,19 @@
 			PreferencesViewController *preferences = [[PreferencesViewController alloc] init];
 			[[self navigationController] pushViewController:preferences animated:YES];
 			[preferences release];
+#if 0
 		} else if (indexPath.row == 1) { // Identities
 			IdentityViewController *ident = [[IdentityViewController alloc] init];
 			//CertificateViewController *ident = [[CertificateViewController alloc] init];
 			//IdentitiesTabBarController *ident = [[IdentitiesTabBarController alloc] init];
 			[[self navigationController] pushViewController:ident animated:YES];
 			[ident release];
-		} else if (indexPath.row == 2) { // Diagnostics
+#endif
+		} else if (indexPath.row == 1) { // Diagnostics
 			DiagnosticsViewController *diag = [[DiagnosticsViewController alloc] init];
 			[[self navigationController] pushViewController:diag animated:YES];
 			[diag release];
-		} else if (indexPath.row == 3) { // About
+		} else if (indexPath.row == 2) { // About
 			[self presentAboutDialog];
 		}
 	}

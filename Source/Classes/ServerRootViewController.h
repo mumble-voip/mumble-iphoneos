@@ -36,13 +36,15 @@
 #import <UIKit/UIKit.h>
 
 @interface ServerRootViewController : UITableViewController {
-	MKConnection *_connection;
-	MKServerModel *_model;
+	MKConnection   *_connection;
+	MKServerModel  *_model;
 	NSMutableArray *_channelUsers;
-	MKChannel *_currentChannel;
+	MKChannel      *_currentChannel;
+	NSString       *_username;
+	NSString       *_password;
 }
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port;
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;
 - (void) dealloc;
 
 @end

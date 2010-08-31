@@ -29,14 +29,15 @@
 */
 
 @interface FavouriteServer : NSObject <NSCopying> {
-	NSInteger _pkey;
-	NSString *_displayName;
-	NSString *_hostName;
+	NSInteger  _pkey;
+	NSString   *_displayName;
+	NSString   *_hostName;
 	NSUInteger _port;
-	NSString *_userName;
+	NSString   *_userName;
+	NSString   *_password;
 }
 
-- (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName;
+- (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
 - (id) init;
 - (void) dealloc;
 
@@ -45,6 +46,7 @@
 @property (copy)    NSString    *hostName;
 @property (assign)  NSUInteger  port;
 @property (copy)    NSString    *userName;
+@property (copy)    NSString    *password;
 
 - (BOOL) hasPrimaryKey;
 

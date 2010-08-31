@@ -179,7 +179,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
 			[cell setSecureTextEntry:YES];
 			[cell setValueChangedAction:@selector(passwordChanged:)];
-			// fixme(mkrautz): Grab value from keychain?
+			[cell setTextValue:[_favourite password]];
 		}
 	}
 
@@ -210,7 +210,8 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 }
 
 - (void) passwordChanged:(id)sender {
-	// We should store passwords in keychain.
+	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)sender;
+	[_favourite setPassword:[cell textValue]];
 }
 
 #pragma mark -
