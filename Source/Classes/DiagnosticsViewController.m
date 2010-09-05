@@ -111,6 +111,12 @@
 	[[_preprocessorCell detailTextLabel] setText:@"∞ µs"];
 	[[_preprocessorCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
+	_routeCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RouteCell"];
+	[_routeCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+	[[_routeCell textLabel] setText:@"Route"];
+	[[_routeCell detailTextLabel] setText:@"Unknown"];
+	[[_routeCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+
 	_updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
 	[self updateDiagnostics:nil];
 	
@@ -129,6 +135,7 @@
 	[_buildDateCell release];
 
 	[_preprocessorCell release];
+	[_routeCell release];
 
 	[super dealloc];
 }
@@ -154,7 +161,7 @@
 	if (section == 1) // Application
 		return 4;
 	if (section == 2) // Audio
-		return 1;
+		return 2;
 	return 0;
 }
 
@@ -190,6 +197,8 @@
 	} else if ([indexPath section] == 2) { // Audio
 		if ([indexPath row] == 0) { // Preprocessor
 			return _preprocessorCell;
+		} else if ([indexPath row] == 1) { // Route
+			return _routeCell;
 		}
 	}
 	return nil;
@@ -242,6 +251,8 @@
 	[audio getBenchmarkData:&data];
 
 	[[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
+	[[_routeCell detailTextLabel] setText:[audio currentAudioRoute]];
+
 	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
 }
 

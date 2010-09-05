@@ -41,6 +41,7 @@
 	UITableViewCell *_sinceLaunchCell;
 
 	UITableViewCell *_preprocessorCell;
+	UITableViewCell *_routeCell;
 
 	NSTimer *_updateTimer;
 }
