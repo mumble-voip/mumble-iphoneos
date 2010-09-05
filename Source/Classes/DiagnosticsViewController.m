@@ -95,7 +95,7 @@
 	_buildDateCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_buildDateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_buildDateCell textLabel] setText:@"Build Date"];
-	[[_buildDateCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"]];
+	[[_buildDateCell detailTextLabel] setText:[[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] description]];
 	[[_buildDateCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	_sinceLaunchCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
@@ -284,12 +284,16 @@
 	// Application
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
 	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
-	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] forKey:@"build-date"];
+
+	NSDate *buildDate = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"];
+	NSString *buildDateString = [NSString stringWithFormat:@"%.2f", [buildDate timeIntervalSince1970]];
+	[dict setObject:buildDateString forKey:@"build-date-epoch"];
+
 	[dict setObject:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
 	// Audio
 	[dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
 
-	NSURL *url = [NSURL URLWithString:@"https://mumble-iphoneos.appspot.com/diagnostics"];
+	NSURL *url = [NSURL URLWithString:@"https://mumble-ios.appspot.com/diagnostics"];
 	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0f];
 	[req setHTTPMethod:@"POST"];
 	[req setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
