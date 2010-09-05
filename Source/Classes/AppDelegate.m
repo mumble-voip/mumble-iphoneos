@@ -74,6 +74,8 @@
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	}
+
+	_verCheck = [[VersionChecker alloc] init];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -81,6 +83,7 @@
 }
 
 - (void) dealloc {
+	[_verCheck release];
 	[_launchDate release];
 	[navigationController release];
 	[window release];

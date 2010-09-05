@@ -14,6 +14,7 @@
 		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
+		2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* VersionChecker.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
 		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
@@ -148,6 +149,8 @@
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
 		2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsViewController.m; sourceTree = "<group>"; };
+		2858DBA11233E31B000D6F75 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
+		2858DBA21233E31B000D6F75 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPad.h; sourceTree = "<group>"; };
 		285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPad.m; sourceTree = "<group>"; };
@@ -354,6 +357,8 @@
 				287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */,
 				28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */,
 				28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */,
+				2858DBA11233E31B000D6F75 /* VersionChecker.h */,
+				2858DBA21233E31B000D6F75 /* VersionChecker.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -709,7 +714,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\nexport PATH=$PATH:$HOME/.local/bin\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%d %H:%M:%S\")')\ndefaults write ${PLIST} MumbleBuildDate -string \"${builddate}\"";
+			shellScript = "PLIST=${TARGET_BUILD_DIR}/Mumble.app/Info\n\nexport PATH=$PATH:$HOME/.local/bin\ncd ${PROJECT_DIR}\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%dT%H:%M:%SZ\")')\ndefaults write ${PLIST} MumbleBuildDate -date \"${builddate}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -750,6 +755,7 @@
 				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
 				281D1BA511D66E3C006BE21C /* Identity.m in Sources */,
 				28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */,
+				2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,7 +814,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
@@ -827,7 +833,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = BetaDist;
@@ -852,7 +858,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
@@ -870,7 +876,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -887,7 +893,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -28,23 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "VersionChecker.h"
+#import <Foundation/Foundation.h>
 
-@interface AppDelegate : NSObject <UIApplicationDelegate> {
-	UIWindow                *window;
-	UINavigationController  *navigationController;
-	NSDate                  *_launchDate;
-	VersionChecker          *_verCheck;
+@interface VersionChecker : NSObject {
+	NSURLConnection *_conn;
+	NSMutableData   *_buf;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
-
-- (void) applicationDidFinishLaunching:(UIApplication *)application;
-- (void) applicationWillTerminate:(UIApplication *)application;
-
-- (void) reloadPreferences;
-- (NSTimeInterval) timeIntervalSinceLaunch;
+- (id) init;
+- (void) dealloc;
 
 @end
-
