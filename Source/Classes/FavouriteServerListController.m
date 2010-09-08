@@ -209,6 +209,8 @@
 	[_favouriteServers addObject:newServer];
 	[newServer release];
 
+	[Database storeFavourite:newServer];
+
 	[_favouriteServers sortUsingSelector:@selector(compare:)];
 	[[self tableView] reloadData];
 }
