@@ -159,7 +159,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 		} else if (row == 2) {
 			[cell setLabel:@"Port"];
 			[cell setPlaceholder:FavouriteServerPlaceholderPort];
-			[cell setKeyboardType:UIKeyboardTypeNumberPad];
+			[cell setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
 			[cell setValueChangedAction:@selector(portChanged:)];
 			if ([_favourite port] != 0)
 				[cell setIntValue:[_favourite port]];
