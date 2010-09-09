@@ -53,6 +53,7 @@
 	[_textField setFont:[UIFont systemFontOfSize:14.0f]];
 	[_textField setTextColor:[UIColor colorWithRed:(CGFloat)0x32/0xff green:(CGFloat)0x4f/0xff blue:(CGFloat)0x85/0xff alpha:0xff]];
 	[_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+	[_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
 	[_textField setDelegate:self];
 	[view addSubview:_textField];
 	[_textField release];
