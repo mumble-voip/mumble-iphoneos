@@ -71,7 +71,12 @@
 	[_imageView setImage:[UIImage imageNamed:@"DefaultAvatar"]];
 
 	[_nameLabel	setText:_identityName];
-	[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
+
+	if (_emailAddress != nil && _emailAddress.length > 0) {
+		[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
+	} else {
+		[_emailLabel setText:nil];
+	}
 
 	[_activityIndicator startAnimating];
 }

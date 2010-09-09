@@ -42,6 +42,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 		[alert show];
+		[alert release];
 	});
 }
 
@@ -55,8 +56,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	if (self == nil)
 		return nil;
 
-	_identityName = @"Joe Schmoe";
-	_emailAddress = @"joe@schmoe.ca";
+	// fixme(mkrautz): Can we fetch these from the device?
+	_identityName = nil;
+	_emailAddress = nil;
 
 	return self;
 }
@@ -89,7 +91,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	if (section == 0) // Avatar
 		return 0;
 	if (section == 1) // Identity
-		return 2;
+		return 3;
 
 	return 0;
 }
@@ -123,16 +125,22 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 		if (row == 0) { // Name
 			[cell setLabel:@"Name"];
-			[cell setPlaceholder:@"Optional"];
+			[cell setPlaceholder:@"Mumble User"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
 			[cell setValueChangedAction:@selector(nameChanged:)];
 			[cell setTextValue:_identityName];
 		} else if (row == 1) { // E-mail
 			[cell setLabel:@"Email"];
-			[cell setPlaceholder:@"Optional"];
+			[cell setPlaceholder:@"(Optional)"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setValueChangedAction:@selector(emailChanged:)];
 			[cell setTextValue:_emailAddress];
+		} else if (row == 2) { // Nickname
+			[cell setLabel:@"Nickname"];
+			[cell setPlaceholder:@"(Optional)"];
+			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+			[cell setValueChangedAction:@selector(nicknameChanged:)];
+			[cell setTextValue:_nickname];
 		}
 
 		return cell;
@@ -149,7 +157,21 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) createButtonClicked:(UIBarButtonItem *)doneButton {
-	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:_identityName email:_emailAddress delegate:self];
+	NSString *name, *email;
+	if (_identityName == nil || [_identityName length] == 0) {
+		name = @"Mumble User";
+	} else {
+		name = _identityName;
+	}
+	if (_emailAddress == nil || [_emailAddress length] == 0) {
+		email = nil;
+	} else {
+		// fixme(mkrautz): RegEx this or do a DNS lookup like the desktop client to determine if
+		// the email has a chance to be valid.
+		email = _emailAddress;
+	}
+
+	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:name email:email delegate:self];
 	[[self navigationController] pushViewController:progress animated:YES];
 	[progress release];
 
@@ -157,7 +179,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 		OSStatus err = noErr;
 
 		// Generate a certificate for this identity.
-		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:_identityName email:_emailAddress];
+		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:name email:email];
 		NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
 		if (pkcs12 == nil) {
 			ShowAlertDialog(@"Unable to generate certificate",
@@ -176,12 +198,20 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 				NSData *data = nil;
 				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
 				if (err == noErr && data != nil) {
-						Identity *ident = [[Identity alloc] init];
-						ident.persistent = data;
-						ident.userName = @"Tukoff";
-						[Database storeIdentity:ident];
-						[ident release];
-						NSLog(@"Stored identity...");
+					Identity *ident = [[Identity alloc] init];
+					ident.persistent = data;
+					ident.fullName = name;
+					ident.emailAddress = email;
+					if (_nickname == nil || [_nickname length] == 0) {
+						// fixme(mkrautz): Convert the full name to a nickname.
+						ident.userName = nil;
+					} else {
+						ident.userName = _nickname;
+					}
+
+					[Database storeIdentity:ident];
+					[ident release];
+					NSLog(@"Stored identity...");
 				// This happens when a certificate with a duplicate subject name is added.
 				} else if (err == noErr && data == nil) {
 					ShowAlertDialog(@"Unable to add identity",
@@ -205,16 +235,20 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	_identityName = [[firstNameField textValue] copy];
 }
 
-- (void) emailChangd:(TableViewTextFieldCell *)emailField {
+- (void) emailChanged:(TableViewTextFieldCell *)emailField {
 	[_emailAddress release];
 	_emailAddress = [[emailField textValue] copy];
+}
+
+- (void) nicknameChanged:(TableViewTextFieldCell *)nicknameField {
+	[_nickname release];
+	_nickname = [[nicknameField textValue] copy];
 }
 
 #pragma mark -
 #pragma mark IdentityCreationProgressView delegate
 
 - (void) identityCreationProgressViewDidCancel:(IdentityCreationProgressView *)progressView {
-//	[[self navigationController] popViewControllerUsingTransition:UIViewAnimationTransitionCurlUp];
 	NSLog(@"Cancel not implemented.");
 }
 

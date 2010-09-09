@@ -31,6 +31,7 @@
 @interface IdentityCreationViewController : UITableViewController {
 	NSString *_identityName;
 	NSString *_emailAddress;
+	NSString *_nickname;
 }
 
 - (id) init;

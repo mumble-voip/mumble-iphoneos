@@ -195,8 +195,14 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		}
 
 		Identity *ident = [_identities objectAtIndex:[indexPath row]];
-		cell.textLabel.text = ident.userName;
-
+		if (ident.userName.length > 0) {
+			cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", ident.fullName, ident.userName];
+		} else {
+			cell.textLabel.text = ident.fullName;
+		}
+		if (ident.emailAddress.length > 0) {
+			cell.detailTextLabel.text = ident.emailAddress;
+		}
 		return cell;
 	} else if (_currentView == IdentityViewControllerCertificateView) {
 		static NSString *CellIdentifier = @"CertificateCell";
@@ -208,6 +214,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		// Configure the cell...
 		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
 		cell.textLabel.text = [dict objectForKey:kSecAttrLabel];
+		cell.detailTextLabel.text = nil;
 		return cell;
 	}
 
