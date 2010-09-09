@@ -170,6 +170,11 @@
 	return YES;
 }
 
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+	[textField resignFirstResponder];
+	return TRUE;
+}
+
 #pragma mark -
 #pragma mark UITextInptTraits protocol
 
