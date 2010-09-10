@@ -95,8 +95,7 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	MKAudioSettings settings;
-	settings.inputCodec = MKCodecFormatCELT;
-	settings.outputCodec = MKCodecFormatCELT;
+	settings.codec = MKCodecFormatCELT;
 	settings.quality = 24000;
 	settings.audioPerPacket = 10;
 	settings.noiseSuppression = -42; /* -42 dB */
