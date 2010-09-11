@@ -37,7 +37,8 @@
 #import <MumbleKit/MKAudio.h>
 
 @interface AppDelegate (Private)
- - (void) setupAudio;
+- (void) setupAudio;
+- (void) notifyCrash;
 @end
 
 @implementation AppDelegate
@@ -75,6 +76,8 @@
 		[welcomeScreen release];
 	}
 
+	[self notifyCrash];
+
 	_verCheck = [[VersionChecker alloc] init];
 }
 
@@ -88,6 +91,24 @@
 	[navigationController release];
 	[window release];
 	[super dealloc];
+}
+
+- (void) notifyCrash {
+	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+																	   NSUserDomainMask,
+																	   YES);
+	NSString *directory = [documentDirectories objectAtIndex:0];
+	NSString *crashTokenPath = [directory stringByAppendingPathComponent:@".crashtoken"];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:crashTokenPath]) {
+		NSString *title = @"Beta Crash Reporting";
+		NSString *msg = @"Mumble has detected that it has recently crashed.\n\n"
+						"Don't forget to report your crashes to the beta portal using the crash reporting tool.\n";
+		UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		[alertView show];
+		[alertView release];
+
+		[[NSFileManager defaultManager] removeItemAtPath:crashTokenPath error:nil];
+	}
 }
 
 - (void) setupAudio {

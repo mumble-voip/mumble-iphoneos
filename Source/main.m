@@ -28,8 +28,73 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+static char crashhandler_fn[PATH_MAX] = { 0, };
+static void crashhandler_signal_handler();
+static void crashhandler_signals_setup();
+static void crashhandler_signals_restore();
+static void crashhandler_handle_crash();
+static void crashhandler_init();
+
+static void crashhandler_signal_handler(int signal) {
+	NSLog(@"signalHandler");
+	switch (signal) {
+		case SIGQUIT:
+		case SIGILL:
+		case SIGTRAP:
+		case SIGABRT:
+		case SIGEMT:
+		case SIGFPE:
+		case SIGBUS:
+		case SIGSEGV:
+		case SIGSYS:
+			crashhandler_signals_restore();
+			crashhandler_handle_crash();
+			break;
+		default:
+			break;
+	}
+}
+
+/* These are the signals that according to signal(3) produce a coredump by default. */
+int sigs[] = { SIGQUIT, SIGILL, SIGTRAP, SIGABRT, SIGEMT, SIGFPE, SIGBUS, SIGSEGV, SIGSYS };
+#define NSIGS sizeof(sigs)/sizeof(sigs[0])
+
+static void crashhandler_signals_setup() {
+	for (int i = 0; i < NSIGS; i++) {
+		signal(sigs[i], crashhandler_signal_handler);
+	}
+}
+
+static void crashhandler_signals_restore() {
+	for (int i = 0; i < NSIGS; i++) {
+		signal(sigs[i], NULL);
+	}
+}
+
+static void crashhandler_handle_crash() {
+	NSLog(@"handleCrash!");
+	/* Abuse mtime for figuring out which crashdump we should send. */
+	FILE *f = fopen(crashhandler_fn, "w");
+	fflush(f);
+	fclose(f);
+}
+
+static void crashhandler_init() {
+	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+																	   NSUserDomainMask,
+																	   YES);
+	NSString *directory = [documentDirectories objectAtIndex:0];
+	NSString *dbPath = [directory stringByAppendingPathComponent:@".crashtoken"];
+
+	strlcpy(crashhandler_fn, [dbPath UTF8String], PATH_MAX);
+	NSLog(@"setup crashandler %s", crashhandler_fn);
+
+	crashhandler_signals_setup();
+}
+
 int main(int argc, char *argv[]) {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+	crashhandler_init();
 	int retVal = UIApplicationMain(argc, argv, nil, nil);
 	[pool release];
 	return retVal;
