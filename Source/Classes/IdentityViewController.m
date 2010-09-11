@@ -32,6 +32,7 @@
 #import "IdentityCreationViewController.h"
 #import "Database.h"
 #import "Identity.h"
+#import "CertificateCell.h"
 
 static NSInteger IdentityViewControllerIdentityView = 0;
 static NSInteger IdentityViewControllerCertificateView = 1;
@@ -183,7 +184,6 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 	return 0;
 }
 
-
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
@@ -203,19 +203,23 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		if (ident.emailAddress.length > 0) {
 			cell.detailTextLabel.text = ident.emailAddress;
 		}
+
 		return cell;
+
 	} else if (_currentView == IdentityViewControllerCertificateView) {
 		static NSString *CellIdentifier = @"CertificateCell";
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-		}
+		CertificateCell *cell = (CertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil)
+			cell = [CertificateCell loadFromNib];
 
 		// Configure the cell...
 		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
-		cell.textLabel.text = [dict objectForKey:kSecAttrLabel];
-		cell.detailTextLabel.text = nil;
-		return cell;
+		[cell setSubjectName:[dict objectForKey:kSecAttrLabel]];
+		[cell setEmail:@"user@example.com"];
+		[cell setIssuerText:@"Self-signed certificate"];
+		[cell setExpiryText:@"Expires soon!"];
+
+		return (UITableViewCell *) cell;
 	}
 
 	return nil;
@@ -266,7 +270,15 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (_currentView == IdentityViewControllerIdentityView)
+		return 44.0f;
+	if (_currentView == IdentityViewControllerCertificateView)
+		return 85.0f; // fixme(mkrautz): Hard coded because everything else is a hassle.
+	return 0.0f;
 }
 
 #pragma mark -
