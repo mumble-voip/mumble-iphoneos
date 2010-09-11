@@ -104,6 +104,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 - (void) setCurrentView:(NSInteger)currentView {
 	BOOL animate = (currentView != _currentView);
 
+	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+
 	// View changed to identity view
 	if (currentView == IdentityViewControllerIdentityView) {
 		self.navigationItem.title = @"Identities";
