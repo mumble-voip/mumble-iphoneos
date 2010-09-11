@@ -34,6 +34,7 @@
 	NSString   *_userName;
 	NSString   *_fullName;
 	NSString   *_emailAddress;
+	NSData     *_avatarData;
 }
 
 @property (assign) NSInteger primaryKey;
@@ -41,7 +42,12 @@
 @property (copy) NSString *userName;
 @property (copy) NSString *fullName;
 @property (copy) NSString *emailAddress;
+@property (copy) NSData *avatarData;
+@property (copy, getter=avatar, setter=setAvatar:) UIImage *avatar;
 
 - (BOOL) hasPrimaryKey;
+
+- (UIImage *) avatar;
+- (void) setAvatar:(UIImage *)image;
 
 @end

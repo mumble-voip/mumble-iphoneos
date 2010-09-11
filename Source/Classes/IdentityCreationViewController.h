@@ -28,10 +28,13 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface IdentityCreationViewController : UITableViewController {
-	NSString *_identityName;
-	NSString *_emailAddress;
-	NSString *_nickname;
+@interface IdentityCreationViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource,
+																   UIImagePickerControllerDelegate,
+																   UIActionSheetDelegate> {
+	NSString  *_identityName;
+	NSString  *_emailAddress;
+	NSString  *_nickname;
+	UIImage   *_avatarImage;
 }
 
 - (id) init;

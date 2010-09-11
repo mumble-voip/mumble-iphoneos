@@ -37,6 +37,7 @@
 @synthesize userName = _userName;
 @synthesize fullName = _fullName;
 @synthesize emailAddress = _emailAddress;
+@synthesize avatarData = _avatarData;
 
 - (id) init {
 	self = [super init];
@@ -50,6 +51,22 @@
 
 - (BOOL) hasPrimaryKey {
 	return _pkey != -1;
+}
+
+- (UIImage *) avatar {
+	if (_avatarData == nil)
+		return nil;
+
+	return [UIImage imageWithData:_avatarData];
+}
+
+- (void) setAvatar:(UIImage *)image {
+	[_avatarData release];
+	if (image == nil) {
+		_avatarData = nil;
+	} else {
+		_avatarData = [UIImagePNGRepresentation(image) retain];
+	}
 }
 
 @end

@@ -22,6 +22,8 @@
 		2858A596123B9EE000A82155 /* certificate512.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858A590123B9EE000A82155 /* certificate512.png */; };
 		2858A598123BA05E00A82155 /* certificate32.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858A597123BA05E00A82155 /* certificate32.png */; };
 		2858A5AD123BA08D00A82155 /* CertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* CertificateCell.m */; };
+		2858A626123BB98700A82155 /* AvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A625123BB98700A82155 /* AvatarCell.m */; };
+		2858A62C123BB9B300A82155 /* AvatarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A62B123BB9B300A82155 /* AvatarCell.xib */; };
 		2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* VersionChecker.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
@@ -143,6 +145,9 @@
 		2858A597123BA05E00A82155 /* certificate32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificate32.png; path = Resources/icons/ios/certificate32.png; sourceTree = "<group>"; };
 		2858A5AB123BA08D00A82155 /* CertificateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCell.h; sourceTree = "<group>"; };
 		2858A5AC123BA08D00A82155 /* CertificateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCell.m; sourceTree = "<group>"; };
+		2858A624123BB98700A82155 /* AvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarCell.h; sourceTree = "<group>"; };
+		2858A625123BB98700A82155 /* AvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarCell.m; sourceTree = "<group>"; };
+		2858A62B123BB9B300A82155 /* AvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AvatarCell.xib; sourceTree = "<group>"; };
 		2858DBA11233E31B000D6F75 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		2858DBA21233E31B000D6F75 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
@@ -332,6 +337,8 @@
 				2858DBA21233E31B000D6F75 /* VersionChecker.m */,
 				2858A5AB123BA08D00A82155 /* CertificateCell.h */,
 				2858A5AC123BA08D00A82155 /* CertificateCell.m */,
+				2858A624123BB98700A82155 /* AvatarCell.h */,
+				2858A625123BB98700A82155 /* AvatarCell.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -492,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				2858A58A123B9EC700A82155 /* icons */,
+				2858A62B123BB9B300A82155 /* AvatarCell.xib */,
 				2858A57F123B9E5700A82155 /* CertificateCell.xib */,
 				28763A9411D2B056009DB8B6 /* DefaultAvatar.png */,
 				287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */,
@@ -637,6 +645,7 @@
 				2858A595123B9EE000A82155 /* certificate256.png in Resources */,
 				2858A596123B9EE000A82155 /* certificate512.png in Resources */,
 				2858A598123BA05E00A82155 /* certificate32.png in Resources */,
+				2858A62C123BB9B300A82155 /* AvatarCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,6 +707,7 @@
 				28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */,
 				2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */,
 				2858A5AD123BA08D00A82155 /* CertificateCell.m in Sources */,
+				2858A626123BB98700A82155 /* AvatarCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

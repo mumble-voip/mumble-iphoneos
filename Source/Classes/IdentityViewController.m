@@ -203,6 +203,11 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		if (ident.emailAddress.length > 0) {
 			cell.detailTextLabel.text = ident.emailAddress;
 		}
+		if (ident.avatar != nil) {
+			cell.imageView.image = ident.avatar;
+		} else {
+			cell.imageView.image = [UIImage imageNamed:@"DefaultAvatar"];
+		}
 
 		return cell;
 
@@ -274,11 +279,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (_currentView == IdentityViewControllerIdentityView)
-		return 44.0f;
-	if (_currentView == IdentityViewControllerCertificateView)
-		return 85.0f; // fixme(mkrautz): Hard coded because everything else is a hassle.
-	return 0.0f;
+	return 85.0f;
 }
 
 #pragma mark -

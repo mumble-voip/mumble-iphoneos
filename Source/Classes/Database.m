@@ -90,7 +90,6 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `identity` "
 					  @"INTEGER DEFAULT NULL REFERENCES identities(id) ON DELETE SET DEFAULT"];
 
-	// fixme(mkrautz): This is a temporary solution for 0.1.
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `username` TEXT"];
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `password` TEXT"];
 
@@ -227,12 +226,11 @@ static FMDatabase *db = nil;
 // Store identity
 //
 + (void) storeIdentity:(Identity *)ident {
-	NSLog(@"StoreIdentity..");
 	// If the favourite already has a primary key, update the currently stored entity
 	if ([ident hasPrimaryKey]) {
 		// If it isn't already stored, store it and update the object's pkey.
 		[db executeUpdate:@"UPDATE `identities` SET `username`=?, `fullname`=?, `email`=?, `avatar`=?, `persistent`=? WHERE `id`=?",
-			ident.userName, ident.fullName, ident.emailAddress, nil, ident.persistent,
+			ident.userName, ident.fullName, ident.emailAddress, ident.avatarData, ident.persistent,
 			[NSNumber numberWithInt:[ident primaryKey]]];
 	} else {
 		// We're already inside a transaction if we were called from within
@@ -242,10 +240,9 @@ static FMDatabase *db = nil;
 		if (newTransaction)
 			[db beginTransaction];
 		[db executeUpdate:@"INSERT INTO `identities` (`username`, `fullname`, `email`, `avatar`, `persistent`) VALUES (?, ?, ?, ?, ?)",
-			ident.userName, ident.fullName, ident.emailAddress, nil, ident.persistent];
+			ident.userName, ident.fullName, ident.emailAddress, ident.avatarData, ident.persistent];
 		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
 		[res next];
-		NSLog(@"pkey = %i", [res intForColumn:0]);
 		[ident setPrimaryKey:[res intForColumnIndex:0]];
 		if (newTransaction)
 			[db commit];
@@ -266,7 +263,7 @@ static FMDatabase *db = nil;
 //
 + (NSArray *) fetchAllIdentities {
 	NSMutableArray *idents = [[NSMutableArray alloc] init];
-	FMResultSet *res = [db executeQuery:@"SELECT `id`, `persistent`, `username`, `fullname`, `email` FROM `identities`"];
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `persistent`, `username`, `fullname`, `email`, `avatar` FROM `identities`"];
 	while ([res next]) {
 		Identity *ident = [[Identity alloc] init];
 		ident.primaryKey = [res intForColumnIndex:0];
@@ -274,6 +271,7 @@ static FMDatabase *db = nil;
 		ident.userName = [res stringForColumnIndex:2];
 		ident.fullName = [res stringForColumnIndex:3];
 		ident.emailAddress = [res stringForColumnIndex:4];
+		ident.avatarData = [res dataForColumnIndex:5];
 		[idents addObject:ident];
 	}
 	[res close];
@@ -289,16 +287,6 @@ static FMDatabase *db = nil;
 		[Database storeIdentity:ident];
 	}
 	[db commit];
-}
-
-+ (void) showStoredIdentities {
-	FMResultSet *res = [db executeQuery:@"SELECT `username`, `persistent` FROM `identities`"];
-	while ([res next]) {
-		NSString *boom = [[NSString alloc] initWithData:[res dataForColumnIndex:1] encoding:NSUTF8StringEncoding];
-		NSLog(@"username=%@, persistent=%@", [res stringForColumnIndex:0], boom);
-		[boom release];
-	}
-	[res close];
 }
 
 @end

@@ -28,26 +28,19 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class IdentityCreationProgressView;
-
-@protocol IdentityCreationProgressViewDelegate
-- (void) identityCreationProgressViewDidCancel:(IdentityCreationProgressView *)progressView;
-@end
-
 @interface IdentityCreationProgressView : UIViewController {
-	IBOutlet UIActivityIndicatorView *_activityIndicator;
-	IBOutlet UIImageView *_imageView;
-	IBOutlet UILabel *_nameLabel;
-	IBOutlet UILabel *_emailLabel;
-	IBOutlet UIButton *_cancelButton;
+	IBOutlet UIActivityIndicatorView  *_activityIndicator;
+	IBOutlet UIImageView              *_imageView;
+	IBOutlet UILabel                  *_nameLabel;
+	IBOutlet UILabel                  *_emailLabel;
 
-	NSString *_identityName;
-	NSString *_emailAddress;
-	id _delegate;
+	NSString                          *_identityName;
+	NSString                          *_emailAddress;
+	UIImage                           *_avatarImage;
+	id                                _delegate;
 }
 
-- (id) initWithName:(NSString *)name email:(NSString *)email delegate:(id)delegate;
+- (id) initWithName:(NSString *)name email:(NSString *)email image:(UIImage *)image;
 - (void) dealloc;
-- (IBAction) cancelButtonClicked:(UIButton *)cancelButon;
 
 @end

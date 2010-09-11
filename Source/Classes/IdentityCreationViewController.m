@@ -35,6 +35,7 @@
 #import "IdentityViewController.h"
 #import "Database.h"
 #import "Identity.h"
+#import "AvatarCell.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -45,6 +46,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 		[alert release];
 	});
 }
+
+@interface IdentityCreationViewController (Private)
+- (void) deselectSelectedRowAnimated:(BOOL)animated;
+- (void) presentExistingImagePicker;
+- (void) presentCameraImagePicker;
+@end
 
 @implementation IdentityCreationViewController
 
@@ -59,11 +66,15 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	// fixme(mkrautz): Can we fetch these from the device?
 	_identityName = nil;
 	_emailAddress = nil;
+	_avatarImage = [UIImage imageNamed:@"DefaultAvatar"];
 
 	return self;
 }
 
 - (void) dealloc {
+	[_identityName release];
+	[_emailAddress release];
+	[_avatarImage release];
 	[super dealloc];
 }
 
@@ -80,6 +91,43 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 #pragma mark -
+#pragma mark Table view delegate
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([indexPath section] == 0) {
+		return 155.0f;
+	} else {
+		return 44.0f;
+	}
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	// We can only select the avatar.
+	if ([indexPath section] != 0)
+		return;
+
+	// If the device can take pictures, give the user a choice between taking a new picture,
+	// or picking one from the photo library.
+	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+		UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Select Avatar" delegate:self
+														cancelButtonTitle:@"Cancel"
+														destructiveButtonTitle:nil
+														otherButtonTitles:@"Take Picture", @"Use Existing",
+														nil];
+		[sheet showInView:[self tableView]];
+		[sheet release];
+
+	// If not camera is available, pop up the photo library picker immediately.
+	} else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+		[self presentExistingImagePicker];
+
+	// Can this happen?
+	} else {
+		[self deselectSelectedRowAnimated:NO];
+	}
+}
+
+#pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -89,7 +137,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) // Avatar
-		return 0;
+		return 1;
 	if (section == 1) // Identity
 		return 3;
 
@@ -105,15 +153,22 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	return @"Default";
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-	if (section == 0) // Avatar
-		return @"Not Yet Implemented";
-
-	return nil;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath section] == 1) { // Identity
+
+	if ([indexPath section] == 0) { // Avatar
+		AvatarCell *cell = (AvatarCell *)[tableView dequeueReusableCellWithIdentifier:@"AvatarCell"];
+		if (cell == nil) {
+			cell = [AvatarCell loadFromNib];
+		}
+
+		UIView *transparentBackground = [[UIView alloc] initWithFrame:CGRectZero];
+		transparentBackground.backgroundColor = [UIColor clearColor];
+		cell.backgroundView = transparentBackground;
+		cell.selectedBackgroundView = transparentBackground;
+		[cell setAvatarImage:_avatarImage];
+
+		 return cell;
+	} else if ([indexPath section] == 1) { // Identity
 		NSUInteger row = [indexPath row];
 		static NSString *CellIdentifier = @"IdentityCreationTextFieldCell";
 		TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -171,7 +226,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 		email = _emailAddress;
 	}
 
-	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:name email:email delegate:self];
+	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:name email:email image:_avatarImage];
 	[[self navigationController] pushViewController:progress animated:YES];
 	[progress release];
 
@@ -198,10 +253,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 				NSData *data = nil;
 				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
 				if (err == noErr && data != nil) {
+
 					Identity *ident = [[Identity alloc] init];
 					ident.persistent = data;
 					ident.fullName = name;
 					ident.emailAddress = email;
+					ident.avatar = _avatarImage;
 					if (_nickname == nil || [_nickname length] == 0) {
 						// fixme(mkrautz): Convert the full name to a nickname.
 						ident.userName = nil;
@@ -246,10 +303,68 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 #pragma mark -
-#pragma mark IdentityCreationProgressView delegate
+#pragma mark UIActionSheet delegate
 
-- (void) identityCreationProgressViewDidCancel:(IdentityCreationProgressView *)progressView {
-	NSLog(@"Cancel not implemented.");
+- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)idx {
+	if (idx == 0) { // Take Picture
+		[self presentCameraImagePicker];
+	} else if (idx == 1) { // Use Existing
+		[self presentExistingImagePicker];
+	}
+}
+
+#pragma mark -
+#pragma mark UIImagePickerController delegate
+
+- (void) imagePickerController:(UIImagePickerController *)imagePicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+	// We only allow users to pick images, and we always allow them to edit them.
+	//
+	// The default iOS UIImagePickerController only allows users to crop their images
+	// to a 320x320 rect.  Since we expect rectangular images, it's an OK fit. We can
+	// just resize them if we want a smaller image.
+	UIImage *editedImage = [info objectForKey:UIImagePickerControllerEditedImage];
+	_avatarImage = [[UIImage alloc] initWithCGImage:[editedImage CGImage]];
+	[self dismissModalViewControllerAnimated:YES];
+
+	[self deselectSelectedRowAnimated:NO];
+	[[self tableView] reloadData];
+}
+
+- (void) imagePickerControllerDidCancel:(UIImagePickerController *)imagePicker {
+	[self dismissModalViewControllerAnimated:YES];
+	[self deselectSelectedRowAnimated:NO];
+	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:NO];
+}
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void) deselectSelectedRowAnimated:(BOOL)animated {
+	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:animated];
+}													 
+
+- (void) presentExistingImagePicker {
+	UIImagePickerController *imgPicker = [[UIImagePickerController alloc] init];
+	[imgPicker setDelegate:self];
+	[imgPicker setAllowsEditing:YES];
+	[imgPicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+	[self presentModalViewController:imgPicker animated:YES];
+	[imgPicker release];
+}
+
+- (void) presentCameraImagePicker {
+	UIImagePickerController *imgPicker = [[UIImagePickerController alloc] init];
+
+	// Use front-facing camera, if available.
+	if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
+		[imgPicker setCameraDevice:UIImagePickerControllerCameraDeviceFront];
+	}
+
+	[imgPicker setDelegate:self];
+	[imgPicker setAllowsEditing:YES];
+	[imgPicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+	[self presentModalViewController:imgPicker animated:YES];
+	[imgPicker release];
 }
 
 @end

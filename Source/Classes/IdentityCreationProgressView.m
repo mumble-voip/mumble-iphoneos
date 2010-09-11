@@ -32,14 +32,17 @@
 
 @implementation IdentityCreationProgressView
 
-- (id) initWithName:(NSString *)name email:(NSString *)email delegate:(id)delegate {
+- (id) initWithName:(NSString *)name email:(NSString *)email image:(UIImage *)image {
 	self = [super initWithNibName:@"IdentityCreationProgressView" bundle:nil];
 	if (self == nil)
 		return nil;
 
-	_identityName = [name copy];
-	_emailAddress = [email copy];
-	_delegate = delegate;
+	_identityName = [name retain];
+	_emailAddress = [email retain];
+	_avatarImage = [image retain];
+	if (_avatarImage == nil) {
+		_avatarImage = [UIImage imageNamed:@"DefaultAvatar"];
+	}
 
 	return self;
 }
@@ -47,6 +50,7 @@
 - (void) dealloc {
 	[_identityName release];
 	[_emailAddress release];
+	[_avatarImage release];
 
 	[super dealloc];
 }
@@ -61,15 +65,12 @@
 	[[_imageView layer] setBorderWidth:1.0f];
 	[[_imageView layer] setBorderColor:[[UIColor colorWithRed:0.298 green:0.337 blue:0.424 alpha:1.0] CGColor]];
 
-#if 1
 	[[_imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
 	[[_imageView layer] setShadowOffset:CGSizeMake(-1.0f, 1.0f)];
 	[[_imageView layer] setShadowOpacity:1.0f];
 	[[_imageView layer] setShadowRadius:1.0f];
-#endif
 
-	[_imageView setImage:[UIImage imageNamed:@"DefaultAvatar"]];
-
+	[_imageView setImage:_avatarImage];
 	[_nameLabel	setText:_identityName];
 
 	if (_emailAddress != nil && _emailAddress.length > 0) {
@@ -79,11 +80,6 @@
 	}
 
 	[_activityIndicator startAnimating];
-}
-
-- (void) cancelButtonClicked:(UIButton *)cancelButon {
-	if ([_delegate respondsToSelector:@selector(identityCreationProgressViewDidCancel:)])
-		[_delegate identityCreationProgressViewDidCancel:self];
 }
 
 @end
