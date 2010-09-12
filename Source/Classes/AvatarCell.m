@@ -30,10 +30,6 @@
 
 #import "AvatarCell.h"
 
-@interface AvatarCell (ImageOps)
-+ (UIImage *) highlightedImageFromUIImage:(UIImage *)image;
-@end
-
 @implementation AvatarCell
 
 - (void) dealloc {

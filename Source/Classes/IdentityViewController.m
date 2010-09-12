@@ -34,6 +34,8 @@
 #import "Identity.h"
 #import "CertificateCell.h"
 
+#import <MumbleKit/MKCertificate.h>
+
 static NSInteger IdentityViewControllerIdentityView = 0;
 static NSInteger IdentityViewControllerCertificateView = 1;
 
@@ -220,11 +222,11 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 			cell = [CertificateCell loadFromNib];
 
 		// Configure the cell...
-		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
-		[cell setSubjectName:[dict objectForKey:kSecAttrLabel]];
-		[cell setEmail:@"user@example.com"];
-		[cell setIssuerText:@"Self-signed certificate"];
-		[cell setExpiryText:@"Expires soon!"];
+		MKCertificate *cert = [_certificateItems objectAtIndex:[indexPath row]];
+		[cell setSubjectName:[cert commonName]];
+		[cell setEmail:[cert emailAddress]];
+		[cell setIssuerText:[cert issuerName]];
+		[cell setExpiryText:[[cert expiryDate] description]];
 
 		return (UITableViewCell *) cell;
 	}
@@ -307,39 +309,26 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
 						   kSecClassIdentity,    kSecClass,
 						   kCFBooleanTrue,       kSecReturnRef,
-						   kCFBooleanTrue,       kSecReturnAttributes,
-						   kCFBooleanTrue,       kSecReturnPersistentRef,
 						   kSecMatchLimitAll,    kSecMatchLimit,
 						   nil];
-	CFTypeRef result = NULL;
-	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, &result);
-	if (err == noErr) {
-		if (result != NULL) {
-			NSArray *items = (NSArray *)result;
-			_certificateItems = [items mutableCopy];
-			[items release];
+	NSArray *array = nil;
+	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
+	if (err != noErr || array == nil) {
+		NSLog(@"Unable to fetch.");
+		[array release];
+		return;
+	}
+
+	_certificateItems = [[NSMutableArray alloc] init];
+
+	for (id obj in array) {
+		SecCertificateRef secCert;
+		if (SecIdentityCopyCertificate((SecIdentityRef)obj, &secCert) == noErr) {
+			NSData *secData = (NSData *)SecCertificateCopyData(secCert);
+			MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+			[_certificateItems addObject:cert];
 		}
 	}
-#if 0
-	if (_certificateItems) {
-		[_certificateItems enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-			// Assume obj is a dictionary
-			NSDictionary *dict = (NSDictionary *)obj;
-			NSLog(@"%p", dict);
-			[dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-				NSLog(@"key = %@", key);
-				NSLog(@"val class = %@", NSStringFromClass([obj class]));
-			}];
-			NSLog(@"Label: %@", [dict objectForKey:kSecAttrLabel]);
-			NSLog(@"Issuer: %@", [dict objectForKey:kSecAttrIssuer]);
-			NSLog(@"Subject: %@", [dict objectForKey:kSecAttrSubject]);
-			NSLog(@"%@ %@", kSecReturnPersistentRef, kSecReturnRef);
-			NSLog(@"Persistent: %@", [dict objectForKey:kSecValuePersistentRef]);
-			//NSLog(@"Data: %@", [dict objectForKey:@"certdata"]);
-			NSLog(@"---");
-		}];
-	}
-#endif
 }
 
 @end
