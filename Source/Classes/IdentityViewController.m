@@ -226,7 +226,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		[cell setSubjectName:[cert commonName]];
 		[cell setEmail:[cert emailAddress]];
 		[cell setIssuerText:[cert issuerName]];
-		[cell setExpiryText:[[cert expiryDate] description]];
+		[cell setExpiryText:[[cert notAfter] description]];
 
 		return (UITableViewCell *) cell;
 	}
