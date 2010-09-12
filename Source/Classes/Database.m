@@ -52,8 +52,20 @@ static FMDatabase *db = nil;
 																	   NSUserDomainMask,
 																	   YES);
 	NSString *directory = [documentDirectories objectAtIndex:0];
-	NSString *dbPath = [directory stringByAppendingPathComponent:@"mumble.sqlite"];
 
+	NSError *err = nil;
+	NSFileManager *manager = [NSFileManager defaultManager];
+
+	// Hide the SQLite database from the iTunes document inspector.
+	NSString *oldPath = [directory stringByAppendingPathComponent:@"mumble.sqlite"];
+	NSString *newPath = [directory stringByAppendingPathComponent:@".mumble.sqlite"];
+	if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
+		if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
+			NSLog(@"Database: Unable to move file to new spot");
+		}
+	}
+
+	NSString *dbPath = newPath;
 	db = [[FMDatabase alloc] initWithPath:dbPath];
 	if (!db)
 		return;
