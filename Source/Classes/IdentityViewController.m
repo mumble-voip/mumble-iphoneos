@@ -191,7 +191,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	if (_currentView == IdentityViewControllerIdentityView) {
 		static NSString *CellIdentifier = @"IdentityCell";
@@ -226,7 +226,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 			cell = [CertificateCell loadFromNib];
 
 		// Configure the cell...
-		MKCertificate *cert = [_certificateItems objectAtIndex:[indexPath row]];
+		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+		MKCertificate *cert = [dict objectForKey:@"cert"];
 		[cell setSubjectName:[cert commonName]];
 		[cell setEmail:[cert emailAddress]];
 		[cell setIssuerText:[cert issuerName]];
@@ -239,11 +240,11 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 	return nil;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
 		if (_currentView == IdentityViewControllerIdentityView) {
 			[self deleteIdentityForRow:[indexPath row]];
@@ -256,7 +257,6 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 }
 
 - (void) deleteIdentityForRow:(NSUInteger)row {
-	NSLog(@"IdentityViewController: deleteIdentityForRow not implemented.");
 	Identity *ident = [_identities objectAtIndex:row];
 	[Database deleteIdentity:ident];
 	[ident release];
@@ -266,18 +266,15 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 - (void) deleteCertificateForRow:(NSUInteger)row {
 	// Delete a certificate from the keychain
 	NSDictionary *dict = [_certificateItems objectAtIndex:row];
-	NSLog(@"Attempting to delete %@", [dict objectForKey:kSecAttrLabel]);
+
 	// This goes against what the documentation says for this fucntion, but Apple has stated that
 	// this is the intended way to delete via a persistent ref through a rdar.
 	NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-							[dict objectForKey:kSecValuePersistentRef], kSecValuePersistentRef,
+							[dict objectForKey:@"persistentRef"], kSecValuePersistentRef,
 						nil];
 	OSStatus err = SecItemDelete((CFDictionaryRef)op);
 	if (err == noErr) {
 		[_certificateItems removeObjectAtIndex:row];
-		NSLog(@"IdentityViewController: Successfully removed certificate.");
-	} else {
-		NSLog(@"CertificateViewController: Failed to SecItemDelete identity. err=%i", (int)err);
 	}
 }
 
@@ -286,7 +283,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (_currentView == IdentityViewControllerCertificateView) {
-		MKCertificate *cert = [_certificateItems objectAtIndex:[indexPath row]];
+		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+		MKCertificate *cert = [dict objectForKey:@"cert"];
 		CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
 		[[self navigationController] pushViewController:certView animated:YES];
 		[certView release];
@@ -309,7 +307,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		[[self navigationController] presentModalViewController:navCtrl animated:YES];
 		[navCtrl release];
 	} else if (_currentView == IdentityViewControllerCertificateView) {
-		NSLog(@"IdentityViewController: Add view for Certificate View not implemented.");
+		// Implement me
 	}
 }
 
@@ -319,25 +317,33 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 - (void) fetchCertificates {
 	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
 						   kSecClassIdentity,    kSecClass,
-						   kCFBooleanTrue,       kSecReturnRef,
+						   kCFBooleanTrue,       kSecReturnPersistentRef,
 						   kSecMatchLimitAll,    kSecMatchLimit,
 						   nil];
 	NSArray *array = nil;
 	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
 	if (err != noErr || array == nil) {
-		NSLog(@"Unable to fetch.");
 		[array release];
 		return;
 	}
 
 	_certificateItems = [[NSMutableArray alloc] init];
 
-	for (id obj in array) {
-		SecCertificateRef secCert;
-		if (SecIdentityCopyCertificate((SecIdentityRef)obj, &secCert) == noErr) {
-			NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-			MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
-			[_certificateItems addObject:cert];
+	for (NSData *persistentRef in array) {
+		query = [NSDictionary dictionaryWithObjectsAndKeys:
+					persistentRef,      kSecValuePersistentRef,
+					kCFBooleanTrue,     kSecReturnRef,
+					kSecMatchLimitOne,  kSecMatchLimit,
+				 nil];
+		SecIdentityRef identity = NULL;
+		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
+			SecCertificateRef secCert;
+			if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+				NSData *secData = (NSData *)SecCertificateCopyData(secCert);
+				MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+				[_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+											  cert, @"cert", persistentRef, @"persistentRef", nil]];
+			}
 		}
 	}
 }
