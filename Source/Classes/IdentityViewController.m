@@ -33,6 +33,7 @@
 #import "Database.h"
 #import "Identity.h"
 #import "CertificateCell.h"
+#import "CertificateViewController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -69,7 +70,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setCurrentView:IdentityViewControllerIdentityView];
+	if (_currentView == -1)
+		[self setCurrentView:IdentityViewControllerIdentityView];
 	[self.navigationController setToolbarHidden:NO animated:NO];
 }
 
@@ -81,7 +83,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 							 nil];
 	UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:segmentItems];
 	[segmentedControl setSegmentedControlStyle:UISegmentedControlStyleBar];
-	[segmentedControl setSelectedSegmentIndex:0];
+	[segmentedControl setSelectedSegmentIndex:_currentView];
 	[segmentedControl addTarget:self action:@selector(viewChanged:) forControlEvents:UIControlEventValueChanged];
 	UIBarButtonItem *barSegmented = [[UIBarButtonItem alloc] initWithCustomView:segmentedControl];
 	[segmentedControl release];
@@ -213,6 +215,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 			cell.imageView.image = [UIImage imageNamed:@"DefaultAvatar"];
 		}
 
+		[cell setAccessoryType:UITableViewCellAccessoryNone];
+
 		return cell;
 
 	} else if (_currentView == IdentityViewControllerCertificateView) {
@@ -227,6 +231,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		[cell setEmail:[cert emailAddress]];
 		[cell setIssuerText:[cert issuerName]];
 		[cell setExpiryText:[[cert notAfter] description]];
+		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 
 		return (UITableViewCell *) cell;
 	}
@@ -280,6 +285,12 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (_currentView == IdentityViewControllerCertificateView) {
+		MKCertificate *cert = [_certificateItems objectAtIndex:[indexPath row]];
+		CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
+		[[self navigationController] pushViewController:certView animated:YES];
+		[certView release];
+	}
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -88,6 +88,7 @@
 		287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */; };
 		287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
 		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
@@ -232,6 +233,8 @@
 		287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
 		287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		288D6B5E123D08EE00D37EDE /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
+		288D6B5F123D08EE00D37EDE /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
@@ -339,6 +342,8 @@
 				2858A5AC123BA08D00A82155 /* CertificateCell.m */,
 				2858A624123BB98700A82155 /* AvatarCell.h */,
 				2858A625123BB98700A82155 /* AvatarCell.m */,
+				288D6B5E123D08EE00D37EDE /* CertificateViewController.h */,
+				288D6B5F123D08EE00D37EDE /* CertificateViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -708,6 +713,7 @@
 				2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */,
 				2858A5AD123BA08D00A82155 /* CertificateCell.m in Sources */,
 				2858A626123BB98700A82155 /* AvatarCell.m in Sources */,
+				288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
