@@ -76,7 +76,9 @@
 		[welcomeScreen release];
 	}
 
+#ifdef MUMBLE_BETA_DIST
 	[self notifyCrash];
+#endif
 
 	_verCheck = [[VersionChecker alloc] init];
 }
