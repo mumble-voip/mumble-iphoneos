@@ -3,4 +3,4 @@
 	url = git://mumble.git.sourceforge.net/gitroot/mumble/mumblekit
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
-	url = http://github.com/kballard/fmdb.git
+	url = http://github.com/ccgus/fmdb.git
