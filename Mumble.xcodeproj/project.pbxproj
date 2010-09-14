@@ -148,7 +148,7 @@
 		2858A5AC123BA08D00A82155 /* CertificateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCell.m; sourceTree = "<group>"; };
 		2858A624123BB98700A82155 /* AvatarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarCell.h; sourceTree = "<group>"; };
 		2858A625123BB98700A82155 /* AvatarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarCell.m; sourceTree = "<group>"; };
-		2858A62B123BB9B300A82155 /* AvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AvatarCell.xib; sourceTree = "<group>"; };
+		2858A62B123BB9B300A82155 /* AvatarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AvatarCell.xib; path = Resources/AvatarCell.xib; sourceTree = "<group>"; };
 		2858DBA11233E31B000D6F75 /* VersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionChecker.h; sourceTree = "<group>"; };
 		2858DBA21233E31B000D6F75 /* VersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionChecker.m; sourceTree = "<group>"; };
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
