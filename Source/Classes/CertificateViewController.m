@@ -36,28 +36,11 @@ static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
 static const NSUInteger CertificateViewSectionTotal              = 2;
 
-static const NSUInteger CertificateViewSubjectCommonName         = 0;
-static const NSUInteger CertificateViewSubjectOrganization       = 1;
-static const NSUInteger CertificateViewSubjectOrganizationalUnit = 2;
-static const NSUInteger CertificateViewSubjectCountry            = 3;
-static const NSUInteger CertificateViewSubjectLocale             = 4;
-static const NSUInteger CertificateViewSubjectState              = 5;
-static const NSUInteger CertificateViewSubjectNotBefore          = 6;
-static const NSUInteger CertificateViewSubjectNotAfter           = 7;
-static const NSUInteger CertificateViewSubjectEmail              = 8;
-static const NSUInteger CertificateViewSubjectNumRows            = 9;
-
-static const NSUInteger CertificateViewIssuerCommonName          = 0;
-static const NSUInteger CertificateViewIssuerOrganization        = 1;
-static const NSUInteger CertificateViewIssuerOrganizationalUnit  = 2;
-static const NSUInteger CertificateViewIssuerCountry             = 3;
-static const NSUInteger CertificateViewIssuerLocale              = 4;
-static const NSUInteger CertificateViewIssuerState               = 5;
-static const NSUInteger CertificateViewIssuerNumRows             = 6;
-
+@interface CertificateViewController (Private)
+- (void) extractCertData:(MKCertificate *)cert;
+@end
 
 @implementation CertificateViewController
-
 
 #pragma mark -
 #pragma mark Initialization
@@ -67,18 +50,62 @@ static const NSUInteger CertificateViewIssuerNumRows             = 6;
 	if (self == nil)
 		return nil;
 
-	_cert = [cert retain];
+	[self extractCertData:cert];
 
 	return self;
 }
 
 - (void) dealloc {
-	[_cert release];
+	[_subjectItems release];
+	[_issuerItems release];
+	[_certTitle release];
 	[super dealloc];
 }
 
 - (void) viewDidLoad {
-	[self setTitle:[_cert subjectItem:MKCertificateItemCommonName]];
+	[self setTitle:_certTitle];
+}
+
+- (void) extractCertData:(MKCertificate *)cert {
+	NSMutableArray *subject = [[NSMutableArray alloc] init];
+	NSMutableArray *issuer = [[NSMutableArray alloc] init];
+	NSString *str = nil;
+
+	// Subject DN + additional
+	str = [cert subjectItem:MKCertificateItemCommonName];
+	if (str) {
+		[subject addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+		_certTitle = [str copy];
+	} else
+		_certTitle = @"Unknown Certificate";
+
+	str = [cert subjectItem:MKCertificateItemOrganization];
+	if (str)
+		[subject addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+
+	str = [[cert notBefore] description];
+	if (str)
+		[subject addObject:[NSArray arrayWithObjects:@"Not Before", str, nil]];
+
+	str = [[cert notAfter] description];
+	if (str)
+		[subject addObject:[NSArray arrayWithObjects:@"Not After", str, nil]];
+
+	str = [cert emailAddress];
+	if (str)
+		[subject addObject:[NSArray arrayWithObjects:@"Email", str, nil]];
+
+	// Issuer DN
+	str = [cert issuerItem:MKCertificateItemCommonName];
+	if (str)
+		[issuer addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+
+	str = [cert issuerItem:MKCertificateItemOrganization];
+	if (str)
+		[issuer addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+
+	_subjectItems = subject;
+	_issuerItems = issuer;
 }
 
 #pragma mark -
@@ -90,9 +117,9 @@ static const NSUInteger CertificateViewIssuerNumRows             = 6;
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == CertificateViewSectionSubject) {
-		return CertificateViewSubjectNumRows;
+		return [_subjectItems count];
 	} else if (section == CertificateViewSectionIssuer) {
-		return CertificateViewIssuerNumRows;
+		return [_issuerItems count];
 	}
 	return 0;
 }
@@ -120,57 +147,15 @@ static const NSUInteger CertificateViewIssuerNumRows             = 6;
 	NSUInteger section = [indexPath section];
 	NSUInteger row = [indexPath row];
 
-	if (section == CertificateViewSectionSubject) {
-		if (row == CertificateViewSubjectCommonName) {
-			cell.textLabel.text = @"Common Name";
-			cell.detailTextLabel.text = [_cert subjectItem:MKCertificateItemCommonName];
-		} else if (row == CertificateViewSubjectOrganization) {
-			cell.textLabel.text = @"Organization";
-			cell.detailTextLabel.text = [_cert subjectItem:MKCertificateItemOrganization];
-		} else if (row == CertificateViewSubjectOrganizationalUnit) {
-			cell.textLabel.text = @"Org. Unit";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewSubjectCountry) {
-			cell.textLabel.text = @"Country";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewSubjectLocale) {
-			cell.textLabel.text = @"Locale";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewSubjectState) {
-			cell.textLabel.text = @"State";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewSubjectNotBefore) {
-			cell.textLabel.text = @"Valid from";
-			cell.detailTextLabel.text = [[_cert notBefore] description];
-		} else if (row == CertificateViewSubjectNotAfter) {
-			cell.textLabel.text = @"Valid to";
-			cell.detailTextLabel.text = [[_cert notAfter] description];
-		} else if (row == CertificateViewSubjectEmail) {
-			cell.textLabel.text = @"Email";
-			cell.detailTextLabel.text = [_cert emailAddress];
-		}
-	} else if (section == CertificateViewSectionIssuer) {
-		if (row == CertificateViewIssuerCommonName) {
-			cell.textLabel.text = @"Common Name";
-			cell.detailTextLabel.text = [_cert issuerItem:MKCertificateItemCommonName];
-		} else if (row == CertificateViewIssuerOrganization) {
-			cell.textLabel.text = @"Organization";
-			cell.detailTextLabel.text = [_cert issuerItem:MKCertificateItemOrganization];
-		} else if (row == CertificateViewIssuerOrganizationalUnit) {
-			cell.textLabel.text = @"Org. Unit";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewIssuerCountry) {
-			cell.textLabel.text = @"Country";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewIssuerLocale) {
-			cell.textLabel.text = @"Locale";
-			cell.detailTextLabel.text = @"";
-		} else if (row == CertificateViewIssuerState) {
-			cell.textLabel.text = @"State";
-			cell.detailTextLabel.text = @"";
-		}
-	}
-    
+	NSArray *item = nil;
+	if (section == CertificateViewSectionSubject)
+		item = [_subjectItems objectAtIndex:row];
+	else if (section == CertificateViewSectionIssuer)
+		item = [_issuerItems objectAtIndex:row];
+
+	cell.textLabel.text = [item objectAtIndex:0];
+	cell.detailTextLabel.text = [item objectAtIndex:1];
+
     return cell;
 }
 

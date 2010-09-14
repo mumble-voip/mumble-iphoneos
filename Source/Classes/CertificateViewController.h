@@ -33,7 +33,9 @@
 @class MKCertificate;
 
 @interface CertificateViewController : UITableViewController {
-	MKCertificate  *_cert;
+	NSArray        *_subjectItems;
+	NSArray        *_issuerItems;
+	NSString       *_certTitle;
 }
 
 - (id) initWithCertificate:(MKCertificate *)cert;
