@@ -35,7 +35,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ServerRootViewController : UITableViewController {
+@interface ServerRootViewController : UITableViewController <MKConnectionDelegate> {
 	MKConnection   *_connection;
 	MKServerModel  *_model;
 	NSMutableArray *_channelUsers;

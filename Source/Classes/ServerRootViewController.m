@@ -29,12 +29,14 @@
 */
 
 #import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKCertificate.h>
 
 #import "ServerRootViewController.h"
 #import "ChannelViewController.h"
 #import "LogViewController.h"
 #import "UserViewController.h"
 #import "PDFImageLoader.h"
+#import "CertificateViewController.h"
 
 @implementation ServerRootViewController
 
@@ -85,6 +87,10 @@
 	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
 	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
 	[disconnectButton release];
+
+	UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithTitle:@"Certs" style:UIBarButtonItemStyleBordered target:self action:@selector(infoClicked:)];
+	[[self navigationItem] setRightBarButtonItem:infoItem];
+	[infoItem release];
 
 	// Toolbar
 	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
@@ -374,6 +380,14 @@
 - (void) disconnectClicked:(id)sender {
 	[_connection closeStreams];
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
+}
+
+// Info (certs) button clicke
+- (void) infoClicked:(id)sender {
+	NSArray *certs = [_connection peerCertificates];
+	CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:[certs objectAtIndex:0]];
+	[[self navigationController] pushViewController:certView animated:YES];
+	[certView release];
 }
 
 // Push-to-Talk button
