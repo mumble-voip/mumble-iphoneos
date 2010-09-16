@@ -58,34 +58,41 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark -
 #pragma mark Initialization
 
-- (id) init {
+- (id) initWithIdentity:(Identity *)identity {
 	self = [super initWithStyle:UITableViewStyleGrouped];
 	if (self == nil)
 		return nil;
 
-	// fixme(mkrautz): Can we fetch these from the device?
-	_identityName = nil;
-	_emailAddress = nil;
-	_avatarImage = [UIImage imageNamed:@"DefaultAvatar"];
+	if (identity) {
+		_identity = [identity retain];
+		_editMode = YES;
+	} else
+		_identity = [[Identity alloc] init];
 
 	return self;
 }
 
+- (id) init {
+	return [self initWithIdentity:nil];
+}
+
 - (void) dealloc {
-	[_identityName release];
-	[_emailAddress release];
-	[_avatarImage release];
+	[_identity release];
 	[super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[[self navigationItem] setTitle:@"Create Identity"];
+	if (_editMode)
+		[[self navigationItem] setTitle:@"Edit Identity"];
+	else
+		[[self navigationItem] setTitle:@"Create Identity"];
 
 	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonClicked:)];
 	[[self navigationItem] setLeftBarButtonItem:cancelButton];
 	[cancelButton release];
 
-	UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createButtonClicked:)];
+	NSString *createText = _editMode ? @"Done" : @"Create";
+	UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:createText style:UIBarButtonItemStyleDone target:self action:@selector(createButtonClicked:)];
 	[[self navigationItem] setRightBarButtonItem:createButton];
 	[createButton release];
 }
@@ -165,7 +172,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 		transparentBackground.backgroundColor = [UIColor clearColor];
 		cell.backgroundView = transparentBackground;
 		cell.selectedBackgroundView = transparentBackground;
-		[cell setAvatarImage:_avatarImage];
+		[cell setAvatarImage:_identity.avatar];
 
 		 return cell;
 	} else if ([indexPath section] == 1) { // Identity
@@ -183,19 +190,19 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 			[cell setPlaceholder:@"Mumble User"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
 			[cell setValueChangedAction:@selector(nameChanged:)];
-			[cell setTextValue:_identityName];
+			[cell setTextValue:_identity.fullName];
 		} else if (row == 1) { // E-mail
 			[cell setLabel:@"Email"];
 			[cell setPlaceholder:@"(Optional)"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setValueChangedAction:@selector(emailChanged:)];
-			[cell setTextValue:_emailAddress];
+			[cell setTextValue:_identity.emailAddress];
 		} else if (row == 2) { // Nickname
 			[cell setLabel:@"Nickname"];
 			[cell setPlaceholder:@"(Optional)"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setValueChangedAction:@selector(nicknameChanged:)];
-			[cell setTextValue:_nickname];
+			[cell setTextValue:_identity.userName];
 		}
 
 		return cell;
@@ -213,20 +220,28 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (void) createButtonClicked:(UIBarButtonItem *)doneButton {
 	NSString *name, *email;
-	if (_identityName == nil || [_identityName length] == 0) {
+
+	if (_identity.fullName == nil || [_identity.fullName length] == 0) {
 		name = @"Mumble User";
 	} else {
-		name = _identityName;
+		name = _identity.fullName;
 	}
-	if (_emailAddress == nil || [_emailAddress length] == 0) {
+
+	if (_identity.emailAddress == nil || [_identity.emailAddress length] == 0) {
 		email = nil;
 	} else {
 		// fixme(mkrautz): RegEx this or do a DNS lookup like the desktop client to determine if
 		// the email has a chance to be valid.
-		email = _emailAddress;
+		email = _identity.emailAddress;
 	}
 
-	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:name email:email image:_avatarImage];
+	if (_editMode) {
+		[Database storeIdentity:_identity];
+		[[self navigationController] dismissModalViewControllerAnimated:YES];
+		return;
+	}
+
+	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:_identity.fullName email:_identity.emailAddress image:_identity.avatar];
 	[[self navigationController] pushViewController:progress animated:YES];
 	[progress release];
 
@@ -253,21 +268,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 				NSData *data = nil;
 				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
 				if (err == noErr && data != nil) {
-
-					Identity *ident = [[Identity alloc] init];
-					ident.persistent = data;
-					ident.fullName = name;
-					ident.emailAddress = email;
-					ident.avatar = _avatarImage;
-					if (_nickname == nil || [_nickname length] == 0) {
-						// fixme(mkrautz): Convert the full name to a nickname.
-						ident.userName = nil;
-					} else {
-						ident.userName = _nickname;
-					}
-
-					[Database storeIdentity:ident];
-					[ident release];
+					[Database storeIdentity:_identity];
 					NSLog(@"Stored identity...");
 				// This happens when a certificate with a duplicate subject name is added.
 				} else if (err == noErr && data == nil) {
@@ -288,18 +289,15 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) nameChanged:(TableViewTextFieldCell *)firstNameField {
-	[_identityName release];
-	_identityName = [[firstNameField textValue] copy];
+	_identity.fullName = [firstNameField textValue];
 }
 
 - (void) emailChanged:(TableViewTextFieldCell *)emailField {
-	[_emailAddress release];
-	_emailAddress = [[emailField textValue] copy];
+	_identity.emailAddress = [emailField textValue];
 }
 
 - (void) nicknameChanged:(TableViewTextFieldCell *)nicknameField {
-	[_nickname release];
-	_nickname = [[nicknameField textValue] copy];
+	_identity.userName = [nicknameField textValue];
 }
 
 #pragma mark -
@@ -314,6 +312,18 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 #pragma mark -
+#pragma mark UINavigationController delegate
+
+//– (void) navigationController:(UINavigationController *)navController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//}
+
+- (void) navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+}
+
+- (void) navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+}
+
+#pragma mark -
 #pragma mark UIImagePickerController delegate
 
 - (void) imagePickerController:(UIImagePickerController *)imagePicker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -323,9 +333,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	// to a 320x320 rect.  Since we expect rectangular images, it's an OK fit. We can
 	// just resize them if we want a smaller image.
 	UIImage *editedImage = [info objectForKey:UIImagePickerControllerEditedImage];
-	_avatarImage = [[UIImage alloc] initWithCGImage:[editedImage CGImage]];
-	[self dismissModalViewControllerAnimated:YES];
+	_identity.avatar = editedImage;
 
+	[self dismissModalViewControllerAnimated:YES];
 	[self deselectSelectedRowAnimated:NO];
 	[[self tableView] reloadData];
 }

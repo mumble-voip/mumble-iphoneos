@@ -28,16 +28,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import "Identity.h"
+
 @interface IdentityCreationViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource,
-																   UIImagePickerControllerDelegate,
-																   UIActionSheetDelegate> {
-	NSString  *_identityName;
-	NSString  *_emailAddress;
-	NSString  *_nickname;
-	UIImage   *_avatarImage;
+                                                                   UIImagePickerControllerDelegate,
+                                                                   UINavigationControllerDelegate,
+                                                                   UIActionSheetDelegate> {
+	BOOL      _editMode;
+	Identity  *_identity;
 }
 
 - (id) init;
+- (id) initWithIdentity:(Identity *)identity;
 - (void) dealloc;
 
 @end

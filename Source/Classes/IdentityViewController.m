@@ -226,7 +226,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 			cell.imageView.image = [UIImage imageNamed:@"DefaultAvatar"];
 		}
 
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
+		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 
 		return cell;
 
@@ -293,7 +293,14 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (_currentView == IdentityViewControllerCertificateView) {
+	if (_currentView == IdentityViewControllerIdentityView) {
+		Identity *ident = [_identities objectAtIndex:[indexPath row]];
+		IdentityCreationViewController *identityEdit = [[IdentityCreationViewController alloc] initWithIdentity:ident];
+		UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:identityEdit];
+		[[self navigationController] presentModalViewController:navCtrl animated:YES];
+		[navCtrl release];
+		[identityEdit release];
+	} else if (_currentView == IdentityViewControllerCertificateView) {
 		NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
 		MKCertificate *cert = [dict objectForKey:@"cert"];
 		CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
