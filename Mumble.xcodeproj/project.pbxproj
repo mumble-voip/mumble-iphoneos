@@ -73,8 +73,8 @@
 		2876394911D28945009DB8B6 /* IdentityViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 2876394811D28945009DB8B6 /* IdentityViewController.m */; };
 		2876396711D28A25009DB8B6 /* IdentityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2876394811D28945009DB8B6 /* IdentityViewController.m */; };
 		2876398611D28BA8009DB8B6 /* IdentityCreationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */; };
-		287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */; };
-		287639FF11D2A242009DB8B6 /* IdentityCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */; };
+		287639F911D29D99009DB8B6 /* CertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */; };
+		287639FF11D2A242009DB8B6 /* CertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* CertificateCreationProgressView.xib */; };
 		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
 		28763A9511D2B056009DB8B6 /* DefaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 28763A9411D2B056009DB8B6 /* DefaultAvatar.png */; };
 		28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */; };
@@ -90,6 +90,8 @@
 		287EAB841245305400A0159D /* libMumbleKitCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 287EAB671245303200A0159D /* libMumbleKitCombined.a */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
+		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
+		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
 		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
@@ -113,49 +115,49 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1009A41501009A41501009A4 /* libMumbleKitCombined.a */;
+			remoteGlobalIDString = 1009A41501009A41501009A4;
 			remoteInfo = MumbleKitCombined;
 		};
 		287EAB681245303200A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1009C31B01009C31B01009C3 /* libCELT-0.7.0.a */;
+			remoteGlobalIDString = 1009C31B01009C31B01009C3;
 			remoteInfo = "CELT-0.7.0";
 		};
 		287EAB6A1245303200A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1009F1CE01009F1CE01009F1 /* libSpeex.a */;
+			remoteGlobalIDString = 1009F1CE01009F1CE01009F1;
 			remoteInfo = Speex;
 		};
 		287EAB6C1245303200A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 100A08C80100A08C80100A08 /* libSpeexDSP.a */;
+			remoteGlobalIDString = 100A08C80100A08C80100A08;
 			remoteInfo = SpeexDSP;
 		};
 		287EAB6E1245303200A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 100A27BF0100A27BF0100A27 /* libProtocolBuffers.a */;
+			remoteGlobalIDString = 100A27BF0100A27BF0100A27;
 			remoteInfo = ProtocolBuffers;
 		};
 		287EAB701245303200A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 100CB7450100CB7450100CB7 /* libOpenSSL.a */;
+			remoteGlobalIDString = 100CB7450100CB7450100CB7;
 			remoteInfo = OpenSSL;
 		};
 		287EAB821245303E00A0159D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 10099CA1010099CA1010099C /* MumbleKitCombined */;
+			remoteGlobalIDString = 10099C9A010099C9A010099C /* MumbleKitCombined */;
 			remoteInfo = MumbleKitCombined;
 		};
 /* End PBXContainerItemProxy section */
@@ -245,9 +247,9 @@
 		2876394811D28945009DB8B6 /* IdentityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityViewController.m; sourceTree = "<group>"; };
 		2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityCreationViewController.h; sourceTree = "<group>"; };
 		2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityCreationViewController.m; sourceTree = "<group>"; };
-		287639F711D29D99009DB8B6 /* IdentityCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityCreationProgressView.h; sourceTree = "<group>"; };
-		287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityCreationProgressView.m; sourceTree = "<group>"; };
-		287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = IdentityCreationProgressView.xib; path = Resources/IdentityCreationProgressView.xib; sourceTree = "<group>"; };
+		287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationProgressView.h; sourceTree = "<group>"; };
+		287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationProgressView.m; sourceTree = "<group>"; };
+		287639FE11D2A242009DB8B6 /* CertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CertificateCreationProgressView.xib; path = Resources/CertificateCreationProgressView.xib; sourceTree = "<group>"; };
 		28763A4411D2AA91009DB8B6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		28763A9411D2B056009DB8B6 /* DefaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DefaultAvatar.png; path = Resources/DefaultAvatar.png; sourceTree = "<group>"; };
 		28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController-AnimationAdditions.m"; sourceTree = "<group>"; };
@@ -270,6 +272,10 @@
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		288D6B5E123D08EE00D37EDE /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
 		288D6B5F123D08EE00D37EDE /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
+		28942C0D1245476400C63A07 /* CertificatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificatePickerViewController.h; sourceTree = "<group>"; };
+		28942C0E1245476400C63A07 /* CertificatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificatePickerViewController.m; sourceTree = "<group>"; };
+		28942D7A12456F9200C63A07 /* CertificateCreationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationView.h; sourceTree = "<group>"; };
+		28942D7B12456F9200C63A07 /* CertificateCreationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationView.m; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
@@ -367,8 +373,8 @@
 				2876394811D28945009DB8B6 /* IdentityViewController.m */,
 				2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */,
 				2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */,
-				287639F711D29D99009DB8B6 /* IdentityCreationProgressView.h */,
-				287639F811D29D99009DB8B6 /* IdentityCreationProgressView.m */,
+				287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */,
+				287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */,
 				28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */,
 				28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */,
 				2858DBA11233E31B000D6F75 /* VersionChecker.h */,
@@ -379,6 +385,10 @@
 				2858A625123BB98700A82155 /* AvatarCell.m */,
 				288D6B5E123D08EE00D37EDE /* CertificateViewController.h */,
 				288D6B5F123D08EE00D37EDE /* CertificateViewController.m */,
+				28942C0D1245476400C63A07 /* CertificatePickerViewController.h */,
+				28942C0E1245476400C63A07 /* CertificatePickerViewController.m */,
+				28942D7A12456F9200C63A07 /* CertificateCreationView.h */,
+				28942D7B12456F9200C63A07 /* CertificateCreationView.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -547,7 +557,7 @@
 				2858A62B123BB9B300A82155 /* AvatarCell.xib */,
 				2858A57F123B9E5700A82155 /* CertificateCell.xib */,
 				28763A9411D2B056009DB8B6 /* DefaultAvatar.png */,
-				287639FE11D2A242009DB8B6 /* IdentityCreationProgressView.xib */,
+				287639FE11D2A242009DB8B6 /* CertificateCreationProgressView.xib */,
 				2861C2BB116BEA11002B8514 /* about */,
 				2861C2BE116BEA11002B8514 /* mumble-icons */,
 				2861C3E2116BEA12002B8514 /* serverlist */,
@@ -716,7 +726,7 @@
 				287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */,
 				287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */,
 				2876394911D28945009DB8B6 /* IdentityViewController.m in Resources */,
-				287639FF11D2A242009DB8B6 /* IdentityCreationProgressView.xib in Resources */,
+				287639FF11D2A242009DB8B6 /* CertificateCreationProgressView.xib in Resources */,
 				28763A9511D2B056009DB8B6 /* DefaultAvatar.png in Resources */,
 				2858A580123B9E5700A82155 /* CertificateCell.xib in Resources */,
 				2858A591123B9EE000A82155 /* certificate16.png in Resources */,
@@ -781,7 +791,7 @@
 				281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */,
 				2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */,
 				2876398611D28BA8009DB8B6 /* IdentityCreationViewController.m in Sources */,
-				287639F911D29D99009DB8B6 /* IdentityCreationProgressView.m in Sources */,
+				287639F911D29D99009DB8B6 /* CertificateCreationProgressView.m in Sources */,
 				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
 				281D1BA511D66E3C006BE21C /* Identity.m in Sources */,
 				28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */,
@@ -789,6 +799,8 @@
 				2858A5AD123BA08D00A82155 /* CertificateCell.m in Sources */,
 				2858A626123BB98700A82155 /* AvatarCell.m in Sources */,
 				288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */,
+				28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */,
+				28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

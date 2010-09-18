@@ -30,22 +30,14 @@
 
 #import "IdentityCreationViewController.h"
 #import "TableViewTextFieldCell.h"
-#import "IdentityCreationProgressView.h"
-#import "UINavigationController-AnimationAdditions.h"
 #import "IdentityViewController.h"
 #import "Database.h"
 #import "Identity.h"
 #import "AvatarCell.h"
+#import "CertificateCell.h"
+#import "CertificatePickerViewController.h"
 
 #import <MumbleKit/MKCertificate.h>
-
-static void ShowAlertDialog(NSString *title, NSString *msg) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	});
-}
 
 @interface IdentityCreationViewController (Private)
 - (void) deselectSelectedRowAnimated:(BOOL)animated;
@@ -101,36 +93,44 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Table view delegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath section] == 0) {
+	NSUInteger section = [indexPath section], row = [indexPath row];
+	if (section == 0) // Avatar
 		return 155.0f;
-	} else {
-		return 44.0f;
-	}
+	if (section == 1 && row == 1)
+		return 85.0f;
+	return 44.0f;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	// We can only select the avatar.
-	if ([indexPath section] != 0)
-		return;
+	// Avatar
+	if ([indexPath section] == 0) {
+		// If the device can take pictures, give the user a choice between taking a new picture,
+		// or picking one from the photo library.
+		if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+			UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Select Avatar" delegate:self
+															cancelButtonTitle:@"Cancel"
+															destructiveButtonTitle:nil
+															otherButtonTitles:@"Take Picture", @"Use Existing",
+															nil];
+			[sheet showInView:[self tableView]];
+			[sheet release];
 
-	// If the device can take pictures, give the user a choice between taking a new picture,
-	// or picking one from the photo library.
-	if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-		UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Select Avatar" delegate:self
-														cancelButtonTitle:@"Cancel"
-														destructiveButtonTitle:nil
-														otherButtonTitles:@"Take Picture", @"Use Existing",
-														nil];
-		[sheet showInView:[self tableView]];
-		[sheet release];
+		// If not camera is available, pop up the photo library picker immediately.
+		} else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+			[self presentExistingImagePicker];
 
-	// If not camera is available, pop up the photo library picker immediately.
-	} else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-		[self presentExistingImagePicker];
+			// Can this happen?
+		} else {
+			[self deselectSelectedRowAnimated:NO];
+		}
 
-	// Can this happen?
-	} else {
-		[self deselectSelectedRowAnimated:NO];
+	// Certificate
+	} else if ([indexPath section] == 1 && [indexPath row] == 1) {
+		CertificatePickerViewController *certPicker = [[CertificatePickerViewController alloc] initWithPersistentRef:[_identity persistent]];
+		[[self navigationController] pushViewController:certPicker animated:YES];
+		[certPicker setDelegate:self];
+		[certPicker release];
+		[self deselectSelectedRowAnimated:YES];
 	}
 }
 
@@ -141,12 +141,11 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     return 2;
 }
 
-
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0) // Avatar
 		return 1;
 	if (section == 1) // Identity
-		return 3;
+		return 2;
 
 	return 0;
 }
@@ -161,7 +160,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
 	if ([indexPath section] == 0) { // Avatar
 		AvatarCell *cell = (AvatarCell *)[tableView dequeueReusableCellWithIdentifier:@"AvatarCell"];
 		if (cell == nil) {
@@ -173,39 +171,69 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 		cell.backgroundView = transparentBackground;
 		cell.selectedBackgroundView = transparentBackground;
 		[cell setAvatarImage:_identity.avatar];
-
 		 return cell;
+
 	} else if ([indexPath section] == 1) { // Identity
 		NSUInteger row = [indexPath row];
-		static NSString *CellIdentifier = @"IdentityCreationTextFieldCell";
-		TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[TableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
-		}
-
-		[cell setTarget:self];
-
-		if (row == 0) { // Name
-			[cell setLabel:@"Name"];
-			[cell setPlaceholder:@"Mumble User"];
-			[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-			[cell setValueChangedAction:@selector(nameChanged:)];
-			[cell setTextValue:_identity.fullName];
-		} else if (row == 1) { // E-mail
-			[cell setLabel:@"Email"];
-			[cell setPlaceholder:@"(Optional)"];
-			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-			[cell setValueChangedAction:@selector(emailChanged:)];
-			[cell setTextValue:_identity.emailAddress];
-		} else if (row == 2) { // Nickname
+		if (row == 0) { // Nickname
+			static NSString *CellIdentifier = @"IdentityCreationTextFieldCell";
+			TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil) {
+				cell = [[[TableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+			}
 			[cell setLabel:@"Nickname"];
-			[cell setPlaceholder:@"(Optional)"];
+			[cell setPlaceholder:@"MumbleUser"];
 			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 			[cell setValueChangedAction:@selector(nicknameChanged:)];
 			[cell setTextValue:_identity.userName];
-		}
+			[cell setTarget:self];
+			return cell;
 
-		return cell;
+		} else if (row == 1) { // Certificate
+			static NSString *CellIdentifier = @"CertificateCell";
+			CertificateCell *cell = (CertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil)
+				cell = [CertificateCell loadFromNib];
+
+			// Fetch the certificate
+
+			MKCertificate *cert = nil;
+			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+										[_identity persistent],		kSecValuePersistentRef,
+										kCFBooleanTrue,				kSecReturnRef,
+										kSecMatchLimitOne,			kSecMatchLimit,
+										nil];
+			SecIdentityRef identityRef = NULL;
+			OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identityRef);
+			if (err == noErr && identityRef) {
+				SecCertificateRef secCert = NULL;
+				err = SecIdentityCopyCertificate(identityRef, &secCert);
+				if (err == noErr && secCert) {
+					NSData *certData = (NSData *)SecCertificateCopyData(secCert);
+					if (certData) {
+						cert = [MKCertificate certificateWithCertificate:certData privateKey:nil];
+					}
+					[certData release];
+					CFRelease(secCert);
+				}
+				CFRelease(identityRef);
+			}
+
+			if (cert == nil) {
+				[cell setSubjectName:@"(Unknown)"];
+				[cell setEmail:@"unknown"];
+				[cell setIssuerText:@"issuer"];
+				[cell setExpiryText:@"expiry"];
+			} else {
+				[cell setSubjectName:[cert commonName]];
+				[cell setEmail:[cert emailAddress]];
+				[cell setIssuerText:[cert issuerName]];
+				[cell setExpiryText:[[cert notAfter] description]];
+			}
+
+			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+			return cell;
+		}
 	}
 
 	return nil;
@@ -219,81 +247,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) createButtonClicked:(UIBarButtonItem *)doneButton {
-	NSString *name, *email;
-
-	if (_identity.fullName == nil || [_identity.fullName length] == 0) {
-		name = @"Mumble User";
-	} else {
-		name = _identity.fullName;
-	}
-
-	if (_identity.emailAddress == nil || [_identity.emailAddress length] == 0) {
-		email = nil;
-	} else {
-		// fixme(mkrautz): RegEx this or do a DNS lookup like the desktop client to determine if
-		// the email has a chance to be valid.
-		email = _identity.emailAddress;
-	}
-
-	if (_editMode) {
-		[Database storeIdentity:_identity];
-		[[self navigationController] dismissModalViewControllerAnimated:YES];
-		return;
-	}
-
-	IdentityCreationProgressView *progress = [[IdentityCreationProgressView alloc] initWithName:_identity.fullName email:_identity.emailAddress image:_identity.avatar];
-	[[self navigationController] pushViewController:progress animated:YES];
-	[progress release];
-
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		OSStatus err = noErr;
-
-		// Generate a certificate for this identity.
-		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:name email:email];
-		NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
-		if (pkcs12 == nil) {
-			ShowAlertDialog(@"Unable to generate certificate",
-							@"Mumble was unable to generate a certificate for the your identity.");
-		} else {
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
-			NSArray *items = nil;
-			err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
-			if (err == errSecSuccess && [items count] > 0) {
-				NSDictionary *pkcsDict = [items objectAtIndex:0];
-				// Get the SecIdentityRef
-				SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
-				NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-				                        (id)identity, kSecValueRef,
-				                        kCFBooleanTrue, kSecReturnPersistentRef, nil];
-				NSData *data = nil;
-				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
-				if (err == noErr && data != nil) {
-					[Database storeIdentity:_identity];
-					NSLog(@"Stored identity...");
-				// This happens when a certificate with a duplicate subject name is added.
-				} else if (err == noErr && data == nil) {
-					ShowAlertDialog(@"Unable to add identity",
-									@"The certificate of the just-added identity could not be added to the certificate store because it "
-									@"has the same name as a certificate already found in the store.");
-				}
-			} else {
-				ShowAlertDialog(@"Unable to import generated certificate",
-								@"Mumble was unable to import the generated certificate into the certificate store.");
-			}
-		}
-
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[[self navigationController] dismissModalViewControllerAnimated:YES];
-		});
-	});
-}
-
-- (void) nameChanged:(TableViewTextFieldCell *)firstNameField {
-	_identity.fullName = [firstNameField textValue];
-}
-
-- (void) emailChanged:(TableViewTextFieldCell *)emailField {
-	_identity.emailAddress = [emailField textValue];
+	[Database storeIdentity:_identity];
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void) nicknameChanged:(TableViewTextFieldCell *)nicknameField {
@@ -313,9 +268,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 #pragma mark -
 #pragma mark UINavigationController delegate
-
-//– (void) navigationController:(UINavigationController *)navController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-//}
 
 - (void) navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
 }
@@ -347,11 +299,19 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 #pragma mark -
+#pragma mark CertificatePickerViewController delegate
+
+- (void) certificatePickerViewController:(CertificatePickerViewController *)certPicker didSelectCertificate:(NSData *)persistentRef {
+	[_identity setPersistent:persistentRef];
+	[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+#pragma mark -
 #pragma mark Private methods
 
 - (void) deselectSelectedRowAnimated:(BOOL)animated {
 	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:animated];
-}													 
+}												 
 
 - (void) presentExistingImagePicker {
 	UIImagePickerController *imgPicker = [[UIImagePickerController alloc] init];

@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface IdentityViewController : UITableViewController {
+@interface IdentityViewController : UITableViewController <UIActionSheetDelegate> {
 	NSMutableArray *_identities;
 	NSMutableArray *_certificateItems;
 	NSInteger      _currentView;

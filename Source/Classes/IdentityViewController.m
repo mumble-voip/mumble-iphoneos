@@ -34,6 +34,7 @@
 #import "Identity.h"
 #import "CertificateCell.h"
 #import "CertificateViewController.h"
+#import "CertificateCreationView.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -121,12 +122,13 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 
 	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 
+	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
+	[self.navigationItem setRightBarButtonItem:addButton];
+	[addButton release];
+
 	// View changed to identity view
 	if (currentView == IdentityViewControllerIdentityView) {
 		self.navigationItem.title = @"Identities";
-		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
-		[self.navigationItem setRightBarButtonItem:addButton];
-		[addButton release];
 
 		NSUInteger deleteCount = [_certificateItems count];
 		[_certificateItems release];
@@ -142,7 +144,6 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 	// View changed to certificate view
 	} else if (currentView == IdentityViewControllerCertificateView) {
 		self.navigationItem.title = @"Certificates";
-		[self.navigationItem setRightBarButtonItem:nil];
 
 		NSUInteger deleteCount = [_identities count];
 		[_identities release];
@@ -203,7 +204,6 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
 	if (_currentView == IdentityViewControllerIdentityView) {
 		static NSString *CellIdentifier = @"IdentityCell";
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -212,14 +212,8 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		}
 
 		Identity *ident = [_identities objectAtIndex:[indexPath row]];
-		if (ident.userName.length > 0) {
-			cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", ident.fullName, ident.userName];
-		} else {
-			cell.textLabel.text = ident.fullName;
-		}
-		if (ident.emailAddress.length > 0) {
-			cell.detailTextLabel.text = ident.emailAddress;
-		}
+		cell.textLabel.text = ident.userName;
+
 		if (ident.avatar != nil) {
 			cell.imageView.image = ident.avatar;
 		} else {
@@ -227,7 +221,6 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		}
 
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-
 		return cell;
 
 	} else if (_currentView == IdentityViewControllerCertificateView) {
@@ -325,12 +318,36 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 		[[self navigationController] presentModalViewController:navCtrl animated:YES];
 		[navCtrl release];
 	} else if (_currentView == IdentityViewControllerCertificateView) {
-		// Implement me
+		UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Add Certificate"
+														   delegate:self
+												  cancelButtonTitle:@"Cancel"
+											 destructiveButtonTitle:nil
+												  otherButtonTitles:@"Generate New Certificate",
+																	@"Import From Disk",
+								nil];
+		[sheet showInView:[self tableView]];
+		[sheet release];
 	}
 }
 
 #pragma mark -
-#pragma mark
+#pragma mark UIActionSheet delegate
+
+- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)idx {
+	if (idx == 0) { // Generate New Certificate
+		UINavigationController *navCtrl = [[UINavigationController alloc] init];
+		CertificateCreationView *certGen = [[CertificateCreationView alloc] init];
+		[navCtrl pushViewController:certGen animated:NO];
+		[certGen release];
+		[self presentModalViewController:navCtrl animated:YES];
+		[navCtrl release];
+	} else if (idx == 1) { // Import From Disk
+		NSLog(@"DiskImport");
+	}
+}
+
+#pragma mark -
+#pragma mark Misc.
 
 - (void) fetchCertificates {
 	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:

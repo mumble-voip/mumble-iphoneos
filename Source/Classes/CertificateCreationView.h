@@ -28,58 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "IdentityCreationProgressView.h"
+#import <UIKit/UIKit.h>
 
-@implementation IdentityCreationProgressView
-
-- (id) initWithName:(NSString *)name email:(NSString *)email image:(UIImage *)image {
-	self = [super initWithNibName:@"IdentityCreationProgressView" bundle:nil];
-	if (self == nil)
-		return nil;
-
-	_identityName = [name retain];
-	_emailAddress = [email retain];
-	_avatarImage = [image retain];
-	if (_avatarImage == nil) {
-		_avatarImage = [UIImage imageNamed:@"DefaultAvatar"];
-	}
-
-	return self;
+@interface CertificateCreationView : UITableViewController {
+	NSString  *_fullName;
+	NSString  *_emailAddress;
 }
 
-- (void) dealloc {
-	[_identityName release];
-	[_emailAddress release];
-	[_avatarImage release];
-
-	[super dealloc];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-	[[self navigationItem] setTitle:@"Creating Identity"];
-	[[self navigationItem] setHidesBackButton:YES];
-
-	[[_imageView layer] setBackgroundColor:[[UIColor whiteColor] CGColor]];
-	[[_imageView layer] setMasksToBounds:YES];
-	[[_imageView layer] setCornerRadius:10.0f];
-	[[_imageView layer] setBorderWidth:1.0f];
-	[[_imageView layer] setBorderColor:[[UIColor colorWithRed:0.298 green:0.337 blue:0.424 alpha:1.0] CGColor]];
-
-	[[_imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-	[[_imageView layer] setShadowOffset:CGSizeMake(-1.0f, 1.0f)];
-	[[_imageView layer] setShadowOpacity:1.0f];
-	[[_imageView layer] setShadowRadius:1.0f];
-
-	[_imageView setImage:_avatarImage];
-	[_nameLabel	setText:_identityName];
-
-	if (_emailAddress != nil && _emailAddress.length > 0) {
-		[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
-	} else {
-		[_emailLabel setText:nil];
-	}
-
-	[_activityIndicator startAnimating];
-}
+- (id) init;
+- (void) dealloc;
 
 @end

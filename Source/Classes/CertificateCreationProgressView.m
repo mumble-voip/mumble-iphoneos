@@ -28,20 +28,38 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Identity.h"
-#import "CertificatePickerViewController.h"
+#import "CertificateCreationProgressView.h"
 
-@interface IdentityCreationViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource,
-                                                                   UIImagePickerControllerDelegate,
-                                                                   UINavigationControllerDelegate,
-                                                                   UIActionSheetDelegate,
-																   CertificatePickerViewControllerDelegate> {
-	BOOL      _editMode;
-	Identity  *_identity;
+@implementation CertificateCreationProgressView
+
+- (id) initWithName:(NSString *)name email:(NSString *)email {
+	if (self = [super initWithNibName:@"CertificateCreationProgressView" bundle:nil]) {
+		_identityName = [name retain];
+		_emailAddress = [email retain];
+		NSLog(@"name = %@, email = %@", _identityName, _emailAddress);
+	}
+	return self;
 }
 
-- (id) init;
-- (id) initWithIdentity:(Identity *)identity;
-- (void) dealloc;
+- (void) dealloc {
+	[_identityName release];
+	[_emailAddress release];
+	[super dealloc];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	[[self navigationItem] setTitle:@"Generating Certificate"];
+	[[self navigationItem] setHidesBackButton:YES];
+
+	[_nameLabel	setText:_identityName];
+
+	if (_emailAddress != nil && _emailAddress.length > 0) {
+		[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
+	} else {
+		[_emailLabel setText:nil];
+	}
+
+	[_activityIndicator startAnimating];
+}
 
 @end

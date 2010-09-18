@@ -28,20 +28,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Identity.h"
-#import "CertificatePickerViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface IdentityCreationViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource,
-                                                                   UIImagePickerControllerDelegate,
-                                                                   UINavigationControllerDelegate,
-                                                                   UIActionSheetDelegate,
-																   CertificatePickerViewControllerDelegate> {
-	BOOL      _editMode;
-	Identity  *_identity;
+@class CertificatePickerViewController;
+
+@protocol CertificatePickerViewControllerDelegate
+- (void) certificatePickerViewController:(CertificatePickerViewController *)certPicker didSelectCertificate:(NSData *)persistentRef;
+@end
+
+@interface CertificatePickerViewController : UITableViewController {
+	NSMutableArray                               *_certificateItems;
+	id<CertificatePickerViewControllerDelegate>  _delegate;
+	NSUInteger                                   _selectedRow;
+	NSData                                       *_selected;
 }
 
-- (id) init;
-- (id) initWithIdentity:(Identity *)identity;
+- (id) initWithPersistentRef:(NSData *)persistentRef;
 - (void) dealloc;
+
+- (id<CertificatePickerViewControllerDelegate>) delegate;
+- (void) setDelegate:(id<CertificatePickerViewControllerDelegate>)delegate;
 
 @end
