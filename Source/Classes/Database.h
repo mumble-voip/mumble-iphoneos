@@ -49,5 +49,6 @@
 + (void) deleteIdentity:(Identity *)ident;
 + (void) storeIdentities:(NSArray *)idents;
 + (NSArray *) fetchAllIdentities;
++ (Identity *) identityWithPrimaryKey:(NSInteger)key;
 
 @end

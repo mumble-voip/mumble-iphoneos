@@ -28,33 +28,28 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "CertificatePickerViewController.h"
-#import "CertificateCell.h"
+#import "IdentityPickerViewController.h"
+#import "Identity.h"
+#import "Database.h"
 
-#import <MumbleKit/MKCertificate.h>
-
-@interface CertificatePickerViewController (Private)
-- (void) fetchCertificates;
-@end
-
-@implementation CertificatePickerViewController
+@implementation IdentityPickerViewController
 
 #pragma mark -
 #pragma mark Initialization
 
-- (id) initWithPersistentRef:(NSData *)persistentRef {
+- (id) initWithIdentity:(Identity *)identity {
 	self = [super initWithStyle:UITableViewStyleGrouped];
 
 	if (self != nil) {
-		[self fetchCertificates];
-		_selected = persistentRef;
+		_identities = [[Database fetchAllIdentities] retain];
+		_selectedPrimaryKey = [identity primaryKey];
 	}
 
 	return self;
 }
 
 - (void) dealloc {
-	[_certificateItems release];
+	[_identities release];
 	[super dealloc];
 }
 
@@ -65,11 +60,11 @@
 #pragma mark -
 #pragma mark Delegate
 
-- (id<CertificatePickerViewControllerDelegate>) delegate {
+- (id<IdentityPickerViewControllerDelegate>) delegate {
 	return _delegate;
 }
 
-- (void) setDelegate:(id<CertificatePickerViewControllerDelegate>)delegate {
+- (void) setDelegate:(id<IdentityPickerViewControllerDelegate>)delegate {
 	_delegate = delegate;
 }
 
@@ -81,7 +76,7 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_certificateItems count] + 1;
+    return [_identities count] + 1;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -96,7 +91,7 @@
 		}
 		[[cell textLabel] setText:@"None"];
 		[[cell detailTextLabel] setText:nil];
-		if (_selected != nil) {
+		if (_selectedPrimaryKey != -1) {
 			[cell setAccessoryType:UITableViewCellAccessoryNone];
 		} else {
 			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
@@ -105,18 +100,17 @@
 		return cell;
 	}
 
-	static NSString *CellIdentifier = @"CertificateCell";
-	CertificateCell *cell = (CertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil)
-		cell = [CertificateCell loadFromNib];
+	NSString *CellIdentifier = @"IdentityPickerCell";
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (!cell) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewStyleGrouped reuseIdentifier:CellIdentifier];
+	}
 
-	NSDictionary *dict = [_certificateItems objectAtIndex:row-1];
-	MKCertificate *cert = [dict objectForKey:@"cert"];
-	[cell setSubjectName:[cert commonName]];
-	[cell setEmail:[cert emailAddress]];
-	[cell setIssuerText:[cert issuerName]];
-	[cell setExpiryText:[[cert notAfter] description]];
-	if ([_selected isEqualToData:[dict objectForKey:@"persistentRef"]]) {
+	Identity *ident = [_identities objectAtIndex:row-1];
+	[[cell textLabel] setText:[ident userName]];
+	[[cell imageView] setImage:[ident avatar]];
+
+	if (_selectedPrimaryKey == [ident primaryKey]) {
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 		_selectedRow = row;
 	} else {
@@ -140,10 +134,10 @@
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
 		_selectedRow = row;
 
-		NSDictionary *dict = row > 0 ? [_certificateItems objectAtIndex:row-1] : nil;
-		_selected = [dict objectForKey:@"persistentRef"];
-		if ([(id)_delegate respondsToSelector:@selector(certificatePickerViewController:didSelectCertificate:)]) {
-			[_delegate certificatePickerViewController:self didSelectCertificate:_selected];
+		Identity *ident = row > 0 ? [_identities objectAtIndex:row-1] : nil;
+		_selectedPrimaryKey = ident ? [ident primaryKey] : -1;
+		if ([(id)_delegate respondsToSelector:@selector(identityPickerViewController:didSelectIdentity:)]) {
+			[_delegate identityPickerViewController:self didSelectIdentity:ident];
 		}
 	}
 
@@ -151,47 +145,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath row] == 0) {
-		return 44.0f;
-	}
-	return 85.0f;
-}
-
-#pragma mark -
-#pragma mark Misc.
-
-- (void) fetchCertificates {
-	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-						   kSecClassIdentity,    kSecClass,
-						   kCFBooleanTrue,       kSecReturnPersistentRef,
-						   kSecMatchLimitAll,    kSecMatchLimit,
-						   nil];
-	NSArray *array = nil;
-	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
-	if (err != noErr || array == nil) {
-		[array release];
-		return;
-	}
-
-	_certificateItems = [[NSMutableArray alloc] init];
-
-	for (NSData *persistentRef in array) {
-		query = [NSDictionary dictionaryWithObjectsAndKeys:
-				 persistentRef,      kSecValuePersistentRef,
-				 kCFBooleanTrue,     kSecReturnRef,
-				 kSecMatchLimitOne,  kSecMatchLimit,
-				 nil];
-		SecIdentityRef identity = NULL;
-		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-			SecCertificateRef secCert;
-			if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
-				NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-				MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
-				[_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-											  cert, @"cert", persistentRef, @"persistentRef", nil]];
-			}
-		}
-	}
+	return 44.0f;
 }
 
 @end

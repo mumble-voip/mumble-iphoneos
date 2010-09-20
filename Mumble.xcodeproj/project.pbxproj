@@ -88,6 +88,7 @@
 		287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */; };
 		287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */; };
 		287EAB841245305400A0159D /* libMumbleKitCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 287EAB671245303200A0159D /* libMumbleKitCombined.a */; };
+		28847911124696BA0068364D /* IdentityPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28847910124696BA0068364D /* IdentityPickerViewController.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
@@ -157,7 +158,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 10099C9A010099C9A010099C /* MumbleKitCombined */;
+			remoteGlobalIDString = 10099D33010099D33010099D;
 			remoteInfo = MumbleKitCombined;
 		};
 /* End PBXContainerItemProxy section */
@@ -269,6 +270,8 @@
 		287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteServerEditViewController.m; sourceTree = "<group>"; };
 		287BA42911B9A1DB0010E031 /* TableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewTextFieldCell.h; sourceTree = "<group>"; };
 		287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewTextFieldCell.m; sourceTree = "<group>"; };
+		2884790F124696BA0068364D /* IdentityPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityPickerViewController.h; sourceTree = "<group>"; };
+		28847910124696BA0068364D /* IdentityPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityPickerViewController.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		288D6B5E123D08EE00D37EDE /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
 		288D6B5F123D08EE00D37EDE /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				2872F7C4124668880078C0B1 /* Identities */,
 				28BF8E1C11D93A1900B72770 /* Database */,
 				285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
@@ -369,26 +373,10 @@
 				281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */,
 				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
 				2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */,
-				2876394711D28945009DB8B6 /* IdentityViewController.h */,
-				2876394811D28945009DB8B6 /* IdentityViewController.m */,
-				2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */,
-				2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */,
-				287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */,
-				287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */,
 				28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */,
 				28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */,
 				2858DBA11233E31B000D6F75 /* VersionChecker.h */,
 				2858DBA21233E31B000D6F75 /* VersionChecker.m */,
-				2858A5AB123BA08D00A82155 /* CertificateCell.h */,
-				2858A5AC123BA08D00A82155 /* CertificateCell.m */,
-				2858A624123BB98700A82155 /* AvatarCell.h */,
-				2858A625123BB98700A82155 /* AvatarCell.m */,
-				288D6B5E123D08EE00D37EDE /* CertificateViewController.h */,
-				288D6B5F123D08EE00D37EDE /* CertificateViewController.m */,
-				28942C0D1245476400C63A07 /* CertificatePickerViewController.h */,
-				28942C0E1245476400C63A07 /* CertificatePickerViewController.m */,
-				28942D7A12456F9200C63A07 /* CertificateCreationView.h */,
-				28942D7B12456F9200C63A07 /* CertificateCreationView.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -489,6 +477,31 @@
 			);
 			name = serverlist;
 			path = Resources/serverlist;
+			sourceTree = "<group>";
+		};
+		2872F7C4124668880078C0B1 /* Identities */ = {
+			isa = PBXGroup;
+			children = (
+				2876394711D28945009DB8B6 /* IdentityViewController.h */,
+				2876394811D28945009DB8B6 /* IdentityViewController.m */,
+				2876398411D28BA8009DB8B6 /* IdentityCreationViewController.h */,
+				2876398511D28BA8009DB8B6 /* IdentityCreationViewController.m */,
+				287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */,
+				287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */,
+				2858A5AB123BA08D00A82155 /* CertificateCell.h */,
+				2858A5AC123BA08D00A82155 /* CertificateCell.m */,
+				2858A624123BB98700A82155 /* AvatarCell.h */,
+				2858A625123BB98700A82155 /* AvatarCell.m */,
+				288D6B5E123D08EE00D37EDE /* CertificateViewController.h */,
+				288D6B5F123D08EE00D37EDE /* CertificateViewController.m */,
+				28942C0D1245476400C63A07 /* CertificatePickerViewController.h */,
+				28942C0E1245476400C63A07 /* CertificatePickerViewController.m */,
+				28942D7A12456F9200C63A07 /* CertificateCreationView.h */,
+				28942D7B12456F9200C63A07 /* CertificateCreationView.m */,
+				2884790F124696BA0068364D /* IdentityPickerViewController.h */,
+				28847910124696BA0068364D /* IdentityPickerViewController.m */,
+			);
+			name = Identities;
 			sourceTree = "<group>";
 		};
 		28BF8E1C11D93A1900B72770 /* Database */ = {
@@ -801,6 +814,7 @@
 				288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */,
 				28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */,
 				28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */,
+				28847911124696BA0068364D /* IdentityPickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,7 +872,7 @@
 					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-D__IPHONE_OS_VERSION_MIN_REQUIRED=040000";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos4.1;

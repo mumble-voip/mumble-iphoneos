@@ -112,7 +112,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 		return 3;
 	// Identity
 	} else if (section == 1) {
-		return 2;
+		return 1;
 	}
 
 	return 0;
@@ -130,19 +130,19 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"FavouriteServerEditCell";
-	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-		cell = [[[TableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
-    }
-
-	[cell setTarget:self];
-
 	NSUInteger section = [indexPath section];
 	NSUInteger row = [indexPath row];
 
 	// Mumble Server
 	if (section == 0) {
+		static NSString *CellIdentifier = @"FavouriteServerEditCell";
+		TableViewTextFieldCell *cell = (TableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[[TableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+		}
+
+		[cell setTarget:self];
+
 		if (row == 0) {
 			[cell setLabel:@"Description"];
 			[cell setPlaceholder:FavouriteServerPlaceholderDisplayName];
@@ -166,24 +166,56 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 			else
 				[cell setTextValue:nil];
 		}
+
+		return cell;
+
 	// Identity
-	} else if (section == 1) {
-		if (row == 0) {
-			[cell setLabel:@"Username"];
-			[cell setPlaceholder:FavouriteServerPlaceholderUsername];
-			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-			[cell setValueChangedAction:@selector(usernameChanged:)];
-			[cell setTextValue:[_favourite userName]];
-		} else if (row == 1) {
-			[cell setLabel:@"Password"];
-			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
-			[cell setSecureTextEntry:YES];
-			[cell setValueChangedAction:@selector(passwordChanged:)];
-			[cell setTextValue:[_favourite password]];
+	} else if (section == 1 && row == 0) {
+		static NSString *CellIdentifier = @"FavouriteServerIdentityCell";
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+		if (cell == nil) {
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
 		}
+
+		Identity *ident = [_favourite identity];
+		if (ident) {
+			[[cell textLabel] setText:[ident userName]];
+			[[cell imageView] setImage:[ident avatar]];
+		} else {
+			[[cell textLabel] setText:@"None"];
+			[[cell imageView] setImage:nil];
+		}
+
+		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+
+		return cell;
 	}
 
-    return cell;
+    return nil;
+}
+
+#pragma mark -
+#pragma mark Table view delegate
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([indexPath section] != 1 && [indexPath row] != 0)
+		return;
+
+	IdentityPickerViewController *identityPicker = [[IdentityPickerViewController alloc] initWithIdentity:[_favourite identity]];
+	[identityPicker setDelegate:self];
+	[[self navigationController] pushViewController:identityPicker animated:YES];
+	[identityPicker release];
+
+	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark -
+#pragma mark IdentityPickerViewController delegate
+
+- (void) identityPickerViewController:(IdentityPickerViewController *)identityPicker didSelectIdentity:(Identity *)identity {
+	[_favourite setIdentity:identity];
+	[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 #pragma mark -

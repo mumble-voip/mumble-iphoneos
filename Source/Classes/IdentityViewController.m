@@ -84,10 +84,7 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 - (void) viewWillAppear:(BOOL)animated {
 	if (_currentView == -1)
 		[self setCurrentView:IdentityViewControllerIdentityView];
-	[self.navigationController setToolbarHidden:NO animated:NO];
-}
 
-- (void) viewDidAppear:(BOOL)animated {
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 	NSArray *segmentItems = [NSArray arrayWithObjects:
 							 @"Identities",
@@ -100,21 +97,20 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 	UIBarButtonItem *barSegmented = [[UIBarButtonItem alloc] initWithCustomView:segmentedControl];
 	[segmentedControl release];
 
-	[self.navigationController.toolbar setItems:[NSArray arrayWithObjects:flexSpace, barSegmented, flexSpace, nil]];
+	[self setToolbarItems:[NSArray arrayWithObjects:flexSpace, barSegmented, flexSpace, nil]];
+	[self viewChanged:segmentedControl];
 
 	[flexSpace release];
 	[barSegmented release];
 
-	[self viewChanged:segmentedControl];
+	[self.navigationController setToolbarHidden:NO animated:YES];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
 	[_identities release];
 	_identities = nil;
-}
 
-- (void) viewDidDisappear:(BOOL)animated {
-	[self.navigationController setToolbarHidden:YES animated:NO];
+	[self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void) setCurrentView:(NSInteger)currentView {

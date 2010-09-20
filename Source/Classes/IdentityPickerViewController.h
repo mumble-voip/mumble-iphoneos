@@ -28,33 +28,26 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Identity.h"
+#import <UIKit/UIKit.h>
 
-@interface FavouriteServer : NSObject <NSCopying> {
-	NSInteger  _pkey;
-	NSString   *_displayName;
-	NSString   *_hostName;
-	NSUInteger _port;
-	NSString   *_userName;
-	NSString   *_password;
-	NSInteger  _identityForeignKey;
+@class IdentityPickerViewController;
+@class Identity;
+
+@protocol IdentityPickerViewControllerDelegate
+- (void) identityPickerViewController:(IdentityPickerViewController *)certPicker didSelectIdentity:(Identity *)identity;
+@end
+
+@interface IdentityPickerViewController : UITableViewController {
+	NSMutableArray                               *_identities;
+	id<IdentityPickerViewControllerDelegate>     _delegate;
+	NSUInteger                                   _selectedRow;
+	NSInteger                                    _selectedPrimaryKey;
 }
 
-- (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
-- (id) init;
+- (id) initWithIdentity:(Identity *)identity;
 - (void) dealloc;
 
-@property (assign)  NSInteger   primaryKey;
-@property (copy)    NSString    *displayName;
-@property (copy)    NSString    *hostName;
-@property (assign)  NSUInteger  port;
-@property (copy)    NSString    *userName;
-@property (copy)    NSString    *password;
-@property (assign)  NSInteger   identityForeignKey;
-
-- (BOOL) hasPrimaryKey;
-- (NSComparisonResult) compare:(FavouriteServer *)favServ;
-- (Identity *) identity;
-- (void) setIdentity:(Identity *)ident;
+- (id<IdentityPickerViewControllerDelegate>) delegate;
+- (void) setDelegate:(id<IdentityPickerViewControllerDelegate>)delegate;
 
 @end

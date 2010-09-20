@@ -29,15 +29,17 @@
 */
 
 #import "FavouriteServer.h"
+#import "Database.h"
 
 @implementation FavouriteServer
 
-@synthesize primaryKey  = _pkey;
-@synthesize displayName = _displayName;
-@synthesize hostName    = _hostName;
-@synthesize port        = _port;
-@synthesize userName    = _userName;
-@synthesize password    = _password;
+@synthesize primaryKey         = _pkey;
+@synthesize displayName        = _displayName;
+@synthesize hostName           = _hostName;
+@synthesize port               = _port;
+@synthesize userName           = _userName;
+@synthesize password           = _password;
+@synthesize identityForeignKey = _identityForeignKey;
 
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord {
 	self = [super init];
@@ -70,6 +72,7 @@
 	FavouriteServer *favServ = [[FavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName password:_password];
 	if ([self hasPrimaryKey])
 		[favServ setPrimaryKey:[self primaryKey]];
+	[favServ setIdentityForeignKey:[self identityForeignKey]];
 	return favServ;
 }
 
@@ -79,6 +82,24 @@
 
 - (NSComparisonResult) compare:(FavouriteServer *)favServ {
 	return [_displayName caseInsensitiveCompare:[favServ displayName]];
+}
+
+- (Identity *) identity {
+	if (_identityForeignKey == -1)
+		return nil;
+	return [Database identityWithPrimaryKey:_identityForeignKey];
+}
+
+- (void) setIdentity:(Identity *)ident {
+	if (ident == nil)
+		_identityForeignKey = -1;
+
+	if (![ident hasPrimaryKey]) {
+		NSLog(@"FavouriteServer: Identity has no primary key.");
+		return;
+	}
+
+	_identityForeignKey = [ident primaryKey];
 }
 
 @end

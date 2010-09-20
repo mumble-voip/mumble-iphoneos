@@ -49,6 +49,20 @@
 	return self;
 }
 
+- (id) copyWithZone:(NSZone *)zone {
+	Identity *ident = [[Identity alloc] init];
+	if ([self hasPrimaryKey]) {
+		NSLog(@"Identity: Set Primary Key");
+		ident.primaryKey = self.primaryKey;
+	}
+	ident.persistent = self.persistent;
+	ident.userName = self.userName;
+	ident.fullName = self.fullName;
+	ident.emailAddress = self.emailAddress;
+	ident.avatarData = self.avatarData;
+	return ident;
+}
+
 - (BOOL) hasPrimaryKey {
 	return _pkey != -1;
 }

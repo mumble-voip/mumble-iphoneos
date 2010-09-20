@@ -220,10 +220,10 @@
 			}
 
 			if (cert == nil) {
-				[cell setSubjectName:@"(Unknown)"];
-				[cell setEmail:@"unknown"];
-				[cell setIssuerText:@"issuer"];
-				[cell setExpiryText:@"expiry"];
+				[cell setSubjectName:@"None"];
+				[cell setEmail:nil];
+				[cell setIssuerText:nil];
+				[cell setExpiryText:nil];
 			} else {
 				[cell setSubjectName:[cert commonName]];
 				[cell setEmail:[cert emailAddress]];

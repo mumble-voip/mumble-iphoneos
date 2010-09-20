@@ -38,12 +38,9 @@ static FMDatabase *db = nil;
 + (BOOL) enableForeignKeySupport;
 @end
 
-
 @implementation Database
 
-//
 // Initialize the database.
-//
 + (void) initializeDatabase {
 
 	NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
@@ -112,9 +109,7 @@ static FMDatabase *db = nil;
 	}
 }
 
-//
 // Enable foreign key support in SQLite
-//
 + (BOOL) enableForeignKeySupport {
 	FMResultSet *res;
 	BOOL supported;
@@ -140,9 +135,7 @@ static FMDatabase *db = nil;
 	return supported;
 }
 
-//
 // Tear down the database
-//
 + (void) teardown {
 	[db release];
 }
@@ -152,18 +145,15 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"DROP TABLE `servers`"];
 }
 
-//
 // Store a single favourite
-//
 + (void) storeFavourite:(FavouriteServer *)favServ {
 	// If the favourite already has a primary key, update the currently stored entity
 	if ([favServ hasPrimaryKey]) {
-		NSLog(@"update!");
 		[db executeUpdate:@"UPDATE `servers` SET `name`=?, `hostname`=?, `port`=?, `identity`=?, `username`=?, `password`=? WHERE `id`=?",
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
-			nil,
+			[favServ identityForeignKey] == -1 ? nil : [NSNumber numberWithInt:[favServ identityForeignKey]],
 			[favServ userName],
 			[favServ password],
 			[NSNumber numberWithInt:[favServ primaryKey]]];
@@ -172,7 +162,6 @@ static FMDatabase *db = nil;
 		// We're already inside a transaction if we were called from within
 		// storeFavourites. If that isn't the case, make sure we start a new
 		// transaction.
-		NSLog(@"insert!");
 		BOOL newTransaction = ![db inTransaction];
 		if (newTransaction)
 			[db beginTransaction];
@@ -180,13 +169,12 @@ static FMDatabase *db = nil;
 			[favServ displayName],
 			[favServ hostName],
 			[NSString stringWithFormat:@"%u", [favServ port]],
-			nil,
+			[favServ identityForeignKey] == -1 ? nil : [NSNumber numberWithInt:[favServ identityForeignKey]],
 			[favServ userName],
 			[favServ password]];
 		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
 		[res next];
 		[favServ setPrimaryKey:[res intForColumnIndex:0]];
-		NSLog(@"%i...", [favServ primaryKey]);
 		if (newTransaction)
 			[db commit];
 	}
@@ -198,9 +186,7 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"DELETE FROM `servers` WHERE `id`=?", [NSNumber numberWithInt:[favServ primaryKey]]];
 }
 
-//
 // Save favourites
-//
 + (void) storeFavourites:(NSArray *)favourites {
 	[db beginTransaction];
 	for (FavouriteServer *favServ in favourites) {
@@ -209,34 +195,29 @@ static FMDatabase *db = nil;
 	[db commit];
 }
 
-//
 // Fetch all favourites
-//
 + (NSMutableArray *) fetchAllFavourites {
 	NSMutableArray *favs = [[NSMutableArray alloc] init];
-
 	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `identity`, `username`, `password` FROM `servers`"];
-	NSLog(@"resultSet = %p", res);
-
 	while ([res next]) {
 		FavouriteServer *fs = [[FavouriteServer alloc] init];
 		[fs setPrimaryKey:[res intForColumnIndex:0]];
 		[fs setDisplayName:[res stringForColumnIndex:1]];
 		[fs setHostName:[res stringForColumnIndex:2]];
 		[fs setPort:[res intForColumnIndex:3]];
+		if ([res columnIndexIsNull:4])
+			[fs setIdentityForeignKey:-1];
+		else
+			[fs setIdentityForeignKey:[res intForColumnIndex:4]];
 		[fs setUserName:[res stringForColumnIndex:5]];
 		[fs setPassword:[res stringForColumnIndex:6]];
 		[favs addObject:fs];
 	}
-
 	[res close];
-
 	return [favs autorelease];
 }
 
-//
 // Store identity
-//
 + (void) storeIdentity:(Identity *)ident {
 	// If the favourite already has a primary key, update the currently stored entity
 	if ([ident hasPrimaryKey]) {
@@ -261,18 +242,14 @@ static FMDatabase *db = nil;
 	}
 }
 
-//
 // Delete identity
-//
 + (void) deleteIdentity:(Identity *)ident {
 	NSAssert([ident hasPrimaryKey], @"Can only delete objects originated from database");
 	[db executeUpdate:@"DELETE FROM `identities` WHERE `id`=?",
 		[NSNumber numberWithInt:[ident primaryKey]]];
 }
 
-//
 // Fetch all identities
-//
 + (NSArray *) fetchAllIdentities {
 	NSMutableArray *idents = [[NSMutableArray alloc] init];
 	FMResultSet *res = [db executeQuery:@"SELECT `id`, `persistent`, `username`, `fullname`, `email`, `avatar` FROM `identities`"];
@@ -290,9 +267,26 @@ static FMDatabase *db = nil;
 	return [idents autorelease];
 }
 
-//
+// Fetch an identity by primary key
++ (Identity *) identityWithPrimaryKey:(NSInteger)key {
+	FMResultSet *res = [db executeQuery:@"SELECT `id`, `persistent`, `username`, `fullname`, `email`, `avatar` FROM `identities` WHERE `id`=?",
+							[NSNumber numberWithInt:key]];
+	if (res && [res next]) {
+		Identity *ident = [[Identity alloc] init];
+		ident.primaryKey = [res intForColumnIndex:0];
+		ident.persistent = [res dataForColumnIndex:1];
+		ident.userName = [res stringForColumnIndex:2];
+		ident.fullName = [res stringForColumnIndex:3];
+		ident.emailAddress = [res stringForColumnIndex:4];
+		ident.avatarData = [res dataForColumnIndex:5];
+		[res close];
+		return [ident autorelease];
+	}
+
+	return nil;
+}
+
 // Save identities
-//
 + (void) storeIdentities:(NSArray *)idents {
 	[db beginTransaction];
 	for (Identity *ident in idents) {

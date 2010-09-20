@@ -29,8 +29,9 @@
 */
 
 #import "FavouriteServer.h"
+#import "IdentityPickerViewController.h"
 
-@interface FavouriteServerEditViewController : UITableViewController {
+@interface FavouriteServerEditViewController : UITableViewController <IdentityPickerViewControllerDelegate> {
 	BOOL _editMode;
 	FavouriteServer *_favourite;
 	id _target;
