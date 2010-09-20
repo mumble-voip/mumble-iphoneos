@@ -158,6 +158,8 @@
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 //
