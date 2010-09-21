@@ -108,7 +108,9 @@
 
 	Identity *ident = [_identities objectAtIndex:row-1];
 	[[cell textLabel] setText:[ident userName]];
-	[[cell imageView] setImage:[ident avatar]];
+
+	NSData *data = [ident avatarData];
+	[[cell imageView] setImage:data ? [ident avatar] : [UIImage imageNamed:@"DefaultAvatar"]];
 
 	if (_selectedPrimaryKey == [ident primaryKey]) {
 		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];

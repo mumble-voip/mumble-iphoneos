@@ -386,6 +386,14 @@
 }
 
 #pragma mark -
+#pragma mark UITableView delegate
+
+#if 0
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+#endif
+
+#pragma mark -
 #pragma mark UIAlertView delegate
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

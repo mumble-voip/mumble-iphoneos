@@ -170,8 +170,12 @@
 		transparentBackground.backgroundColor = [UIColor clearColor];
 		cell.backgroundView = transparentBackground;
 		cell.selectedBackgroundView = transparentBackground;
-		[cell setAvatarImage:_identity.avatar];
-		 return cell;
+
+		// fixme(mkrautz): Maybe a [_identity hasAvatar] method?
+		NSData *data = [_identity avatarData];
+		[cell setAvatarImage:data ? _identity.avatar : [UIImage imageNamed:@"DefaultAvatar"]];
+
+		return cell;
 
 	} else if ([indexPath section] == 1) { // Identity
 		NSUInteger row = [indexPath row];

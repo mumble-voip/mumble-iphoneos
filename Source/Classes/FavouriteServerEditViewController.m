@@ -187,7 +187,8 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 			Identity *ident = [_favourite identity];
 			if (ident) {
 				[[cell textLabel] setText:[ident userName]];
-				[[cell imageView] setImage:[ident avatar]];
+				NSData *data = [ident avatarData];
+				[[cell imageView] setImage:data ? [ident avatar] : [UIImage imageNamed:@"DefaultAvatar"]];
 			} else {
 				[[cell textLabel] setText:@"None"];
 				[[cell imageView] setImage:nil];
