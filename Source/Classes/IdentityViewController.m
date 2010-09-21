@@ -57,23 +57,9 @@ static NSInteger IdentityViewControllerCertificateView = 1;
 #pragma mark Initialization
 
 - (id) init {
-	self = [super init];
-	if (self == nil)
-		return nil;
-
-	_currentView = -1;
-
-#ifdef MUMBLE_BETA_DIST
-	// Hack in a beta tester alert
-	NSString *title = @"Beta Alert!";
-	NSString *msg = @"Identities are a new feature of version 0.2 of Mumble for iOS.\n\n"
-					@"It's under heavy development right now, so we don't need bugreports "
-					@"about it as of yet. Thanks!\n";
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-#endif
-
+	if (self = [super init]) {
+		_currentView = -1;
+	}
 	return self;
 }
 
