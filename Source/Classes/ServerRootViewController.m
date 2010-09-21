@@ -30,6 +30,7 @@
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKCertificate.h>
+#import <MumbleKit/MKConnection.h>
 
 #import "ServerRootViewController.h"
 #import "ChannelViewController.h"
@@ -40,12 +41,12 @@
 
 @implementation ServerRootViewController
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(Identity *)identity password:(NSString *)password {
 	self = [super init];
 	if (! self)
 		return nil;
 
-	_username = [username copy];
+	_identity = [identity retain];
 	_password = [password copy];
 
 	_connection = [[MKConnection alloc] init];
@@ -53,6 +54,19 @@
 
 	_model = [[MKServerModel alloc] initWithConnection:_connection];
 	[_model addDelegate:self];
+
+	// Try to fetch our given identity's SecIdentityRef by its persistent reference.
+	// If we're able to fetch it, set it as the connection's client certificate.
+	SecIdentityRef secIdentity = NULL;
+	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+								[identity persistent],	kSecValuePersistentRef,
+								kCFBooleanTrue,			kSecReturnRef,
+								kSecMatchLimitOne,		kSecMatchLimit,
+							nil];
+	if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
+		[_connection setClientIdentity:secIdentity];
+		CFRelease(secIdentity);
+	}
 
 	[_connection connectToHost:host port:port];
 
@@ -64,7 +78,7 @@
 }
 
 - (void) dealloc {
-	[_username release];
+	[_identity release];
 	[_password release];
 	[_model release];
 	[_connection release];
@@ -162,11 +176,15 @@
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
-//
-// An SSL connection has been opened to the server.  We should authenticate ourselves.
-//
+// Connection established...
 - (void) connectionOpened:(MKConnection *)conn {
-	[conn authenticateWithUsername:_username password:_password];
+	NSLog(@"ServerRootViewController: Connection established");
+	[conn authenticateWithUsername:[_identity userName] password:_password];
+}
+
+// Connection closed...
+- (void) connectionClosed:(MKConnection *)conn {
+	NSLog(@"ServerRootViewController: Connection closed");
 }
 
 #pragma mark MKServerModel Delegate

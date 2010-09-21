@@ -109,7 +109,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Mumble Server
 	if (section == 0) {
-		return 3;
+		return 4;
 	// Identity
 	} else if (section == 1) {
 		return 1;
@@ -165,30 +165,38 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 				[cell setIntValue:[_favourite port]];
 			else
 				[cell setTextValue:nil];
+		} else if (row == 3) {
+			[cell setLabel:@"Password"];
+			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
+			[cell setSecureTextEntry:YES];
+			[cell setValueChangedAction:@selector(passwordChanged:)];
+			[cell setTextValue:[_favourite password]];
 		}
 
 		return cell;
 
 	// Identity
-	} else if (section == 1 && row == 0) {
-		static NSString *CellIdentifier = @"FavouriteServerIdentityCell";
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+	} else if (section == 1) {
+		if (row == 0) {
+			static NSString *CellIdentifier = @"FavouriteServerIdentityCell";
+			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+			if (cell == nil) {
+				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+			}
+
+			Identity *ident = [_favourite identity];
+			if (ident) {
+				[[cell textLabel] setText:[ident userName]];
+				[[cell imageView] setImage:[ident avatar]];
+			} else {
+				[[cell textLabel] setText:@"None"];
+				[[cell imageView] setImage:nil];
+			}
+
+			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+
+			return cell;
 		}
-
-		Identity *ident = [_favourite identity];
-		if (ident) {
-			[[cell textLabel] setText:[ident userName]];
-			[[cell imageView] setImage:[ident avatar]];
-		} else {
-			[[cell textLabel] setText:@"None"];
-			[[cell imageView] setImage:nil];
-		}
-
-		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-
-		return cell;
 	}
 
     return nil;
@@ -234,11 +242,6 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 - (void) portChanged:(id)sender {
 	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)sender;
 	[_favourite setPort:(NSUInteger)[[cell textValue] intValue]];
-}
-
-- (void) usernameChanged:(id)sender {
-	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)sender;
-	[_favourite setUserName:[cell textValue]];
 }
 
 - (void) passwordChanged:(id)sender {
