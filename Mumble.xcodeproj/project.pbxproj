@@ -14,6 +14,7 @@
 		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
+		284BBBA512495C4400366F4C /* MumbleApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 284BBBA412495C4400366F4C /* MumbleApplication.m */; };
 		2858A580123B9E5700A82155 /* CertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* CertificateCell.xib */; };
 		2858A591123B9EE000A82155 /* certificate16.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858A58B123B9EE000A82155 /* certificate16.png */; };
 		2858A593123B9EE000A82155 /* certificate64.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858A58D123B9EE000A82155 /* certificate64.png */; };
@@ -175,6 +176,8 @@
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
 		2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsViewController.m; sourceTree = "<group>"; };
+		284BBBA312495C4400366F4C /* MumbleApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleApplication.h; sourceTree = "<group>"; };
+		284BBBA412495C4400366F4C /* MumbleApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MumbleApplication.m; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* CertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CertificateCell.xib; path = Resources/CertificateCell.xib; sourceTree = "<group>"; };
 		2858A58B123B9EE000A82155 /* certificate16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificate16.png; path = Resources/icons/ios/certificate16.png; sourceTree = "<group>"; };
 		2858A58D123B9EE000A82155 /* certificate64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificate64.png; path = Resources/icons/ios/certificate64.png; sourceTree = "<group>"; };
@@ -330,6 +333,8 @@
 				2861C25A116BE905002B8514 /* AboutViewController.h */,
 				2861C25B116BE905002B8514 /* AboutViewController.m */,
 				2861C25C116BE905002B8514 /* AboutViewController.xib */,
+				284BBBA312495C4400366F4C /* MumbleApplication.h */,
+				284BBBA412495C4400366F4C /* MumbleApplication.m */,
 				2861C25D116BE905002B8514 /* AppDelegate.h */,
 				2861C25E116BE905002B8514 /* AppDelegate.m */,
 				2861C25F116BE905002B8514 /* CountryServerListController.h */,
@@ -815,6 +820,7 @@
 				28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */,
 				28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */,
 				28847911124696BA0068364D /* IdentityPickerViewController.m in Sources */,
+				284BBBA512495C4400366F4C /* MumbleApplication.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

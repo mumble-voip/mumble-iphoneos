@@ -30,6 +30,7 @@
 
 #import "AppDelegate.h"
 
+#import "MumbleApplication.h"
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
 #import "Database.h"
@@ -76,9 +77,7 @@
 		[welcomeScreen release];
 	}
 
-#ifdef MUMBLE_BETA_DIST
 	[self notifyCrash];
-#endif
 
 	_verCheck = [[VersionChecker alloc] init];
 }
@@ -96,12 +95,7 @@
 }
 
 - (void) notifyCrash {
-	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-																	   NSUserDomainMask,
-																	   YES);
-	NSString *directory = [documentDirectories objectAtIndex:0];
-	NSString *crashTokenPath = [directory stringByAppendingPathComponent:@".crashtoken"];
-	if ([[NSFileManager defaultManager] fileExistsAtPath:crashTokenPath]) {
+	if ([MumbleApp didCrashRecently]) {
 		NSString *title = @"Beta Crash Reporting";
 		NSString *msg = @"Mumble has detected that it has recently crashed.\n\n"
 						"Don't forget to report your crashes to the beta portal using the crash reporting tool.\n";
@@ -109,7 +103,7 @@
 		[alertView show];
 		[alertView release];
 
-		[[NSFileManager defaultManager] removeItemAtPath:crashTokenPath error:nil];
+		[MumbleApp resetCrashCount];
 	}
 }
 

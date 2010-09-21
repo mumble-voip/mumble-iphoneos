@@ -28,9 +28,16 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MumbleApplication", @"AppDelegate");
-	[pool release];
-	return retVal;
+#define MumbleApp ((MumbleApplication *)[MumbleApplication sharedApplication])
+
+@interface MumbleApplication : UIApplication {
+	NSString *_crashTokenPath;
 }
+
+- (id) init;
+- (void) dealloc;
+
+- (BOOL) didCrashRecently;
+- (void) resetCrashCount;
+
+@end
