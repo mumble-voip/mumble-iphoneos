@@ -39,6 +39,10 @@
 #import "PDFImageLoader.h"
 #import "CertificateViewController.h"
 
+@interface ServerRootViewController (Private)
+- (void) togglePushToTalk;
+@end
+
 @implementation ServerRootViewController
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(Identity *)identity password:(NSString *)password {
@@ -116,6 +120,7 @@
 	[pttButton release];
 	[usersButton release];
 	[flexSpace release];
+
 	[[self navigationController] setToolbarHidden:NO];
 }
 
@@ -420,11 +425,7 @@
 
 // Push-to-Talk button
 - (void) pushToTalkClicked:(id)sender {
-	static BOOL toggle = NO;
-	toggle = !toggle;
-
-	MKAudio *audio = [MKAudio sharedAudio];
-	[audio setForceTransmit:toggle];
+	[self togglePushToTalk];
 }
 
 // Channel picker
@@ -442,6 +443,12 @@
 // User picker
 - (void) usersButtonClicked:(id)sender {
 	NSLog(@"users");
+}
+
+- (void) togglePushToTalk {
+	_pttState = !_pttState;
+	MKAudio *audio = [MKAudio sharedAudio];
+	[audio setForceTransmit:_pttState];
 }
 
 @end

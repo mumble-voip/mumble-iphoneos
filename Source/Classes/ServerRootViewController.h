@@ -44,6 +44,7 @@
 	MKChannel      *_currentChannel;
 	Identity       *_identity;
 	NSString       *_password;
+	BOOL           _pttState;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(Identity *)identity password:(NSString *)password;
