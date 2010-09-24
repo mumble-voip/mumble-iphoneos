@@ -28,6 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+@class AppDelegate;
+
 #define MumbleApp ((MumbleApplication *)[MumbleApplication sharedApplication])
 
 @interface MumbleApplication : UIApplication {
@@ -37,6 +39,7 @@
 - (id) init;
 - (void) dealloc;
 
+- (AppDelegate *) delegate;
 - (BOOL) didCrashRecently;
 - (void) resetCrashCount;
 

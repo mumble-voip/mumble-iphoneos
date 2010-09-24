@@ -34,6 +34,7 @@
 #import "FavouriteServer.h"
 #import "FavouriteServerEditViewController.h"
 
+#import "ServerConnectionViewController.h"
 #import "ServerRootViewController.h"
 
 @implementation FavouriteServerListController
@@ -136,9 +137,16 @@
 	// Connect
 	if (index == 0) {
 		UINavigationController *navCtrl = [[UINavigationController alloc] init];
-		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName] port:[favServ port] identity:[favServ identity] password:[favServ password]];
-		[navCtrl pushViewController:serverRoot animated:NO];
-		[[self navigationController] presentModalViewController:navCtrl animated:YES];
+
+		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
+																							 port:[favServ port]
+																						 identity:[favServ identity]
+																						 password:[favServ password]];
+		[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+		[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];
+
+		[[self navigationController] presentModalViewController:navCtrl animated:NO];
+
 		[serverRoot release];
 		[navCtrl release];
 

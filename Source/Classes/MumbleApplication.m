@@ -29,6 +29,7 @@
 */
 
 #import "MumbleApplication.h"
+#import "AppDelegate.h"
 
 static char crashhandler_fn[PATH_MAX] = { 0, };
 static void crashhandler_signal_handler();
@@ -95,6 +96,10 @@ static void crashhandler_handle_crash() {
 - (void) dealloc {
 	[_crashTokenPath release];
 	[super dealloc];
+}
+
+- (AppDelegate *) delegate {
+	return (AppDelegate *)[super delegate];
 }
 
 // Setup the crash notification handler

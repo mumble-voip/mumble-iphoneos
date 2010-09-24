@@ -32,7 +32,10 @@
 #import <MumbleKit/MKCertificate.h>
 #import <MumbleKit/MKConnection.h>
 
+#import "MumbleApplication.h"
+#import "AppDelegate.h"
 #import "ServerRootViewController.h"
+#import "ServerConnectionViewController.h"
 #import "ChannelViewController.h"
 #import "LogViewController.h"
 #import "UserViewController.h"
@@ -121,7 +124,30 @@
 	[usersButton release];
 	[flexSpace release];
 
+	// Show the ServerConnectionViewController when we're trying to establish a
+	// connection to a server.
+	if (![_connection connected]) {
+		_progressController = [[ServerConnectionViewController alloc] init];
+		_progressController.view.frame = [[UIScreen mainScreen] applicationFrame];
+		_progressController.view.hidden = YES;
+
+		UIWindow *window = [[MumbleApp delegate] window];
+		[window addSubview:_progressController.view];
+
+		[UIView beginAnimations:nil context:NULL];
+		_progressController.view.hidden = NO;
+		[UIView setAnimationDuration:0.6f];
+		[UIView setAnimationBeginsFromCurrentState:YES];
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:window cache:YES];
+		[UIView commitAnimations];
+
+		[MumbleApp setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
+	}
+
 	[[self navigationController] setToolbarHidden:NO];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
 }
 
 #pragma mark MKConnection Delegate
@@ -194,26 +220,31 @@
 
 #pragma mark MKServerModel Delegate
 
-//
 // We've successfuly joined the server.
-//
 - (void) serverModel:(MKServerModel *)server joinedServerAsUser:(MKUser *)user {
 	_currentChannel = [[_model connectedUser] channel];
 	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
+
+	[MumbleApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+
+	[UIView animateWithDuration:0.4f animations:^{
+		_progressController.view.alpha = 0.0f;
+	} completion:^(BOOL finished){
+		[_progressController.view removeFromSuperview];
+		[_progressController release];
+		_progressController = nil;
+	}];
+
 	[[self navigationItem] setTitle:[_currentChannel channelName]];
 	[[self tableView] reloadData];
 }
 
-//
 // A user joined the server.
-//
 - (void) serverModel:(MKServerModel *)server userJoined:(MKUser *)user {
 	NSLog(@"ServerViewController: userJoined.");
 }
 
-//
 // A user left the server.
-//
 - (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
 	if (_currentChannel == nil)
 		return;
@@ -226,9 +257,7 @@
 	}
 }
 
-//
 // A user moved channel
-//
 - (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
 	if (_currentChannel == nil)
 		return;
@@ -277,23 +306,17 @@
 	}
 }
 
-//
 // A channel was added.
-//
 - (void) serverModel:(MKServerModel *)server channelAdded:(MKChannel *)channel {
 	NSLog(@"ServerViewController: channelAdded.");
 }
 
-//
 // A channel was removed.
-//
 - (void) serverModel:(MKServerModel *)server channelRemoved:(MKChannel *)channel {
 	NSLog(@"ServerViewController: channelRemoved.");
 }
 
-//
 // User talk state changed
-//
 - (void) userTalkStateChanged:(NSNotification *)notification {
 	if (_currentChannel == nil)
 		return;

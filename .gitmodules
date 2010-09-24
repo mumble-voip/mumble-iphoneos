@@ -4,3 +4,6 @@
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
 	url = http://github.com/ccgus/fmdb.git
+[submodule "Dependencies/three20"]
+	path = Dependencies/three20
+	url = http://github.com/facebook/three20.git
