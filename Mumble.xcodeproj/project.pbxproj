@@ -166,7 +166,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 10099D4E010099D4E010099D;
+			remoteGlobalIDString = 10099D1E010099D1E010099D;
 			remoteInfo = MumbleKitCombined;
 		};
 		28FEA757124AB77B00A3F6B5 /* PBXContainerItemProxy */ = {
@@ -1286,7 +1286,10 @@
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "-D__IPHONE_OS_VERSION_MIN_REQUIRED=040000";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
