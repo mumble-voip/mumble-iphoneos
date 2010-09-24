@@ -31,6 +31,12 @@ This will fetch known "working" snapshot of the required submodules
 for MumbleKit. (CELT, Speex, Protocol Buffers for Objective C and
 OpenSSL)
 
+Then it's time to generate MumbleKit's Xcode project file. For this
+you'll need CMake 2.8.3 (or 2.8.2 with patches, see MumbleKit's
+README for more information). To generate MumbleKit.xcodeproj, do:
+
+        $ cmake -G Xcode . -DIOS_BUILD=1
+
 Once this is done, you should be able to open up the Xcode
 project file for Mumble (Mumble.xcodeproj) in the root of
 the source tree and hit Cmd-B to build!
