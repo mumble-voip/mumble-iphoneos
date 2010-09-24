@@ -31,7 +31,7 @@
 		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
 		2861C274116BE905002B8514 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* AboutViewController.m */; };
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
-		2861C276116BE905002B8514 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* AppDelegate.m */; };
+		2861C276116BE905002B8514 /* MumbleApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */; };
 		2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C265116BE905002B8514 /* PDFImageLoader.m */; };
 		2861C27B116BE905002B8514 /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* PublicServerList.m */; };
 		2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* PublicServerListController.m */; };
@@ -353,8 +353,8 @@
 		2861C25A116BE905002B8514 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		2861C25B116BE905002B8514 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		2861C25C116BE905002B8514 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
-		2861C25D116BE905002B8514 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		2861C25E116BE905002B8514 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2861C25D116BE905002B8514 /* MumbleApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleApplicationDelegate.h; sourceTree = "<group>"; };
+		2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MumbleApplicationDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* CountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryServerListController.h; sourceTree = "<group>"; };
 		2861C264116BE905002B8514 /* PDFImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageLoader.h; sourceTree = "<group>"; };
 		2861C265116BE905002B8514 /* PDFImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageLoader.m; sourceTree = "<group>"; };
@@ -503,8 +503,8 @@
 				2861C25C116BE905002B8514 /* AboutViewController.xib */,
 				284BBBA312495C4400366F4C /* MumbleApplication.h */,
 				284BBBA412495C4400366F4C /* MumbleApplication.m */,
-				2861C25D116BE905002B8514 /* AppDelegate.h */,
-				2861C25E116BE905002B8514 /* AppDelegate.m */,
+				2861C25D116BE905002B8514 /* MumbleApplicationDelegate.h */,
+				2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */,
 				2861C25F116BE905002B8514 /* CountryServerListController.h */,
 				28C6EF0911BBF38100E426C8 /* CountryServerListController.m */,
 				2861C264116BE905002B8514 /* PDFImageLoader.h */,
@@ -1156,7 +1156,7 @@
 				287A60AA117628FE00DD4FFB /* ChannelViewController.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				2861C274116BE905002B8514 /* AboutViewController.m in Sources */,
-				2861C276116BE905002B8514 /* AppDelegate.m in Sources */,
+				2861C276116BE905002B8514 /* MumbleApplicationDelegate.m in Sources */,
 				2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */,
 				2861C27B116BE905002B8514 /* PublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,

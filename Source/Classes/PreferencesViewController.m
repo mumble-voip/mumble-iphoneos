@@ -29,7 +29,8 @@
 */
 
 #import "PreferencesViewController.h"
-#import "AppDelegate.h"
+#import "MumbleApplication.h"
+#import "MumbleApplicationDelegate.h"
 #import "AdvancedAudioPreferencesViewController.h"
 
 @interface PreferencesViewController (Private)
@@ -56,7 +57,7 @@
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
 	// Call our app delegate to reload preferences
-	[(AppDelegate *)[[UIApplication sharedApplication] delegate] reloadPreferences];
+	[[MumbleApp delegate] reloadPreferences];
 
 	[super dealloc];
 }

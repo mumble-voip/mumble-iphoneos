@@ -33,7 +33,8 @@
 #import <MumbleKit/MKConnection.h>
 
 #import "MumbleApplication.h"
-#import "AppDelegate.h"
+#import "MumbleApplicationDelegate.h"
+
 #import "ServerRootViewController.h"
 #import "ServerConnectionViewController.h"
 #import "ChannelViewController.h"

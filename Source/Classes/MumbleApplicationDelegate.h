@@ -30,7 +30,7 @@
 
 #import "VersionChecker.h"
 
-@interface AppDelegate : NSObject <UIApplicationDelegate> {
+@interface MumbleApplicationDelegate : NSObject <UIApplicationDelegate> {
 	UIWindow                *window;
 	UINavigationController  *navigationController;
 	NSDate                  *_launchDate;

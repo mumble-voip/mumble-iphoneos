@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "AppDelegate.h"
+#import "MumbleApplicationDelegate.h"
 
 #import "MumbleApplication.h"
 #import "WelcomeScreenPhone.h"
@@ -37,12 +37,12 @@
 
 #import <MumbleKit/MKAudio.h>
 
-@interface AppDelegate (Private)
+@interface MumbleApplicationDelegate (Private)
 - (void) setupAudio;
 - (void) notifyCrash;
 @end
 
-@implementation AppDelegate
+@implementation MumbleApplicationDelegate
 
 @synthesize window;
 @synthesize navigationController;

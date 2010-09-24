@@ -33,7 +33,8 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#import "AppDelegate.h"
+#import "MumbleApplication.h"
+#import "MumbleApplicationDelegate.h"
 #import "DiagnosticsViewController.h"
 
 @interface DiagnosticsViewController (Private)
@@ -101,7 +102,7 @@
 	_sinceLaunchCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
 	[_sinceLaunchCell setSelectionStyle:UITableViewCellSelectionStyleNone];
 	[[_sinceLaunchCell textLabel] setText:@"Time Since Launch"];
-	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
+	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [[MumbleApp delegate] timeIntervalSinceLaunch]]];
 	[[_sinceLaunchCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
 	// Audio
@@ -289,7 +290,7 @@
 	NSString *buildDateString = [NSString stringWithFormat:@"%.2f", [buildDate timeIntervalSince1970]];
 	[dict setObject:buildDateString forKey:@"build-date-epoch"];
 
-	[dict setObject:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
+	[dict setObject:[NSString stringWithFormat:@"%.2f", [(MumbleApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
 	// Audio
 	[dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
 

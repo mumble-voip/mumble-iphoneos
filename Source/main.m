@@ -30,7 +30,7 @@
 
 int main(int argc, char *argv[]) {
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MumbleApplication", @"AppDelegate");
+	int retVal = UIApplicationMain(argc, argv, @"MumbleApplication", @"MumbleApplicationDelegate");
 	[pool release];
 	return retVal;
 }

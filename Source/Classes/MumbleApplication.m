@@ -29,7 +29,7 @@
 */
 
 #import "MumbleApplication.h"
-#import "AppDelegate.h"
+#import "MumbleApplicationDelegate.h"
 
 static char crashhandler_fn[PATH_MAX] = { 0, };
 static void crashhandler_signal_handler();
