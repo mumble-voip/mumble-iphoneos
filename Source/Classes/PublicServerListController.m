@@ -28,108 +28,81 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import "PublicServerList.h"
 #import "PublicServerListController.h"
 #import "CountryServerListController.h"
 
 @implementation PublicServerListController
 
 - (id) init {
-	self = [super initWithNibName:@"PublicServerListController" bundle:nil];
-	if (self == nil)
-		return nil;
-
-	publicServerList = [[PublicServerList alloc] init];
-	[publicServerList setDelegate:self];
-	[publicServerList load];
-
-	// Add UIActivityIndicator
-	activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-	[activityIndicator startAnimating];
-	UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-	self.navigationItem.rightBarButtonItem = rightButton;
-
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		_serverList = [[PublicServerList alloc] init];
+		[_serverList setDelegate:self];
+		[_serverList load];
+	}
 	return self;
 }
 
 - (void) dealloc {
-	[publicServerList release];
-	[activityIndicator release];
+	[_serverList release];
 	[super dealloc];
 }
 
-
-- (void)viewDidLoad {
-	[super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
+- (void) viewWillAppear:(BOOL)animated {
 	self.navigationItem.title = @"Public Servers";
+
+	if (![_serverList loadCompleted]) {
+		_activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+		[_activityIndicator startAnimating];
+		UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
+		self.navigationItem.rightBarButtonItem = rightButton;
+		[_activityIndicator release];
+	}
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-}
 
- // Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+#pragma mark
+#pragma mark PublicServerList delegate
 
-- (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-
-}
-
-/* Public Server List delegate. */
-
-- (void) serverListReady: (PublicServerList *)publicList {
-	loadCompleted = YES;
+- (void) publicServerListDidLoad:(PublicServerList *)publicList {
 	[[self tableView] reloadData];
-	[activityIndicator stopAnimating];
+	[_activityIndicator stopAnimating];
 }
 
-/* Table view methods. */
+- (void) publicServerListFailedLoading:(NSError *)error {
+}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#pragma mark -
+#pragma mark UITableView data source
 
-	if (!loadCompleted)
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+	if (![_serverList loadCompleted])
 		return 0;
-
-	return [publicServerList numberOfContinents];
+	return [_serverList numberOfContinents];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return [publicServerList continentNameAtIndex:section];
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	return [_serverList continentNameAtIndex:section];
 }
 
-// Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-	if (!loadCompleted)
+	if (![_serverList loadCompleted])
 		return 0;
-
-	return [publicServerList numberOfCountriesAtContinentIndex:section];
+	return [_serverList numberOfCountriesAtContinentIndex:section];
 }
 
-// Space it a little.
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50.0;
 }
 
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countryItem"];
 	if (!cell) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryItem"] autorelease];
 	}
 
-	// Set up a disclosure accessory on our cells.
 	[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-	NSDictionary *countryInfo = [publicServerList countryAtIndexPath:indexPath];
+	NSDictionary *countryInfo = [_serverList countryAtIndexPath:indexPath];
 	cell.textLabel.text = [countryInfo objectForKey:@"name"];
 	NSInteger numServers = [[countryInfo objectForKey:@"servers"] count];
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%i %@", numServers, numServers > 1 ? @"servers" : @"server"];
@@ -137,9 +110,11 @@
 	return cell;
 }
 
-// Row selected.
+#pragma mark -
+#pragma mark UITableView delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary *countryInfo = [publicServerList countryAtIndexPath:indexPath];
+	NSDictionary *countryInfo = [_serverList countryAtIndexPath:indexPath];
 	NSString *countryName = [countryInfo objectForKey:@"name"];
 	NSArray *countryServers = [countryInfo objectForKey:@"servers"];
 

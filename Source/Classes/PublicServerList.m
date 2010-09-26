@@ -34,128 +34,119 @@
 @implementation PublicServerList
 
 - (id) init {
-	self = [super init];
-	if (self == nil)
-		return nil;
-
-	continentNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Continents.plist", [[NSBundle mainBundle] resourcePath]]];
-	countryNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Countries.plist", [[NSBundle mainBundle] resourcePath]]];
-
+	if (self = [super init]) {
+		_continentNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Continents.plist", [[NSBundle mainBundle] resourcePath]]];
+		_countryNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Countries.plist", [[NSBundle mainBundle] resourcePath]]];
+		_loadCompleted = NO;
+	}
 	return self;
 }
 
 - (void) dealloc {
-	[modelContinents release];
-	[modelCountries release];
+	[_conn cancel];
+	[_conn release];
 
-	[continentNames release];
-	[countryNames release];
-
+	[_modelContinents release];
+	[_modelCountries release];
+	[_continentNames release];
+	[_countryNames release];
 	[super dealloc];
 }
 
-- (void) setDelegate:(id)selector {
-	delegate = selector;
+- (id<PublicServerListDelegate>) delegate {
+	return _delegate;
+}
+
+- (void) setDelegate:(id<PublicServerListDelegate>)delegate {
+	_delegate = delegate;
 }
 
 - (void) load {
-	// Setup request.
-	urlRequest = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
-	[NSURLConnection connectionWithRequest:urlRequest delegate:self];
+	NSURLRequest *req = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
+	_conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
+	_buf = [[NSMutableData alloc] init];
+}
+
+- (BOOL) loadCompleted {
+	return _loadCompleted;
 }
 
 #pragma mark -
-#pragma mark NSConnection delegate methods
+#pragma mark NSConnection delegate
 
-/*
- * Called when new data from the NSURLConnecting is available.
- */
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	if (serverListData == nil) {
-		serverListData = [[NSMutableData alloc] init];
-	}
-	[serverListData appendData:data];
+- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[_buf appendData:data];
 }
 
-/*
- * Called when we fail to grab the server list.
- */
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	NSLog(@"PublicServerList: Failed to fetch public server list.");
-
-	if ([(NSObject *)delegate respondsToSelector:@selector(serverListError:)]) {
-		[delegate serverListError:error];
-	}
+	[_delegate publicServerListFailedLoading:error];
 }
 
-/*
- * Called when we're done loading the server list XML. Time to parse it!
- */
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+- (void) connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSLog(@"PublicServerList: Finished loading list.");
 
-	continentCountries = [[NSMutableDictionary alloc] initWithCapacity:[continentNames count]];
-	countryServers = [[NSMutableDictionary alloc] init];
+	_continentCountries = [[NSMutableDictionary alloc] initWithCapacity:[_continentNames count]];
+	_countryServers = [[NSMutableDictionary alloc] init];
 
 	// Parse XML server list
-	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:serverListData];
-	[parser setDelegate:self];
+	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:_buf];
+	[parser setDelegate:(id<NSXMLParserDelegate>)self];
 	[parser parse];
 	[parser release];
+	[_buf release];
 
 	// Transform from NSDictionary representation to a NSArray-model
-	NSArray *continentCodes = [[continentNames allKeys] sortedArrayUsingSelector:@selector(compare:)];
-	[modelContinents release];
-	modelContinents = [[NSMutableArray alloc] initWithCapacity:[continentCodes count]];
-	[modelCountries release];
-	modelCountries = [[NSMutableArray alloc] init];
+	NSArray *continentCodes = [[_continentNames allKeys] sortedArrayUsingSelector:@selector(compare:)];
+	[_modelContinents release];
+	_modelContinents = [[NSMutableArray alloc] initWithCapacity:[continentCodes count]];
+	[_modelCountries release];
+	_modelCountries = [[NSMutableArray alloc] init];
 
 	for (NSString *key in continentCodes) {
-		[modelContinents addObject:[continentNames objectForKey:key]];
+		[_modelContinents addObject:[_continentNames objectForKey:key]];
 
-		NSSet *countryCodeSet = [continentCountries objectForKey:key];
+		NSSet *countryCodeSet = [_continentCountries objectForKey:key];
 		NSArray *countryCodes = [[countryCodeSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 
 		NSMutableArray *countries = [NSMutableArray arrayWithCapacity:[countryCodes count]];
 
 		for (NSString *countryKey in countryCodes) {
-			NSString *countryName = [countryNames objectForKey:countryKey];
-			NSArray *countryServerList = [countryServers objectForKey:countryKey];
+			NSString *countryName = [_countryNames objectForKey:countryKey];
+			NSArray *countryServerList = [_countryServers objectForKey:countryKey];
 			NSDictionary *country = [NSDictionary dictionaryWithObjectsAndKeys:
 										countryName, @"name",
 										countryServerList, @"servers", nil];
 			[countries addObject:country];
 		}
-		[modelCountries addObject:countries];
+		[_modelCountries addObject:countries];
 	}
 
-	[continentCountries release];
-	[countryServers release];
-	continentCountries = countryServers = nil;
+	[_continentCountries release];
+	[_countryServers release];
+	_continentCountries = nil;
+	_countryServers = nil;
 
-	[serverListData release];
-	serverListData = nil;
+	_loadCompleted = YES;
+	[_delegate publicServerListDidLoad:self];
 
-	// Call our delegate.
-	if ([(NSObject *)delegate respondsToSelector:@selector(serverListReady:)]) {
-		[delegate serverListReady:self];
-	}
+	[_conn release];
+	_conn = nil;
 }
 
 #pragma mark -
 #pragma mark NSXMLParserDelegate methods
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
-	if ([elementName isEqual:@"server"]) {
+- (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
+	if ([elementName isEqualToString:@"server"]) {
 		NSString *countryCode = [attributeDict objectForKey:@"country_code"];
 		if (countryCode) {
-
 			// Get server array for this particular country
-			NSMutableArray *array = [countryServers objectForKey:countryCode];
+			NSMutableArray *array = [_countryServers objectForKey:countryCode];
 			if (array == nil) {
 				// No array available. Create a new one.
 				array = [NSMutableArray arrayWithCapacity:50];
-				[countryServers setObject:array forKey:countryCode];
+				[_countryServers setObject:array forKey:countryCode];
 			}
 			// Add attribute dict to server array.
 			[array addObject:[attributeDict retain]];
@@ -163,11 +154,11 @@
 			// Extract the continent code of the country
 			NSString *continentCode = [attributeDict objectForKey:@"continent_code"];
 			// Get our country set from our continent -> countries mapping
-			NSMutableSet *countries = [continentCountries objectForKey:continentCode];
+			NSMutableSet *countries = [_continentCountries objectForKey:continentCode];
 			if (countries == nil) {
 				// No set for continent? Create a new one.
 				countries = [NSMutableSet setWithCapacity:100];
-				[continentCountries setObject:countries forKey:continentCode];
+				[_continentCountries setObject:countries forKey:continentCode];
 			}
 			[countries addObject:countryCode];
 		}
@@ -180,20 +171,24 @@
 #pragma mark -
 #pragma mark Model access
 
+// Returns the number of continents in the public server list
 - (NSInteger) numberOfContinents {
-	return [continentNames count];
+	return [_continentNames count];
 }
 
+// Get continent at index 'idx'.
 - (NSString *) continentNameAtIndex:(NSInteger)index {
-	return [modelContinents objectAtIndex:index];
+	return [_modelContinents objectAtIndex:index];
 }
 
+// Get the number of countries in the continent at index 'idx'.
 - (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index {
-	return [[modelCountries objectAtIndex:index] count];
+	return [[_modelCountries objectAtIndex:index] count];
 }
 
+// Get a dictionary representing a country.
 - (NSDictionary *) countryAtIndexPath:(NSIndexPath *)indexPath {
-	return [[modelCountries objectAtIndex:[indexPath indexAtPosition:0]] objectAtIndex:[indexPath indexAtPosition:1]];
+	return [[_modelCountries objectAtIndex:[indexPath indexAtPosition:0]] objectAtIndex:[indexPath indexAtPosition:1]];
 }
 
 @end

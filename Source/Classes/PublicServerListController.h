@@ -30,10 +30,9 @@
 
 #import "PublicServerList.h"
 
-@interface PublicServerListController : UITableViewController {
-	BOOL loadCompleted;
-	UIActivityIndicatorView *activityIndicator;
-	PublicServerList *publicServerList;
+@interface PublicServerListController : UITableViewController <PublicServerListDelegate> {
+	UIActivityIndicatorView  *_activityIndicator;
+	PublicServerList         *_serverList;
 }
 
 - (id) init;

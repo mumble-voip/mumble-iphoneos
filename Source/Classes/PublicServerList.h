@@ -33,37 +33,35 @@
 @class PublicServerList;
 
 @protocol PublicServerListDelegate
-- (void) serverListReady:(PublicServerList *)list;
-- (void) serverListError:(NSError *)error;
+- (void) publicServerListDidLoad:(PublicServerList *)list;
+- (void) publicServerListFailedLoading:(NSError *)error;
 @end
 
-// fixme(mkrautz): Come iOS SDK 4 public release, we should implement the NSXMLParserDelegate protocol.
-@interface PublicServerList : NSObject {
-	NSURLRequest *urlRequest;
-	NSURLResponse *urlResponse;
-	NSMutableData *serverListData;
+@interface PublicServerList : NSObject <NSXMLParserDelegate> {
+	NSURLConnection               *_conn;
+	NSMutableData                 *_buf;
 
-	NSMutableDictionary *continentCountries;
-	NSMutableDictionary *countryServers;
+	NSMutableDictionary           *_continentCountries;
+	NSMutableDictionary           *_countryServers;
 
-	NSDictionary *continentNames;
-	NSDictionary *countryNames;
+	NSDictionary                  *_continentNames;
+	NSDictionary                  *_countryNames;
 
-	NSMutableArray *modelContinents;
-	NSMutableArray *modelCountries;
+	NSMutableArray                *_modelContinents;
+	NSMutableArray                *_modelCountries;
 
-	id<PublicServerListDelegate> delegate;
+	BOOL                          _loadCompleted;
+	id<PublicServerListDelegate>  _delegate;
 }
 
 - (id) init;
 - (void) dealloc;
 
-#pragma mark Public methods
+- (id<PublicServerListDelegate>) delegate;
+- (void) setDelegate:(id<PublicServerListDelegate>)selector;
 
 - (void) load;
-- (void) setDelegate:(id)selector;
-
-#pragma mark Model access
+- (BOOL) loadCompleted;
 
 - (NSInteger) numberOfContinents;
 - (NSString *) continentNameAtIndex:(NSInteger)index;
