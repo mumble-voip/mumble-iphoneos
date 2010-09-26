@@ -33,7 +33,10 @@
 #import "MumbleApplication.h"
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
+#import "WelcomeScreenController.h"
 #import "Database.h"
+
+#import "MumbleStyleSheet.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -50,21 +53,31 @@
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
 	_launchDate = [[NSDate alloc] init];
 
-	[window addSubview:[navigationController view]];
+	UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
 	[window makeKeyAndVisible];
 
 	[self reloadPreferences];
 	[Database initializeDatabase];
+	[TTDefaultStyleSheet setGlobalStyleSheet:[[[MumbleStyleSheet alloc] init] autorelease]];
+	
+	self.navigationController.toolbarHidden = YES;
+	[window addSubview:[navigationController view]];
 
-	// If we're running on anything below OS 3.2, UIDevice does not
-	// respond to the userInterfaceIdiom method. We must assume we're
-	// running on an iPhone or iPod Touch.
-	UIDevice *device = [UIDevice currentDevice];
-	UIUserInterfaceIdiom idiom = UIUserInterfaceIdiomPhone;
-	if ([device respondsToSelector:@selector(userInterfaceIdiom)]) {
-		idiom = [[UIDevice currentDevice] userInterfaceIdiom];
-	}
+	// Create a fake splash screen that we can animate to give us
+	// a pretty fade-in launch...
+	UIScreen *screen = [UIScreen mainScreen];
+	UIImageView *imageView = [[UIImageView alloc] initWithFrame:[screen applicationFrame]];
+	[imageView setImage:[UIImage imageNamed:@"Splash.png"]];
+	[window addSubview:imageView];
 
+#if 1
+	self.navigationController.view.autoresizesSubviews = YES;
+
+	WelcomeScreenController *welcomeScreen = [[WelcomeScreenController alloc] init];
+	[navigationController pushViewController:welcomeScreen animated:NO];
+	[welcomeScreen release];
+
+#else
 	if (idiom == UIUserInterfaceIdiomPad) {
 		NSLog(@"UIUserInterfaceIdiomPad detected.");
 		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
@@ -76,10 +89,17 @@
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	}
+#endif
+	
+	[UIView animateWithDuration:0.8f animations:^{
+		imageView.alpha = 0.0f;
+	} completion:^(BOOL finished){
+		[imageView removeFromSuperview];
+		[imageView release];
 
-	[self notifyCrash];
-
-	_verCheck = [[VersionChecker alloc] init];
+		[self notifyCrash];
+		_verCheck = [[VersionChecker alloc] init];
+	}];	
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {

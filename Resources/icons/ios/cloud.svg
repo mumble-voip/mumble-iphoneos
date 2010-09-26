@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3874"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="cloud.svg">
+  <defs
+     id="defs3876">
+    <linearGradient
+       id="linearGradient4417">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4419" />
+      <stop
+         style="stop-color:#f4f4f4;stop-opacity:1;"
+         offset="1"
+         id="stop4421" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4417"
+       id="linearGradient4433"
+       x1="42.857143"
+       y1="489.50504"
+       x2="331.42856"
+       y2="489.50504"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="25.154261"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="797"
+     inkscape:window-height="597"
+     inkscape:window-x="241"
+     inkscape:window-y="58"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata3879">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3894"
+       style="fill:url(#linearGradient4433);fill-opacity:1.0;fill-rule:nonzero;stroke:none"
+       transform="matrix(1,0,0,1.2625,148.57143,-98.495071)"
+       inkscape:export-filename="/Users/mkrautz/Desktop/cloud.png"
+       inkscape:export-xdpi="16.219999"
+       inkscape:export-ydpi="16.219999">
+      <path
+         id="path3892"
+         transform="translate(105.71428,-74.285719)"
+         style="fill:url(#linearGradient4433);fill-opacity:1.0;fill-rule:nonzero;stroke:none"
+         d="m 225.71429,542.36218 c 0,33.92606 -33.89844,61.42857 -75.71429,61.42857 -41.81585,0 -75.714287,-27.50251 -75.714287,-61.42857 0,-33.92606 33.898437,-61.42857 75.714287,-61.42857 41.81585,0 75.71429,27.50251 75.71429,61.42857 z m -65.71428,-31.42857 c 0,33.92606 -33.89844,61.42857 -75.714293,61.42857 -41.81585,0 -75.714287,-27.50251 -75.714287,-61.42857 0,-33.92606 33.898437,-61.42857 75.714287,-61.42857 41.815853,0 75.714293,27.50251 75.714293,61.42857 z m 17.14285,51.42857 c 0,33.92606 -33.89844,61.42857 -75.71429,61.42857 -41.815846,0 -75.714283,-27.50251 -75.714283,-61.42857 0,-33.92606 33.898437,-61.42857 75.714283,-61.42857 41.81585,0 75.71429,27.50251 75.71429,61.42857 z m 45.71429,51.42858 c 0,33.92606 -33.89844,61.42857 -75.71429,61.42857 -41.81585,0 -75.714287,-27.50251 -75.714287,-61.42857 0,-33.92606 33.898437,-61.42857 75.714287,-61.42857 41.81585,0 75.71429,27.50251 75.71429,61.42857 z M 88.571439,548.07647 c 0,33.92606 -33.89844,61.42857 -75.71429,61.42857 -41.81585,0 -75.714287,-27.50251 -75.714287,-61.42857 0,-33.92606 33.898437,-61.42857 75.714287,-61.42857 41.81585,0 75.71429,27.50251 75.71429,61.42857 z m 31.428571,68.57143 c 0,33.92606 -33.89844,61.42857 -75.71429,61.42857 -41.81585,0 -75.714287,-27.50251 -75.714287,-61.42857 0,-33.92606 33.898437,-61.42857 75.714287,-61.42857 41.81585,0 75.71429,27.50251 75.71429,61.42857 z"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+</svg>
