@@ -1317,6 +1317,7 @@
 					"${PROJECT_DIR}/Dependencies/three20/Build/Products/three20",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-D__IPHONE_OS_VERSION_MIN_REQUIRED=040000";
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -1324,7 +1325,7 @@
 				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos4.1;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
 			};
