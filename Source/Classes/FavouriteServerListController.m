@@ -145,7 +145,11 @@
 		[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
 		[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];
 
-		[[self navigationController] presentModalViewController:navCtrl animated:NO];
+		BOOL animated = YES;
+#ifdef USE_CONNECTION_ANIMATION
+		animated = NO;
+#endif
+		[[self navigationController] presentModalViewController:navCtrl animated:animated];
 
 		[serverRoot release];
 		[navCtrl release];

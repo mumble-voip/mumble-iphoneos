@@ -125,6 +125,7 @@
 	[usersButton release];
 	[flexSpace release];
 
+#ifdef USE_CONNECTION_ANIMATION
 	// Show the ServerConnectionViewController when we're trying to establish a
 	// connection to a server.
 	if (![_connection connected]) {
@@ -144,6 +145,7 @@
 
 		[MumbleApp setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
 	}
+#endif
 
 	[[self navigationController] setToolbarHidden:NO];
 }
@@ -226,6 +228,7 @@
 	_currentChannel = [[_model connectedUser] channel];
 	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
 
+#ifdef USE_CONNECTION_ANIMATION
 	[MumbleApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 
 	[UIView animateWithDuration:0.4f animations:^{
@@ -235,6 +238,7 @@
 		[_progressController release];
 		_progressController = nil;
 	}];
+#endif
 
 	[[self navigationItem] setTitle:[_currentChannel channelName]];
 	[[self tableView] reloadData];
