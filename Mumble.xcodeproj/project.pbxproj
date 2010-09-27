@@ -1289,10 +1289,14 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/sqlite/",
+					"${PROJECT_DIR}/Dependencies/three20/Build/Products/three20",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1365,10 +1369,14 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/sqlite/",
+					"${PROJECT_DIR}/Dependencies/three20/Build/Products/three20",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
