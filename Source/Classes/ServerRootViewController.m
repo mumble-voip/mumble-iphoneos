@@ -293,7 +293,7 @@
 	if (_currentChannel == nil)
 		return;
 
-	// Was this ourselves? If so, we need to rebuild the our user table view
+	// Was this ourselves, or someone else?
 	if (user != [server connectedUser]) {
 		// Did the user join this channel?
 		if (chan == _currentChannel) {
@@ -311,7 +311,8 @@
 			}
 		}
 
-	// We were moved
+	// We were moved. We need to redo the array holding the users of the
+	// current channel.
 	} else {
 		NSUInteger numUsers = [_channelUsers count];
 		[_channelUsers release];
@@ -332,8 +333,10 @@
 			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 		}
 		[[self tableView] insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationLeft];
-
 		[array release];
+
+		// Update the title to match our new channel.
+		[[self navigationItem] setTitle:[_currentChannel channelName]];
 	}
 }
 
