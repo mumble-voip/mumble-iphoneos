@@ -51,4 +51,8 @@
 + (NSArray *) fetchAllIdentities;
 + (Identity *) identityWithPrimaryKey:(NSInteger)key;
 
+// Cert verification
++ (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
++ (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
+
 @end

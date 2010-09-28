@@ -102,6 +102,14 @@ static FMDatabase *db = nil;
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `username` TEXT"];
 	[db executeUpdate:@"ALTER TABLE `servers` ADD `password` TEXT"];
 
+	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `cert` "
+	                  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+	                  @" `hostname` TEXT,"
+	                  @" `port` INTEGER,"
+	                  @" `digest` TEXT)"];
+	[db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `cert_host_port`"
+	                  @" on `cert`(`hostname`,`port`)"];
+
 	[db executeUpdate:@"VACUUM"];
 
 	if ([db hadError]) {
@@ -293,6 +301,24 @@ static FMDatabase *db = nil;
 		[Database storeIdentity:ident];
 	}
 	[db commit];
+}
+
+#pragma mark -
+#pragma mark Certificate verification
+
++ (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+	[db executeUpdate:@"REPLACE INTO `cert` (`hostname`,`port`,`digest`) VALUES (?,?,?)",
+	       hostname, [NSNumber numberWithInteger:port], hash];
+
+}
+
++ (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+	FMResultSet *result = [db executeQuery:@"SELECT `digest` FROM `cert` WHERE `hostname` = ? AND `port` = ?",
+	                             hostname, [NSNumber numberWithInteger:port]];
+	if ([result next]) {
+		return [result stringForColumnIndex:0];
+	}
+	return nil;
 }
 
 @end

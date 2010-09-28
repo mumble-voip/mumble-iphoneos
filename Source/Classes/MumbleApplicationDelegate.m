@@ -59,7 +59,7 @@
 	[self reloadPreferences];
 	[Database initializeDatabase];
 	[TTDefaultStyleSheet setGlobalStyleSheet:[[[MumbleStyleSheet alloc] init] autorelease]];
-	
+
 	self.navigationController.toolbarHidden = YES;
 	[window addSubview:[navigationController view]];
 
