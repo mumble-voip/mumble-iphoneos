@@ -95,6 +95,7 @@
 		287EAB841245305400A0159D /* libMumbleKitCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 287EAB671245303200A0159D /* libMumbleKitCombined.a */; };
 		28847911124696BA0068364D /* IdentityPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28847910124696BA0068364D /* IdentityPickerViewController.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
@@ -441,6 +442,8 @@
 		2884790F124696BA0068364D /* IdentityPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityPickerViewController.h; sourceTree = "<group>"; };
 		28847910124696BA0068364D /* IdentityPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityPickerViewController.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		288B55DE1252903300563A28 /* ServerCertificateTrustViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCertificateTrustViewController.h; sourceTree = "<group>"; };
+		288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCertificateTrustViewController.m; sourceTree = "<group>"; };
 		288D6B5E123D08EE00D37EDE /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
 		288D6B5F123D08EE00D37EDE /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
 		28942C0D1245476400C63A07 /* CertificatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificatePickerViewController.h; sourceTree = "<group>"; };
@@ -568,6 +571,8 @@
 				28BC8218124D543B00D0D1F9 /* WelcomeScreenController.m */,
 				2821B7DF124E8EAD001DF8E4 /* MumbleStyleSheet.h */,
 				2821B7E0124E8EAD001DF8E4 /* MumbleStyleSheet.m */,
+				288B55DE1252903300563A28 /* ServerCertificateTrustViewController.h */,
+				288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1224,6 +1229,7 @@
 				28FEA682124AA5A000A3F6B5 /* ServerConnectionViewController.m in Sources */,
 				28BC8219124D543B00D0D1F9 /* WelcomeScreenController.m in Sources */,
 				2821B7E1124E8EAD001DF8E4 /* MumbleStyleSheet.m in Sources */,
+				288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

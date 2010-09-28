@@ -43,6 +43,7 @@
 #import "UserViewController.h"
 #import "PDFImageLoader.h"
 #import "CertificateViewController.h"
+#import "ServerCertificateTrustViewController.h"
 
 @interface ServerRootViewController (Private)
 - (void) togglePushToTalk;
@@ -180,6 +181,7 @@
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 			[alert addButtonWithTitle:@"Ignore"];
 			[alert addButtonWithTitle:@"Trust New Certificate"];
+			[alert addButtonWithTitle:@"Show Certificates"];
 			[alert show];
 			[alert release];
 		}
@@ -193,6 +195,7 @@
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 		[alert addButtonWithTitle:@"Ignore"];
 		[alert addButtonWithTitle:@"Trust Certificate"];
+		[alert addButtonWithTitle:@"Show Certificates"];
 		[alert show];
 		[alert release];
 	}
@@ -461,13 +464,14 @@
 	if (buttonIndex == 0) {
 		// Tear down the connection.
 		[_connection disconnect];
-		return;
 
 	// Ignore
 	} else if (buttonIndex == 1) {
 		// Ignore just reconnects to the server without
 		// performing any verification on the certificate chain
 		// the server presents us.
+		[_connection setIgnoreSSLVerification:YES];
+		[_connection reconnect];
 
 	// Trust
 	} else if (buttonIndex == 2) {
@@ -476,10 +480,17 @@
 		// the same certificate it always has.
 		NSString *digest = [[[_connection peerCertificates] objectAtIndex:0] hexDigest];
 		[Database storeDigest:digest forServerWithHostname:_hostname port:_port];
-	}
+		[_connection setIgnoreSSLVerification:YES];
+		[_connection reconnect];
 
-	[_connection setIgnoreSSLVerification:YES];
-	[_connection reconnect];
+	// Show certificates
+	} else if (buttonIndex == 3) {
+		ServerCertificateTrustViewController *certTrustView = [[ServerCertificateTrustViewController alloc] initWithConnection:_connection];
+		UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certTrustView];
+		[certTrustView release];
+		[self presentModalViewController:navCtrl animated:YES];
+		[navCtrl release];
+	}
 }
 
 #pragma mark -
