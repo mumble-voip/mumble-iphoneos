@@ -40,9 +40,6 @@
 @class ServerConnectionViewController;
 
 @interface ServerRootViewController : UITableViewController <MKConnectionDelegate> {
-	NSString                        *_hostname;
-	NSUInteger                      _port;
-
 	MKConnection                    *_connection;
 	MKServerModel                   *_model;
 	NSMutableArray                  *_channelUsers;

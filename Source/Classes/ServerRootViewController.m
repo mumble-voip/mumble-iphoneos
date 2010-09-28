@@ -56,9 +56,6 @@
 	if (! self)
 		return nil;
 
-	_hostname = [host copy];
-	_port = port;
-
 	_identity = [identity retain];
 	_password = [password copy];
 
@@ -91,7 +88,6 @@
 }
 
 - (void) dealloc {
-	[_hostname release];
 	[_identity release];
 	[_password release];
 	[_model release];
@@ -164,7 +160,7 @@
 // The connection encountered an invalid SSL certificate chain.
 - (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
 	// Check the database whether the user trusts the leaf certificate of this server.
-	NSString *storedDigest = [Database digestForServerWithHostname:_hostname port:_port];
+	NSString *storedDigest = [Database digestForServerWithHostname:[conn hostname] port:[conn port]];
 	NSString *serverDigest = [[[conn peerCertificates] objectAtIndex:0] hexDigest];
 	if (storedDigest) {
 		// Match?
@@ -479,7 +475,7 @@
 		// verification errors from this host as long as it keeps on presenting us
 		// the same certificate it always has.
 		NSString *digest = [[[_connection peerCertificates] objectAtIndex:0] hexDigest];
-		[Database storeDigest:digest forServerWithHostname:_hostname port:_port];
+		[Database storeDigest:digest forServerWithHostname:[_connection hostname] port:[_connection port]];
 		[_connection setIgnoreSSLVerification:YES];
 		[_connection reconnect];
 
