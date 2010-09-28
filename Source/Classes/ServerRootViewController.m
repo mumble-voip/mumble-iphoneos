@@ -179,7 +179,7 @@
 			NSString *msg = @"The server presented a different certificate than the one stored for this server";
 			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 			[alert addButtonWithTitle:@"Ignore"];
-			[alert addButtonWithTitle:@"Always Ignore"];
+			[alert addButtonWithTitle:@"Trust New Certificate"];
 			[alert show];
 			[alert release];
 		}
@@ -192,7 +192,7 @@
 
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 		[alert addButtonWithTitle:@"Ignore"];
-		[alert addButtonWithTitle:@"Always Ignore"];
+		[alert addButtonWithTitle:@"Trust Certificate"];
 		[alert show];
 		[alert release];
 	}
@@ -466,7 +466,7 @@
 		// performing any verification on the certificate chain
 		// the server presents us.
 
-	// Always Ignore
+	// Trust
 	} else if (buttonIndex == 2) {
 		// Store the cert hash of the leaf certificate.  We then ignore certificate
 		// verification errors from this host as long as it keeps on presenting us
