@@ -457,7 +457,7 @@
 	// Cancel
 	if (buttonIndex == 0) {
 		// Tear down the connection.
-		[_connection closeStreams];
+		[_connection disconnect];
 		return;
 
 	// Ignore
@@ -484,7 +484,7 @@
 
 // Disconnect from the server
 - (void) disconnectClicked:(id)sender {
-	[_connection closeStreams];
+	[_connection disconnect];
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
