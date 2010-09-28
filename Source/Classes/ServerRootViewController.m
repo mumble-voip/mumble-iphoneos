@@ -34,6 +34,7 @@
 
 #import "MumbleApplication.h"
 #import "MumbleApplicationDelegate.h"
+#import "Database.h"
 
 #import "ServerRootViewController.h"
 #import "ServerConnectionViewController.h"
@@ -53,6 +54,9 @@
 	self = [super init];
 	if (! self)
 		return nil;
+
+	_hostname = [host copy];
+	_port = port;
 
 	_identity = [identity retain];
 	_password = [password copy];
@@ -86,6 +90,7 @@
 }
 
 - (void) dealloc {
+	[_hostname release];
 	[_identity release];
 	[_password release];
 	[_model release];
@@ -155,23 +160,45 @@
 
 #pragma mark MKConnection Delegate
 
-//
-// The connection encountered an invalid SSL certificate chain. For now, we will show this dialog
-// each time, as iPhoneOS 3.{1,2}.X doesn't allow for trusting certificates on an app-to-app basis.
-//
+// The connection encountered an invalid SSL certificate chain.
 - (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
-	NSString *title = @"Unable to validate server certificate";
-	NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
+	// Check the database whether the user trusts the leaf certificate of this server.
+	NSString *storedDigest = [Database digestForServerWithHostname:_hostname port:_port];
+	NSString *serverDigest = [[[conn peerCertificates] objectAtIndex:0] hexDigest];
+	if (storedDigest) {
+		// Match?
+		if ([storedDigest isEqualToString:serverDigest]) {
+			[conn setIgnoreSSLVerification:YES];
+			[conn reconnect];
+			return;
 
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-	[alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
+		// Mismatch.  The server is using a new certificate, different from the one it previously
+		// presented to us.
+		} else {
+			NSString *title = @"Certificate Mismatch";
+			NSString *msg = @"The server presented a different certificate than the one stored for this server";
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+			[alert addButtonWithTitle:@"Ignore"];
+			[alert addButtonWithTitle:@"Always Ignore"];
+			[alert show];
+			[alert release];
+		}
+
+	// No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
+	// what to do.
+	} else {
+		NSString *title = @"Unable to validate server certificate";
+		NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
+
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+		[alert addButtonWithTitle:@"Ignore"];
+		[alert addButtonWithTitle:@"Always Ignore"];
+		[alert show];
+		[alert release];
+	}
 }
 
-//
 // The server rejected our connection.
-//
 - (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
 	NSString *title = @"Connection Rejected";
 	NSString *msg = nil;
@@ -212,7 +239,6 @@
 
 // Connection established...
 - (void) connectionOpened:(MKConnection *)conn {
-	NSLog(@"ServerRootViewController: Connection established");
 	[conn authenticateWithUsername:[_identity userName] password:_password];
 }
 
@@ -390,9 +416,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     static NSString *CellIdentifier = @"Cell";
-
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
@@ -430,6 +454,27 @@
 #pragma mark UIAlertView delegate
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	// Cancel
+	if (buttonIndex == 0) {
+		// Tear down the connection.
+		[_connection closeStreams];
+		return;
+
+	// Ignore
+	} else if (buttonIndex == 1) {
+		// Ignore just reconnects to the server without
+		// performing any verification on the certificate chain
+		// the server presents us.
+
+	// Always Ignore
+	} else if (buttonIndex == 2) {
+		// Store the cert hash of the leaf certificate.  We then ignore certificate
+		// verification errors from this host as long as it keeps on presenting us
+		// the same certificate it always has.
+		NSString *digest = [[[_connection peerCertificates] objectAtIndex:0] hexDigest];
+		[Database storeDigest:digest forServerWithHostname:_hostname port:_port];
+	}
+
 	[_connection setIgnoreSSLVerification:YES];
 	[_connection reconnect];
 }
