@@ -498,10 +498,10 @@
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
-// Info (certs) button clicke
+// Info (certs) button clicked
 - (void) infoClicked:(id)sender {
 	NSArray *certs = [_connection peerCertificates];
-	CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:[certs objectAtIndex:0]];
+	CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificates:certs];
 	[[self navigationController] pushViewController:certView animated:YES];
 	[certView release];
 }

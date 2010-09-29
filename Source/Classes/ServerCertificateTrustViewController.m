@@ -42,9 +42,8 @@
 
 - (id) initWithConnection:(MKConnection *)conn {
 	NSArray *peerCerts = [conn peerCertificates];
-	if (self = [super initWithCertificate:[peerCerts objectAtIndex:0]]) {
+	if (self = [super initWithCertificates:[conn peerCertificates]]) {
 		_conn = conn;
-		_numCerts = [peerCerts count];
 	}
 	return self;
 }
@@ -55,8 +54,6 @@
 
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-
-	self.navigationItem.title = [NSString stringWithFormat:@"1 of %i", _numCerts];;
 
 	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)];
 	self.navigationItem.leftBarButtonItem = cancelButton;

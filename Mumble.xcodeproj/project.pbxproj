@@ -21,6 +21,8 @@
 		2821B843124EAC1B001DF8E4 /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B842124EAC1B001DF8E4 /* cloud.png */; };
 		2821B871124EB3F3001DF8E4 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B870124EB3F3001DF8E4 /* Splash.png */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
+		283A68BE1253856E00267F6D /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = 283A68BC1253856E00267F6D /* down.png */; };
+		283A68BF1253856E00267F6D /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 283A68BD1253856E00267F6D /* up.png */; };
 		284BBBA512495C4400366F4C /* MumbleApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 284BBBA412495C4400366F4C /* MumbleApplication.m */; };
 		2858A580123B9E5700A82155 /* CertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* CertificateCell.xib */; };
 		2858A591123B9EE000A82155 /* certificate16.png in Resources */ = {isa = PBXBuildFile; fileRef = 2858A58B123B9EE000A82155 /* certificate16.png */; };
@@ -346,6 +348,8 @@
 		2821B870124EB3F3001DF8E4 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/icons/Splash.png; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
 		2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsViewController.m; sourceTree = "<group>"; };
+		283A68BC1253856E00267F6D /* down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = down.png; path = Resources/icons/ios/down.png; sourceTree = "<group>"; };
+		283A68BD1253856E00267F6D /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = up.png; path = Resources/icons/ios/up.png; sourceTree = "<group>"; };
 		284BBBA312495C4400366F4C /* MumbleApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleApplication.h; sourceTree = "<group>"; };
 		284BBBA412495C4400366F4C /* MumbleApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MumbleApplication.m; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* CertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CertificateCell.xib; path = Resources/CertificateCell.xib; sourceTree = "<group>"; };
@@ -589,6 +593,8 @@
 		2858A58A123B9EC700A82155 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				283A68BC1253856E00267F6D /* down.png */,
+				283A68BD1253856E00267F6D /* up.png */,
 				2861C2C7116BEA11002B8514 /* Default.png */,
 				2821B870124EB3F3001DF8E4 /* Splash.png */,
 				2821B842124EAC1B001DF8E4 /* cloud.png */,
@@ -1160,6 +1166,8 @@
 				2821B837124EAA67001DF8E4 /* diagnostics.png in Resources */,
 				2821B843124EAC1B001DF8E4 /* cloud.png in Resources */,
 				2821B871124EB3F3001DF8E4 /* Splash.png in Resources */,
+				283A68BE1253856E00267F6D /* down.png in Resources */,
+				283A68BF1253856E00267F6D /* up.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

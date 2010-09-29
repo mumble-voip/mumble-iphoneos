@@ -34,7 +34,6 @@
 
 @interface ServerCertificateTrustViewController : CertificateViewController {
 	MKConnection  *_conn;
-	NSInteger     _numCerts;
 }
 
 - (id) initWithConnection:(MKConnection *)conn;

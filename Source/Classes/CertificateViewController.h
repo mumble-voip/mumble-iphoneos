@@ -33,12 +33,19 @@
 @class MKCertificate;
 
 @interface CertificateViewController : UITableViewController {
-	NSArray        *_subjectItems;
-	NSArray        *_issuerItems;
-	NSString       *_certTitle;
+	NSInteger           _curIdx;
+	NSArray             *_certificates;
+	NSArray             *_subjectItems;
+	NSArray             *_issuerItems;
+	NSString            *_certTitle;
+	UISegmentedControl  *_arrows;
 }
 
 - (id) initWithCertificate:(MKCertificate *)cert;
+- (id) initWithCertificates:(NSArray *)certs;
 - (void) dealloc;
+
+- (void) showDataForCertificate:(MKCertificate *)cert;
+- (void) updateCertificateDisplay;
 
 @end
