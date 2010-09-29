@@ -47,6 +47,7 @@
 		return nil;
 
 	_pkey = -1;
+	_identityForeignKey = -1;
 	_displayName = [displayName copy];
 	_hostName = [hostName copy];
 	_port = port;
