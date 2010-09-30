@@ -40,7 +40,6 @@
 #import "ServerConnectionViewController.h"
 #import "ChannelViewController.h"
 #import "LogViewController.h"
-#import "UserViewController.h"
 #import "CertificateViewController.h"
 #import "ServerCertificateTrustViewController.h"
 
