@@ -18,6 +18,8 @@
 		280D4A281254E1B700493267 /* globe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A231254E1B700493267 /* globe@2x.png */; };
 		280D4A291254E1B700493267 /* person@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A241254E1B700493267 /* person@2x.png */; };
 		280D4A2A1254E1B700493267 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A251254E1B700493267 /* star@2x.png */; };
+		280D4A311254EC1900493267 /* certificatecell.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A2F1254EC1900493267 /* certificatecell.png */; };
+		280D4A321254EC1900493267 /* certificatecell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A301254EC1900493267 /* certificatecell@2x.png */; };
 		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2821B7E1124E8EAD001DF8E4 /* MumbleStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2821B7E0124E8EAD001DF8E4 /* MumbleStyleSheet.m */; };
@@ -348,6 +350,8 @@
 		280D4A231254E1B700493267 /* globe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "globe@2x.png"; path = "Resources/icons/ios/globe@2x.png"; sourceTree = "<group>"; };
 		280D4A241254E1B700493267 /* person@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "person@2x.png"; path = "Resources/icons/ios/person@2x.png"; sourceTree = "<group>"; };
 		280D4A251254E1B700493267 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "star@2x.png"; path = "Resources/icons/ios/star@2x.png"; sourceTree = "<group>"; };
+		280D4A2F1254EC1900493267 /* certificatecell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificatecell.png; path = Resources/icons/ios/certificatecell.png; sourceTree = "<group>"; };
+		280D4A301254EC1900493267 /* certificatecell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell@2x.png"; path = "Resources/icons/ios/certificatecell@2x.png"; sourceTree = "<group>"; };
 		281D1BA311D66E3C006BE21C /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		281D1BA411D66E3C006BE21C /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
@@ -629,6 +633,8 @@
 				2858A58E123B9EE000A82155 /* certificate128.png */,
 				2858A58F123B9EE000A82155 /* certificate256.png */,
 				2858A590123B9EE000A82155 /* certificate512.png */,
+				280D4A2F1254EC1900493267 /* certificatecell.png */,
+				280D4A301254EC1900493267 /* certificatecell@2x.png */,
 			);
 			name = icons;
 			sourceTree = "<group>";
@@ -1196,6 +1202,8 @@
 				280D4A281254E1B700493267 /* globe@2x.png in Resources */,
 				280D4A291254E1B700493267 /* person@2x.png in Resources */,
 				280D4A2A1254E1B700493267 /* star@2x.png in Resources */,
+				280D4A311254EC1900493267 /* certificatecell.png in Resources */,
+				280D4A321254EC1900493267 /* certificatecell@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

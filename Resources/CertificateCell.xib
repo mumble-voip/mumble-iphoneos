@@ -56,7 +56,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">certificate64.png</string>
+									<string key="NSResourceName">certificatecell.png</string>
 								</object>
 							</object>
 							<object class="IBUILabel" id="86053166">
@@ -556,7 +556,7 @@
 		<string key="IBDocument.LastKnownRelativeProjectPath">../Mumble.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">certificate64.png</string>
+			<string key="NS.key.0">certificatecell.png</string>
 			<string key="NS.object.0">{64, 64}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">123</string>
