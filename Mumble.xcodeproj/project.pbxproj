@@ -11,6 +11,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */; };
+		280D4A191254DAB400493267 /* down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A171254DAB400493267 /* down@2x.png */; };
+		280D4A1A1254DAB400493267 /* up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A181254DAB400493267 /* up@2x.png */; };
 		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2821B7E1124E8EAD001DF8E4 /* MumbleStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2821B7E0124E8EAD001DF8E4 /* MumbleStyleSheet.m */; };
@@ -334,6 +336,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesViewController.m; sourceTree = "<group>"; };
+		280D4A171254DAB400493267 /* down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "down@2x.png"; path = "Resources/icons/ios/down@2x.png"; sourceTree = "<group>"; };
+		280D4A181254DAB400493267 /* up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "up@2x.png"; path = "Resources/icons/ios/up@2x.png"; sourceTree = "<group>"; };
 		281D1BA311D66E3C006BE21C /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		281D1BA411D66E3C006BE21C /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
@@ -593,6 +597,8 @@
 		2858A58A123B9EC700A82155 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				280D4A171254DAB400493267 /* down@2x.png */,
+				280D4A181254DAB400493267 /* up@2x.png */,
 				283A68BC1253856E00267F6D /* down.png */,
 				283A68BD1253856E00267F6D /* up.png */,
 				2861C2C7116BEA11002B8514 /* Default.png */,
@@ -1168,6 +1174,8 @@
 				2821B871124EB3F3001DF8E4 /* Splash.png in Resources */,
 				283A68BE1253856E00267F6D /* down.png in Resources */,
 				283A68BF1253856E00267F6D /* up.png in Resources */,
+				280D4A191254DAB400493267 /* down@2x.png in Resources */,
+				280D4A1A1254DAB400493267 /* up@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
