@@ -29,7 +29,6 @@
 */
 
 #import "ChannelViewController.h"
-#import "PDFImageLoader.h"
 
 @implementation ChannelViewController
 
@@ -111,12 +110,12 @@
 
 	if (section == ChannelViewSectionSubChannels) {
 		MKChannel *childChannel = [[_channel subchannels] objectAtIndex:row];
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"channel"];
+		cell.imageView.image = [UIImage imageNamed:@"channel"];
 		cell.textLabel.text = [childChannel channelName];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	} else if (section == ChannelViewSectionUsers) {
 		MKUser *channelUser = [[_channel users] objectAtIndex:row];
-		cell.imageView.image = [PDFImageLoader imageFromPDF:@"talking_off"];
+		cell.imageView.image = [UIImage imageNamed:@"talking_off"];
 		cell.textLabel.text = [channelUser userName];
 		cell.accessoryType = UITableViewCellAccessoryNone;
 	} else if (section == ChannelViewSectionActions) {

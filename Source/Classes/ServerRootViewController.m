@@ -41,7 +41,6 @@
 #import "ChannelViewController.h"
 #import "LogViewController.h"
 #import "UserViewController.h"
-#import "PDFImageLoader.h"
 #import "CertificateViewController.h"
 #import "ServerCertificateTrustViewController.h"
 
@@ -373,9 +372,7 @@
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
 	
-	UIImageView *imageView = [cell imageView];
-	UIImage *image = [PDFImageLoader imageFromPDF:talkImageName];
-	[imageView setImage:image];
+	[[cell imageView] setImage:[UIImage imageNamed:talkImageName]];
 }
 
 // We stopped transmitting
@@ -388,7 +385,7 @@
 
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 	UIImageView *imageView = [cell imageView];
-	UIImage *image = [PDFImageLoader imageFromPDF:@"talking_off"];
+	UIImage *image = [UIImage imageNamed:@"talking_off"];
 	[imageView setImage:image];
 }
 
@@ -401,9 +398,7 @@
 		return;
 
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-	UIImageView *imageView = [cell imageView];
-	UIImage *image = [PDFImageLoader imageFromPDF:@"talking_on"];
-	[imageView setImage:image];
+	[[cell imageView] setImage:[UIImage imageNamed:@"talking_on"]];
 }
 
 #pragma mark -
@@ -439,7 +434,7 @@
 		talkImageName = @"talking_whisper";
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
-	cell.imageView.image = [PDFImageLoader imageFromPDF:talkImageName];
+	cell.imageView.image = [UIImage imageNamed:talkImageName];
 	
     return cell;
 }

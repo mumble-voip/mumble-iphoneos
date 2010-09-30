@@ -20,6 +20,16 @@
 		280D4A2A1254E1B700493267 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A251254E1B700493267 /* star@2x.png */; };
 		280D4A311254EC1900493267 /* certificatecell.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A2F1254EC1900493267 /* certificatecell.png */; };
 		280D4A321254EC1900493267 /* certificatecell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4A301254EC1900493267 /* certificatecell@2x.png */; };
+		280D4B361255457B00493267 /* talking_alt.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B2E1255457B00493267 /* talking_alt.png */; };
+		280D4B371255457B00493267 /* talking_alt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B2F1255457B00493267 /* talking_alt@2x.png */; };
+		280D4B381255457B00493267 /* talking_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B301255457B00493267 /* talking_off.png */; };
+		280D4B391255457B00493267 /* talking_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B311255457B00493267 /* talking_off@2x.png */; };
+		280D4B3A1255457B00493267 /* talking_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B321255457B00493267 /* talking_on.png */; };
+		280D4B3B1255457B00493267 /* talking_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B331255457B00493267 /* talking_on@2x.png */; };
+		280D4B3C1255457B00493267 /* talking_whisper.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B341255457B00493267 /* talking_whisper.png */; };
+		280D4B3D1255457B00493267 /* talking_whisper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B351255457B00493267 /* talking_whisper@2x.png */; };
+		280D4B401255463000493267 /* channel.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3E1255463000493267 /* channel.png */; };
+		280D4B411255463000493267 /* channel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3F1255463000493267 /* channel@2x.png */; };
 		281D1BA511D66E3C006BE21C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 281D1BA411D66E3C006BE21C /* Identity.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2821B7E1124E8EAD001DF8E4 /* MumbleStyleSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2821B7E0124E8EAD001DF8E4 /* MumbleStyleSheet.m */; };
@@ -50,7 +60,6 @@
 		2861C274116BE905002B8514 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* AboutViewController.m */; };
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
 		2861C276116BE905002B8514 /* MumbleApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */; };
-		2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C265116BE905002B8514 /* PDFImageLoader.m */; };
 		2861C27B116BE905002B8514 /* PublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* PublicServerList.m */; };
 		2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* PublicServerListController.m */; };
 		2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C271116BE905002B8514 /* WelcomeScreenPhone.m */; };
@@ -352,6 +361,16 @@
 		280D4A251254E1B700493267 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "star@2x.png"; path = "Resources/icons/ios/star@2x.png"; sourceTree = "<group>"; };
 		280D4A2F1254EC1900493267 /* certificatecell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificatecell.png; path = Resources/icons/ios/certificatecell.png; sourceTree = "<group>"; };
 		280D4A301254EC1900493267 /* certificatecell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell@2x.png"; path = "Resources/icons/ios/certificatecell@2x.png"; sourceTree = "<group>"; };
+		280D4B2E1255457B00493267 /* talking_alt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talking_alt.png; path = Resources/icons/ios/talking_alt.png; sourceTree = "<group>"; };
+		280D4B2F1255457B00493267 /* talking_alt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_alt@2x.png"; path = "Resources/icons/ios/talking_alt@2x.png"; sourceTree = "<group>"; };
+		280D4B301255457B00493267 /* talking_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talking_off.png; path = Resources/icons/ios/talking_off.png; sourceTree = "<group>"; };
+		280D4B311255457B00493267 /* talking_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_off@2x.png"; path = "Resources/icons/ios/talking_off@2x.png"; sourceTree = "<group>"; };
+		280D4B321255457B00493267 /* talking_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talking_on.png; path = Resources/icons/ios/talking_on.png; sourceTree = "<group>"; };
+		280D4B331255457B00493267 /* talking_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_on@2x.png"; path = "Resources/icons/ios/talking_on@2x.png"; sourceTree = "<group>"; };
+		280D4B341255457B00493267 /* talking_whisper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talking_whisper.png; path = Resources/icons/ios/talking_whisper.png; sourceTree = "<group>"; };
+		280D4B351255457B00493267 /* talking_whisper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_whisper@2x.png"; path = "Resources/icons/ios/talking_whisper@2x.png"; sourceTree = "<group>"; };
+		280D4B3E1255463000493267 /* channel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = channel.png; path = Resources/icons/ios/channel.png; sourceTree = "<group>"; };
+		280D4B3F1255463000493267 /* channel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "channel@2x.png"; path = "Resources/icons/ios/channel@2x.png"; sourceTree = "<group>"; };
 		281D1BA311D66E3C006BE21C /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		281D1BA411D66E3C006BE21C /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
@@ -394,8 +413,6 @@
 		2861C25D116BE905002B8514 /* MumbleApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MumbleApplicationDelegate.h; sourceTree = "<group>"; };
 		2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MumbleApplicationDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* CountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryServerListController.h; sourceTree = "<group>"; };
-		2861C264116BE905002B8514 /* PDFImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageLoader.h; sourceTree = "<group>"; };
-		2861C265116BE905002B8514 /* PDFImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageLoader.m; sourceTree = "<group>"; };
 		2861C266116BE905002B8514 /* PublicServerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerList.h; sourceTree = "<group>"; };
 		2861C267116BE905002B8514 /* PublicServerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicServerList.m; sourceTree = "<group>"; };
 		2861C268116BE905002B8514 /* PublicServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicServerListController.h; sourceTree = "<group>"; };
@@ -548,8 +565,6 @@
 				2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */,
 				2861C25F116BE905002B8514 /* CountryServerListController.h */,
 				28C6EF0911BBF38100E426C8 /* CountryServerListController.m */,
-				2861C264116BE905002B8514 /* PDFImageLoader.h */,
-				2861C265116BE905002B8514 /* PDFImageLoader.m */,
 				2861C266116BE905002B8514 /* PublicServerList.h */,
 				2861C267116BE905002B8514 /* PublicServerList.m */,
 				2861C268116BE905002B8514 /* PublicServerListController.h */,
@@ -635,6 +650,16 @@
 				2858A590123B9EE000A82155 /* certificate512.png */,
 				280D4A2F1254EC1900493267 /* certificatecell.png */,
 				280D4A301254EC1900493267 /* certificatecell@2x.png */,
+				280D4B2E1255457B00493267 /* talking_alt.png */,
+				280D4B2F1255457B00493267 /* talking_alt@2x.png */,
+				280D4B301255457B00493267 /* talking_off.png */,
+				280D4B311255457B00493267 /* talking_off@2x.png */,
+				280D4B321255457B00493267 /* talking_on.png */,
+				280D4B331255457B00493267 /* talking_on@2x.png */,
+				280D4B341255457B00493267 /* talking_whisper.png */,
+				280D4B351255457B00493267 /* talking_whisper@2x.png */,
+				280D4B3E1255463000493267 /* channel.png */,
+				280D4B3F1255463000493267 /* channel@2x.png */,
 			);
 			name = icons;
 			sourceTree = "<group>";
@@ -1204,6 +1229,16 @@
 				280D4A2A1254E1B700493267 /* star@2x.png in Resources */,
 				280D4A311254EC1900493267 /* certificatecell.png in Resources */,
 				280D4A321254EC1900493267 /* certificatecell@2x.png in Resources */,
+				280D4B361255457B00493267 /* talking_alt.png in Resources */,
+				280D4B371255457B00493267 /* talking_alt@2x.png in Resources */,
+				280D4B381255457B00493267 /* talking_off.png in Resources */,
+				280D4B391255457B00493267 /* talking_off@2x.png in Resources */,
+				280D4B3A1255457B00493267 /* talking_on.png in Resources */,
+				280D4B3B1255457B00493267 /* talking_on@2x.png in Resources */,
+				280D4B3C1255457B00493267 /* talking_whisper.png in Resources */,
+				280D4B3D1255457B00493267 /* talking_whisper@2x.png in Resources */,
+				280D4B401255463000493267 /* channel.png in Resources */,
+				280D4B411255463000493267 /* channel@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1236,7 +1271,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				2861C274116BE905002B8514 /* AboutViewController.m in Sources */,
 				2861C276116BE905002B8514 /* MumbleApplicationDelegate.m in Sources */,
-				2861C27A116BE905002B8514 /* PDFImageLoader.m in Sources */,
 				2861C27B116BE905002B8514 /* PublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* PublicServerListController.m in Sources */,
 				2861C281116BE905002B8514 /* WelcomeScreenPhone.m in Sources */,
