@@ -141,7 +141,14 @@
 #pragma mark Actions
 
 - (void) aboutClicked:(id)sender {
-	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+#ifdef MUMBLE_BETA_DIST
+	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@ (%@)",
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+#else
+	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@",
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+#endif
 	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
 	
 	UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self

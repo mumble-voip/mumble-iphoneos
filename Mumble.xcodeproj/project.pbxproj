@@ -1343,7 +1343,7 @@
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-D__IPHONE_OS_VERSION_MIN_REQUIRED=040000";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -1424,7 +1424,7 @@
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				OTHER_CFLAGS = "";
+				OTHER_CFLAGS = "-D__IPHONE_OS_VERSION_MIN_REQUIRED=040000";
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
