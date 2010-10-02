@@ -119,6 +119,7 @@
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
+		289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* ChannelNavigationViewController.m */; };
 		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
@@ -489,6 +490,8 @@
 		28942C0E1245476400C63A07 /* CertificatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificatePickerViewController.m; sourceTree = "<group>"; };
 		28942D7A12456F9200C63A07 /* CertificateCreationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationView.h; sourceTree = "<group>"; };
 		28942D7B12456F9200C63A07 /* CertificateCreationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationView.m; sourceTree = "<group>"; };
+		289CBA16125693040015E58E /* ChannelNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelNavigationViewController.h; sourceTree = "<group>"; };
+		289CBA17125693040015E58E /* ChannelNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelNavigationViewController.m; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
@@ -610,6 +613,8 @@
 				2821B7E0124E8EAD001DF8E4 /* MumbleStyleSheet.m */,
 				288B55DE1252903300563A28 /* ServerCertificateTrustViewController.h */,
 				288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */,
+				289CBA16125693040015E58E /* ChannelNavigationViewController.h */,
+				289CBA17125693040015E58E /* ChannelNavigationViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1308,6 +1313,7 @@
 				28BC8219124D543B00D0D1F9 /* WelcomeScreenController.m in Sources */,
 				2821B7E1124E8EAD001DF8E4 /* MumbleStyleSheet.m in Sources */,
 				288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */,
+				289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

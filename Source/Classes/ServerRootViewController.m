@@ -42,6 +42,7 @@
 #import "LogViewController.h"
 #import "CertificateViewController.h"
 #import "ServerCertificateTrustViewController.h"
+#import "ChannelNavigationViewController.h"
 
 @interface ServerRootViewController (Private)
 - (void) togglePushToTalk;
@@ -147,6 +148,7 @@
 	}
 #endif
 
+	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[[self navigationController] setToolbarHidden:NO];
 }
 
@@ -370,7 +372,7 @@
 		talkImageName = @"talking_whisper";
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
-	
+
 	[[cell imageView] setImage:[UIImage imageNamed:talkImageName]];
 }
 
@@ -422,6 +424,11 @@
 	MKUser *user = [_channelUsers objectAtIndex:row];
 
 	cell.textLabel.text = [user userName];
+	if ([_model connectedUser] == user) {
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+	} else {
+		cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+	}
 
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
@@ -441,10 +448,9 @@
 #pragma mark -
 #pragma mark UITableView delegate
 
-#if 0
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 28.0f;
 }
-#endif
 
 #pragma mark -
 #pragma mark UIAlertView delegate
@@ -507,14 +513,11 @@
 
 // Channel picker
 - (void) channelsButtonClicked:(id)sender {
-	ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:[_model rootChannel] serverModel:_model];
-	UINavigationController *navCtrl = [[UINavigationController alloc] init];
-
-	[navCtrl pushViewController:channelView animated:NO];
-	[[self navigationController] presentModalViewController:navCtrl animated:YES];
-
-	[navCtrl release];
+	ChannelNavigationViewController *channelView = [[ChannelNavigationViewController alloc] initWithServerModel:_model];
+	UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:channelView];
 	[channelView release];
+	[[self navigationController] presentModalViewController:navCtrl animated:YES];
+	[navCtrl release];
 }
 
 // User picker
