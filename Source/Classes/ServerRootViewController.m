@@ -46,6 +46,7 @@
 
 @interface ServerRootViewController (Private)
 - (void) togglePushToTalk;
+- (UIView *) stateAccessoryViewForUser:(MKUser *)user;
 @end
 
 @implementation ServerRootViewController
@@ -349,19 +350,38 @@
 	NSLog(@"ServerViewController: channelRemoved.");
 }
 
+- (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMute:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMutedAndDeafened:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMuteAndDeafen:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+	NSUInteger userIndex = [_channelUsers indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
 // User talk state changed
 - (void) userTalkStateChanged:(NSNotification *)notification {
 	if (_currentChannel == nil)
 		return;
-	
+
 	MKUser *user = [notification object];
 	NSUInteger userIndex = [_channelUsers indexOfObject:user];
-	
+
 	if (userIndex == NSNotFound)
 		return;
-	
+
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-	
+
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
 	if (talkState == MKTalkStatePassive)
@@ -441,8 +461,44 @@
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
 	cell.imageView.image = [UIImage imageNamed:talkImageName];
-	
+
+	cell.accessoryView = [self stateAccessoryViewForUser:user];
+
     return cell;
+}
+
+- (UIView *) stateAccessoryViewForUser:(MKUser *)user {
+	const CGFloat iconHeight = 28.0f;
+	const CGFloat iconWidth = 22.0f;
+
+	NSMutableArray *states = [[NSMutableArray alloc] init];
+	if ([user isAuthenticated])
+		[states addObject:@"authenticated"];
+	if ([user isSelfDeafened])
+		[states addObject:@"deafened_self"];
+	if ([user isSelfMuted])
+		[states addObject:@"muted_self"];
+	if ([user isMuted])
+		[states addObject:@"muted_server"];
+	if ([user isLocalMuted])
+		[states addObject:@"muted_local"];
+	if ([user isSuppressed])
+		[states addObject:@"muted_suppressed"];
+
+	CGFloat widthOffset = [states count] * iconWidth;
+	UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
+	for (NSString *imageName in states) {
+		UIImage *img = [UIImage imageNamed:imageName];
+		UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+		CGFloat ypos = (iconHeight - img.size.height)/2.0f;
+		CGFloat xpos = (iconWidth - img.size.width)/2.0f;
+		widthOffset -= iconWidth - xpos;
+		imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
+		[stateView addSubview:imgView];
+	}
+
+	[states release];
+	return [stateView autorelease];
 }
 
 #pragma mark -

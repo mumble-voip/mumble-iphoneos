@@ -120,6 +120,18 @@
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
 		289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* ChannelNavigationViewController.m */; };
+		289CBB541257BCD10015E58E /* authenticated.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB521257BCD10015E58E /* authenticated.png */; };
+		289CBB551257BCD10015E58E /* authenticated@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB531257BCD10015E58E /* authenticated@2x.png */; };
+		289CBB5B1257BDAC0015E58E /* muted_self.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB591257BDAC0015E58E /* muted_self.png */; };
+		289CBB5C1257BDAC0015E58E /* muted_self@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB5A1257BDAC0015E58E /* muted_self@2x.png */; };
+		289CBB821257C5B80015E58E /* deafened_self.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB801257C5B80015E58E /* deafened_self.png */; };
+		289CBB831257C5B80015E58E /* deafened_self@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB811257C5B80015E58E /* deafened_self@2x.png */; };
+		289CBC5B1257DFD60015E58E /* muted_local.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC551257DFD60015E58E /* muted_local.png */; };
+		289CBC5C1257DFD60015E58E /* muted_local@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC561257DFD60015E58E /* muted_local@2x.png */; };
+		289CBC5D1257DFD60015E58E /* muted_server.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC571257DFD60015E58E /* muted_server.png */; };
+		289CBC5E1257DFD60015E58E /* muted_server@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC581257DFD60015E58E /* muted_server@2x.png */; };
+		289CBC5F1257DFD60015E58E /* muted_suppressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC591257DFD60015E58E /* muted_suppressed.png */; };
+		289CBC601257DFD60015E58E /* muted_suppressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBC5A1257DFD60015E58E /* muted_suppressed@2x.png */; };
 		289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* LanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* LogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* LogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* LogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* LogEntry.m */; };
@@ -492,6 +504,18 @@
 		28942D7B12456F9200C63A07 /* CertificateCreationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationView.m; sourceTree = "<group>"; };
 		289CBA16125693040015E58E /* ChannelNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelNavigationViewController.h; sourceTree = "<group>"; };
 		289CBA17125693040015E58E /* ChannelNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelNavigationViewController.m; sourceTree = "<group>"; };
+		289CBB521257BCD10015E58E /* authenticated.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = authenticated.png; path = Resources/icons/ios/authenticated.png; sourceTree = "<group>"; };
+		289CBB531257BCD10015E58E /* authenticated@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "authenticated@2x.png"; path = "Resources/icons/ios/authenticated@2x.png"; sourceTree = "<group>"; };
+		289CBB591257BDAC0015E58E /* muted_self.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = muted_self.png; path = Resources/icons/ios/muted_self.png; sourceTree = "<group>"; };
+		289CBB5A1257BDAC0015E58E /* muted_self@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "muted_self@2x.png"; path = "Resources/icons/ios/muted_self@2x.png"; sourceTree = "<group>"; };
+		289CBB801257C5B80015E58E /* deafened_self.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = deafened_self.png; path = Resources/icons/ios/deafened_self.png; sourceTree = "<group>"; };
+		289CBB811257C5B80015E58E /* deafened_self@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "deafened_self@2x.png"; path = "Resources/icons/ios/deafened_self@2x.png"; sourceTree = "<group>"; };
+		289CBC551257DFD60015E58E /* muted_local.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = muted_local.png; path = Resources/icons/ios/muted_local.png; sourceTree = "<group>"; };
+		289CBC561257DFD60015E58E /* muted_local@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "muted_local@2x.png"; path = "Resources/icons/ios/muted_local@2x.png"; sourceTree = "<group>"; };
+		289CBC571257DFD60015E58E /* muted_server.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = muted_server.png; path = Resources/icons/ios/muted_server.png; sourceTree = "<group>"; };
+		289CBC581257DFD60015E58E /* muted_server@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "muted_server@2x.png"; path = "Resources/icons/ios/muted_server@2x.png"; sourceTree = "<group>"; };
+		289CBC591257DFD60015E58E /* muted_suppressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = muted_suppressed.png; path = Resources/icons/ios/muted_suppressed.png; sourceTree = "<group>"; };
+		289CBC5A1257DFD60015E58E /* muted_suppressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "muted_suppressed@2x.png"; path = "Resources/icons/ios/muted_suppressed@2x.png"; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* LanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* LanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* LogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogViewController.h; sourceTree = "<group>"; };
@@ -641,6 +665,18 @@
 				280D4A211254E1B700493267 /* cloud@2x.png */,
 				2821B836124EAA67001DF8E4 /* diagnostics.png */,
 				280D4A221254E1B700493267 /* diagnostics@2x.png */,
+				289CBB521257BCD10015E58E /* authenticated.png */,
+				289CBB531257BCD10015E58E /* authenticated@2x.png */,
+				289CBB591257BDAC0015E58E /* muted_self.png */,
+				289CBB5A1257BDAC0015E58E /* muted_self@2x.png */,
+				289CBC551257DFD60015E58E /* muted_local.png */,
+				289CBC561257DFD60015E58E /* muted_local@2x.png */,
+				289CBC571257DFD60015E58E /* muted_server.png */,
+				289CBC581257DFD60015E58E /* muted_server@2x.png */,
+				289CBC591257DFD60015E58E /* muted_suppressed.png */,
+				289CBC5A1257DFD60015E58E /* muted_suppressed@2x.png */,
+				289CBB801257C5B80015E58E /* deafened_self.png */,
+				289CBB811257C5B80015E58E /* deafened_self@2x.png */,
 				2821B82E124EA784001DF8E4 /* person.png */,
 				280D4A241254E1B700493267 /* person@2x.png */,
 				2821B828124EA09F001DF8E4 /* star.png */,
@@ -1244,6 +1280,18 @@
 				280D4B3D1255457B00493267 /* talking_whisper@2x.png in Resources */,
 				280D4B401255463000493267 /* channel.png in Resources */,
 				280D4B411255463000493267 /* channel@2x.png in Resources */,
+				289CBB541257BCD10015E58E /* authenticated.png in Resources */,
+				289CBB551257BCD10015E58E /* authenticated@2x.png in Resources */,
+				289CBB5B1257BDAC0015E58E /* muted_self.png in Resources */,
+				289CBB5C1257BDAC0015E58E /* muted_self@2x.png in Resources */,
+				289CBB821257C5B80015E58E /* deafened_self.png in Resources */,
+				289CBB831257C5B80015E58E /* deafened_self@2x.png in Resources */,
+				289CBC5B1257DFD60015E58E /* muted_local.png in Resources */,
+				289CBC5C1257DFD60015E58E /* muted_local@2x.png in Resources */,
+				289CBC5D1257DFD60015E58E /* muted_server.png in Resources */,
+				289CBC5E1257DFD60015E58E /* muted_server@2x.png in Resources */,
+				289CBC5F1257DFD60015E58E /* muted_suppressed.png in Resources */,
+				289CBC601257DFD60015E58E /* muted_suppressed@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
