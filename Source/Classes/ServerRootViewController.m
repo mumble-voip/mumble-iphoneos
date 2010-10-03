@@ -369,6 +369,58 @@
 	}
 }
 
+// --
+
+- (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ muted and deafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unmuted and undeafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userMuted:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ muted by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unmuted by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userDeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ deafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ undeafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userSuppressed:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ suppressed by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnsuppressed:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unsuppressed by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userMuteStateChanged:(MKUser *)user {
+	NSInteger userIndex = [_channelUsers indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+// --
+
+- (void) serverModel:(MKServerModel *)model userPrioritySpeakerChanged:(MKUser *)user {
+	NSInteger userIndex = [_channelUsers indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+// --
+
 // User talk state changed
 - (void) userTalkStateChanged:(NSNotification *)notification {
 	if (_currentChannel == nil)
@@ -480,10 +532,14 @@
 		[states addObject:@"muted_self"];
 	if ([user isMuted])
 		[states addObject:@"muted_server"];
+	if ([user isDeafened])
+		[states addObject:@"deafened_server"];
 	if ([user isLocalMuted])
 		[states addObject:@"muted_local"];
 	if ([user isSuppressed])
 		[states addObject:@"muted_suppressed"];
+	if ([user isPrioritySpeaker])
+		[states addObject:@"priorityspeaker"];
 
 	CGFloat widthOffset = [states count] * iconWidth;
 	UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
