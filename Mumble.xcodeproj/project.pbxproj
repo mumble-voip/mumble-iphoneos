@@ -211,7 +211,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 10099DDA010099DDA010099D;
+			remoteGlobalIDString = 10099F7E010099F7E010099F /* MumbleKitCombined */;
 			remoteInfo = MumbleKitCombined;
 		};
 		28FEA757124AB77B00A3F6B5 /* PBXContainerItemProxy */ = {
