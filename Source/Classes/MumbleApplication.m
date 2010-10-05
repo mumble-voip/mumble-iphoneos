@@ -28,6 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <unistd.h>
+#include <signal.h>
+
 #import "MumbleApplication.h"
 #import "MumbleApplicationDelegate.h"
 
@@ -82,6 +85,7 @@ static void crashhandler_handle_crash() {
 
 @interface MumbleApplication (Private)
 - (void) setupCrashHandler;
+- (void) setupLogFile;
 @end
 
 @implementation MumbleApplication
@@ -89,6 +93,7 @@ static void crashhandler_handle_crash() {
 - (id) init {
 	if (self = [super init]) {
 		[self setupCrashHandler];
+		[self setupLogFile];
 	}
 	return self;
 }
@@ -121,6 +126,19 @@ static void crashhandler_handle_crash() {
 // Reset our crash count (delete our crashtoken file)
 - (void) resetCrashCount {
 	[[NSFileManager defaultManager] removeItemAtPath:_crashTokenPath error:nil];
+}
+
+// Setup the log file
+- (void) setupLogFile {
+#ifdef MUMBLE_BETA_DIST
+	NSRange r = [[[UIDevice currentDevice] name] rangeOfString:@"Simulator"];
+	if (r.location == NSNotFound) {
+		NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *logFilePath = [[documentDirectories objectAtIndex:0] stringByAppendingPathComponent:@"MumbleBetaLog.txt"];
+		FILE *f = fopen([logFilePath UTF8String], "a+");
+		dup2(fileno(f), fileno(stderr));
+	}
+#endif
 }
 
 @end
