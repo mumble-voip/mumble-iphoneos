@@ -76,7 +76,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == ChannelViewSectionSubChannels) {
-		return [[_channel subchannels] count];
+		return [[_channel channels] count];
 	} else if (section == ChannelViewSectionUsers) {
 		return [[_channel users] count];
 	} else if (section == ChannelViewSectionActions) {
@@ -109,7 +109,7 @@
 	NSUInteger row = [indexPath indexAtPosition:1];
 
 	if (section == ChannelViewSectionSubChannels) {
-		MKChannel *childChannel = [[_channel subchannels] objectAtIndex:row];
+		MKChannel *childChannel = [[_channel channels] objectAtIndex:row];
 		cell.imageView.image = [UIImage imageNamed:@"channel"];
 		cell.textLabel.text = [childChannel channelName];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -137,7 +137,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 	if (section == ChannelViewSectionSubChannels) {
-		MKChannel *childChannel = [[_channel subchannels] objectAtIndex:row];
+		MKChannel *childChannel = [[_channel channels] objectAtIndex:row];
 		ChannelViewController *channelView = [[ChannelViewController alloc] initWithChannel:childChannel serverModel:_model];
 		[self.navigationController pushViewController:channelView animated:YES];
 		[channelView release];

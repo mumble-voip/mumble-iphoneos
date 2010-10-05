@@ -91,21 +91,13 @@
 - (id) initWithServerModel:(MKServerModel *)serverModel {
 	if (self = [super initWithStyle:UITableViewStylePlain]) {
 		_serverModel = serverModel;
-
 		[_serverModel addDelegate:self];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userTalkStateChanged:) name:@"MKUserTalkStateChanged" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selfStartedTransmit:) name:@"MKAudioTransmitStarted" object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selfStoppedTransmit:) name:@"MKAudioTransmitStopped" object:nil];
 	}
 	return self;
 }
 
 - (void) dealloc {
 	[_serverModel removeDelegate:self];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"MKUserTalkStateChanged" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"MKAudioTransmitStarted" object:nil];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:@"MKAudioTransmitStopped" object:nil];
-
 	[super dealloc];
 }
 
@@ -142,7 +134,7 @@
 		[_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
 		[_modelItems addObject:[ChannelNavigationItem navigationItemWithObject:user indentLevel:indentLevel+1]];
 	}
-	for (MKChannel *chan in [channel subchannels]) {
+	for (MKChannel *chan in [channel channels]) {
 		[self addChannelTreeToModel:chan indentLevel:indentLevel+1];
 	}
 }
@@ -217,15 +209,23 @@
 #pragma mark -
 #pragma mark MumbleKit notifications'n'stuff
 
-// User talk state changed
-- (void) userTalkStateChanged:(NSNotification *)notification {
+- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
+	[self rebuildModelArrayFromChannel:[model rootChannel]];
+}
+
+- (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
 	NSLog(@"userTalkStateChanged!!");
-	MKUser *user = [notification object];	
 	NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
 	NSLog(@"userIndex = %i", userIndex);
 
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-	
+
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
 	if (talkState == MKTalkStatePassive)
@@ -238,34 +238,6 @@
 		talkImageName = @"talking_alt";
 
 	cell.imageView.image = [UIImage imageNamed:talkImageName];
-}
-
-// We stopped transmitting
-- (void) selfStoppedTransmit:(NSNotification *)notification {
-	MKUser *user = [_serverModel connectedUser];
-	NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
-
-	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-	cell.imageView.image = [UIImage imageNamed:@"talking_off"];
-}
-
-// We started transmitting
-- (void) selfStartedTransmit:(NSNotification *)notification {
-	MKUser *user = [_serverModel connectedUser];
-	NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
-	
-	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-	cell.imageView.image = [UIImage imageNamed:@"talking_on"];
-}
-
-- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
-	[self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 - (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
