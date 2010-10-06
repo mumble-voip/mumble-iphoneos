@@ -1,0 +1,9 @@
+#!/bin/bash
+
+pushd Dependencies/three20
+T20P=src/common/Configurations/Project.xcconfig
+T20L=src/common/Configurations/Library.xcconfig
+git checkout ${T20P} && git checkout ${T20L}
+echo "ARCHS = \$(ARCHS_STANDARD_32_BIT)" >> ${T20P}
+echo "ARCHS = \$(ARCHS_STANDARD_32_BIT)" >> ${T20L}
+popd
