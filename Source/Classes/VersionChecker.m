@@ -28,6 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#import "MumbleApplication.h"
 #import "VersionChecker.h"
 
 @interface VersionChecker (Private)
@@ -93,10 +94,16 @@
 
 - (void) newBuildAvailable {
 	NSString *title = @"New beta build available";
-	NSString *msg = @"A new beta build is available from the beta portal.\n\nPlease update when time permits.";
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+	NSString *msg = @"Do you want to upgrade?";
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upgrade", nil];
 	[alert show];
 	[alert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 1) { // Upgrade
+		[MumbleApp openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://mumble-ios.appspot.com/wdist/manifest"]];
+	}
 }
 
 @end
