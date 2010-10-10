@@ -74,18 +74,13 @@
 		NSBundle *mainBundle = [NSBundle mainBundle];
 		NSString *ourRev = [mainBundle objectForInfoDictionaryKey:@"MumbleGitRevision"];
 		NSString *latestRev = [dict objectForKey:@"MumbleGitRevision"];
-		if ([ourRev isEqualToString:latestRev]) {
+		if (![ourRev isEqualToString:latestRev]) {
 			NSDate *ourBuildDate = [mainBundle objectForInfoDictionaryKey:@"MumbleBuildDate"];
 			NSDate *latestBuildDate = [dict objectForKey:@"MumbleBuildDate"];
-			if ([ourBuildDate isEqualToDate:latestBuildDate]) {
-				// Running the latest build
-			} else {
+			if (![ourBuildDate isEqualToDate:latestBuildDate]) {
 				NSDate *latest = [ourBuildDate laterDate:latestBuildDate];
 				if (latestBuildDate == latest) {
-					// New build available
 					[self newBuildAvailable];
-				} else {
-					// Running an unreleased build
 				}
 			}
 		}
