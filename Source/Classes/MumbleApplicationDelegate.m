@@ -39,6 +39,7 @@
 #import "MumbleStyleSheet.h"
 
 #import <MumbleKit/MKAudio.h>
+#import <MumbleKit/MKConnectionController.h>
 
 @interface MumbleApplicationDelegate (Private)
 - (void) setupAudio;
@@ -156,6 +157,33 @@
 // Time since we launched
 - (NSTimeInterval) timeIntervalSinceLaunch {
 	return [[NSDate date] timeIntervalSinceDate:_launchDate];
+}
+
+- (void) applicationWillResignActive:(UIApplication *)application {
+	// If we have any active connections, don't stop MKAudio. This is
+	// for 'clicking-the-home-button' invocations of this method.
+	//
+	// In case we've been backgrounded by a phone call, MKAudio will
+	// already have shut itself down.
+	NSArray *connections = [[MKConnectionController sharedController] allConnections];
+	if ([connections count] == 0) {
+		NSLog(@"MumbleApplicationDelegate: Not connected to a server. Stopping MKAudio.");
+		[[MKAudio sharedAudio] stop];
+	}
+}
+
+- (void) applicationDidBecomeActive:(UIApplication *)application {
+	// It is possible that we will become active after a phone call has ended.
+	// In the case of phone calls, MKAudio will automatically stop itself, to
+	// allow the phone call to go through. However, once we're back inside the
+	// application, we have to start ourselves again.
+	//
+	// For regular backgrounding, we usually don't turn off the audio system, and
+	// we won't have to start it again.
+	if (![[MKAudio sharedAudio] isRunning]) {
+		NSLog(@"MumbleApplicationDelegate: MKAudio not running. Starting it.");
+		[[MKAudio sharedAudio] start];
+	}
 }
 
 @end
