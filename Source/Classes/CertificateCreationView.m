@@ -56,7 +56,11 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setTitle:@"Generate Certificate"];
+	[self setTitle:@"New Certificate"];
+
+	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
+	[[self navigationItem] setLeftBarButtonItem:cancelButton];
+	[cancelButton release];
 
 	UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
 	[[self navigationItem] setRightBarButtonItem:createButton];
@@ -121,6 +125,10 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) emailChanged:(TableViewTextFieldCell *)sender {
 	[_emailAddress release];
 	_emailAddress = [[sender textValue] copy];
+}
+
+- (void) cancelClicked:(id)sender {
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void) createClicked:(id)sender {

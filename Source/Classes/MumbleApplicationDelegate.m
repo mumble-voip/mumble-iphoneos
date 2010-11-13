@@ -91,7 +91,7 @@
 		[welcomeScreen release];
 	}
 #endif
-	
+
 	[UIView animateWithDuration:0.8f animations:^{
 		imageView.alpha = 0.0f;
 	} completion:^(BOOL finished){
