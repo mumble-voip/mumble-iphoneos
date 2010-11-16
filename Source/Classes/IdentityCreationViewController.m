@@ -30,7 +30,6 @@
 
 #import "IdentityCreationViewController.h"
 #import "TableViewTextFieldCell.h"
-#import "IdentityViewController.h"
 #import "Database.h"
 #import "Identity.h"
 #import "AvatarCell.h"

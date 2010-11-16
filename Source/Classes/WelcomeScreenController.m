@@ -36,7 +36,6 @@
 #import "LanServerListController.h"
 #import "DiagnosticsViewController.h"
 #import "PreferencesViewController.h"
-#import "IdentityViewController.h"
 #import "ServerRootViewController.h"
 #import "AboutViewController.h"
 
@@ -64,11 +63,6 @@
 	item = [[TTLauncherItem alloc] initWithTitle:@"Diagnostics"
 										   image:@"bundle://diagnostics.png"
 											 URL:@"mumbleapp://diag"];
-	[_launcherView addItem:item animated:YES];
-
-	item = [[TTLauncherItem alloc] initWithTitle:@"Identities"
-										   image:@"bundle://person.png"
-											 URL:@"mumbleapp://ident"];
 	[_launcherView addItem:item animated:YES];
 
 	[_launcherView setDelegate:self];
@@ -113,8 +107,6 @@
 		controller = [[LanServerListController alloc] init];
 	} else if ([[item URL] isEqualToString:@"mumbleapp://diag"]) {
 		controller = [[DiagnosticsViewController alloc] init];
-	} else if ([[item URL] isEqualToString:@"mumbleapp://ident"]) {
-		controller = [[IdentityViewController alloc] init];
 	}
 
 	if (controller) {

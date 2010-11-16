@@ -28,13 +28,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface IdentityViewController : UITableViewController <UIActionSheetDelegate> {
-	NSMutableArray *_identities;
-	NSMutableArray *_certificateItems;
-	NSInteger      _currentView;
-}
+#import <UIKit/UIKit.h>
 
-- (id) init;
-- (void) dealloc;
+@interface IdentityPreferencesViewController : UITableViewController {
+	NSMutableArray *_identities;
+}
 
 @end

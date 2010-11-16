@@ -35,7 +35,6 @@
 #import "LanServerListController.h"
 #import "DiagnosticsViewController.h"
 #import "PreferencesViewController.h"
-#import "IdentityViewController.h"
 #import "ServerRootViewController.h"
 #import "AboutViewController.h"
 
@@ -164,9 +163,7 @@
 			[[self navigationController] pushViewController:preferences animated:YES];
 			[preferences release];
 		} else if (indexPath.row == 1) { // Identities
-			IdentityViewController *ident = [[IdentityViewController alloc] init];
-			[[self navigationController] pushViewController:ident animated:YES];
-			[ident release];
+			// Nothing...
 		} else if (indexPath.row == 2) { // Diagnostics
 			DiagnosticsViewController *diag = [[DiagnosticsViewController alloc] init];
 			[[self navigationController] pushViewController:diag animated:YES];

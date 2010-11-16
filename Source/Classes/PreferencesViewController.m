@@ -32,6 +32,8 @@
 #import "MumbleApplication.h"
 #import "MumbleApplicationDelegate.h"
 #import "AdvancedAudioPreferencesViewController.h"
+#import "IdentityPreferencesViewController.h"
+#import "CertificatePreferencesViewController.h"
 
 @interface PreferencesViewController (Private)
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
@@ -73,7 +75,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 2;
+	return 3;
 }
 
 
@@ -84,6 +86,9 @@
 	// Network
 	} else if (section == 1) {
 		return 1;
+	// Identities
+	} else if (section == 2) {
+		return 2;
 	}
 
 	return 0;
@@ -128,6 +133,7 @@
 			[[cell textLabel] setText:@"Advanced Audio"];
 			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 		}
+
 	// Network
 	} else if ([indexPath section] == 1) {
 		if ([indexPath row] == 0) {
@@ -139,6 +145,16 @@
 			[tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
 			[tcpSwitch release];
 		}
+
+	// Identities
+	} else if ([indexPath section] == 2) {
+		if ([indexPath row] == 0) {
+			cell.textLabel.text = @"Identities";
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		} else if ([indexPath row] == 1) {
+			cell.textLabel.text = @"Certificates";
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
 	}
 
     return cell;
@@ -149,6 +165,8 @@
 		return @"Audio";
 	else if (section == 1) // Network
 		return @"Network";
+	else if (section == 2) // Identities;
+		return @"Identities";
 
 	return @"Default";
 }
@@ -164,6 +182,15 @@
 			AdvancedAudioPreferencesViewController *advAudio = [[AdvancedAudioPreferencesViewController alloc] init];
 			[[self navigationController] pushViewController:advAudio animated:YES];
 			[advAudio release];
+		}
+	} else if ([indexPath section] == 2) { // Identities 
+		if ([indexPath row] == 0) { // Identities
+			IdentityPreferencesViewController *identityPref = [[IdentityPreferencesViewController alloc] init];
+			[self.navigationController pushViewController:identityPref animated:YES];
+		} else if ([indexPath row] == 1) { // Certificates
+			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
+			[self.navigationController pushViewController:certPref animated:YES];
+			[certPref release];
 		}
 	}
 }
