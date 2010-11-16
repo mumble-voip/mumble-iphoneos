@@ -34,6 +34,7 @@
 #import "AdvancedAudioPreferencesViewController.h"
 #import "IdentityPreferencesViewController.h"
 #import "CertificatePreferencesViewController.h"
+#import "DiagnosticsViewController.h"
 
 @interface PreferencesViewController (Private)
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
@@ -75,7 +76,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 3;
+	return 4;
 }
 
 
@@ -89,6 +90,9 @@
 	// Identities
 	} else if (section == 2) {
 		return 2;
+	// Beta
+	} else if (section == 3) {
+		return 1;
 	}
 
 	return 0;
@@ -155,6 +159,13 @@
 			cell.textLabel.text = @"Certificates";
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		}
+	
+	// Beta
+	} else if ([indexPath section] == 3) {
+		if ([indexPath row] == 0) {
+			cell.textLabel.text = @"Diagnostics";
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
 	}
 
     return cell;
@@ -167,6 +178,8 @@
 		return @"Network";
 	else if (section == 2) // Identities;
 		return @"Identities";
+	else if (section == 3) // Beta
+		return @"Beta";
 
 	return @"Default";
 }
@@ -191,6 +204,12 @@
 			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
+		}
+	} else if ([indexPath section] == 3) { // Beta
+		if ([indexPath row] == 0) {
+			DiagnosticsViewController *diagView = [[DiagnosticsViewController alloc] init];
+			[self.navigationController pushViewController:diagView animated:YES];
+			[diagView release];
 		}
 	}
 }

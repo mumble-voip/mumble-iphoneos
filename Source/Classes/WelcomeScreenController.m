@@ -34,7 +34,6 @@
 #import "PublicServerListController.h"
 #import "FavouriteServerListController.h"
 #import "LanServerListController.h"
-#import "DiagnosticsViewController.h"
 #import "PreferencesViewController.h"
 #import "ServerRootViewController.h"
 #import "AboutViewController.h"
@@ -58,11 +57,6 @@
 	item = [[TTLauncherItem alloc] initWithTitle:@"LAN Servers"
 										   image:@"bundle://cloud.png"
 											 URL:@"mumbleapp://lan"];
-	[_launcherView addItem:item animated:YES];
-
-	item = [[TTLauncherItem alloc] initWithTitle:@"Diagnostics"
-										   image:@"bundle://diagnostics.png"
-											 URL:@"mumbleapp://diag"];
 	[_launcherView addItem:item animated:YES];
 
 	[_launcherView setDelegate:self];
@@ -105,8 +99,6 @@
 		controller = [[FavouriteServerListController alloc] init];
 	} else if ([[item URL] isEqualToString:@"mumbleapp://lan"]) {
 		controller = [[LanServerListController alloc] init];
-	} else if ([[item URL] isEqualToString:@"mumbleapp://diag"]) {
-		controller = [[DiagnosticsViewController alloc] init];
 	}
 
 	if (controller) {

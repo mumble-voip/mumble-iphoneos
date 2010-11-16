@@ -33,7 +33,6 @@
 #import "PublicServerListController.h"
 #import "FavouriteServerListController.h"
 #import "LanServerListController.h"
-#import "DiagnosticsViewController.h"
 #import "PreferencesViewController.h"
 #import "ServerRootViewController.h"
 #import "AboutViewController.h"
@@ -77,24 +76,19 @@
 #pragma mark TableView
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	return 2;
+	return 1;
 }
 
 // Customize the number of rows in the table view.
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	if (section == 0)
 		return 3;
-	if (section == 1)
-		return 4;
-
 	return 0;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	if (section == 0)
 		return @"Servers";
-	if (section == 1)
-		return @"Other";
 
 	return @"Unknown";
 }
@@ -120,17 +114,6 @@
 		} else if (indexPath.row == 2) {
 			cell.textLabel.text = @"LAN";
 		}
-	/* 'Other' section. */
-	} else if (indexPath.section == 1) {
-		if (indexPath.row == 0) {
-			cell.textLabel.text = @"Preferences";
-		} else if (indexPath.row == 1) {
-			cell.textLabel.text = @"Identities";
-		} else if (indexPath.row == 2) {
-			cell.textLabel.text = @"Diagnostics";
-		} else if (indexPath.row == 3) {
-			cell.textLabel.text = @"About";
-		}
 	}
 
 	[[cell textLabel] setHidden: NO];
@@ -153,23 +136,6 @@
 		} else if (indexPath.row == 2) {
 			LanServerListController *lanList = [[[LanServerListController alloc] init] autorelease];
 			[self.navigationController pushViewController:lanList animated:YES];
-		}
-	}
-
-	/* Other section. */
-	if (indexPath.section == 1) {
-		if (indexPath.row == 0) { // Preferences
-			PreferencesViewController *preferences = [[PreferencesViewController alloc] init];
-			[[self navigationController] pushViewController:preferences animated:YES];
-			[preferences release];
-		} else if (indexPath.row == 1) { // Identities
-			// Nothing...
-		} else if (indexPath.row == 2) { // Diagnostics
-			DiagnosticsViewController *diag = [[DiagnosticsViewController alloc] init];
-			[[self navigationController] pushViewController:diag animated:YES];
-			[diag release];
-		} else if (indexPath.row == 3) { // About
-			[self presentAboutDialog];
 		}
 	}
 }
