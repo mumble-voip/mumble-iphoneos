@@ -33,10 +33,7 @@
 #import "MumbleApplication.h"
 #import "WelcomeScreenPhone.h"
 #import "WelcomeScreenPad.h"
-#import "WelcomeScreenController.h"
 #import "Database.h"
-
-#import "MumbleStyleSheet.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
@@ -59,7 +56,6 @@
 
 	[self reloadPreferences];
 	[Database initializeDatabase];
-	[TTDefaultStyleSheet setGlobalStyleSheet:[[[MumbleStyleSheet alloc] init] autorelease]];
 
 	self.navigationController.toolbarHidden = YES;
 	[window addSubview:[navigationController view]];
@@ -71,14 +67,6 @@
 	[imageView setImage:[UIImage imageNamed:@"Splash.png"]];
 	[window addSubview:imageView];
 
-#if 1
-	self.navigationController.view.autoresizesSubviews = YES;
-
-	WelcomeScreenController *welcomeScreen = [[WelcomeScreenController alloc] init];
-	[navigationController pushViewController:welcomeScreen animated:NO];
-	[welcomeScreen release];
-
-#else
 	if (idiom == UIUserInterfaceIdiomPad) {
 		NSLog(@"UIUserInterfaceIdiomPad detected.");
 		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
@@ -90,7 +78,6 @@
 		[navigationController pushViewController:welcomeScreen animated:YES];
 		[welcomeScreen release];
 	}
-#endif
 
 	[UIView animateWithDuration:0.8f animations:^{
 		imageView.alpha = 0.0f;

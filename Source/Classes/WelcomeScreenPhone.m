@@ -61,11 +61,17 @@
 	[super viewDidLoad];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
-
+- (void) viewWillAppear:(BOOL)animated {
 	self.navigationItem.title = @"Mumble";
 	self.navigationController.toolbarHidden = YES;
+	
+	UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleBordered target:self action:@selector(aboutClicked:)];
+	[self.navigationItem setRightBarButtonItem:about];
+	[about release];
+	
+	UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:@"Preferences" style:UIBarButtonItemStyleBordered target:self action:@selector(prefsClicked:)];
+	[self.navigationItem setLeftBarButtonItem:prefs];
+	[prefs release];
 }
 
 - (void) didReceiveMemoryWarning {
@@ -140,32 +146,43 @@
 	}
 }
 
+- (void) aboutClicked:(id)sender {
+#ifdef MUMBLE_BETA_DIST
+	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@ (%@)",
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+#else
+	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@",
+							[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+#endif
+	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
+	
+	UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
+											  cancelButtonTitle:@"OK"
+											  otherButtonTitles:@"Website", @"Contributors", @"Legal", nil];
+	[aboutView show];
+	[aboutView release];
+}
+
+- (void) prefsClicked:(id)sender {
+	PreferencesViewController *prefs = [[[PreferencesViewController alloc] init] autorelease];
+	[self.navigationController pushViewController:prefs animated:YES];
+}
+
 #pragma mark -
 #pragma mark About Dialog
 
-- (void) presentAboutDialog {
-	NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
-	NSString *aboutMessage = @"Low-latency, high-quality VoIP app";
-
-	_aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-	_aboutWebsiteButton = [_aboutView addButtonWithTitle:@"Website"];
-	_aboutContribButton = [_aboutView addButtonWithTitle:@"Contributors"];
-	_aboutLegalButton = [_aboutView addButtonWithTitle:@"Legal"];
-	[_aboutView show];
-	[_aboutView release];
-}
-
 - (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
-	if (buttonIndex == _aboutWebsiteButton) {
+	if (buttonIndex == 1) {
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumble.info/"]];
-	} else if (buttonIndex == _aboutContribButton) {
+	} else if (buttonIndex ==  2) { 
 		AboutViewController *contribView = [[AboutViewController alloc] initWithContent:@"Contributors"];
 		UINavigationController *navController = [[UINavigationController alloc] init];
 		[navController pushViewController:contribView animated:NO];
 		[contribView release];
 		[[self navigationController] presentModalViewController:navController animated:YES];
 		[navController release];
-	} else if (buttonIndex == _aboutLegalButton) {
+	} else if (buttonIndex == 3) {
 		AboutViewController *legalView = [[AboutViewController alloc] initWithContent:@"Legal"];
 		UINavigationController *navController = [[UINavigationController alloc] init];
 		[navController pushViewController:legalView animated:NO];

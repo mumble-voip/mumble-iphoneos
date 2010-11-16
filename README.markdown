@@ -21,11 +21,6 @@ required submodules:
         $ git submodule init
         $ git submodule update
 
-When they're done checking out, run the FixThree20 script to set
-up Three20 to build for both armv6 and armv7:
-
-        $ ./Scripts/FixThree20
-
 Then it's time to checkout MumbleKit's dependencies:
 
         $ cd MumbleKit
