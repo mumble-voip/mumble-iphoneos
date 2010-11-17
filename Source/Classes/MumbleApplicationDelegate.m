@@ -51,7 +51,6 @@
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
 	_launchDate = [[NSDate alloc] init];
 
-	UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
 	[window makeKeyAndVisible];
 
 	[self reloadPreferences];
@@ -67,17 +66,9 @@
 	[imageView setImage:[UIImage imageNamed:@"Splash.png"]];
 	[window addSubview:imageView];
 
-	if (idiom == UIUserInterfaceIdiomPad) {
-		NSLog(@"UIUserInterfaceIdiomPad detected.");
-		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] initWithNibName:@"WelcomeScreenPad" bundle:nil];
-		[navigationController pushViewController:welcomeScreen animated:YES];
-		[welcomeScreen release];
-	} else if (idiom == UIUserInterfaceIdiomPhone) {
-		NSLog(@"UIUserInterfaceIdiomPhone detected.");
-		WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
-		[navigationController pushViewController:welcomeScreen animated:YES];
-		[welcomeScreen release];
-	}
+	WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
+	[navigationController pushViewController:welcomeScreen animated:YES];
+	[welcomeScreen release];
 
 	[UIView animateWithDuration:0.8f animations:^{
 		imageView.alpha = 0.0f;

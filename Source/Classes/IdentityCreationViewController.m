@@ -299,6 +299,7 @@
 	[self dismissModalViewControllerAnimated:YES];
 	[self deselectSelectedRowAnimated:NO];
 	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:NO];
+	[[self tableView] reloadData];
 }
 
 #pragma mark -
@@ -321,7 +322,18 @@
 	[imgPicker setDelegate:self];
 	[imgPicker setAllowsEditing:YES];
 	[imgPicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-	[self presentModalViewController:imgPicker animated:YES];
+
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		// Figure out the rect that the UIPopoverController should 'point' at.
+		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+		// Show the popover.
+		UIPopoverController *popOver = [[UIPopoverController alloc] initWithContentViewController:imgPicker];
+		[popOver setDelegate:self];
+		[popOver presentPopoverFromRect:cell.frame inView:[self view] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+	} else {
+		[self presentModalViewController:imgPicker animated:YES];
+	}
+
 	[imgPicker release];
 }
 
@@ -336,8 +348,25 @@
 	[imgPicker setDelegate:self];
 	[imgPicker setAllowsEditing:YES];
 	[imgPicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-	[self presentModalViewController:imgPicker animated:YES];
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		// Figure out the rect that the UIPopoverController should 'point' at.
+		UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+		// Show the popover.
+		UIPopoverController *popOver = [[UIPopoverController alloc] initWithContentViewController:imgPicker];
+		[popOver presentPopoverFromRect:cell.frame inView:[self view] permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+		[popOver setDelegate:self];
+	} else {
+		[self presentModalViewController:imgPicker animated:YES];
+	}
 	[imgPicker release];
+}
+
+#pragma mark -
+#pragma mark UIPopoverControllerDelegate
+
+- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+	[popoverController release];
+	[[self tableView] reloadData];
 }
 
 @end

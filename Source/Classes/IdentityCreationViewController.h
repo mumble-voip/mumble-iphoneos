@@ -35,6 +35,7 @@
                                                                    UIImagePickerControllerDelegate,
                                                                    UINavigationControllerDelegate,
                                                                    UIActionSheetDelegate,
+                                                                   UIPopoverControllerDelegate,
 																   CertificatePickerViewControllerDelegate> {
 	BOOL      _editMode;
 	Identity  *_identity;

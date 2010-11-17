@@ -1046,7 +1046,7 @@
 				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 			};
 			name = Debug;
@@ -1074,7 +1074,7 @@
 				);
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1125,7 +1125,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
 				VALIDATE_PRODUCT = YES;
 			};
