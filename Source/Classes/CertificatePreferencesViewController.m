@@ -54,8 +54,8 @@
 }
 
 - (void) dealloc {
-	[super dealloc];
 	[_certificateItems release];
+	[super dealloc];
 }
 
 #pragma mark -

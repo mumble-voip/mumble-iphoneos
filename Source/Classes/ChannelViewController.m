@@ -44,7 +44,7 @@
 }
 
 - (void) dealloc {
-	return [super dealloc];
+	[super dealloc];
 }
 
 #pragma mark -
