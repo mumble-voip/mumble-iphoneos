@@ -44,6 +44,10 @@ static NSUInteger FavouriteServerPlaceholderPortInteger = 64738;
 static NSString *FavouriteServerPlaceholderUsername     = @"MumbleUser";
 static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 
+@interface FavouriteServerEditViewController (Private)
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView;
+@end
+
 @implementation FavouriteServerEditViewController
 
 #pragma mark -
@@ -100,9 +104,16 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 #pragma mark -
 #pragma mark Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 2;
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+ 	NSArray *identities = [Database fetchAllIdentities];
+	// If we have more than one identity, show the identity picker.
+	if ([identities count] > 1)
+		return 2;
+	// If the server's identity is not set, show the identity picker.
+	if ([_favourite identity] == nil)
+		return 2;
+	// Else, return 1.
+	return 1;
 }
 
 
@@ -223,8 +234,14 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 
 - (void) identityPickerViewController:(IdentityPickerViewController *)identityPicker didSelectIdentity:(Identity *)identity {
 	[_favourite setIdentity:identity];
-	[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 
+	// Only reload the identity section if it's visible.
+	// If not, this could lead to an exception being thrown.
+	if ([self numberOfSectionsInTableView:self.tableView] > 1) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+	} else {
+		[self.tableView reloadData];
+	}
 }
 
 #pragma mark -
