@@ -28,8 +28,6 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Identity.h"
-
 #import <MumbleKit/MKUser.h>
 #import <MumbleKit/MKChannel.h>
 #import <MumbleKit/MKConnection.h>
@@ -44,13 +42,13 @@
 	MKServerModel                   *_model;
 	NSMutableArray                  *_channelUsers;
 	MKChannel                       *_currentChannel;
-	Identity                        *_identity;
+	NSString                        *_username;
 	NSString                        *_password;
 	BOOL                            _pttState;
 	ServerConnectionViewController  *_progressController;
 }
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(Identity *)identity password:(NSString *)password;
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(NSString *)username password:(NSString *)password;
 - (void) dealloc;
 
 @end

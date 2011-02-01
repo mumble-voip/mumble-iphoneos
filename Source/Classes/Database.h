@@ -44,13 +44,6 @@
 + (void) storeFavourites:(NSArray *)favourites;
 + (NSMutableArray *) fetchAllFavourites;
 
-// Identity
-+ (void) storeIdentity:(Identity *)ident;
-+ (void) deleteIdentity:(Identity *)ident;
-+ (void) storeIdentities:(NSArray *)idents;
-+ (NSArray *) fetchAllIdentities;
-+ (Identity *) identityWithPrimaryKey:(NSInteger)key;
-
 // Cert verification
 + (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 + (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;

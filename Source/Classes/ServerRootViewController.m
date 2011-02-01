@@ -51,40 +51,43 @@
 
 @implementation ServerRootViewController
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(Identity *)identity password:(NSString *)password {
-	self = [super init];
-	if (! self)
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
+	NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"certificate"];
+	if (certPersistentId == nil) {
+		NSLog(@"ServerRootViewController: Cannot instantiate without a default certificate.");
 		return nil;
-
-	_identity = [identity retain];
-	_password = [password copy];
-
-	_connection = [[MKConnection alloc] init];
-	[_connection setDelegate:self];
-
-	_model = [[MKServerModel alloc] initWithConnection:_connection];
-	[_model addDelegate:self];
-
-	// Try to fetch our given identity's SecIdentityRef by its persistent reference.
-	// If we're able to fetch it, set it as the connection's client certificate.
-	SecIdentityRef secIdentity = NULL;
-	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-								[identity persistent],	kSecValuePersistentRef,
-								kCFBooleanTrue,			kSecReturnRef,
-								kSecMatchLimitOne,		kSecMatchLimit,
-							nil];
-	if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
-		[_connection setClientIdentity:secIdentity];
-		CFRelease(secIdentity);
 	}
 
-	[_connection connectToHost:host port:port];
+	if (self = [super init]) {
+		_username = [username copy];
+		_password = [password copy];
 
+		_connection = [[MKConnection alloc] init];
+		[_connection setDelegate:self];
+
+		_model = [[MKServerModel alloc] initWithConnection:_connection];
+		[_model addDelegate:self];
+
+		// Try to fetch our given identity's SecIdentityRef by its persistent reference.
+		// If we're able to fetch it, set it as the connection's client certificate.
+		SecIdentityRef secIdentity = NULL;
+		NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+									certPersistentId,		kSecValuePersistentRef,
+									kCFBooleanTrue,			kSecReturnRef,
+									kSecMatchLimitOne,		kSecMatchLimit,
+								nil];
+		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
+			[_connection setClientIdentity:secIdentity];
+			CFRelease(secIdentity);
+		}
+
+		[_connection connectToHost:host port:port];
+	}
 	return self;
 }
 
 - (void) dealloc {
-	[_identity release];
+	[_username release];
 	[_password release];
 	[_model release];
 	[_connection release];
@@ -235,7 +238,7 @@
 
 // Connection established...
 - (void) connectionOpened:(MKConnection *)conn {
-	[conn authenticateWithUsername:[_identity userName] password:_password];
+	[conn authenticateWithUsername:_username password:_password];
 }
 
 // Connection closed...

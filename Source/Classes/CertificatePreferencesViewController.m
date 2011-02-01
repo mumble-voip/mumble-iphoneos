@@ -172,10 +172,10 @@
 		[array release];
 		return;
 	}
-	
+
 	[_certificateItems release];
 	_certificateItems = [[NSMutableArray alloc] init];
-	
+
 	for (NSData *persistentRef in array) {
 		query = [NSDictionary dictionaryWithObjectsAndKeys:
 				 persistentRef,      kSecValuePersistentRef,

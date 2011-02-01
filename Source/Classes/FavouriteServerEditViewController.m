@@ -105,37 +105,21 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
- 	NSArray *identities = [Database fetchAllIdentities];
-	// If we have more than one identity, show the identity picker.
-	if ([identities count] > 1)
-		return 2;
-	// If the server's identity is not set, show the identity picker.
-	if ([_favourite identity] == nil)
-		return 2;
-	// Else, return 1.
-	return 1;
+ 	return 1;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Mumble Server
 	if (section == 0) {
-		return 4;
-	// Identity
-	} else if (section == 1) {
-		return 1;
+		return 5;
 	}
-
 	return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	if (section == 0) {
 		return @"Mumble Server";
-	} else if (section == 1) {
-		return @"Identity";
 	}
-
 	return @"Default";
 }
 
@@ -177,6 +161,12 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 			else
 				[cell setTextValue:nil];
 		} else if (row == 3) {
+			[cell setLabel:@"Username"];
+			[cell setPlaceholder:FavouriteServerPlaceholderUsername];
+			[cell setSecureTextEntry:NO];
+			[cell setValueChangedAction:@selector(usernameChanged:)];
+			[cell setTextValue:[_favourite userName]];
+		} else if (row == 4) {
 			[cell setLabel:@"Password"];
 			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
 			[cell setSecureTextEntry:YES];
@@ -185,30 +175,6 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 		}
 
 		return cell;
-
-	// Identity
-	} else if (section == 1) {
-		if (row == 0) {
-			static NSString *CellIdentifier = @"FavouriteServerIdentityCell";
-			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-			if (cell == nil) {
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-			}
-
-			Identity *ident = [_favourite identity];
-			if (ident) {
-				[[cell textLabel] setText:[ident userName]];
-				NSData *data = [ident avatarData];
-				[[cell imageView] setImage:data ? [ident avatar] : [UIImage imageNamed:@"DefaultAvatar"]];
-			} else {
-				[[cell textLabel] setText:@"None"];
-				[[cell imageView] setImage:nil];
-			}
-
-			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-
-			return cell;
-		}
 	}
 
     return nil;
@@ -221,27 +187,7 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 	if ([indexPath section] != 1 && [indexPath row] != 0)
 		return;
 
-	IdentityPickerViewController *identityPicker = [[IdentityPickerViewController alloc] initWithIdentity:[_favourite identity]];
-	[identityPicker setDelegate:self];
-	[[self navigationController] pushViewController:identityPicker animated:YES];
-	[identityPicker release];
-
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark -
-#pragma mark IdentityPickerViewController delegate
-
-- (void) identityPickerViewController:(IdentityPickerViewController *)identityPicker didSelectIdentity:(Identity *)identity {
-	[_favourite setIdentity:identity];
-
-	// Only reload the identity section if it's visible.
-	// If not, this could lead to an exception being thrown.
-	if ([self numberOfSectionsInTableView:self.tableView] > 1) {
-		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
-	} else {
-		[self.tableView reloadData];
-	}
 }
 
 #pragma mark -
@@ -262,9 +208,12 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 	[_favourite setPort:(NSUInteger)[[cell textValue] intValue]];
 }
 
+- (void) usernameChanged:(id)sender {
+	[_favourite setUserName:[sender textValue]];
+}
+	
 - (void) passwordChanged:(id)sender {
-	TableViewTextFieldCell *cell = (TableViewTextFieldCell *)sender;
-	[_favourite setPassword:[cell textValue]];
+	[_favourite setPassword:[sender textValue]];
 }
 
 #pragma mark -

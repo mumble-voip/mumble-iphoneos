@@ -87,13 +87,11 @@
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
 	cell.textLabel.text = [favServ displayName];
 
-	Identity *ident = [favServ identity];
 	NSString *hostName = [favServ hostName];
-	NSString *userName = [ident userName];
+	NSString *userName = [favServ userName];
 	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%u",
 									userName ? userName : @"MumbleUser",
 									hostName ? hostName : @"(no server)", [favServ port]];
-
     return cell;
 }
 
@@ -140,7 +138,7 @@
 
 		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
 																							 port:[favServ port]
-																						 identity:[favServ identity]
+																						 username:[favServ userName]
 																						 password:[favServ password]];
 		[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
 		[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];

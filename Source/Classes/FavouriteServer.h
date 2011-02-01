@@ -28,8 +28,6 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "Identity.h"
-
 @interface FavouriteServer : NSObject <NSCopying> {
 	NSInteger  _pkey;
 	NSString   *_displayName;
@@ -37,7 +35,6 @@
 	NSUInteger _port;
 	NSString   *_userName;
 	NSString   *_password;
-	NSInteger  _identityForeignKey;
 }
 
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
@@ -50,11 +47,8 @@
 @property (assign)  NSUInteger  port;
 @property (copy)    NSString    *userName;
 @property (copy)    NSString    *password;
-@property (assign)  NSInteger   identityForeignKey;
 
 - (BOOL) hasPrimaryKey;
 - (NSComparisonResult) compare:(FavouriteServer *)favServ;
-- (Identity *) identity;
-- (void) setIdentity:(Identity *)ident;
 
 @end

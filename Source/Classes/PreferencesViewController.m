@@ -32,7 +32,6 @@
 #import "MumbleApplication.h"
 #import "MumbleApplicationDelegate.h"
 #import "AdvancedAudioPreferencesViewController.h"
-#import "IdentityPreferencesViewController.h"
 #import "CertificatePreferencesViewController.h"
 #import "DiagnosticsViewController.h"
 
@@ -79,7 +78,6 @@
 	return 4;
 }
 
-
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Audio
 	if (section == 0) {
@@ -87,9 +85,9 @@
 	// Network
 	} else if (section == 1) {
 		return 1;
-	// Identities
+	// Certificates
 	} else if (section == 2) {
-		return 2;
+		return 1;
 	// Beta
 	} else if (section == 3) {
 		return 1;
@@ -153,10 +151,7 @@
 	// Identities
 	} else if ([indexPath section] == 2) {
 		if ([indexPath row] == 0) {
-			cell.textLabel.text = @"Identities";
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		} else if ([indexPath row] == 1) {
-			cell.textLabel.text = @"Certificates";
+			cell.textLabel.text = @"All Certificates";
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		}
 	
@@ -176,8 +171,8 @@
 		return @"Audio";
 	else if (section == 1) // Network
 		return @"Network";
-	else if (section == 2) // Identities;
-		return @"Identities";
+	else if (section == 2) // Certificates
+		return @"Certificates";
 	else if (section == 3) // Beta
 		return @"Beta";
 
@@ -196,11 +191,8 @@
 			[[self navigationController] pushViewController:advAudio animated:YES];
 			[advAudio release];
 		}
-	} else if ([indexPath section] == 2) { // Identities 
-		if ([indexPath row] == 0) { // Identities
-			IdentityPreferencesViewController *identityPref = [[IdentityPreferencesViewController alloc] init];
-			[self.navigationController pushViewController:identityPref animated:YES];
-		} else if ([indexPath row] == 1) { // Certificates
+	} else if ([indexPath section] == 2) { // Certificates
+		if ([indexPath row] == 0) { // Certificates
 			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
