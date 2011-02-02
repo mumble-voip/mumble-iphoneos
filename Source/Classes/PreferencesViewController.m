@@ -84,7 +84,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Audio
 	if (section == 0) {
-		return 3;
+		return 2;
 	// Network
 	} else if (section == 1) {
 		return 1;
@@ -122,19 +122,8 @@
 			[volSlider release];
 		}
 
-		// Ducking
-		if ([indexPath row] == 1) {
-			UISwitch *duckSwitch = [[UISwitch alloc] init];
-			[duckSwitch	setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"AudioDucking"]];
-			[[cell textLabel] setText:@"Duck Audio"];
-			[cell setAccessoryView:duckSwitch];
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-			[duckSwitch addTarget:self action:@selector(audioDuckingChanged:) forControlEvents:UIControlEventValueChanged];
-			[duckSwitch release];
-		}
-
 		// Advanced Audio
-		if ([indexPath row] == 2) {
+		if ([indexPath row] == 1) {
 			[[cell textLabel] setText:@"Advanced Audio"];
 			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 		}
@@ -243,7 +232,7 @@
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
 	if ([indexPath section] == 0) { // Audio
-		if ([indexPath row] == 2) { // Advanced Audio
+		if ([indexPath row] == 1) { // Advanced Audio
 			AdvancedAudioPreferencesViewController *advAudio = [[AdvancedAudioPreferencesViewController alloc] init];
 			[[self navigationController] pushViewController:advAudio animated:YES];
 			[advAudio release];
