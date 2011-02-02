@@ -35,6 +35,8 @@
 #import "CertificatePreferencesViewController.h"
 #import "DiagnosticsViewController.h"
 
+#import <MumbleKit/MKCertificate.h>
+
 @interface PreferencesViewController (Private)
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
 - (void) audioDuckingChanged:(UISwitch *)duckSwitch;
@@ -69,6 +71,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
 	[self setTitle:@"Preferences"];
+	[[self tableView] reloadData];
 }
 
 #pragma mark -
@@ -87,7 +90,7 @@
 		return 1;
 	// Certificates
 	} else if (section == 2) {
-		return 1;
+		return 2;
 	// Beta
 	} else if (section == 3) {
 		return 1;
@@ -148,12 +151,66 @@
 			[tcpSwitch release];
 		}
 
-	// Identities
+	// Certificates
 	} else if ([indexPath section] == 2) {
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
+		if (cell == nil)
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
+
+		NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+							   kSecClassIdentity,    kSecClass,
+							   kCFBooleanTrue,       kSecReturnPersistentRef,
+							   kSecMatchLimitAll,    kSecMatchLimit,
+							   nil];
+		NSArray *certs = nil;
+		SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
+		[certs autorelease];
+		
+		NSUInteger certCount = [certs count];
+		
 		if ([indexPath row] == 0) {
+			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+								   kSecClassIdentity,    kSecClass,
+								   kCFBooleanTrue,       kSecReturnPersistentRef,
+								   kSecMatchLimitAll,    kSecMatchLimit,
+								   nil];
+			NSArray *certs = nil;
+			SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
+			[certs autorelease];
+
 			cell.textLabel.text = @"All Certificates";
+			cell.detailTextLabel.text = [NSString stringWithFormat:@"%i", certCount];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+		} else if ([indexPath row] == 1) {
+
+			NSData *persistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
+			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+								   persistentRef,      kSecValuePersistentRef,
+								   kCFBooleanTrue,     kSecReturnRef,
+								   kSecMatchLimitOne,  kSecMatchLimit,
+								   nil];
+			SecIdentityRef identity = NULL;
+			MKCertificate *cert = nil;
+			if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
+				SecCertificateRef secCert;
+				if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+					NSData *secData = (NSData *)SecCertificateCopyData(secCert);
+					cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+				}
+			}
+			cell.textLabel.text = @"Certificate";
+			cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
+			if (certCount > 1) {
+				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+				cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+			} else {
+				cell.accessoryType = UITableViewCellAccessoryNone;
+				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			}
 		}
+		
+		return cell;
 	
 	// Beta
 	} else if ([indexPath section] == 3) {
@@ -192,10 +249,24 @@
 			[advAudio release];
 		}
 	} else if ([indexPath section] == 2) { // Certificates
-		if ([indexPath row] == 0) { // Certificates
+		if ([indexPath row] == 0) { // All Certificates
 			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
+		} else if ([indexPath row] == 1) { // Certificate
+			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+								   kSecClassIdentity,    kSecClass,
+								   kCFBooleanTrue,       kSecReturnPersistentRef,
+								   kSecMatchLimitAll,    kSecMatchLimit,
+								   nil];
+			NSArray *certs = nil;
+			SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
+			[certs autorelease];
+			if ([certs count] > 1) {
+				CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] initAsPicker];
+				[self.navigationController pushViewController:certPref animated:YES];
+				[certPref release];
+			}
 		}
 	} else if ([indexPath section] == 3) { // Beta
 		if ([indexPath row] == 0) {

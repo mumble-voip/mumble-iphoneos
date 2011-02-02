@@ -48,7 +48,7 @@
 	ServerConnectionViewController  *_progressController;
 }
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port identity:(NSString *)username password:(NSString *)password;
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;
 - (void) dealloc;
 
 @end

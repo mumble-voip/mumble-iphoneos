@@ -49,6 +49,14 @@
 
 - (id) init {
 	if (self = [super init]) {
+		_picker = NO;
+	}
+	return self;
+}
+
+- (id) initAsPicker {
+	if (self = [super init]) {
+		_picker = YES;
 	}
 	return self;
 }
@@ -62,16 +70,22 @@
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-	self.navigationItem.title = @"Certificates";
+	if (_picker) {
+		self.navigationItem.title = @"Pick Certificate";
+	} else {
+		self.navigationItem.title = @"Certificates";
+	}
 
 	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 
 	[self fetchCertificates];
 	[self.tableView reloadData];
 	
-	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
-	[self.navigationItem setRightBarButtonItem:addButton];
-	[addButton release];
+	if (!_picker) {
+		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
+		[self.navigationItem setRightBarButtonItem:addButton];
+		[addButton release];
+	}
 }
 
 #pragma mark -
@@ -98,7 +112,18 @@
 	[cell setEmail:[cert emailAddress]];
 	[cell setIssuerText:[cert issuerName]];
 	[cell setExpiryText:[[cert notAfter] description]];
-	[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+
+	if (!_picker) {
+		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+	} else {
+		[cell setAccessoryType:UITableViewCellAccessoryNone];
+		NSData *persistentRef = [dict objectForKey:@"persistentRef"];
+		NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
+		if ([persistentRef isEqualToData:curPersistentRef]) {
+			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+			_selectedIndex = [indexPath row];
+		}
+	}
 	
 	return (UITableViewCell *) cell;
 }
@@ -106,13 +131,37 @@
 
 #pragma mark -
 #pragma mark Table view delegate
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (!_picker)
+		return UITableViewCellEditingStyleDelete;
+	else
+		return UITableViewCellEditingStyleNone;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
-	MKCertificate *cert = [dict objectForKey:@"cert"];
-	CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
-	[[self navigationController] pushViewController:certView animated:YES];
-	[certView release];
+
+	// If we're in picker mode, simply set the certificate key NSUserDefaults to the persistentRef of this cert.
+	if (_picker) {
+		NSData *persistentRef = [dict objectForKey:@"persistentRef"];
+		[[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
+
+		UITableViewCell *prevCell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
+		UITableViewCell *curCell = [[self tableView] cellForRowAtIndexPath:indexPath];
+		prevCell.accessoryType = UITableViewCellAccessoryNone;
+		curCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+		_selectedIndex = [indexPath row];
+
+		[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+
+	// If not, show the detailed view.
+	} else {
+		MKCertificate *cert = [dict objectForKey:@"cert"];
+		CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
+		[[self navigationController] pushViewController:certView animated:YES];
+		[certView release];
+	}
 }
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -135,7 +184,7 @@
 											  cancelButtonTitle:@"Cancel"
 										 destructiveButtonTitle:nil
 											  otherButtonTitles:@"Generate New Certificate",
-																@"Import From Disk",
+																@"Import From iTunes",
 							nil];
 	[sheet showInView:[self tableView]];
 	[sheet release];

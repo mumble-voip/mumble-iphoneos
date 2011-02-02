@@ -400,7 +400,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2872F7C4124668880078C0B1 /* Identities */,
+				2872F7C4124668880078C0B1 /* Certificates */,
 				28BF8E1C11D93A1900B72770 /* Database */,
 				2838EA0C1293165700035C5D /* Preferences */,
 				285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */,
@@ -611,7 +611,7 @@
 			path = Resources/serverlist;
 			sourceTree = "<group>";
 		};
-		2872F7C4124668880078C0B1 /* Identities */ = {
+		2872F7C4124668880078C0B1 /* Certificates */ = {
 			isa = PBXGroup;
 			children = (
 				287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */,
@@ -625,7 +625,7 @@
 				28942D7A12456F9200C63A07 /* CertificateCreationView.h */,
 				28942D7B12456F9200C63A07 /* CertificateCreationView.m */,
 			);
-			name = Identities;
+			name = Certificates;
 			sourceTree = "<group>";
 		};
 		28BF8E1C11D93A1900B72770 /* Database */ = {

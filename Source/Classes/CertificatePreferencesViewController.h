@@ -28,11 +28,15 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
 @interface CertificatePreferencesViewController : UITableViewController <UIActionSheetDelegate> {
-	NSMutableArray *_certificateItems;
+	NSMutableArray   *_certificateItems;
+	BOOL             _picker;
+	NSUInteger       _selectedIndex;
 }
 
 - (id) init;
+- (id) initAsPicker;
 - (void) dealloc;
 
 @end

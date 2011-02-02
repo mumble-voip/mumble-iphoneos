@@ -52,7 +52,7 @@
 @implementation ServerRootViewController
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
-	NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"certificate"];
+	NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
 	if (certPersistentId == nil) {
 		NSLog(@"ServerRootViewController: Cannot instantiate without a default certificate.");
 		return nil;

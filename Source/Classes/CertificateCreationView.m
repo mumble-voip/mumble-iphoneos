@@ -176,6 +176,11 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
 				if (err == noErr && data != nil) {
 					// Success!
+					// Now, check if there's already a default certificate set.
+					NSData *defaultCert = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
+					if (defaultCert == nil) {
+						[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"DefaultCertificate"];
+					}
 
 				// This happens when a certificate with a duplicate subject name is added.
 				} else if (err == noErr && data == nil) {
