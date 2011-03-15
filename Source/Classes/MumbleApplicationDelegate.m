@@ -66,9 +66,16 @@
 	[imageView setImage:[UIImage imageNamed:@"Splash.png"]];
 	[window addSubview:imageView];
 
-	WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
-	[navigationController pushViewController:welcomeScreen animated:YES];
-	[welcomeScreen release];
+	UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
+    if (idiom == UIUserInterfaceIdiomPad) {
+		WelcomeScreenPad *welcomeScreen = [[WelcomeScreenPad alloc] init];
+		[navigationController pushViewController:welcomeScreen animated:YES];
+		[welcomeScreen release];
+	} else {
+		WelcomeScreenPhone *welcomeScreen = [[WelcomeScreenPhone alloc] init];
+		[navigationController pushViewController:welcomeScreen animated:YES];
+		[welcomeScreen release];
+	}
 
 	[UIView animateWithDuration:0.8f animations:^{
 		imageView.alpha = 0.0f;

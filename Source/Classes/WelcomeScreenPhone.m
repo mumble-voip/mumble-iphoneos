@@ -78,6 +78,10 @@
 	[super didReceiveMemoryWarning];
 }
 
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return NO;
+}
+
 #pragma mark -
 #pragma mark TableView
 

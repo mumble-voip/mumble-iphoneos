@@ -50,12 +50,13 @@
 - (id) init {
 	if (self = [super init]) {
 		_picker = NO;
+		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
 	}
 	return self;
 }
 
 - (id) initAsPicker {
-	if (self = [super init]) {
+	if (self = [self init]) {
 		_picker = YES;
 	}
 	return self;
@@ -196,10 +197,11 @@
 - (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)idx {
 	if (idx == 0) { // Generate New Certificate
 		UINavigationController *navCtrl = [[UINavigationController alloc] init];
+		navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
 		CertificateCreationView *certGen = [[CertificateCreationView alloc] init];
 		[navCtrl pushViewController:certGen animated:NO];
 		[certGen release];
-		[self presentModalViewController:navCtrl animated:YES];
+		[[self navigationController] presentModalViewController:navCtrl animated:YES];
 		[navCtrl release];
 	} else if (idx == 1) { // Import From Disk
 		NSLog(@"DiskImport");

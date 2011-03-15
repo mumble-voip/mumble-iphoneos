@@ -77,6 +77,15 @@ static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 	[super dealloc];
 }
 
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	// On iPad, we support all interface orientations.
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		return YES;
+	}
+	
+	return toInterfaceOrientation == UIInterfaceOrientationPortrait;
+}
+
 #pragma mark -
 #pragma mark View lifecycle
 

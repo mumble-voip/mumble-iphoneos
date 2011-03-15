@@ -121,6 +121,8 @@
 	_updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
 	[self updateDiagnostics:nil];
 	
+	[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+	
 	return self;
 }
 

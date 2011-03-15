@@ -40,10 +40,9 @@
 #pragma mark Initialization
 
 - (id) init {
-	self = [super initWithStyle:UITableViewStyleGrouped];
-	if (self == nil)
-		return nil;
-	
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+	}
 	return self;
 }
 

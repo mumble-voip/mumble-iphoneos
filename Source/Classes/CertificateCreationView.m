@@ -48,7 +48,10 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Initialization
 
 - (id) init {
-	return [super initWithStyle:UITableViewStyleGrouped];
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+	}
+	return self;
 }
 
 - (void) dealloc {

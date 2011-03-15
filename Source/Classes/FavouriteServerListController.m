@@ -36,6 +36,7 @@
 
 #import "ServerConnectionViewController.h"
 #import "ServerRootViewController.h"
+#import "ServerRootViewControllerPad.h"
 
 @implementation FavouriteServerListController
 
@@ -43,18 +44,16 @@
 #pragma mark Initialization
 
 - (id) init {
-	self = [super init];
-	if (self == nil)
-		return nil;
+	if (self = [super init]) {
+		[[self navigationItem] setTitle:@"Favourites"];
 
-	[[self navigationItem] setTitle:@"Favourites"];
+		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
+		[[self navigationItem] setRightBarButtonItem:addButton];
+		[addButton release];
 
-	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
-	[[self navigationItem] setRightBarButtonItem:addButton];
-	[addButton release];
-
-	_favouriteServers = [[Database fetchAllFavourites] retain];
-	[_favouriteServers sortUsingSelector:@selector(compare:)];
+		_favouriteServers = [[Database fetchAllFavourites] retain];
+		[_favouriteServers sortUsingSelector:@selector(compare:)];
+	}
 
 	return self;
 }
@@ -66,14 +65,23 @@
 	[super dealloc];
 }
 
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	// On iPad, we support all interface orientations.
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		return YES;
+	}
+
+	return toInterfaceOrientation == UIInterfaceOrientationPortrait;
+}
+
 #pragma mark -
 #pragma mark Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [_favouriteServers count];
 }
 
@@ -95,11 +103,11 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
 		NSUInteger row = [indexPath row];
 
@@ -118,11 +126,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[favServ displayName] delegate:self
+	BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+	UIView *cellView = [[self tableView] cellForRowAtIndexPath:indexPath];
+
+	NSString *sheetTitle = pad ? nil : [favServ displayName];
+	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:sheetTitle delegate:self
 												  cancelButtonTitle:@"Cancel"
 												  destructiveButtonTitle:nil
 												  otherButtonTitles:@"Connect", @"Edit", nil];
-	[sheet showInView:[self tableView]];
+	if (pad) {
+		CGRect frame = cellView.frame;
+		frame.origin.y = frame.origin.y - (frame.size.height/2);
+		[sheet showFromRect:frame inView:self.tableView animated:YES];
+	} else {
+		[sheet showInView:cellView];
+	}
 	[sheet release];
 }
 
@@ -134,23 +152,28 @@
 
 	// Connect
 	if (index == 0) {
-		UINavigationController *navCtrl = [[UINavigationController alloc] init];
-
-		ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
-																							 port:[favServ port]
-																						 username:[favServ userName]
-																						 password:[favServ password]];
-		[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-		[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];
-
-		BOOL animated = YES;
-#ifdef USE_CONNECTION_ANIMATION
-		animated = NO;
-#endif
-		[[self navigationController] presentModalViewController:navCtrl animated:animated];
-
-		[serverRoot release];
-		[navCtrl release];
+		if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+			UINavigationController *navCtrl = [[UINavigationController alloc] init];
+			ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
+			      																				 port:[favServ port]
+				     																		 username:[favServ userName]
+					    																	 password:[favServ password]];
+			[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+			[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];
+			[[self navigationController] presentModalViewController:navCtrl animated:YES];
+			[serverRoot release];
+			[navCtrl release];
+		} else {
+			ServerRootViewControllerPad *serverRoot = [[ServerRootViewControllerPad alloc] initWithHostname:[favServ hostName]
+																									   port:[favServ port]
+																								   username:[favServ userName]
+																								   password:[favServ password]];
+			UINavigationController *nav = [[UINavigationController alloc] init];
+			[nav pushViewController:serverRoot animated:NO];
+			[self.navigationController presentModalViewController:nav animated:YES];
+			[serverRoot release];
+			[nav release];
+		}
 
 	// Edit
 	} else if (index == 1) {
@@ -174,6 +197,7 @@
 	[modalNav pushViewController:editView animated:NO];
 	[editView release];
 
+	modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
 	[[self navigationController] presentModalViewController:modalNav animated:YES];
 	[modalNav release];
 }
@@ -191,6 +215,7 @@
 	[modalNav pushViewController:editView animated:NO];
 	[editView release];
 
+	modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
 	[[self navigationController] presentModalViewController:modalNav animated:YES];
 	[modalNav release];
 }

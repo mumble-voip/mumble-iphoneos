@@ -30,6 +30,7 @@
 		280D4B3D1255457B00493267 /* talking_whisper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B351255457B00493267 /* talking_whisper@2x.png */; };
 		280D4B401255463000493267 /* channel.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3E1255463000493267 /* channel.png */; };
 		280D4B411255463000493267 /* channel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3F1255463000493267 /* channel@2x.png */; };
+		280EDE8912FE1E7C00774B3B /* ServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* ServerRootViewControllerPad.m */; };
 		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2821B821124E9F4E001DF8E4 /* globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B820124E9F4E001DF8E4 /* globe.png */; };
 		2821B829124EA09F001DF8E4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B828124EA09F001DF8E4 /* star.png */; };
@@ -54,7 +55,6 @@
 		2858DBA31233E31B000D6F75 /* VersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* VersionChecker.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* WelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */; };
-		285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */; };
 		2861C274116BE905002B8514 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* AboutViewController.m */; };
 		2861C275116BE905002B8514 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* AboutViewController.xib */; };
 		2861C276116BE905002B8514 /* MumbleApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MumbleApplicationDelegate.m */; };
@@ -111,6 +111,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
+		288DC2BD12FD9C810044DEF5 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 288DC2BC12FD9C810044DEF5 /* WelcomeScreenPad.xib */; };
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
 		289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* ChannelNavigationViewController.m */; };
@@ -197,7 +198,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 100669490100669490100669 /* MumbleKitCombined */;
+			remoteGlobalIDString = 100669490100669490100669;
 			remoteInfo = MumbleKitCombined;
 		};
 /* End PBXContainerItemProxy section */
@@ -227,6 +228,8 @@
 		280D4B351255457B00493267 /* talking_whisper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_whisper@2x.png"; path = "Resources/icons/ios/talking_whisper@2x.png"; sourceTree = "<group>"; };
 		280D4B3E1255463000493267 /* channel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = channel.png; path = Resources/icons/ios/channel.png; sourceTree = "<group>"; };
 		280D4B3F1255463000493267 /* channel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "channel@2x.png"; path = "Resources/icons/ios/channel@2x.png"; sourceTree = "<group>"; };
+		280EDE8712FE1E7C00774B3B /* ServerRootViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewControllerPad.h; sourceTree = "<group>"; };
+		280EDE8812FE1E7C00774B3B /* ServerRootViewControllerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewControllerPad.m; sourceTree = "<group>"; };
 		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
 		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2821B820124E9F4E001DF8E4 /* globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = globe.png; path = Resources/icons/ios/globe.png; sourceTree = "<group>"; };
@@ -258,7 +261,6 @@
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../../Resources-iPad/Source/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenPad.h; sourceTree = "<group>"; };
 		285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenPad.m; sourceTree = "<group>"; };
-		285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeScreenPad.xib; sourceTree = "<group>"; };
 		2861C25A116BE905002B8514 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		2861C25B116BE905002B8514 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		2861C25C116BE905002B8514 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 		288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCertificateTrustViewController.m; sourceTree = "<group>"; };
 		288D6B5E123D08EE00D37EDE /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
 		288D6B5F123D08EE00D37EDE /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
+		288DC2BC12FD9C810044DEF5 /* WelcomeScreenPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WelcomeScreenPad.xib; sourceTree = "<group>"; };
 		28942C0D1245476400C63A07 /* CertificatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificatePickerViewController.h; sourceTree = "<group>"; };
 		28942C0E1245476400C63A07 /* CertificatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificatePickerViewController.m; sourceTree = "<group>"; };
 		28942D7A12456F9200C63A07 /* CertificateCreationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationView.h; sourceTree = "<group>"; };
@@ -423,12 +426,14 @@
 				2861C272116BE905002B8514 /* WelcomeScreenPhone.xib */,
 				285C9EEF116BF5B100A9A6A7 /* WelcomeScreenPad.h */,
 				285C9EF0116BF5B100A9A6A7 /* WelcomeScreenPad.m */,
-				285C9EF1116BF5B100A9A6A7 /* WelcomeScreenPad.xib */,
+				288DC2BC12FD9C810044DEF5 /* WelcomeScreenPad.xib */,
 				287A60551176201E00DD4FFB /* ChannelViewController.h */,
 				287A60561176201E00DD4FFB /* ChannelViewController.m */,
 				287A60571176201E00DD4FFB /* ChannelViewController.xib */,
 				287852D9117BC866009E26B1 /* ServerRootViewController.h */,
 				287852DA117BC866009E26B1 /* ServerRootViewController.m */,
+				280EDE8712FE1E7C00774B3B /* ServerRootViewControllerPad.h */,
+				280EDE8812FE1E7C00774B3B /* ServerRootViewControllerPad.m */,
 				28A4CCD1117E064B006EB479 /* LogViewController.h */,
 				28A4CCD2117E064B006EB479 /* LogViewController.m */,
 				28A4CCF3117E1D4D006EB479 /* LogEntry.h */,
@@ -441,8 +446,6 @@
 				287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */,
 				289D254A11BC28BC00E39F2C /* LanServerListController.h */,
 				289D254B11BC28BC00E39F2C /* LanServerListController.m */,
-				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
-				2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */,
 				28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */,
 				28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */,
 				2858DBA11233E31B000D6F75 /* VersionChecker.h */,
@@ -475,6 +478,8 @@
 				281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */,
 				2838EA0D129316C200035C5D /* CertificatePreferencesViewController.h */,
 				2838EA0E129316C200035C5D /* CertificatePreferencesViewController.m */,
+				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
+				2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -856,7 +861,6 @@
 				2861C508116BEA12002B8514 /* Continents.plist in Resources */,
 				2861C509116BEA12002B8514 /* Countries.plist in Resources */,
 				285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */,
-				285C9EF3116BF5B100A9A6A7 /* WelcomeScreenPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */,
 				287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */,
 				287639FF11D2A242009DB8B6 /* CertificateCreationProgressView.xib in Resources */,
@@ -913,6 +917,7 @@
 				289CBE92125934540015E58E /* deafened_server@2x.png in Resources */,
 				289CBE99125935990015E58E /* priorityspeaker.png in Resources */,
 				289CBE9A125935990015E58E /* priorityspeaker@2x.png in Resources */,
+				288DC2BD12FD9C810044DEF5 /* WelcomeScreenPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,6 +982,7 @@
 				288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */,
 				289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */,
 				2838EA0F129316C200035C5D /* CertificatePreferencesViewController.m in Sources */,
+				280EDE8912FE1E7C00774B3B /* ServerRootViewControllerPad.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
