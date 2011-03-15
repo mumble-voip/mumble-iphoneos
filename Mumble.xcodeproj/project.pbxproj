@@ -107,13 +107,13 @@
 		287BA34011B97EEE0010E031 /* FavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* FavouriteServerListController.m */; };
 		287BA3A611B996D90010E031 /* FavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* FavouriteServerEditViewController.m */; };
 		287BA42B11B9A1DB0010E031 /* TableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* TableViewTextFieldCell.m */; };
-		287EAB841245305400A0159D /* libMumbleKitCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 287EAB671245303200A0159D /* libMumbleKitCombined.a */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288B55E01252903300563A28 /* ServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* ServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* CertificateViewController.m */; };
 		288DC2BD12FD9C810044DEF5 /* WelcomeScreenPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 288DC2BC12FD9C810044DEF5 /* WelcomeScreenPad.xib */; };
 		28942C0F1245476400C63A07 /* CertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* CertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* CertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* CertificateCreationView.m */; };
+		28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28990AB0132FDA540034B406 /* libMumbleKit.a */; };
 		289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* ChannelNavigationViewController.m */; };
 		289CBB541257BCD10015E58E /* authenticated.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB521257BCD10015E58E /* authenticated.png */; };
 		289CBB551257BCD10015E58E /* authenticated@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CBB531257BCD10015E58E /* authenticated@2x.png */; };
@@ -145,61 +145,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */ = {
+		28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 28D1E663115018A800469C69;
-			remoteInfo = MumbleKit;
+			remoteGlobalIDString = 28BCF2C1132AE3B40003AEC1;
+			remoteInfo = "MumbleKit (iOS)";
 		};
-		287EAB661245303200A0159D /* PBXContainerItemProxy */ = {
+		28990A8F132FD9CC0034B406 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 1009A41501009A41501009A4;
-			remoteInfo = MumbleKitCombined;
+			remoteGlobalIDString = 2845A71A132D9B2F0034D631;
+			remoteInfo = "MumbleKit (Mac)";
 		};
-		287EAB681245303200A0159D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1009C31B01009C31B01009C3;
-			remoteInfo = "CELT-0.7.0";
-		};
-		287EAB6A1245303200A0159D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1009F1CE01009F1CE01009F1;
-			remoteInfo = Speex;
-		};
-		287EAB6C1245303200A0159D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 100A08C80100A08C80100A08;
-			remoteInfo = SpeexDSP;
-		};
-		287EAB6E1245303200A0159D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 100A27BF0100A27BF0100A27;
-			remoteInfo = ProtocolBuffers;
-		};
-		287EAB701245303200A0159D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 100CB7450100CB7450100CB7;
-			remoteInfo = OpenSSL;
-		};
-		287EAB821245303E00A0159D /* PBXContainerItemProxy */ = {
+		28990AAE132FDA4B0034B406 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 100669490100669490100669;
-			remoteInfo = MumbleKitCombined;
+			remoteGlobalIDString = 28BCF2C0132AE3B40003AEC1;
+			remoteInfo = "MumbleKit (iOS)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -338,6 +303,7 @@
 		28942C0E1245476400C63A07 /* CertificatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificatePickerViewController.m; sourceTree = "<group>"; };
 		28942D7A12456F9200C63A07 /* CertificateCreationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationView.h; sourceTree = "<group>"; };
 		28942D7B12456F9200C63A07 /* CertificateCreationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationView.m; sourceTree = "<group>"; };
+		28990AB0132FDA540034B406 /* libMumbleKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libMumbleKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		289CBA16125693040015E58E /* ChannelNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelNavigationViewController.h; sourceTree = "<group>"; };
 		289CBA17125693040015E58E /* ChannelNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelNavigationViewController.m; sourceTree = "<group>"; };
 		289CBB521257BCD10015E58E /* authenticated.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = authenticated.png; path = Resources/icons/ios/authenticated.png; sourceTree = "<group>"; };
@@ -386,7 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				287EAB841245305400A0159D /* libMumbleKitCombined.a in Frameworks */,
+				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -554,13 +520,8 @@
 		2861C28F116BE91B002B8514 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2861C2A7116BE91B002B8514 /* libMumbleKit.a */,
-				287EAB671245303200A0159D /* libMumbleKitCombined.a */,
-				287EAB691245303200A0159D /* libCELT-0.7.0.a */,
-				287EAB6B1245303200A0159D /* libSpeex.a */,
-				287EAB6D1245303200A0159D /* libSpeexDSP.a */,
-				287EAB6F1245303200A0159D /* libProtocolBuffers.a */,
-				287EAB711245303200A0159D /* libOpenSSL.a */,
+				28990A8E132FD9CC0034B406 /* libMumbleKit.a */,
+				28990A90132FD9CC0034B406 /* MumbleKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -709,6 +670,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28990AB0132FDA540034B406 /* libMumbleKit.a */,
 				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
@@ -735,7 +697,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				287EAB831245303E00A0159D /* PBXTargetDependency */,
+				28990AAF132FDA4B0034B406 /* PBXTargetDependency */,
 			);
 			name = Mumble;
 			productName = Mumble;
@@ -773,53 +735,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2861C2A7116BE91B002B8514 /* libMumbleKit.a */ = {
+		28990A8E132FD9CC0034B406 /* libMumbleKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libMumbleKit.a;
-			remoteRef = 2861C2A6116BE91B002B8514 /* PBXContainerItemProxy */;
+			remoteRef = 28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		287EAB671245303200A0159D /* libMumbleKitCombined.a */ = {
+		28990A90132FD9CC0034B406 /* MumbleKit.framework */ = {
 			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMumbleKitCombined.a;
-			remoteRef = 287EAB661245303200A0159D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		287EAB691245303200A0159D /* libCELT-0.7.0.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCELT-0.7.0.a";
-			remoteRef = 287EAB681245303200A0159D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		287EAB6B1245303200A0159D /* libSpeex.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSpeex.a;
-			remoteRef = 287EAB6A1245303200A0159D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		287EAB6D1245303200A0159D /* libSpeexDSP.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSpeexDSP.a;
-			remoteRef = 287EAB6C1245303200A0159D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		287EAB6F1245303200A0159D /* libProtocolBuffers.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libProtocolBuffers.a;
-			remoteRef = 287EAB6E1245303200A0159D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		287EAB711245303200A0159D /* libOpenSSL.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libOpenSSL.a;
-			remoteRef = 287EAB701245303200A0159D /* PBXContainerItemProxy */;
+			fileType = wrapper.framework;
+			path = MumbleKit.framework;
+			remoteRef = 28990A8F132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -989,10 +916,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		287EAB831245303E00A0159D /* PBXTargetDependency */ = {
+		28990AAF132FDA4B0034B406 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = MumbleKitCombined;
-			targetProxy = 287EAB821245303E00A0159D /* PBXContainerItemProxy */;
+			name = "MumbleKit (iOS)";
+			targetProxy = 28990AAE132FDA4B0034B406 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
