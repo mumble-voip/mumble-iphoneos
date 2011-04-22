@@ -36,7 +36,6 @@
 }
 
 - (id) init;
-- (id) initAsPicker;
 - (void) dealloc;
 
 @end

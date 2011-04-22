@@ -30,6 +30,7 @@
 
 #import "CertificatePickerViewController.h"
 #import "CertificateCell.h"
+#import "CertificateController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -161,37 +162,14 @@
 #pragma mark Misc.
 
 - (void) fetchCertificates {
-	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-						   kSecClassIdentity,    kSecClass,
-						   kCFBooleanTrue,       kSecReturnPersistentRef,
-						   kSecMatchLimitAll,    kSecMatchLimit,
-						   nil];
-	NSArray *array = nil;
-	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
-	if (err != noErr || array == nil) {
-		[array release];
-		return;
-	}
+    NSArray *persistentRefs = [CertificateController allPersistentRefs];
+	_certificateItems = [[NSMutableArray alloc] initWithCapacity:[persistentRefs count]];
 
-	_certificateItems = [[NSMutableArray alloc] init];
-
-	for (NSData *persistentRef in array) {
-		query = [NSDictionary dictionaryWithObjectsAndKeys:
-				 persistentRef,      kSecValuePersistentRef,
-				 kCFBooleanTrue,     kSecReturnRef,
-				 kSecMatchLimitOne,  kSecMatchLimit,
-				 nil];
-		SecIdentityRef identity = NULL;
-		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-			SecCertificateRef secCert;
-			if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
-				NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-				MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
-				[_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-											  cert, @"cert", persistentRef, @"persistentRef", nil]];
-			}
-		}
-	}
+	for (NSData *persistentRef in persistentRefs) {
+        MKCertificate *cert = [CertificateController certificateWithPersistentRef:persistentRef];
+        [_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                      cert, @"cert", persistentRef, @"persistentRef", nil]];
+    }
 }
 
 @end

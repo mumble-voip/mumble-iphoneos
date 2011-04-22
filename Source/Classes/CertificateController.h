@@ -28,11 +28,17 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <MumbleKit/MKCertificate.h>
 
-@interface AdvancedAudioPreferencesViewController : UITableViewController
+@interface CertificateController : NSObject
++ (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
++ (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
 
-- (id) init;
-- (void) dealloc;
++ (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
++ (MKCertificate *) defaultCertificate;
 
+
++ (NSArray *) rawCertificates;
++ (NSArray *) allPersistentRefs;
 @end

@@ -53,4 +53,12 @@
 	_expiryLabel.text = expiryText;
 }
 
+- (void) setShowsCheckmark:(BOOL)showsCheckmark {
+    [_selectedLabel setHidden:!showsCheckmark];
+}
+
+- (BOOL) isCheckmarkShown {
+    return ![_selectedLabel isHidden];
+}
+
 @end

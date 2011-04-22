@@ -42,7 +42,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Initialization
 
 - (id) initWithCertificate:(MKCertificate *)cert {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
 		_certificates = [[NSArray alloc] initWithObjects:cert, nil];
 		_curIdx = 0;
 		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
@@ -51,7 +51,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 }
 
 - (id) initWithCertificates:(NSArray *)cert {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
 		_certificates = [[NSArray alloc] initWithArray:cert];
 		_curIdx = 0;
 		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
@@ -201,11 +201,14 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (void) certificateSwitch:(id)sender {
 	if ([_arrows selectedSegmentIndex] == 0) {
-		if (_curIdx < [_certificates count]-1)
-			++_curIdx;
+		if (_curIdx < [_certificates count]-1) {
+            _curIdx += 1;
+        }
 	} else {
-		if (_curIdx > 0)
-			--_curIdx;
+		if (_curIdx > 0) {
+			_curIdx -= 1;
+        }
+        
 	}
 
 	[self updateCertificateDisplay];

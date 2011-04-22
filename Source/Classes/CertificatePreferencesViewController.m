@@ -32,6 +32,7 @@
 #import "CertificateCell.h"
 #import "CertificateCreationView.h"
 #import "CertificateViewController.h"
+#import "CertificateController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -48,16 +49,8 @@
 #pragma mark Initialization
 
 - (id) init {
-	if (self = [super init]) {
-		_picker = NO;
+	if ((self = [super init])) {
 		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
-}
-
-- (id) initAsPicker {
-	if (self = [self init]) {
-		_picker = YES;
 	}
 	return self;
 }
@@ -71,22 +64,16 @@
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-	if (_picker) {
-		self.navigationItem.title = @"Pick Certificate";
-	} else {
-		self.navigationItem.title = @"Certificates";
-	}
+    self.navigationItem.title = @"Certificates";
 
 	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 
 	[self fetchCertificates];
 	[self.tableView reloadData];
 	
-	if (!_picker) {
-		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
-		[self.navigationItem setRightBarButtonItem:addButton];
-		[addButton release];
-	}
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
+    [self.navigationItem setRightBarButtonItem:addButton];
+    [addButton release];
 }
 
 #pragma mark -
@@ -114,17 +101,17 @@
 	[cell setIssuerText:[cert issuerName]];
 	[cell setExpiryText:[[cert notAfter] description]];
 
-	if (!_picker) {
-		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-	} else {
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
-		NSData *persistentRef = [dict objectForKey:@"persistentRef"];
-		NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
-		if ([persistentRef isEqualToData:curPersistentRef]) {
-			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-			_selectedIndex = [indexPath row];
-		}
-	}
+    NSData *persistentRef = [dict objectForKey:@"persistentRef"];
+    NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
+
+    if ([persistentRef isEqualToData:curPersistentRef]) {
+        _selectedIndex = [indexPath row];
+        [cell setShowsCheckmark:YES];
+    } else {
+        [cell setShowsCheckmark:NO];
+    }
+    
+    [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
 	
 	return (UITableViewCell *) cell;
 }
@@ -133,36 +120,21 @@
 #pragma mark -
 #pragma mark Table view delegate
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (!_picker)
-		return UITableViewCellEditingStyleDelete;
-	else
-		return UITableViewCellEditingStyleNone;
+    return UITableViewCellEditingStyleDelete;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+    NSData *persistentRef = [dict objectForKey:@"persistentRef"];
+	[[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
 
-	// If we're in picker mode, simply set the certificate key NSUserDefaults to the persistentRef of this cert.
-	if (_picker) {
-		NSData *persistentRef = [dict objectForKey:@"persistentRef"];
-		[[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
+	CertificateCell *prevCell = (CertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
+    CertificateCell *curCell = (CertificateCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
+    [prevCell setShowsCheckmark:NO];
+    [curCell setShowsCheckmark:YES];
+    _selectedIndex = [indexPath row];
 
-		UITableViewCell *prevCell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
-		UITableViewCell *curCell = [[self tableView] cellForRowAtIndexPath:indexPath];
-		prevCell.accessoryType = UITableViewCellAccessoryNone;
-		curCell.accessoryType = UITableViewCellAccessoryCheckmark;
-
-		_selectedIndex = [indexPath row];
-
-		[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
-	// If not, show the detailed view.
-	} else {
-		MKCertificate *cert = [dict objectForKey:@"cert"];
-		CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
-		[[self navigationController] pushViewController:certView animated:YES];
-		[certView release];
-	}
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,6 +146,14 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return 85.0f;
+}
+
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+    MKCertificate *cert = [dict objectForKey:@"cert"];
+    CertificateViewController *certView = [[CertificateViewController alloc] initWithCertificate:cert];
+    [[self navigationController] pushViewController:certView animated:YES];
+    [certView release];
 }
 
 #pragma mark -
@@ -212,50 +192,27 @@
 #pragma mark Utils
 
 - (void) fetchCertificates {
-	NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-						   kSecClassIdentity,    kSecClass,
-						   kCFBooleanTrue,       kSecReturnPersistentRef,
-						   kSecMatchLimitAll,    kSecMatchLimit,
-						   nil];
-	NSArray *array = nil;
-	OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
-	if (err != noErr || array == nil) {
-		[array release];
-		return;
-	}
+	NSArray *persistentRefs = [CertificateController allPersistentRefs];
 
 	[_certificateItems release];
-	_certificateItems = [[NSMutableArray alloc] init];
+    _certificateItems = nil;
 
-	for (NSData *persistentRef in array) {
-		query = [NSDictionary dictionaryWithObjectsAndKeys:
-				 persistentRef,      kSecValuePersistentRef,
-				 kCFBooleanTrue,     kSecReturnRef,
-				 kSecMatchLimitOne,  kSecMatchLimit,
-				 nil];
-		SecIdentityRef identity = NULL;
-		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-			SecCertificateRef secCert;
-			if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
-				NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-				MKCertificate *cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
-				[_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-											  cert, @"cert", persistentRef, @"persistentRef", nil]];
-			}
-		}
-	}
+    if (persistentRefs) {
+        _certificateItems = [[NSMutableArray alloc] initWithCapacity:[persistentRefs count]];
+        for (NSData *persistentRef in persistentRefs) {
+            MKCertificate *cert = [CertificateController certificateWithPersistentRef:persistentRef];
+            if (cert) {
+                [_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                              cert, @"cert", persistentRef, @"persistentRef", nil]];
+            }
+        }
+    }
 }
 
 - (void) deleteCertificateForRow:(NSUInteger)row {
 	// Delete a certificate from the keychain
 	NSDictionary *dict = [_certificateItems objectAtIndex:row];
-	
-	// This goes against what the documentation says for this fucntion, but Apple has stated that
-	// this is the intended way to delete via a persistent ref through a rdar.
-	NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-						[dict objectForKey:@"persistentRef"], kSecValuePersistentRef,
-						nil];
-	OSStatus err = SecItemDelete((CFDictionaryRef)op);
+	OSStatus err = [CertificateController deleteCertificateWithPersistentRef:[dict objectForKey:@"persistentRef"]];
 	if (err == noErr) {
 		[_certificateItems removeObjectAtIndex:row];
 	}

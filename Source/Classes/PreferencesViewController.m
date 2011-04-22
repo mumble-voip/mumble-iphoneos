@@ -31,9 +31,9 @@
 #import "PreferencesViewController.h"
 #import "MumbleApplication.h"
 #import "MumbleApplicationDelegate.h"
-#import "AdvancedAudioPreferencesViewController.h"
 #import "CertificatePreferencesViewController.h"
 #import "DiagnosticsViewController.h"
+#import "CertificateController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -49,19 +49,15 @@
 #pragma mark Initialization
 
 - (id) init {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
 		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
 	}
 	return self;
 }
 
 - (void) dealloc {
-	// Sync user defaults to persistent storage
 	[[NSUserDefaults standardUserDefaults] synchronize];
-
-	// Call our app delegate to reload preferences
 	[[MumbleApp delegate] reloadPreferences];
-
 	[super dealloc];
 }
 
@@ -83,7 +79,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Audio
 	if (section == 0) {
-		return 2;
+		return 1;
 	// Network
 	} else if (section == 1) {
 		return 1;
@@ -121,12 +117,6 @@
 			[volSlider release];
 		}
 
-		// Advanced Audio
-		if ([indexPath row] == 1) {
-			[[cell textLabel] setText:@"Advanced Audio"];
-			[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-		}
-
 	// Network
 	} else if ([indexPath section] == 1) {
 		if ([indexPath row] == 0) {
@@ -145,59 +135,19 @@
 		if (cell == nil)
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
 
-		NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-							   kSecClassIdentity,    kSecClass,
-							   kCFBooleanTrue,       kSecReturnPersistentRef,
-							   kSecMatchLimitAll,    kSecMatchLimit,
-							   nil];
-		NSArray *certs = nil;
-		SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
-		[certs autorelease];
-		
-		NSUInteger certCount = [certs count];
-		
-		if ([indexPath row] == 0) {
-			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-								   kSecClassIdentity,    kSecClass,
-								   kCFBooleanTrue,       kSecReturnPersistentRef,
-								   kSecMatchLimitAll,    kSecMatchLimit,
-								   nil];
-			NSArray *certs = nil;
-			SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
-			[certs autorelease];
-
+        NSArray *persistentRefs = [CertificateController allPersistentRefs];
+		if ([indexPath row] == 1) {
 			cell.textLabel.text = @"All Certificates";
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%i", certCount];
+			cell.detailTextLabel.text = [NSString stringWithFormat:@"%i", [persistentRefs count]];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-		} else if ([indexPath row] == 1) {
-
-			NSData *persistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
-			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-								   persistentRef,      kSecValuePersistentRef,
-								   kCFBooleanTrue,     kSecReturnRef,
-								   kSecMatchLimitOne,  kSecMatchLimit,
-								   nil];
-			SecIdentityRef identity = NULL;
-			MKCertificate *cert = nil;
-			if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-				SecCertificateRef secCert;
-				if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
-					NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-					cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
-				}
-			}
-			cell.textLabel.text = @"Certificate";
+		} else if ([indexPath row] == 0) {
+            MKCertificate *cert = [CertificateController defaultCertificate];
+			cell.textLabel.text = @"Active";
 			cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
-			if (certCount > 1) {
-				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-				cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-			} else {
-				cell.accessoryType = UITableViewCellAccessoryNone;
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			}
+			cell.accessoryType = UITableViewCellAccessoryNone;
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
-		
+
 		return cell;
 	
 	// Beta
@@ -230,31 +180,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
-	if ([indexPath section] == 0) { // Audio
-		if ([indexPath row] == 1) { // Advanced Audio
-			AdvancedAudioPreferencesViewController *advAudio = [[AdvancedAudioPreferencesViewController alloc] init];
-			[[self navigationController] pushViewController:advAudio animated:YES];
-			[advAudio release];
-		}
-	} else if ([indexPath section] == 2) { // Certificates
-		if ([indexPath row] == 0) { // All Certificates
+	if ([indexPath section] == 2) { // Certificates
+		if ([indexPath row] == 1) { // All Certificates
 			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
-		} else if ([indexPath row] == 1) { // Certificate
-			NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-								   kSecClassIdentity,    kSecClass,
-								   kCFBooleanTrue,       kSecReturnPersistentRef,
-								   kSecMatchLimitAll,    kSecMatchLimit,
-								   nil];
-			NSArray *certs = nil;
-			SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
-			[certs autorelease];
-			if ([certs count] > 1) {
-				CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] initAsPicker];
-				[self.navigationController pushViewController:certPref animated:YES];
-				[certPref release];
-			}
 		}
 	} else if ([indexPath section] == 3) { // Beta
 		if ([indexPath row] == 0) {

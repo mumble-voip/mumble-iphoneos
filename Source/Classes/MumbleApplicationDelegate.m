@@ -85,7 +85,7 @@
 
 		[self notifyCrash];
 		_verCheck = [[VersionChecker alloc] init];
-	}];	
+	}];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -126,7 +126,7 @@
 	settings.jitterBufferSize = 0; /* 10 ms */
 	settings.volume = [defaults floatForKey:@"AudioOutputVolume"];
 	settings.outputDelay = 0; /* 10 ms */
-	settings.enablePreprocessor = [defaults boolForKey:@"AudioInputPreprocessor"];
+	settings.enablePreprocessor = YES;
 	settings.enableBenchmark = YES;
 
 	MKAudio *audio = [MKAudio sharedAudio];

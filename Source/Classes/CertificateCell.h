@@ -35,6 +35,7 @@
 	IBOutlet UILabel *_emailLabel;
 	IBOutlet UILabel *_issuerLabel;
 	IBOutlet UILabel *_expiryLabel;
+    IBOutlet UILabel *_selectedLabel;
 }
 
 + (CertificateCell *) loadFromNib;
@@ -43,5 +44,8 @@
 - (void) setEmail:(NSString *)email;
 - (void) setIssuerText:(NSString *)issuerText;
 - (void) setExpiryText:(NSString *)expiryText;
+
+- (BOOL) isCheckmarkShown;
+- (void) setShowsCheckmark:(BOOL)showsCheckmark;
 
 @end

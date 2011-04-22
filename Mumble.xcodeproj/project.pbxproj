@@ -31,13 +31,13 @@
 		280D4B401255463000493267 /* channel.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3E1255463000493267 /* channel.png */; };
 		280D4B411255463000493267 /* channel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 280D4B3F1255463000493267 /* channel@2x.png */; };
 		280EDE8912FE1E7C00774B3B /* ServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* ServerRootViewControllerPad.m */; };
-		281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */; };
 		2821B821124E9F4E001DF8E4 /* globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B820124E9F4E001DF8E4 /* globe.png */; };
 		2821B829124EA09F001DF8E4 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B828124EA09F001DF8E4 /* star.png */; };
 		2821B82F124EA784001DF8E4 /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B82E124EA784001DF8E4 /* person.png */; };
 		2821B837124EAA67001DF8E4 /* diagnostics.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B836124EAA67001DF8E4 /* diagnostics.png */; };
 		2821B843124EAC1B001DF8E4 /* cloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B842124EAC1B001DF8E4 /* cloud.png */; };
 		2821B871124EB3F3001DF8E4 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 2821B870124EB3F3001DF8E4 /* Splash.png */; };
+		282F6A2513620BD5008F555B /* CertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 282F6A2413620BD5008F555B /* CertificateController.m */; };
 		2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */; };
 		2838EA0F129316C200035C5D /* CertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* CertificatePreferencesViewController.m */; };
 		283A68BE1253856E00267F6D /* down.png in Resources */ = {isa = PBXBuildFile; fileRef = 283A68BC1253856E00267F6D /* down.png */; };
@@ -195,14 +195,14 @@
 		280D4B3F1255463000493267 /* channel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "channel@2x.png"; path = "Resources/icons/ios/channel@2x.png"; sourceTree = "<group>"; };
 		280EDE8712FE1E7C00774B3B /* ServerRootViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewControllerPad.h; sourceTree = "<group>"; };
 		280EDE8812FE1E7C00774B3B /* ServerRootViewControllerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewControllerPad.m; sourceTree = "<group>"; };
-		281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
-		281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		2821B820124E9F4E001DF8E4 /* globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = globe.png; path = Resources/icons/ios/globe.png; sourceTree = "<group>"; };
 		2821B828124EA09F001DF8E4 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = Resources/icons/ios/star.png; sourceTree = "<group>"; };
 		2821B82E124EA784001DF8E4 /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = person.png; path = Resources/icons/ios/person.png; sourceTree = "<group>"; };
 		2821B836124EAA67001DF8E4 /* diagnostics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diagnostics.png; path = Resources/icons/ios/diagnostics.png; sourceTree = "<group>"; };
 		2821B842124EAC1B001DF8E4 /* cloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cloud.png; path = Resources/icons/ios/cloud.png; sourceTree = "<group>"; };
 		2821B870124EB3F3001DF8E4 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = Resources/icons/Splash.png; sourceTree = "<group>"; };
+		282F6A2313620BD5008F555B /* CertificateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateController.h; sourceTree = "<group>"; };
+		282F6A2413620BD5008F555B /* CertificateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiagnosticsViewController.h; sourceTree = "<group>"; };
 		2830A18B11CE983B00970A41 /* DiagnosticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiagnosticsViewController.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* CertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificatePreferencesViewController.h; sourceTree = "<group>"; };
@@ -440,8 +440,6 @@
 			children = (
 				2801C35911CA9F1A00E664E8 /* PreferencesViewController.h */,
 				2801C35A11CA9F1A00E664E8 /* PreferencesViewController.m */,
-				281EF08611CD721D001C6B73 /* AdvancedAudioPreferencesViewController.h */,
-				281EF08711CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m */,
 				2838EA0D129316C200035C5D /* CertificatePreferencesViewController.h */,
 				2838EA0E129316C200035C5D /* CertificatePreferencesViewController.m */,
 				2830A18A11CE983B00970A41 /* DiagnosticsViewController.h */,
@@ -590,6 +588,8 @@
 				28942C0E1245476400C63A07 /* CertificatePickerViewController.m */,
 				28942D7A12456F9200C63A07 /* CertificateCreationView.h */,
 				28942D7B12456F9200C63A07 /* CertificateCreationView.m */,
+				282F6A2313620BD5008F555B /* CertificateController.h */,
+				282F6A2413620BD5008F555B /* CertificateController.m */,
 			);
 			name = Certificates;
 			sourceTree = "<group>";
@@ -894,7 +894,6 @@
 				28C6EF0A11BBF38100E426C8 /* CountryServerListController.m in Sources */,
 				289D254C11BC28BC00E39F2C /* LanServerListController.m in Sources */,
 				2801C35B11CA9F1A00E664E8 /* PreferencesViewController.m in Sources */,
-				281EF08811CD721D001C6B73 /* AdvancedAudioPreferencesViewController.m in Sources */,
 				2830A18C11CE983B00970A41 /* DiagnosticsViewController.m in Sources */,
 				287639F911D29D99009DB8B6 /* CertificateCreationProgressView.m in Sources */,
 				28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */,
@@ -910,6 +909,7 @@
 				289CBA18125693040015E58E /* ChannelNavigationViewController.m in Sources */,
 				2838EA0F129316C200035C5D /* CertificatePreferencesViewController.m in Sources */,
 				280EDE8912FE1E7C00774B3B /* ServerRootViewControllerPad.m in Sources */,
+				282F6A2513620BD5008F555B /* CertificateController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
