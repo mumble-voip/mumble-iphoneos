@@ -37,6 +37,7 @@
 #import "ServerConnectionViewController.h"
 #import "ServerRootViewController.h"
 #import "ServerRootViewControllerPad.h"
+#import "ServerCell.h"
 
 @implementation FavouriteServerListController
 
@@ -44,7 +45,7 @@
 #pragma mark Initialization
 
 - (id) init {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		[[self navigationItem] setTitle:@"Favourites"];
 
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
@@ -86,21 +87,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"FavouriteServerCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+    ServerCell *cell = (ServerCell *)[tableView dequeueReusableCellWithIdentifier:[ServerCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[ServerCell alloc] init] autorelease];
     }
-
-	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-	cell.textLabel.text = [favServ displayName];
-
-	NSString *hostName = [favServ hostName];
-	NSString *userName = [favServ userName];
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%u",
-									userName ? userName : @"MumbleUser",
-									hostName ? hostName : @"(no server)", [favServ port]];
-    return cell;
+    [cell populateFromFavouriteServer:favServ];
+    return (UITableViewCell *) cell;
 }
 
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -247,9 +240,8 @@
 	[newServer release];
 
 	[Database storeFavourite:newServer];
-
 	[_favouriteServers sortUsingSelector:@selector(compare:)];
-	[[self tableView] reloadData];
+    [[self tableView] reloadData];
 }
 
 @end

@@ -35,6 +35,8 @@
 #import "FavouriteServerListController.h"
 #import "FavouriteServerEditViewController.h"
 
+#import "ServerCell.h"
+
 @implementation CountryServerListController
 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers {
@@ -80,18 +82,17 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *reuseIdentifier = @"PublicServer";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    ServerCell *cell = (ServerCell *) [tableView dequeueReusableCellWithIdentifier:[ServerCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier] autorelease];
+        cell = [[[ServerCell alloc] init] autorelease];
     }
+    
+    NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+    [cell populateFromDisplayName:[serverItem objectForKey:@"name"]
+                         hostName:[serverItem objectForKey:@"ip"]
+                             port:[serverItem objectForKey:@"port"]];
 
-	// fixme(mkrautz): Implement a ServerCell?
-	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
-	cell.textLabel.text = [serverItem objectForKey:@"name"];
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@:%@", [serverItem objectForKey:@"ip"], [serverItem objectForKey:@"port"]];
-
-    return cell;
+    return (UITableViewCell *) cell;
 }
 
 #pragma mark -

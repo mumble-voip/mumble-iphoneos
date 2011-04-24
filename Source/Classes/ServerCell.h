@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 ; Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,18 +28,23 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "FavouriteServer.h"
+#import <MumbleKit/MKServerPinger.h>
 
-@interface FavouriteServerListController : UITableViewController <UIActionSheetDelegate> {
-	NSMutableArray   *_favouriteServers;
-	BOOL             _editMode;
-	FavouriteServer  *_editedServer;
+@class FavouriteServer;
+
+@interface ServerCell : UITableViewCell <MKServerPingerDelegate> {
+    NSString        *_displayname;
+    NSString        *_hostname;
+    NSString        *_port;
+    NSString        *_username;
+    MKServerPinger  *_pinger;
 }
+
++ (NSString *) reuseIdentifier;
 
 - (id) init;
 - (void) dealloc;
 
-- (void) presentNewFavouriteDialog;
-- (void) presentEditDialogForFavourite:(FavouriteServer *)favServ;
-
+- (void) populateFromDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSString *)port;
+- (void) populateFromFavouriteServer:(FavouriteServer *)favServ;
 @end
