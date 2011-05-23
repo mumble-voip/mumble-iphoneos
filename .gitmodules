@@ -1,6 +1,6 @@
 [submodule "MumbleKit"]
 	path = MumbleKit
-	url = git://mumble.git.sourceforge.net/gitroot/mumble/mumblekit
+	url = http://github.com/mkrautz/mumblekit.git
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
 	url = http://github.com/ccgus/fmdb.git
