@@ -12,8 +12,7 @@ and various other Unix-like systems. Visit its website at:
 Building it
 ===========
 
-To build this you need the iOS 4.0 SDK from Apple and an
-Intel Mac (or equivalent :)) running Mac OS X 10.6 (or later).
+To build this you need Xcode 4 and the latest iOS SDK from Apple.
 
 The easiest way to get a working source tree is to check out
 the mumble-iphoneos repository recursively (his will recursively
@@ -26,3 +25,18 @@ To fetch the repository:
 Once this is done, you should be able to open up the Xcode
 project file for Mumble (Mumble.xcodeproj) in the root of
 the source tree and hit Cmd-B to build!
+
+Extra tips for advanced users
+=============================
+
+When launching Mumble.xcodeproj for the first time, you're recommended to
+remove all schemes but the Mumble one. Xcode will automatically populate
+it with the schemes of all .xcodeprojs in the workspace.
+
+Schemes can be configured using the dropdown box right of the start and stop
+buttons in the default Xcode 4 UI.
+
+We also recommend you to edit the default scheme for the Mumble target
+and change the Archive configuration to BetaDist, and the Test configuration
+to Release (debug builds pretty slow for devices, but for the Simulator, they're
+OK!)
