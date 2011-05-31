@@ -73,7 +73,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 4;
+	return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -82,12 +82,9 @@
 		return 1;
 	// Network
 	} else if (section == 1) {
-		return 1;
-	// Certificates
-	} else if (section == 2) {
 		return 2;
 	// Beta
-	} else if (section == 3) {
+	} else if (section == 2) {
 		return 1;
 	}
 
@@ -127,31 +124,20 @@
 			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
 			[tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
 			[tcpSwitch release];
-		}
-
-	// Certificates
-	} else if ([indexPath section] == 2) {
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
-		if (cell == nil)
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
-
-        NSArray *persistentRefs = [CertificateController allPersistentRefs];
-		if ([indexPath row] == 1) {
-			cell.textLabel.text = @"All Certificates";
-			cell.detailTextLabel.text = [NSString stringWithFormat:@"%i", [persistentRefs count]];
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		} else if ([indexPath row] == 0) {
+		} else if ([indexPath row] == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
+            if (cell == nil)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
             MKCertificate *cert = [CertificateController defaultCertificate];
-			cell.textLabel.text = @"Active";
+			cell.textLabel.text = @"Certificate";
 			cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
-			cell.accessoryType = UITableViewCellAccessoryNone;
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+            return cell;
 		}
-
-		return cell;
 	
 	// Beta
-	} else if ([indexPath section] == 3) {
+	} else if ([indexPath section] == 2) {
 		if ([indexPath row] == 0) {
 			cell.textLabel.text = @"Diagnostics";
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -166,9 +152,7 @@
 		return @"Audio";
 	else if (section == 1) // Network
 		return @"Network";
-	else if (section == 2) // Certificates
-		return @"Certificates";
-	else if (section == 3) // Beta
+	else if (section == 2) // Beta
 		return @"Beta";
 
 	return @"Default";
@@ -180,8 +164,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
-	if ([indexPath section] == 2) { // Certificates
-		if ([indexPath row] == 1) { // All Certificates
+	if ([indexPath section] == 1) { // Network
+		if ([indexPath row] == 1) { // Certificates
 			CertificatePreferencesViewController *certPref = [[CertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
@@ -201,12 +185,6 @@
 - (void) audioVolumeChanged:(UISlider *)volumeSlider {
 	[[NSUserDefaults standardUserDefaults] setFloat:[volumeSlider value] forKey:@"AudioOutputVolume"];
 }
-
-- (void) audioDuckingChanged:(UISwitch *)duckSwitch {
-	[[NSUserDefaults standardUserDefaults] setBool:[duckSwitch isOn] forKey:@"AudioDucking"];
-}
-
-// Network
 
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch {
 	[[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"ForceTCP"];
