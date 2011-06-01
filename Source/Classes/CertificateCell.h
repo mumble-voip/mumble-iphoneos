@@ -31,11 +31,12 @@
 #import <UIKit/UIKit.h>
 
 @interface CertificateCell : UITableViewCell {
-	IBOutlet UILabel *_nameLabel;
-	IBOutlet UILabel *_emailLabel;
-	IBOutlet UILabel *_issuerLabel;
-	IBOutlet UILabel *_expiryLabel;
-    IBOutlet UILabel *_selectedLabel;
+    IBOutlet UIImageView  *_certImage;
+    IBOutlet UILabel      *_nameLabel;
+    IBOutlet UILabel      *_emailLabel;
+    IBOutlet UILabel      *_issuerLabel;
+    IBOutlet UILabel      *_expiryLabel;
+    BOOL                  _isCurrentCert;
 }
 
 + (CertificateCell *) loadFromNib;
@@ -45,7 +46,7 @@
 - (void) setIssuerText:(NSString *)issuerText;
 - (void) setExpiryText:(NSString *)expiryText;
 
-- (BOOL) isCheckmarkShown;
-- (void) setShowsCheckmark:(BOOL)showsCheckmark;
+- (BOOL) isCurrentCertificate;
+- (void) setIsCurrentCertificate:(BOOL)isSelected;
 
 @end

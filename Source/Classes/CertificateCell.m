@@ -53,12 +53,25 @@
 	_expiryLabel.text = expiryText;
 }
 
-- (void) setShowsCheckmark:(BOOL)showsCheckmark {
-    [_selectedLabel setHidden:!showsCheckmark];
+- (void) setIsCurrentCertificate:(BOOL)isCurrent {
+    _isCurrentCert = isCurrent;
+    UIColor *selectedColor = [UIColor colorWithRed:(CGFloat)0x36/0xff
+                                             green:(CGFloat)0x53/0xff
+                                              blue:(CGFloat)0x86/0xff
+                                             alpha:0xff];
+    if (isCurrent) {
+        [_certImage setImage:[UIImage imageNamed:@"certificatecell-selected"]];
+        [_nameLabel setTextColor:selectedColor];
+        [_emailLabel setTextColor:selectedColor];
+    } else {
+        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];
+        [_nameLabel setTextColor:[UIColor blackColor]];
+        [_emailLabel setTextColor:[UIColor blackColor]];
+    }
 }
 
-- (BOOL) isCheckmarkShown {
-    return ![_selectedLabel isHidden];
+- (BOOL) isCurrentCertificate {
+    return _isCurrentCert;
 }
 
 @end

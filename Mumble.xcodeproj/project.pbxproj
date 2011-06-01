@@ -93,6 +93,8 @@
 		2861C507116BEA12002B8514 /* talking_whisper.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E1116BEA12002B8514 /* talking_whisper.pdf */; };
 		2861C508116BEA12002B8514 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E3116BEA12002B8514 /* Continents.plist */; };
 		2861C509116BEA12002B8514 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2861C3E4116BEA12002B8514 /* Countries.plist */; };
+		2869797A1395B42100076CB4 /* certificatecell-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 286979781395B42100076CB4 /* certificatecell-selected.png */; };
+		2869797B1395B42100076CB4 /* certificatecell-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286979791395B42100076CB4 /* certificatecell-selected@2x.png */; };
 		287639F911D29D99009DB8B6 /* CertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */; };
 		287639FF11D2A242009DB8B6 /* CertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* CertificateCreationProgressView.xib */; };
 		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
@@ -272,6 +274,8 @@
 		2861C3E1116BEA12002B8514 /* talking_whisper.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = talking_whisper.pdf; sourceTree = "<group>"; };
 		2861C3E3116BEA12002B8514 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Continents.plist; sourceTree = "<group>"; };
 		2861C3E4116BEA12002B8514 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Countries.plist; sourceTree = "<group>"; };
+		286979781395B42100076CB4 /* certificatecell-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell-selected.png"; path = "Resources/icons/ios/certificatecell-selected.png"; sourceTree = "<group>"; };
+		286979791395B42100076CB4 /* certificatecell-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell-selected@2x.png"; path = "Resources/icons/ios/certificatecell-selected@2x.png"; sourceTree = "<group>"; };
 		287639F711D29D99009DB8B6 /* CertificateCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateCreationProgressView.h; sourceTree = "<group>"; };
 		287639F811D29D99009DB8B6 /* CertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateCreationProgressView.m; sourceTree = "<group>"; };
 		287639FE11D2A242009DB8B6 /* CertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CertificateCreationProgressView.xib; path = Resources/CertificateCreationProgressView.xib; sourceTree = "<group>"; };
@@ -496,6 +500,8 @@
 				2858A590123B9EE000A82155 /* certificate512.png */,
 				280D4A2F1254EC1900493267 /* certificatecell.png */,
 				280D4A301254EC1900493267 /* certificatecell@2x.png */,
+				286979781395B42100076CB4 /* certificatecell-selected.png */,
+				286979791395B42100076CB4 /* certificatecell-selected@2x.png */,
 				280D4B2E1255457B00493267 /* talking_alt.png */,
 				280D4B2F1255457B00493267 /* talking_alt@2x.png */,
 				280D4B301255457B00493267 /* talking_off.png */,
@@ -850,6 +856,8 @@
 				289CBE99125935990015E58E /* priorityspeaker.png in Resources */,
 				289CBE9A125935990015E58E /* priorityspeaker@2x.png in Resources */,
 				288DC2BD12FD9C810044DEF5 /* WelcomeScreenPad.xib in Resources */,
+				2869797A1395B42100076CB4 /* certificatecell-selected.png in Resources */,
+				2869797B1395B42100076CB4 /* certificatecell-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

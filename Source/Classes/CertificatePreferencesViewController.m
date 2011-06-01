@@ -106,9 +106,9 @@
 
     if ([persistentRef isEqualToData:curPersistentRef]) {
         _selectedIndex = [indexPath row];
-        [cell setShowsCheckmark:YES];
+        [cell setIsCurrentCertificate:YES];
     } else {
-        [cell setShowsCheckmark:NO];
+        [cell setIsCurrentCertificate:NO];
     }
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
@@ -130,8 +130,8 @@
 
 	CertificateCell *prevCell = (CertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
     CertificateCell *curCell = (CertificateCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
-    [prevCell setShowsCheckmark:NO];
-    [curCell setShowsCheckmark:YES];
+    [prevCell setIsCurrentCertificate:NO];
+    [curCell setIsCurrentCertificate:YES];
     _selectedIndex = [indexPath row];
 
     [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
