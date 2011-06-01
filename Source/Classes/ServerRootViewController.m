@@ -126,28 +126,6 @@
 	[usersButton release];
 	[flexSpace release];
 
-#ifdef USE_CONNECTION_ANIMATION
-	// Show the ServerConnectionViewController when we're trying to establish a
-	// connection to a server.
-	if (![_connection connected]) {
-		_progressController = [[ServerConnectionViewController alloc] init];
-		_progressController.view.frame = [[UIScreen mainScreen] applicationFrame];
-		_progressController.view.hidden = YES;
-
-		UIWindow *window = [[MumbleApp delegate] window];
-		[window addSubview:_progressController.view];
-
-		[UIView beginAnimations:nil context:NULL];
-		_progressController.view.hidden = NO;
-		[UIView setAnimationDuration:0.6f];
-		[UIView setAnimationBeginsFromCurrentState:YES];
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:window cache:YES];
-		[UIView commitAnimations];
-
-		[MumbleApp setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
-	}
-#endif
-
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[[self navigationController] setToolbarHidden:NO];
 }
