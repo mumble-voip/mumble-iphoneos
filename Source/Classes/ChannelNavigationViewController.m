@@ -89,7 +89,7 @@
 #pragma mark Initialization and lifecycle
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {
-	if (self = [super initWithStyle:UITableViewStylePlain]) {
+	if ((self = [super initWithStyle:UITableViewStylePlain])) {
 		_serverModel = serverModel;
 		[_serverModel addDelegate:self];
 	}
@@ -107,7 +107,7 @@
 	[doneButton release];
 	
 	self.navigationItem.title = @"Server View";
-	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	
 	[self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
 }
@@ -162,19 +162,19 @@
 
 	MKUser *connectedUser = [_serverModel connectedUser];
 
-	cell.textLabel.font = [UIFont systemFontOfSize:14];
+	cell.textLabel.font = [UIFont systemFontOfSize:18];
 	if ([object class] == [MKChannel class]) {
 		MKChannel *chan = object;
 		cell.imageView.image = [UIImage imageNamed:@"channel"];
 		cell.textLabel.text = [chan channelName];
 		if (chan == [connectedUser channel])
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
 	} else if ([object class] == [MKUser class]) {
 		MKUser *user = object;
 		cell.imageView.image = [UIImage imageNamed:@"talking_off"];
 		cell.textLabel.text = [user userName];
 		if (user == connectedUser)
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
 	}
 
 	cell.indentationLevel = [navItem indentLevel];
@@ -196,7 +196,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 28.0f;
+	return 44.0f;
 }
 
 #pragma mark -
