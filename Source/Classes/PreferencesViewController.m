@@ -170,7 +170,7 @@
 			[self.navigationController pushViewController:certPref animated:YES];
 			[certPref release];
 		}
-	} else if ([indexPath section] == 3) { // Beta
+	} else if ([indexPath section] == 2) { // Beta
 		if ([indexPath row] == 0) {
 			DiagnosticsViewController *diagView = [[DiagnosticsViewController alloc] init];
 			[self.navigationController pushViewController:diagView animated:YES];
