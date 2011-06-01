@@ -58,7 +58,7 @@
 		return nil;
 	}
 
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		_username = [username copy];
 		_password = [password copy];
 
@@ -118,15 +118,13 @@
 	// Toolbar
 	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
 	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
-	UIBarButtonItem *usersButton = [[UIBarButtonItem alloc] initWithTitle:@"Users" style:UIBarButtonItemStyleBordered target:self action:@selector(usersButtonClicked:)];
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, usersButton, nil]];
+	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, nil]];
 	[channelsButton release];
 	[pttButton release];
-	[usersButton release];
 	[flexSpace release];
 
-	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	[[self navigationController] setToolbarHidden:NO];
 }
 
@@ -503,7 +501,7 @@
 #pragma mark UITableView delegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 28.0f;
+	return 44.0f;
 }
 
 #pragma mark -
@@ -572,11 +570,6 @@
 	[channelView release];
 	[[self navigationController] presentModalViewController:navCtrl animated:YES];
 	[navCtrl release];
-}
-
-// User picker
-- (void) usersButtonClicked:(id)sender {
-	NSLog(@"users");
 }
 
 - (void) togglePushToTalk {
