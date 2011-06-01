@@ -437,9 +437,9 @@
 
 	cell.textLabel.text = [user userName];
 	if ([_model connectedUser] == user) {
-		cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
 	} else {
-		cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+		cell.textLabel.font = [UIFont systemFontOfSize:18.0f];
 	}
 
 	MKTalkState talkState = [user talkState];
