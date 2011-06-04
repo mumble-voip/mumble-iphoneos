@@ -47,22 +47,22 @@
 - (id) init {
 	if ((self = [super init])) {
 		[[self navigationItem] setTitle:@"Favourites"];
-
+        
 		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
 		[[self navigationItem] setRightBarButtonItem:addButton];
 		[addButton release];
-
+        
 		_favouriteServers = [[Database fetchAllFavourites] retain];
 		[_favouriteServers sortUsingSelector:@selector(compare:)];
 	}
-
+    
 	return self;
 }
 
 - (void) dealloc {
 	[Database storeFavourites:_favouriteServers];
 	[_favouriteServers release];
-
+    
 	[super dealloc];
 }
 
@@ -71,7 +71,7 @@
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
 		return YES;
 	}
-
+    
 	return toInterfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
@@ -103,11 +103,11 @@
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (editingStyle == UITableViewCellEditingStyleDelete) {
 		NSUInteger row = [indexPath row];
-
+        
 		// Drop it from the database
 		FavouriteServer *favServ = [_favouriteServers objectAtIndex:row];
 		[Database deleteFavourite:favServ];
-
+        
 		// And remove it from our locally sorted array
 		[_favouriteServers removeObjectAtIndex:[indexPath row]];
 		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
@@ -121,12 +121,12 @@
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
 	BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
 	UIView *cellView = [[self tableView] cellForRowAtIndexPath:indexPath];
-
+    
 	NSString *sheetTitle = pad ? nil : [favServ displayName];
 	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:sheetTitle delegate:self
-												  cancelButtonTitle:@"Cancel"
-												  destructiveButtonTitle:nil
-												  otherButtonTitles:@"Connect", @"Edit", nil];
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:@"Connect", @"Edit", nil];
 	if (pad) {
 		CGRect frame = cellView.frame;
 		frame.origin.y = frame.origin.y - (frame.size.height/2);
@@ -140,35 +140,26 @@
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
 	NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
+    
 	FavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-
+    
 	// Connect
 	if (index == 0) {
-		if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-			UINavigationController *navCtrl = [[UINavigationController alloc] init];
-			ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
-			      																				 port:[favServ port]
-				     																		 username:[favServ userName]
-					    																	 password:[favServ password]];
+        ServerRootViewController *serverRoot = [[ServerRootViewController alloc] initWithHostname:[favServ hostName]
+		    																				 port:[favServ port]
+			     																		 username:[favServ userName]
+				    																	 password:[favServ password]];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
 			[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-			[navCtrl setViewControllers:[NSArray arrayWithObjects:serverRoot, nil]];
-			[[self navigationController] presentModalViewController:navCtrl animated:YES];
-			[serverRoot release];
-			[navCtrl release];
-		} else {
-			ServerRootViewControllerPad *serverRoot = [[ServerRootViewControllerPad alloc] initWithHostname:[favServ hostName]
-																									   port:[favServ port]
-																								   username:[favServ userName]
-																								   password:[favServ password]];
-			UINavigationController *nav = [[UINavigationController alloc] init];
-			[nav pushViewController:serverRoot animated:NO];
-			[self.navigationController presentModalViewController:nav animated:YES];
-			[serverRoot release];
-			[nav release];
-		}
-
-	// Edit
+        }
+        
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:serverRoot];
+		[[self navigationController] presentModalViewController:nav animated:YES];
+		[serverRoot release];
+		[nav release];
+        
+        // Edit
 	} else if (index == 1) {
 		[self presentEditDialogForFavourite:favServ];
 	}
@@ -179,17 +170,17 @@
 
 - (void) presentNewFavouriteDialog {
 	UINavigationController *modalNav = [[UINavigationController alloc] init];
-
+    
 	FavouriteServerEditViewController *editView = [[FavouriteServerEditViewController alloc] init];
-
+    
 	_editMode = NO;
 	_editedServer = nil;
-
+    
 	[editView setTarget:self];
 	[editView setDoneAction:@selector(doneButtonClicked:)];
 	[modalNav pushViewController:editView animated:NO];
 	[editView release];
-
+    
 	modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
 	[[self navigationController] presentModalViewController:modalNav animated:YES];
 	[modalNav release];
@@ -197,17 +188,17 @@
 
 - (void) presentEditDialogForFavourite:(FavouriteServer *)favServ {
 	UINavigationController *modalNav = [[UINavigationController alloc] init];
-
+    
 	FavouriteServerEditViewController *editView = [[FavouriteServerEditViewController alloc] initInEditMode:YES withContentOfFavouriteServer:favServ];
-
+    
 	_editMode = YES;
 	_editedServer = favServ;
-
+    
 	[editView setTarget:self];
 	[editView setDoneAction:@selector(doneButtonClicked:)];
 	[modalNav pushViewController:editView animated:NO];
 	[editView release];
-
+    
 	modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
 	[[self navigationController] presentModalViewController:modalNav animated:YES];
 	[modalNav release];
@@ -231,14 +222,14 @@
 //
 - (void) doneButtonClicked:(id)sender {
 	FavouriteServerEditViewController *editView = sender;
-
+    
 	if (_editMode)
 		[_favouriteServers removeObject:_editedServer];
-
+    
 	FavouriteServer *newServer = [editView copyFavouriteFromContent];
 	[_favouriteServers addObject:newServer];
 	[newServer release];
-
+    
 	[Database storeFavourite:newServer];
 	[_favouriteServers sortUsingSelector:@selector(compare:)];
     [[self tableView] reloadData];

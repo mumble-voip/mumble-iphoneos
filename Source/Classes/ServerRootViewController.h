@@ -38,14 +38,18 @@
 @class ServerConnectionViewController;
 
 @interface ServerRootViewController : UITableViewController <MKConnectionDelegate> {
-	MKConnection                    *_connection;
-	MKServerModel                   *_model;
-	NSMutableArray                  *_channelUsers;
-	MKChannel                       *_currentChannel;
-	NSString                        *_username;
-	NSString                        *_password;
-	BOOL                            _pttState;
-	ServerConnectionViewController  *_progressController;
+    MKConnection                    *_connection;
+    MKServerModel                   *_model;
+    NSMutableArray                  *_channelUsers;
+    MKChannel                       *_currentChannel;
+
+    NSString                        *_hostname;
+    NSUInteger                      _port;
+    NSString                        *_username;
+    NSString                        *_password;
+
+    BOOL                            _pttState;
+    ServerConnectionViewController  *_progressController;
 }
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;

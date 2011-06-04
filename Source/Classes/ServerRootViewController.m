@@ -51,37 +51,15 @@
 
 @implementation ServerRootViewController
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
-	NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
-	if (certPersistentId == nil) {
-		NSLog(@"ServerRootViewController: Cannot instantiate without a default certificate.");
-		return nil;
-	}
-
-	if ((self = [super init])) {
+- (id) initWithHostname:(NSString *)host
+                   port:(NSUInteger)port
+               username:(NSString *)username
+               password:(NSString *)password {
+    if ((self = [super init])) {
+        _hostname = [host copy];
+        _port = port;
 		_username = [username copy];
 		_password = [password copy];
-
-		_connection = [[MKConnection alloc] init];
-		[_connection setDelegate:self];
-
-		_model = [[MKServerModel alloc] initWithConnection:_connection];
-		[_model addDelegate:self];
-
-		// Try to fetch our given identity's SecIdentityRef by its persistent reference.
-		// If we're able to fetch it, set it as the connection's client certificate.
-		SecIdentityRef secIdentity = NULL;
-		NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-									certPersistentId,		kSecValuePersistentRef,
-									kCFBooleanTrue,			kSecReturnRef,
-									kSecMatchLimitOne,		kSecMatchLimit,
-								nil];
-		if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
-			[_connection setClientIdentity:secIdentity];
-			CFRelease(secIdentity);
-		}
-
-		[_connection connectToHost:host port:port];
 	}
 	return self;
 }
@@ -91,7 +69,7 @@
 	[_password release];
 	[_model release];
 	[_connection release];
-
+    
 	[super dealloc];
 }
 
@@ -99,22 +77,50 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void) establishConnection {
+    _connection = [[MKConnection alloc] init];
+    [_connection setDelegate:self];
+    
+    _model = [[MKServerModel alloc] initWithConnection:_connection];
+    [_model addDelegate:self];
+    
+    // Set the connection's client cert if one is set in the app's preferences...
+    NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
+    if (certPersistentId != nil) {
+        // Try to fetch our given identity's SecIdentityRef by its persistent reference.
+        // If we're able to fetch it, set it as the connection's client certificate.
+        SecIdentityRef secIdentity = NULL;
+        NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                               certPersistentId,		kSecValuePersistentRef,
+                               kCFBooleanTrue,			kSecReturnRef,
+                               kSecMatchLimitOne,		kSecMatchLimit,
+                               nil];
+        if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
+            [_connection setClientIdentity:secIdentity];
+            CFRelease(secIdentity);
+        }
+    }
+    
+    [_connection connectToHost:_hostname port:_port];
+}
+
+
 - (void) viewWillAppear:(BOOL)animated {
 	// Title
 	if (_currentChannel == nil)
 		[[self navigationItem] setTitle:@"Connecting..."];
 	else
 		[[self navigationItem] setTitle:[_currentChannel channelName]];
-
+    
 	// Top bar
 	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
 	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
 	[disconnectButton release];
-
+    
 	UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithTitle:@"Certs" style:UIBarButtonItemStyleBordered target:self action:@selector(infoClicked:)];
 	[[self navigationItem] setRightBarButtonItem:infoItem];
 	[infoItem release];
-
+    
 	// Toolbar
 	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
 	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
@@ -123,12 +129,15 @@
 	[channelsButton release];
 	[pttButton release];
 	[flexSpace release];
-
+    
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	[[self navigationController] setToolbarHidden:NO];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
+    if (_connection == nil) {
+        [self establishConnection];
+    }
 }
 
 #pragma mark MKConnection Delegate
@@ -144,9 +153,9 @@
 			[conn setIgnoreSSLVerification:YES];
 			[conn reconnect];
 			return;
-
-		// Mismatch.  The server is using a new certificate, different from the one it previously
-		// presented to us.
+            
+            // Mismatch.  The server is using a new certificate, different from the one it previously
+            // presented to us.
 		} else {
 			NSString *title = @"Certificate Mismatch";
 			NSString *msg = @"The server presented a different certificate than the one stored for this server";
@@ -157,13 +166,13 @@
 			[alert show];
 			[alert release];
 		}
-
-	// No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
-	// what to do.
+        
+        // No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
+        // what to do.
 	} else {
 		NSString *title = @"Unable to validate server certificate";
 		NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
-
+        
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
 		[alert addButtonWithTitle:@"Ignore"];
 		[alert addButtonWithTitle:@"Trust Certificate"];
@@ -177,7 +186,7 @@
 - (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
 	NSString *title = @"Connection Rejected";
 	NSString *msg = nil;
-
+    
 	switch (reason) {
 		case MKRejectReasonNone:
 			msg = @"No reason";
@@ -204,12 +213,12 @@
 			msg = @"A certificate is needed to connect to this server";
 			break;
 	}
-
+    
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 	[alert show];
 	[alert release];
-
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
+    
+    [[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 // Connection established...
@@ -228,19 +237,7 @@
 - (void) serverModel:(MKServerModel *)server joinedServerAsUser:(MKUser *)user {
 	_currentChannel = [[_model connectedUser] channel];
 	_channelUsers = [[[[_model connectedUser] channel] users] mutableCopy];
-
-#ifdef USE_CONNECTION_ANIMATION
-	[MumbleApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-
-	[UIView animateWithDuration:0.4f animations:^{
-		_progressController.view.alpha = 0.0f;
-	} completion:^(BOOL finished){
-		[_progressController.view removeFromSuperview];
-		[_progressController release];
-		_progressController = nil;
-	}];
-#endif
-
+    
 	[[self navigationItem] setTitle:[_currentChannel channelName]];
 	[[self tableView] reloadData];
 }
@@ -254,7 +251,7 @@
 - (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
 	if (_currentChannel == nil)
 		return;
-
+    
 	NSUInteger userIndex = [_channelUsers indexOfObject:user];
 	if (userIndex != NSNotFound) {
 		[_channelUsers removeObjectAtIndex:userIndex];
@@ -267,7 +264,7 @@
 - (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
 	if (_currentChannel == nil)
 		return;
-
+    
 	// Was this ourselves, or someone else?
 	if (user != [server connectedUser]) {
 		// Did the user join this channel?
@@ -276,7 +273,7 @@
 			NSUInteger userIndex = [_channelUsers indexOfObject:user];
 			[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
 									withRowAnimation:UITableViewRowAnimationLeft];
-		// Or did he leave it?
+            // Or did he leave it?
 		} else {
 			NSUInteger userIndex = [_channelUsers indexOfObject:user];
 			if (userIndex != NSNotFound) {
@@ -285,23 +282,23 @@
 										withRowAnimation:UITableViewRowAnimationRight];
 			}
 		}
-
-	// We were moved. We need to redo the array holding the users of the
-	// current channel.
+        
+        // We were moved. We need to redo the array holding the users of the
+        // current channel.
 	} else {
 		NSUInteger numUsers = [_channelUsers count];
 		[_channelUsers release];
 		_channelUsers = nil;
-
+        
 		NSMutableArray *array = [[NSMutableArray alloc] init];
 		for (NSUInteger i = 0; i < numUsers; i++) {
 			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 		}
 		[[self tableView] deleteRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationRight];
-
+        
 		_currentChannel = chan;
 		_channelUsers = [[chan users] mutableCopy];
-
+        
 		[array removeAllObjects];
 		numUsers = [_channelUsers count];
 		for (NSUInteger i = 0; i < numUsers; i++) {
@@ -309,7 +306,7 @@
 		}
 		[[self tableView] insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationLeft];
 		[array release];
-
+        
 		// Update the title to match our new channel.
 		[[self navigationItem] setTitle:[_currentChannel channelName]];
 	}
@@ -398,7 +395,7 @@
 	NSUInteger userIndex = [_channelUsers indexOfObject:user];
 	if (userIndex == NSNotFound)
 		return;
-
+    
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
@@ -410,7 +407,7 @@
 		talkImageName = @"talking_whisper";
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
-
+    
 	[[cell imageView] setImage:[UIImage imageNamed:talkImageName]];
 }
 
@@ -431,17 +428,17 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-
+    
 	NSUInteger row = [indexPath row];
 	MKUser *user = [_channelUsers objectAtIndex:row];
-
+    
 	cell.textLabel.text = [user userName];
 	if ([_model connectedUser] == user) {
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
 	} else {
 		cell.textLabel.font = [UIFont systemFontOfSize:18.0f];
 	}
-
+    
 	MKTalkState talkState = [user talkState];
 	NSString *talkImageName = nil;
 	if (talkState == MKTalkStatePassive)
@@ -453,16 +450,16 @@
 	else if (talkState == MKTalkStateShouting)
 		talkImageName = @"talking_alt";
 	cell.imageView.image = [UIImage imageNamed:talkImageName];
-
+    
 	cell.accessoryView = [self stateAccessoryViewForUser:user];
-
+    
     return cell;
 }
 
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user {
 	const CGFloat iconHeight = 28.0f;
 	const CGFloat iconWidth = 22.0f;
-
+    
 	NSMutableArray *states = [[NSMutableArray alloc] init];
 	if ([user isAuthenticated])
 		[states addObject:@"authenticated"];
@@ -480,7 +477,7 @@
 		[states addObject:@"muted_suppressed"];
 	if ([user isPrioritySpeaker])
 		[states addObject:@"priorityspeaker"];
-
+    
 	CGFloat widthOffset = [states count] * iconWidth;
 	UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
 	for (NSString *imageName in states) {
@@ -492,7 +489,7 @@
 		imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
 		[stateView addSubview:imgView];
 	}
-
+    
 	[states release];
 	return [stateView autorelease];
 }
@@ -512,16 +509,16 @@
 	if (buttonIndex == 0) {
 		// Tear down the connection.
 		[_connection disconnect];
-
-	// Ignore
+        
+        // Ignore
 	} else if (buttonIndex == 1) {
 		// Ignore just reconnects to the server without
 		// performing any verification on the certificate chain
 		// the server presents us.
 		[_connection setIgnoreSSLVerification:YES];
 		[_connection reconnect];
-
-	// Trust
+        
+        // Trust
 	} else if (buttonIndex == 2) {
 		// Store the cert hash of the leaf certificate.  We then ignore certificate
 		// verification errors from this host as long as it keeps on presenting us
@@ -530,8 +527,8 @@
 		[Database storeDigest:digest forServerWithHostname:[_connection hostname] port:[_connection port]];
 		[_connection setIgnoreSSLVerification:YES];
 		[_connection reconnect];
-
-	// Show certificates
+        
+        // Show certificates
 	} else if (buttonIndex == 3) {
 		ServerCertificateTrustViewController *certTrustView = [[ServerCertificateTrustViewController alloc] initWithConnection:_connection];
 		UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certTrustView];
