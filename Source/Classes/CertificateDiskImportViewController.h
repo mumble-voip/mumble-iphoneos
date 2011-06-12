@@ -29,6 +29,7 @@
 */
 
 @interface CertificateDiskImportViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate> {
+    BOOL             _showHelp;
     NSMutableArray   *_diskCertificates;
     NSIndexPath      *_attemptIndexPath;
     UITextField      *_passwordField;

@@ -48,10 +48,34 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) showPasswordDialog;
 @end
 
-- (id) initWithStyle:(UITableViewStyle)style {
-    if ((self = [super initWithStyle:style])) {
-        _diskCertificates = [[NSMutableArray alloc] init];
+- (id) init {
+    UITableViewStyle style = UITableViewStyleGrouped;
+    NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSError *err = nil;
+    NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[documentDirs objectAtIndex:0] error:&err];
+    NSMutableArray *diskCerts = nil;
+
+    if ([documentDirs count] > 0) {
+        diskCerts = [[[NSMutableArray alloc] init] autorelease];
+        for (NSString *fileName in dirContents) {
+            if ([fileName hasSuffix:@".pkcs12"])
+                [diskCerts addObject:fileName];
+            if ([fileName hasSuffix:@".p12"])
+                [diskCerts addObject:fileName];
+            if ([fileName hasSuffix:@".pfx"])
+                [diskCerts addObject:fileName];
+        }
     }
+    if ([diskCerts count] > 0) {
+        style = UITableViewStylePlain;
+    }
+
+    if ((self = [super initWithStyle:style])) {
+        if (style == UITableViewStyleGrouped)
+            _showHelp = YES;
+        _diskCertificates = [diskCerts retain];
+    }
+
     return self;
 }
 
@@ -71,24 +95,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
     [doneButton release];
-
-    [_diskCertificates removeAllObjects];
-
-    NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-
-    if ([documentDirs count] > 0) {
-        NSError *err = nil;
-        NSArray *dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[documentDirs objectAtIndex:0] error:&err];
-        for (NSString *fileName in dirContents) {
-            if ([fileName hasSuffix:@".pkcs12"])
-                [_diskCertificates addObject:fileName];
-            if ([fileName hasSuffix:@".p12"])
-                [_diskCertificates addObject:fileName];
-            if ([fileName hasSuffix:@".pfx"])
-                [_diskCertificates addObject:fileName];
-        }
-        [[self tableView] reloadData];
-    }
 }
 
 #pragma mark - Table view data source
@@ -128,6 +134,14 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [self tryImportCertificateWithPassword:nil];
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (_showHelp) {
+        return @"To import your own certificates into Mumble, please transfer them to your device via iTunes File Transfer.";
+    }
+
+    return nil;
+}
+
 #pragma mark - Import logic
 
 - (void) tryImportCertificateWithPassword:(NSString *)password {
@@ -163,10 +177,11 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             if ([[NSFileManager defaultManager] removeItemAtPath:pkcs12File error:&errObj] == NO) {
                 ShowAlertDialog(@"Import Error", [errObj localizedFailureReason]);
             }
-            
+
             [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
             [_diskCertificates removeObjectAtIndex:[_attemptIndexPath row]];
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:_attemptIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            return;
 
         } else if (err == errSecDuplicateItem || (err == noErr && data == nil)) {
             ShowAlertDialog(@"Import Error",
@@ -176,6 +191,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             NSString *msg = [NSString stringWithFormat:@"Unable to import certificate.\nError Code: %li", err];
             ShowAlertDialog(@"Import Error", msg);
         }
+
+        [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
+
     } else if (err == errSecAuthFailed) {
         [self showPasswordDialog];
     } else if (err == errSecDecode) {
