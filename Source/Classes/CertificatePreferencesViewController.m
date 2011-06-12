@@ -33,6 +33,7 @@
 #import "CertificateCreationView.h"
 #import "CertificateViewController.h"
 #import "CertificateController.h"
+#import "CertificateDiskImportViewController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -184,7 +185,11 @@
 		[[self navigationController] presentModalViewController:navCtrl animated:YES];
 		[navCtrl release];
 	} else if (idx == 1) { // Import From Disk
-		NSLog(@"DiskImport");
+        CertificateDiskImportViewController *diskImportViewController = [[CertificateDiskImportViewController alloc] init];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
+        [[self navigationController] presentModalViewController:navController animated:YES];
+        [diskImportViewController release];
+        [navController release];
 	}
 }
 
