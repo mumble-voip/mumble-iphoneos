@@ -31,6 +31,7 @@
 #import "CertificateCreationView.h"
 #import "TableViewTextFieldCell.h"
 #import "CertificateCreationProgressView.h"
+#import "CertificateController.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -180,10 +181,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 				if (err == noErr && data != nil) {
 					// Success!
 					// Now, check if there's already a default certificate set.
-					NSData *defaultCert = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
-					if (defaultCert == nil) {
-						[[NSUserDefaults standardUserDefaults] setObject:data forKey:@"DefaultCertificate"];
-					}
+                    if ([CertificateController defaultCertificate] == nil) {
+                        [CertificateController setDefaultCertificateByPersistentRef:data];
+                    }
 
 				// This happens when a certificate with a duplicate subject name is added.
 				} else if (err == noErr && data == nil) {
