@@ -112,24 +112,22 @@
 	else
 		[[self navigationItem] setTitle:[_currentChannel channelName]];
     
-	// Top bar
-	UIBarButtonItem *disconnectButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStyleBordered target:self action:@selector(disconnectClicked:)];
-	[[self navigationItem] setLeftBarButtonItem:disconnectButton];
-	[disconnectButton release];
+	// Top bar    
+	UIBarButtonItem *serverButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"connection"] style:UIBarButtonItemStylePlain target:self action:@selector(serverInfoClicked:)];
+	[[self navigationItem] setLeftBarButtonItem:serverButton];
+	[serverButton release];
     
-	UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithTitle:@"Certs" style:UIBarButtonItemStyleBordered target:self action:@selector(infoClicked:)];
+	UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"radar"] style:UIBarButtonItemStylePlain target:self action:@selector(channelsButtonClicked:)];
 	[[self navigationItem] setRightBarButtonItem:infoItem];
 	[infoItem release];
-    
+
 	// Toolbar
-	UIBarButtonItem *channelsButton = [[UIBarButtonItem alloc] initWithTitle:@"Channels" style:UIBarButtonItemStyleBordered target:self action:@selector(channelsButtonClicked:)];
 	UIBarButtonItem *pttButton = [[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)];
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[self setToolbarItems:[NSArray arrayWithObjects:channelsButton, flexSpace, pttButton, flexSpace, nil]];
-	[channelsButton release];
+	[self setToolbarItems:[NSArray arrayWithObjects:flexSpace, pttButton, flexSpace, nil]];
 	[pttButton release];
 	[flexSpace release];
-    
+
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 	[[self navigationController] setToolbarHidden:NO];
 }
@@ -542,7 +540,7 @@
 #pragma mark Target/actions
 
 // Disconnect from the server
-- (void) disconnectClicked:(id)sender {
+- (void) serverInfoClicked:(id)sender {
 	[_connection disconnect];
 	[[self navigationController] dismissModalViewControllerAnimated:YES];
 }

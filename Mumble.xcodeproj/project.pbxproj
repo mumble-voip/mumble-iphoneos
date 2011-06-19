@@ -101,6 +101,8 @@
 		28763A9511D2B056009DB8B6 /* DefaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 28763A9411D2B056009DB8B6 /* DefaultAvatar.png */; };
 		28763AE411D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28763AE311D2B77E009DB8B6 /* UINavigationController-AnimationAdditions.m */; };
 		287852DB117BC866009E26B1 /* ServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* ServerRootViewController.m */; };
+		2879221813AC10A1009FB0ED /* connection.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879221613AC10A1009FB0ED /* connection.png */; };
+		2879221913AC10A1009FB0ED /* radar.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879221713AC10A1009FB0ED /* radar.png */; };
 		287A60581176201E00DD4FFB /* ChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
 		287A60591176201E00DD4FFB /* ChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* ChannelViewController.xib */; };
 		287A60AA117628FE00DD4FFB /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* ChannelViewController.m */; };
@@ -286,6 +288,8 @@
 		28763AE911D2B920009DB8B6 /* UINavigationController-AnimationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController-AnimationAdditions.h"; sourceTree = "<group>"; };
 		287852D9117BC866009E26B1 /* ServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerRootViewController.h; sourceTree = "<group>"; };
 		287852DA117BC866009E26B1 /* ServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerRootViewController.m; sourceTree = "<group>"; };
+		2879221613AC10A1009FB0ED /* connection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = connection.png; path = Resources/icons/ios/connection.png; sourceTree = "<group>"; };
+		2879221713AC10A1009FB0ED /* radar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = radar.png; path = Resources/icons/ios/radar.png; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
 		287A60571176201E00DD4FFB /* ChannelViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChannelViewController.xib; sourceTree = "<group>"; };
@@ -463,6 +467,8 @@
 		2858A58A123B9EC700A82155 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				2879221613AC10A1009FB0ED /* connection.png */,
+				2879221713AC10A1009FB0ED /* radar.png */,
 				283A68BC1253856E00267F6D /* down.png */,
 				280D4A171254DAB400493267 /* down@2x.png */,
 				283A68BD1253856E00267F6D /* up.png */,
@@ -863,6 +869,8 @@
 				288DC2BD12FD9C810044DEF5 /* WelcomeScreenPad.xib in Resources */,
 				2869797A1395B42100076CB4 /* certificatecell-selected.png in Resources */,
 				2869797B1395B42100076CB4 /* certificatecell-selected@2x.png in Resources */,
+				2879221813AC10A1009FB0ED /* connection.png in Resources */,
+				2879221913AC10A1009FB0ED /* radar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
