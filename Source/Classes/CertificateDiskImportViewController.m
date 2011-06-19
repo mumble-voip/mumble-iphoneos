@@ -149,12 +149,13 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *pkcs12File = [[documentDirs objectAtIndex:0] stringByAppendingFormat:@"/%@", fileName];
     NSData *pkcs12Data = [NSData dataWithContentsOfFile:pkcs12File];
-    NSDictionary *options = nil;
-    if (password != nil) {
-        options = [NSDictionary dictionaryWithObject:password forKey:(id)kSecImportExportPassphrase];
-    }
+
+    MKCertificate *tmpCert = [MKCertificate certificateWithPKCS12:pkcs12Data password:password];
+    NSData *transformedPkcs12Data = [tmpCert exportPKCS12WithPassword:@""];
+
+    NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
     NSArray *items = nil;
-    OSStatus err = SecPKCS12Import((CFDataRef) pkcs12Data, (CFDictionaryRef) options, (CFArrayRef *) &items);
+    OSStatus err = SecPKCS12Import((CFDataRef)transformedPkcs12Data, (CFDictionaryRef)dict, (CFArrayRef *)&items);
 
     if (err == errSecSuccess && [items count] > 0) {
         NSDictionary *pkcsDict = [items objectAtIndex:0];
@@ -182,7 +183,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             [_diskCertificates removeObjectAtIndex:[_attemptIndexPath row]];
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:_attemptIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             return;
-
         } else if (err == errSecDuplicateItem || (err == noErr && data == nil)) {
             ShowAlertDialog(@"Import Error",
                             @"The certificate of the just-added identity could not be added to the certificate store because it "
