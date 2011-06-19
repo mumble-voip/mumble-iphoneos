@@ -53,6 +53,12 @@
 	[_textField setFont:[UIFont systemFontOfSize:14.0f]];
 	[_textField setTextColor:[UIColor colorWithRed:(CGFloat)0x32/0xff green:(CGFloat)0x4f/0xff blue:(CGFloat)0x85/0xff alpha:0xff]];
 	[_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+
+#if 1
+    // fixme(mkrautz): Lion iOS simluator bug.
+    [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];
+#endif
+
 	[_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
 	[_textField setDelegate:self];
 	[view addSubview:_textField];
@@ -73,7 +79,7 @@
 #pragma mark Action helper
 
 - (void) performValueChangedSelector {
-	id targ = [self target];
+    id targ = [self target];
 	if ([targ respondsToSelector:_valueChangedAction])
 		[[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:targ argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
 	else
