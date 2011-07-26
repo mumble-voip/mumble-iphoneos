@@ -28,9 +28,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@interface MUCertificateCell : UITableViewCell {
+    IBOutlet UIImageView  *_certImage;
+    IBOutlet UILabel      *_nameLabel;
+    IBOutlet UILabel      *_emailLabel;
+    IBOutlet UILabel      *_issuerLabel;
+    IBOutlet UILabel      *_expiryLabel;
+    BOOL                  _isCurrentCert;
 }
+
++ (MUCertificateCell *) loadFromNib;
+
+- (void) setSubjectName:(NSString *)name;
+- (void) setEmail:(NSString *)email;
+- (void) setIssuerText:(NSString *)issuerText;
+- (void) setExpiryText:(NSString *)expiryText;
+
+- (BOOL) isCurrentCertificate;
+- (void) setIsCurrentCertificate:(BOOL)isSelected;
+
+@end

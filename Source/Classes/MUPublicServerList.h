@@ -28,9 +28,44 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <Foundation/Foundation.h>
+
+@class MUPublicServerList;
+
+@protocol PublicServerListDelegate
+- (void) publicServerListDidLoad:(MUPublicServerList *)list;
+- (void) publicServerListFailedLoading:(NSError *)error;
+@end
+
+@interface MUPublicServerList : NSObject <NSXMLParserDelegate> {
+	NSURLConnection               *_conn;
+	NSMutableData                 *_buf;
+
+	NSMutableDictionary           *_continentCountries;
+	NSMutableDictionary           *_countryServers;
+
+	NSDictionary                  *_continentNames;
+	NSDictionary                  *_countryNames;
+
+	NSMutableArray                *_modelContinents;
+	NSMutableArray                *_modelCountries;
+
+	BOOL                          _loadCompleted;
+	id<PublicServerListDelegate>  _delegate;
 }
+
+- (id) init;
+- (void) dealloc;
+
+- (id<PublicServerListDelegate>) delegate;
+- (void) setDelegate:(id<PublicServerListDelegate>)selector;
+
+- (void) load;
+- (BOOL) loadCompleted;
+
+- (NSInteger) numberOfContinents;
+- (NSString *) continentNameAtIndex:(NSInteger)index;
+- (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index;
+- (NSDictionary *) countryAtIndexPath:(NSIndexPath *)indexPath;
+
+@end

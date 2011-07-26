@@ -28,9 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+@interface MUWelcomeScreenPhone : UITableViewController {
+	UIAlertView *_aboutView;
+	NSInteger _aboutWebsiteButton;
+	NSInteger _aboutContribButton;
+	NSInteger _aboutLegalButton;
 }
+
+- (id) init;
+- (void) dealloc;
+
+@end

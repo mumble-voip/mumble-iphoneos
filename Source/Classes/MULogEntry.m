@@ -28,9 +28,34 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MULogEntry.h"
+
+
+@implementation MULogEntry
+
+- (id) initWithText:(NSString *)text {
+	self = [super init];
+	if (self == nil)
+		return nil;
+
+	_date = [[NSDate alloc] init];
+	_text = [text copy];
+
+	return self;
 }
+
+- (void) dealloc {
+	[_date release];
+	[_text release];
+	[super dealloc];
+}
+
+- (NSDate *) date {
+	return _date;
+}
+
+- (NSString *) text {
+	return _text;
+}
+
+@end

@@ -28,9 +28,24 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
-}
+#import <FMDatabase.h>
+
+@class MUFavouriteServer;
+@class Identity;
+
+@interface MUDatabase : NSObject
+
++ (void) initializeDatabase;
++ (void) teardown;
+
+// FavouriteServer
++ (void) storeFavourite:(MUFavouriteServer *)favServ;
++ (void) deleteFavourite:(MUFavouriteServer *)favServ;
++ (void) storeFavourites:(NSArray *)favourites;
++ (NSMutableArray *) fetchAllFavourites;
+
+// Cert verification
++ (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
++ (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
+
+@end

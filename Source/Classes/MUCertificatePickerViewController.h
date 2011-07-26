@@ -28,9 +28,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@class MUCertificatePickerViewController;
+
+@protocol CertificatePickerViewControllerDelegate
+- (void) certificatePickerViewController:(MUCertificatePickerViewController *)certPicker didSelectCertificate:(NSData *)persistentRef;
+@end
+
+@interface MUCertificatePickerViewController : UITableViewController {
+	NSMutableArray                               *_certificateItems;
+	id<CertificatePickerViewControllerDelegate>  _delegate;
+	NSUInteger                                   _selectedRow;
+	NSData                                       *_selected;
 }
+
+- (id) initWithPersistentRef:(NSData *)persistentRef;
+- (void) dealloc;
+
+- (id<CertificatePickerViewControllerDelegate>) delegate;
+- (void) setDelegate:(id<CertificatePickerViewControllerDelegate>)delegate;
+
+@end

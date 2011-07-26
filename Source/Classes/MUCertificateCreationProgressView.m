@@ -28,9 +28,42 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MUCertificateCreationProgressView.h"
+
+@implementation MUCertificateCreationProgressView
+
+- (id) initWithName:(NSString *)name email:(NSString *)email {
+	if (self = [super initWithNibName:@"CertificateCreationProgressView" bundle:nil]) {
+		_identityName = [name retain];
+		_emailAddress = [email retain];
+		NSLog(@"name = %@, email = %@", _identityName, _emailAddress);
+		
+		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+			[self.view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+		}
+	}
+	return self;
 }
+
+- (void) dealloc {
+	[_identityName release];
+	[_emailAddress release];
+	[super dealloc];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	[[self navigationItem] setTitle:@"Generating Certificate"];
+	[[self navigationItem] setHidesBackButton:YES];
+
+	[_nameLabel	setText:_identityName];
+
+	if (_emailAddress != nil && _emailAddress.length > 0) {
+		[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
+	} else {
+		[_emailLabel setText:nil];
+	}
+
+	[_activityIndicator startAnimating];
+}
+
+@end

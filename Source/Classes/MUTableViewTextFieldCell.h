@@ -28,9 +28,56 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@interface MUTableViewTextFieldCell : UITableViewCell <UITextInputTraits, UITextFieldDelegate> {
+	UILabel *_label;
+	UITextField *_textField;
+	SEL _valueChangedAction;
 }
+
+- (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (void) dealloc;
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated;
+
+- (void) setLabel:(NSString *)labelText;
+- (NSString *) label;
+
+- (void) setPlaceholder:(NSString *)defaultValue;
+- (NSString *) placeholder;
+
+- (void) setTextValue:(NSString *)val;
+- (NSString *) textValue;
+
+- (void) setIntValue:(int)val;
+- (int) intValue;
+
+- (void) setValueChangedAction:(SEL)selector;
+- (SEL) valueChangedAction;
+
+#pragma mark -
+#pragma mark UITextInputTraits
+
+- (UITextAutocapitalizationType) autocapitalizationType;
+- (void) setAutocapitalizationType:(UITextAutocapitalizationType)autoCap;
+
+- (UITextAutocorrectionType) autocorrectionType;
+- (void) setAutocorrectionType:(UITextAutocorrectionType)autoCorrection;
+
+- (BOOL) enablesReturnKeyAutomatically;
+- (void) setEnablesReturnKeyAutomatically:(BOOL)enableKey;
+
+- (UIKeyboardAppearance) keyboardAppearance;
+- (void) setKeyboardAppearance:(UIKeyboardAppearance)appearance;
+
+- (UIKeyboardType) keyboardType;
+- (void) setKeyboardType:(UIKeyboardType)type;
+
+- (UIReturnKeyType) returnKeyType;
+- (void) setReturnKeyType:(UIReturnKeyType)type;
+
+- (BOOL) secureTextEntry;
+- (void) setSecureTextEntry:(BOOL)flag;
+
+@end

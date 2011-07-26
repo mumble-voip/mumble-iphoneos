@@ -28,9 +28,23 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MUVersionChecker.h"
+
+@interface MUApplicationDelegate : NSObject <UIApplicationDelegate> {
+	UIWindow                *window;
+	UINavigationController  *navigationController;
+	NSDate                  *_launchDate;
+	MUVersionChecker          *_verCheck;
 }
+
+@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
+
+- (void) applicationDidFinishLaunching:(UIApplication *)application;
+- (void) applicationWillTerminate:(UIApplication *)application;
+
+- (void) reloadPreferences;
+- (NSTimeInterval) timeIntervalSinceLaunch;
+
+@end
+

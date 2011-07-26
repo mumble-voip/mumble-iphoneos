@@ -28,9 +28,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+#import <MumbleKit/MKServerModel.h>
+
+
+@interface MULogViewController : UITableViewController {
+	NSMutableArray *_logEntries;
+	MKServerModel *_serverModel;
+	NSDateFormatter *_dateFormatter;
 }
+
+- (id) initWithServerModel:(MKServerModel *)serverModel;
+- (void) dealloc;
+
+@end

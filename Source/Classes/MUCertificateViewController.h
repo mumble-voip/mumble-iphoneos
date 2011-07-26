@@ -28,9 +28,24 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@class MKCertificate;
+
+@interface MUCertificateViewController : UITableViewController {
+	NSInteger           _curIdx;
+	NSArray             *_certificates;
+	NSArray             *_subjectItems;
+	NSArray             *_issuerItems;
+	NSString            *_certTitle;
+	UISegmentedControl  *_arrows;
 }
+
+- (id) initWithCertificate:(MKCertificate *)cert;
+- (id) initWithCertificates:(NSArray *)certs;
+- (void) dealloc;
+
+- (void) showDataForCertificate:(MKCertificate *)cert;
+- (void) updateCertificateDisplay;
+
+@end

@@ -28,9 +28,50 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MUAboutViewController.h"
+
+@interface MUAboutViewController (Private)
+- (void) doneButtonClicked:(UIBarButtonItem *)doneButton;
+@end
+
+@implementation MUAboutViewController
+
+- (id) initWithContent:(NSString *)content {
+	[self init];
+
+	NSBundle *bundle = [NSBundle mainBundle];
+	NSString *file = nil;
+
+	if ([content isEqual:@"Legal"]) {
+		[self setTitle:content];
+		file = [bundle pathForResource:content ofType:@"html"];
+	} else if ([content isEqual:@"Contributors"]) {
+		[self setTitle:content];
+		file = [bundle pathForResource:content ofType:@"html"];
+	}
+
+	if (file) {
+		NSData *html = [NSData dataWithContentsOfFile:file];
+		if (html) {
+			[(UIWebView *)[self view] loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
+		}
+	}
+
+	return self;
 }
+
+- (void) dealloc {
+	[super dealloc];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+	[[self navigationItem] setRightBarButtonItem:doneButton];
+	[doneButton release];
+}
+
+- (void) doneButtonClicked:(UIBarButtonItem *)doneButton {
+	[[self navigationController] dismissModalViewControllerAnimated:YES];
+}
+
+@end

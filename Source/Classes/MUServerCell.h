@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,9 +28,23 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <MumbleKit/MKServerPinger.h>
+
+@class MUFavouriteServer;
+
+@interface MUServerCell : UITableViewCell <MKServerPingerDelegate> {
+    NSString        *_displayname;
+    NSString        *_hostname;
+    NSString        *_port;
+    NSString        *_username;
+    MKServerPinger  *_pinger;
 }
+
++ (NSString *) reuseIdentifier;
+
+- (id) init;
+- (void) dealloc;
+
+- (void) populateFromDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSString *)port;
+- (void) populateFromFavouriteServer:(MUFavouriteServer *)favServ;
+@end

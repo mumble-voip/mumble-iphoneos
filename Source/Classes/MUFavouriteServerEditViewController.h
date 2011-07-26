@@ -28,9 +28,29 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MUFavouriteServer.h"
+
+@interface MUFavouriteServerEditViewController : UITableViewController {
+	BOOL _editMode;
+	MUFavouriteServer *_favourite;
+	id _target;
+	SEL _doneAction;
 }
+
+- (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ;
+- (id) init;
+- (void) dealloc;
+
+#pragma mark Accessors
+
+- (MUFavouriteServer *) copyFavouriteFromContent;
+
+#pragma mark Target and action handlers
+
+- (void) setTarget:(id)target;
+- (id) target;
+
+- (void) setDoneAction:(SEL)action;
+- (SEL) doneAction;
+
+@end

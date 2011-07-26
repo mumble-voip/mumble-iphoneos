@@ -28,9 +28,27 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+@interface MUFavouriteServer : NSObject <NSCopying> {
+	NSInteger  _pkey;
+	NSString   *_displayName;
+	NSString   *_hostName;
+	NSUInteger _port;
+	NSString   *_userName;
+	NSString   *_password;
 }
+
+- (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
+- (id) init;
+- (void) dealloc;
+
+@property (assign)  NSInteger   primaryKey;
+@property (copy)    NSString    *displayName;
+@property (copy)    NSString    *hostName;
+@property (assign)  NSUInteger  port;
+@property (copy)    NSString    *userName;
+@property (copy)    NSString    *password;
+
+- (BOOL) hasPrimaryKey;
+- (NSComparisonResult) compare:(MUFavouriteServer *)favServ;
+
+@end

@@ -28,9 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@interface MUCertificateCreationView : UITableViewController {
+	NSString  *_fullName;
+	NSString  *_emailAddress;
 }
+
+- (id) init;
+- (void) dealloc;
+
+@end

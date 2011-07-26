@@ -28,9 +28,17 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
-}
+#import <Foundation/Foundation.h>
+#import <MumbleKit/MKCertificate.h>
+
+@interface MUCertificateController : NSObject
++ (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
++ (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
+
++ (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
++ (MKCertificate *) defaultCertificate;
+
+
++ (NSArray *) rawCertificates;
++ (NSArray *) allPersistentRefs;
+@end

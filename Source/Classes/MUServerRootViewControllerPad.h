@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,9 +28,27 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <MumbleKit/MKUser.h>
+#import <MumbleKit/MKChannel.h>
+#import <MumbleKit/MKConnection.h>
+#import <MumbleKit/MKServerModel.h>
+
+#import <UIKit/UIKit.h>
+
+@class MUServerConnectionViewController;
+
+@interface MUServerRootViewControllerPad : UITableViewController <MKConnectionDelegate> {
+	MKConnection                    *_connection;
+	MKServerModel                   *_model;
+	NSMutableArray                  *_channelUsers;
+	MKChannel                       *_currentChannel;
+	NSString                        *_username;
+	NSString                        *_password;
+	BOOL                            _pttState;
+	MUServerConnectionViewController  *_progressController;
 }
+
+- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;
+- (void) dealloc;
+
+@end

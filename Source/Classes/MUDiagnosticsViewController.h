@@ -28,9 +28,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import <UIKit/UIKit.h>
+
+@interface MUDiagnosticsViewController : UITableViewController {
+	UITableViewCell *_deviceCell;
+	UITableViewCell *_osCell;
+	UITableViewCell *_udidCell;
+
+	UITableViewCell *_versionCell;
+	UITableViewCell *_gitRevCell;
+	UITableViewCell *_buildDateCell;
+	UITableViewCell *_sinceLaunchCell;
+
+	UITableViewCell *_preprocessorCell;
+	UITableViewCell *_routeCell;
+
+	NSTimer *_updateTimer;
 }
+
+- (id) init;
+- (void) dealloc;
+
+@end

@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 ; Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,9 +28,18 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-int main(int argc, char *argv[]) {
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, @"MUApplication", @"MUApplicationDelegate");
-	[pool release];
-	return retVal;
+#import "MUFavouriteServer.h"
+
+@interface MUFavouriteServerListController : UITableViewController <UIActionSheetDelegate> {
+	NSMutableArray   *_favouriteServers;
+	BOOL             _editMode;
+	MUFavouriteServer  *_editedServer;
 }
+
+- (id) init;
+- (void) dealloc;
+
+- (void) presentNewFavouriteDialog;
+- (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ;
+
+@end
