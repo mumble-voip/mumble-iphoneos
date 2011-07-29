@@ -36,12 +36,7 @@
 - (void) certificatePickerViewController:(MUCertificatePickerViewController *)certPicker didSelectCertificate:(NSData *)persistentRef;
 @end
 
-@interface MUCertificatePickerViewController : UITableViewController {
-	NSMutableArray                               *_certificateItems;
-	id<CertificatePickerViewControllerDelegate>  _delegate;
-	NSUInteger                                   _selectedRow;
-	NSData                                       *_selected;
-}
+@interface MUCertificatePickerViewController : UITableViewController
 
 - (id) initWithPersistentRef:(NSData *)persistentRef;
 - (void) dealloc;

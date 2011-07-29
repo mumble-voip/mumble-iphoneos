@@ -33,13 +33,7 @@
 #import <MumbleKit/MKServerModel.h>
 
 
-@interface MULogViewController : UITableViewController {
-	NSMutableArray *_logEntries;
-	MKServerModel *_serverModel;
-	NSDateFormatter *_dateFormatter;
-}
-
+@interface MULogViewController : UITableViewController
 - (id) initWithServerModel:(MKServerModel *)serverModel;
 - (void) dealloc;
-
 @end

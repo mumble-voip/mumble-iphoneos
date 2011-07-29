@@ -37,23 +37,7 @@
 - (void) publicServerListFailedLoading:(NSError *)error;
 @end
 
-@interface MUPublicServerList : NSObject <NSXMLParserDelegate> {
-	NSURLConnection               *_conn;
-	NSMutableData                 *_buf;
-
-	NSMutableDictionary           *_continentCountries;
-	NSMutableDictionary           *_countryServers;
-
-	NSDictionary                  *_continentNames;
-	NSDictionary                  *_countryNames;
-
-	NSMutableArray                *_modelContinents;
-	NSMutableArray                *_modelCountries;
-
-	BOOL                          _loadCompleted;
-	id<PublicServerListDelegate>  _delegate;
-}
-
+@interface MUPublicServerList : NSObject <NSXMLParserDelegate> 
 - (id) init;
 - (void) dealloc;
 
@@ -67,5 +51,4 @@
 - (NSString *) continentNameAtIndex:(NSInteger)index;
 - (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index;
 - (NSDictionary *) countryAtIndexPath:(NSIndexPath *)indexPath;
-
 @end

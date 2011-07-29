@@ -31,6 +31,13 @@
 #import "MULogViewController.h"
 #import "MULogEntry.h"
 
+@interface MULogViewController () {
+    NSMutableArray   *_logEntries;
+    MKServerModel    *_serverModel;
+    NSDateFormatter  *_dateFormatter;
+}
+@end
+
 @implementation MULogViewController
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {

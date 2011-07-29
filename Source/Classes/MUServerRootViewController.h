@@ -37,22 +37,7 @@
 
 @class MUServerConnectionViewController;
 
-@interface MUServerRootViewController : UITableViewController <MKConnectionDelegate> {
-    MKConnection                    *_connection;
-    MKServerModel                   *_model;
-    NSMutableArray                  *_channelUsers;
-    MKChannel                       *_currentChannel;
-
-    NSString                        *_hostname;
-    NSUInteger                      _port;
-    NSString                        *_username;
-    NSString                        *_password;
-
-    BOOL                            _pttState;
-    MUServerConnectionViewController  *_progressController;
-}
-
+@interface MUServerRootViewController : UITableViewController <MKConnectionDelegate>
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;
 - (void) dealloc;
-
 @end

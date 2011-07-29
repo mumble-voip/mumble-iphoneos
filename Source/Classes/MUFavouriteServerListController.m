@@ -38,6 +38,13 @@
 #import "MUServerRootViewControllerPad.h"
 #import "MUServerCell.h"
 
+@interface MUFavouriteServerListController () {
+    NSMutableArray     *_favouriteServers;
+    BOOL               _editMode;
+    MUFavouriteServer  *_editedServer;
+}
+@end
+
 @implementation MUFavouriteServerListController
 
 #pragma mark -

@@ -43,6 +43,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	});
 }
 
+@interface MUCertificateCreationView () {
+    NSString  *_fullName;
+    NSString  *_emailAddress;
+}
+@end
+
 @implementation MUCertificateCreationView
 
 #pragma mark -

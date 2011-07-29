@@ -43,7 +43,16 @@
 #import "MUServerCertificateTrustViewController.h"
 #import "MUChannelNavigationViewController.h"
 
-@interface MUServerRootViewControllerPad (Private)
+@interface MUServerRootViewControllerPad () {
+    MKConnection                      *_connection;
+	MKServerModel                     *_model;
+	NSMutableArray                    *_channelUsers;
+	MKChannel                         *_currentChannel;
+	NSString                          *_username;
+	NSString                          *_password;
+	BOOL                              _pttState;
+	MUServerConnectionViewController  *_progressController;
+}
 - (void) togglePushToTalk;
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user;
 @end

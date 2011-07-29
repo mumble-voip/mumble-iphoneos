@@ -31,6 +31,16 @@
 #import "MUFavouriteServer.h"
 #import "MUDatabase.h"
 
+@interface MUFavouriteServer () {
+    NSInteger  _pkey;
+    NSString   *_displayName;
+    NSString   *_hostName;
+    NSUInteger _port;
+    NSString   *_userName;
+    NSString   *_password;
+}
+@end
+
 @implementation MUFavouriteServer
 
 @synthesize primaryKey         = _pkey;

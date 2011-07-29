@@ -30,6 +30,22 @@
 
 #import "MUChannelViewController.h"
 
+typedef enum {
+	ChannelViewSectionSubChannels    = 0,
+	ChannelViewSectionUsers          = 1,
+	ChannelViewSectionActions        = 2,
+} ChannelViewSection;
+
+typedef enum {
+	ChannelViewActionJoinChannel     = 0,
+} ChannelViewAction;
+
+@interface MUChannelViewController () {
+    MKChannel      *_channel;
+    MKServerModel  *_model;
+}
+@end
+
 @implementation MUChannelViewController
 
 - (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model {

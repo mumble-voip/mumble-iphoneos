@@ -30,11 +30,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MUTableViewTextFieldCell : UITableViewCell <UITextInputTraits, UITextFieldDelegate> {
-	UILabel *_label;
-	UITextField *_textField;
-	SEL _valueChangedAction;
-}
+@interface MUTableViewTextFieldCell : UITableViewCell <UITextInputTraits, UITextFieldDelegate>
 
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void) dealloc;

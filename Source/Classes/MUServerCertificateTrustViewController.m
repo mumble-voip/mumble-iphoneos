@@ -34,6 +34,11 @@
 #import "MUServerCertificateTrustViewController.h"
 #import "MUDatabase.h"
 
+@interface MUServerCertificateTrustViewController () {
+    MKConnection  *_conn;
+}
+@end
+
 // This is the modal view controller that's shown to the user
 // when iOS doesn't trsut the certificate chain of the server,
 // and the user picks "Show Certificates"
@@ -41,7 +46,6 @@
 @implementation MUServerCertificateTrustViewController
 
 - (id) initWithConnection:(MKConnection *)conn {
-	NSArray *peerCerts = [conn peerCertificates];
 	if (self = [super initWithCertificates:[conn peerCertificates]]) {
 		_conn = conn;
 	}

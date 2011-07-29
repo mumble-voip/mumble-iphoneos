@@ -28,14 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUWelcomeScreenPhone : UITableViewController {
-	UIAlertView *_aboutView;
-	NSInteger _aboutWebsiteButton;
-	NSInteger _aboutContribButton;
-	NSInteger _aboutLegalButton;
-}
-
+@interface MUWelcomeScreenPhone : UITableViewController
 - (id) init;
 - (void) dealloc;
-
 @end

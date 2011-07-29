@@ -30,12 +30,7 @@
 
 #import "MUPublicServerList.h"
 
-@interface MUPublicServerListController : UITableViewController <PublicServerListDelegate> {
-	UIActivityIndicatorView  *_activityIndicator;
-	MUPublicServerList         *_serverList;
-}
-
+@interface MUPublicServerListController : UITableViewController <PublicServerListDelegate>
 - (id) init;
 - (void) dealloc;
-
 @end

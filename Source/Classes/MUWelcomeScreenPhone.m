@@ -38,7 +38,12 @@
 #import "MUAboutViewController.h"
 
 
-@interface MUWelcomeScreenPhone (Private)
+@interface MUWelcomeScreenPhone () {
+    UIAlertView  *_aboutView;
+    NSInteger    _aboutWebsiteButton;
+    NSInteger    _aboutContribButton;
+    NSInteger    _aboutLegalButton;
+}
 - (void) presentAboutDialog;
 @end
 

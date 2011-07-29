@@ -44,7 +44,12 @@ static NSUInteger FavouriteServerPlaceholderPortInteger = 64738;
 static NSString *FavouriteServerPlaceholderUsername     = @"MumbleUser";
 static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
 
-@interface MUFavouriteServerEditViewController (Private)
+@interface MUFavouriteServerEditViewController () {
+    BOOL               _editMode;
+    MUFavouriteServer  *_favourite;
+    id                 _target;
+    SEL                _doneAction;
+}
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView;
 @end
 

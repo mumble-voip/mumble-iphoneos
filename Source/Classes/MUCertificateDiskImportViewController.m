@@ -32,7 +32,6 @@
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
 
-
 static void ShowAlertDialog(NSString *title, NSString *msg) {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -41,12 +40,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 	});
 }
 
-@implementation MUCertificateDiskImportViewController
-
-@interface MUCertificateDiskImportViewController (Private)
+@interface MUCertificateDiskImportViewController () {
+    BOOL             _showHelp;
+    NSMutableArray   *_diskCertificates;
+    NSIndexPath      *_attemptIndexPath;
+    UITextField      *_passwordField;
+}
 - (void) tryImportCertificateWithPassword:(NSString *)password;
 - (void) showPasswordDialog;
 @end
+
+@implementation MUCertificateDiskImportViewController
 
 - (id) init {
     UITableViewStyle style = UITableViewStyleGrouped;

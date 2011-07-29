@@ -38,7 +38,12 @@
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
 
-@interface MUApplicationDelegate (Private)
+@interface MUApplicationDelegate () {
+    UIWindow                  *window;
+    UINavigationController    *navigationController;
+    NSDate                    *_launchDate;
+    MUVersionChecker          *_verCheck;
+}
 - (void) setupAudio;
 - (void) notifyCrash;
 @end

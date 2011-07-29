@@ -37,12 +37,14 @@
 
 #import <MumbleKit/MKCertificate.h>
 
-
-@interface MUCertificatePreferencesViewController (Private)
+@interface MUCertificatePreferencesViewController () {
+	NSMutableArray   *_certificateItems;
+	BOOL             _picker;
+	NSUInteger       _selectedIndex;
+}
 - (void) fetchCertificates;
 - (void) deleteCertificateForRow:(NSUInteger)row;
 @end
-
 
 @implementation MUCertificatePreferencesViewController
 

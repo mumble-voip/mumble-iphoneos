@@ -28,12 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <UIKit/UIKit.h>
-
-
 @interface MUPreferencesViewController : UITableViewController
-
 - (id) init;
 - (void) dealloc;
-
 @end

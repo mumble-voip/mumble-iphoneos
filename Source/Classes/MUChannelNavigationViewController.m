@@ -78,7 +78,12 @@
 #pragma mark -
 #pragma mark MUChannelNavigationViewController
 
-@interface MUChannelNavigationViewController (Private)
+@interface MUChannelNavigationViewController () {
+    MKServerModel        *_serverModel;
+	NSMutableArray       *_modelItems;
+	NSMutableDictionary  *_userIndexMap;
+	NSMutableDictionary  *_channelIndexMap;
+}
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel;
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel;
 @end

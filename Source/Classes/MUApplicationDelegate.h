@@ -30,12 +30,7 @@
 
 #import "MUVersionChecker.h"
 
-@interface MUApplicationDelegate : NSObject <UIApplicationDelegate> {
-	UIWindow                *window;
-	UINavigationController  *navigationController;
-	NSDate                  *_launchDate;
-	MUVersionChecker          *_verCheck;
-}
+@interface MUApplicationDelegate : NSObject <UIApplicationDelegate> 
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;

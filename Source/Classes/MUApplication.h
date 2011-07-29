@@ -28,19 +28,14 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class AppDelegate;
+@class MUApplicationDelegate;
 
 #define MumbleApp ((MUApplication *)[MUApplication sharedApplication])
 
-@interface MUApplication : UIApplication {
-	NSString *_crashTokenPath;
-}
-
+@interface MUApplication : UIApplication
 - (id) init;
 - (void) dealloc;
-
-- (AppDelegate *) delegate;
+- (MUApplicationDelegate *) delegate;
 - (BOOL) didCrashRecently;
 - (void) resetCrashCount;
-
 @end

@@ -30,13 +30,7 @@
 
 #import "MUFavouriteServer.h"
 
-@interface MUFavouriteServerEditViewController : UITableViewController {
-	BOOL _editMode;
-	MUFavouriteServer *_favourite;
-	id _target;
-	SEL _doneAction;
-}
-
+@interface MUFavouriteServerEditViewController : UITableViewController 
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ;
 - (id) init;
 - (void) dealloc;

@@ -28,11 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUCertificateDiskImportViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate> {
-    BOOL             _showHelp;
-    NSMutableArray   *_diskCertificates;
-    NSIndexPath      *_attemptIndexPath;
-    UITextField      *_passwordField;
-}
+@interface MUCertificateDiskImportViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate>
+
+- (id) init;
+- (void) dealloc;
 
 @end

@@ -31,15 +31,9 @@
 #import <Foundation/Foundation.h>
 
 
-@interface MULogEntry : NSObject {
-	NSDate *_date;
-	NSString *_text;
-}
-
+@interface MULogEntry : NSObject
 - (id) initWithText:(NSString *)text;
 - (void) dealloc;
-
 - (NSDate *) date;
 - (NSString *) text;
-
 @end

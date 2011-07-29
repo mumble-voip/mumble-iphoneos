@@ -36,6 +36,16 @@ static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
 static const NSUInteger CertificateViewSectionTotal              = 2;
 
+@interface MUCertificateViewController () {
+    NSInteger           _curIdx;
+    NSArray             *_certificates;
+    NSArray             *_subjectItems;
+    NSArray             *_issuerItems;
+    NSString            *_certTitle;
+    UISegmentedControl  *_arrows;
+}
+@end
+
 @implementation MUCertificateViewController
 
 #pragma mark -

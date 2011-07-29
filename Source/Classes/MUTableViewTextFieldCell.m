@@ -30,6 +30,13 @@
 
 #import "MUTableViewTextFieldCell.h"
 
+@interface MUTableViewTextFieldCell () {
+    UILabel      *_label;
+    UITextField  *_textField;
+    SEL          _valueChangedAction;
+}
+@end
+
 @implementation MUTableViewTextFieldCell
 
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier {

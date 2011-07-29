@@ -30,12 +30,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MUVersionChecker : NSObject {
-	NSURLConnection *_conn;
-	NSMutableData   *_buf;
-}
-
+@interface MUVersionChecker : NSObject
 - (id) init;
 - (void) dealloc;
-
 @end

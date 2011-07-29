@@ -32,11 +32,7 @@
 
 @class MKConnection;
 
-@interface MUServerCertificateTrustViewController : MUCertificateViewController {
-	MKConnection  *_conn;
-}
-
+@interface MUServerCertificateTrustViewController : MUCertificateViewController
 - (id) initWithConnection:(MKConnection *)conn;
 - (void) dealloc;
-
 @end

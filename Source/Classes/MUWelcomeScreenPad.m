@@ -38,7 +38,13 @@
 #import "MUAboutViewController.h"
 
 
-@interface MUWelcomeScreenPad (Private)
+@interface MUWelcomeScreenPad () {
+    UIAlertView          *_aboutView;
+    NSInteger            _aboutWebsiteButton;
+    NSInteger            _aboutContribButton;
+    NSInteger            _aboutLegalButton;
+    UIPopoverController  *_preferencesPopover;
+}
 - (void) presentAboutDialog;
 @end
 

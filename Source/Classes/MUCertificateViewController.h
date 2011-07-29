@@ -32,14 +32,7 @@
 
 @class MKCertificate;
 
-@interface MUCertificateViewController : UITableViewController {
-	NSInteger           _curIdx;
-	NSArray             *_certificates;
-	NSArray             *_subjectItems;
-	NSArray             *_issuerItems;
-	NSString            *_certTitle;
-	UISegmentedControl  *_arrows;
-}
+@interface MUCertificateViewController : UITableViewController
 
 - (id) initWithCertificate:(MKCertificate *)cert;
 - (id) initWithCertificates:(NSArray *)certs;

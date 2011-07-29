@@ -31,7 +31,13 @@
 #import "MUServerCell.h"
 #import "MUFavouriteServer.h"
 
-@interface MUServerCell (Private)
+@interface MUServerCell () {
+    NSString        *_displayname;
+    NSString        *_hostname;
+    NSString        *_port;
+    NSString        *_username;
+    MKServerPinger  *_pinger;
+}
 - (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andSize:(CGSize)sz;
 @end
 

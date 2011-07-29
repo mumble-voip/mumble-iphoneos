@@ -32,6 +32,12 @@
 #import "MUPublicServerListController.h"
 #import "MUCountryServerListController.h"
 
+@interface MUPublicServerListController () {
+    UIActivityIndicatorView   *_activityIndicator;
+    MUPublicServerList        *_serverList;
+}
+@end
+
 @implementation MUPublicServerListController
 
 - (id) init {

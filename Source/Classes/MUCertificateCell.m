@@ -30,6 +30,16 @@
 
 #import "MUCertificateCell.h"
 
+@interface MUCertificateCell () {
+    IBOutlet UIImageView  *_certImage;
+    IBOutlet UILabel      *_nameLabel;
+    IBOutlet UILabel      *_emailLabel;
+    IBOutlet UILabel      *_issuerLabel;
+    IBOutlet UILabel      *_expiryLabel;
+    BOOL                  _isCurrentCert;
+}
+@end
+
 @implementation MUCertificateCell
 
 + (MUCertificateCell *) loadFromNib {

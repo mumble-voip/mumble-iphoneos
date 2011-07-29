@@ -30,6 +30,11 @@
 
 #import "MULogEntry.h"
 
+@interface MULogEntry () {
+    NSDate    *_date;
+    NSString  *_text;
+}
+@end
 
 @implementation MULogEntry
 

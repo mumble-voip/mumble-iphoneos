@@ -29,13 +29,7 @@
 */
 
 
-@interface MUCertificatePreferencesViewController : UITableViewController <UIActionSheetDelegate> {
-	NSMutableArray   *_certificateItems;
-	BOOL             _picker;
-	NSUInteger       _selectedIndex;
-}
-
+@interface MUCertificatePreferencesViewController : UITableViewController <UIActionSheetDelegate>
 - (id) init;
 - (void) dealloc;
-
 @end

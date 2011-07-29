@@ -31,22 +31,7 @@
 #import <MumbleKit/MKChannel.h>
 #import <MumbleKit/MKServerModel.h>
 
-typedef enum {
-	ChannelViewSectionSubChannels    = 0,
-	ChannelViewSectionUsers          = 1,
-	ChannelViewSectionActions        = 2,
-} ChannelViewSection;
-
-typedef enum {
-	ChannelViewActionJoinChannel     = 0,
-} ChannelViewAction;
-
-@interface MUChannelViewController : UITableViewController {
-	MKChannel *_channel;
-	MKServerModel *_model;
-}
-
+@interface MUChannelViewController : UITableViewController
 - (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model;
 - (void) dealloc;
-
 @end

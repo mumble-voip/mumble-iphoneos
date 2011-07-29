@@ -30,23 +30,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MUDiagnosticsViewController : UITableViewController {
-	UITableViewCell *_deviceCell;
-	UITableViewCell *_osCell;
-	UITableViewCell *_udidCell;
-
-	UITableViewCell *_versionCell;
-	UITableViewCell *_gitRevCell;
-	UITableViewCell *_buildDateCell;
-	UITableViewCell *_sinceLaunchCell;
-
-	UITableViewCell *_preprocessorCell;
-	UITableViewCell *_routeCell;
-
-	NSTimer *_updateTimer;
-}
-
+@interface MUDiagnosticsViewController : UITableViewController
 - (id) init;
 - (void) dealloc;
-
 @end

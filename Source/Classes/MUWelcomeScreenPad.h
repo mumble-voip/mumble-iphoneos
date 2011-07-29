@@ -28,16 +28,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@interface MUWelcomeScreenPad : UITableViewController <UIPopoverControllerDelegate> {
-	UIAlertView *_aboutView;
-	NSInteger _aboutWebsiteButton;
-	NSInteger _aboutContribButton;
-	NSInteger _aboutLegalButton;
-	
-	UIPopoverController *_preferencesPopover;
-}
-
+@interface MUWelcomeScreenPad : UITableViewController <UIPopoverControllerDelegate> 
 - (id) init;
 - (void) dealloc;
-
 @end

@@ -30,12 +30,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MUCertificateCreationView : UITableViewController {
-	NSString  *_fullName;
-	NSString  *_emailAddress;
-}
-
+@interface MUCertificateCreationView : UITableViewController
 - (id) init;
 - (void) dealloc;
-
 @end

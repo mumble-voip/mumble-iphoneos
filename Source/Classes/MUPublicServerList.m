@@ -31,6 +31,24 @@
 #import "MUPublicServerList.h"
 #import <MumbleKit/MKServices.h>
 
+@interface MUPublicServerList () {
+    NSURLConnection               *_conn;
+    NSMutableData                 *_buf;
+
+    NSMutableDictionary           *_continentCountries;
+    NSMutableDictionary           *_countryServers;
+
+    NSDictionary                  *_continentNames;
+    NSDictionary                  *_countryNames;
+
+    NSMutableArray                *_modelContinents;
+    NSMutableArray                *_modelCountries;
+
+    BOOL                          _loadCompleted;
+    id<PublicServerListDelegate>  _delegate;
+}
+@end
+
 @implementation MUPublicServerList
 
 - (id) init {

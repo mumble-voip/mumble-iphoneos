@@ -30,16 +30,9 @@
 
 #import "MUFavouriteServer.h"
 
-@interface MUFavouriteServerListController : UITableViewController <UIActionSheetDelegate> {
-	NSMutableArray   *_favouriteServers;
-	BOOL             _editMode;
-	MUFavouriteServer  *_editedServer;
-}
-
+@interface MUFavouriteServerListController : UITableViewController <UIActionSheetDelegate>
 - (id) init;
 - (void) dealloc;
-
 - (void) presentNewFavouriteDialog;
 - (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ;
-
 @end

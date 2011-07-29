@@ -30,6 +30,17 @@
 
 #import "MUCertificateCreationProgressView.h"
 
+@interface MUCertificateCreationProgressView () {
+    IBOutlet UIActivityIndicatorView  *_activityIndicator;
+	IBOutlet UILabel                  *_nameLabel;
+	IBOutlet UILabel                  *_emailLabel;
+    
+	NSString                          *_identityName;
+	NSString                          *_emailAddress;
+	id                                _delegate;
+}
+@end
+
 @implementation MUCertificateCreationProgressView
 
 - (id) initWithName:(NSString *)name email:(NSString *)email {

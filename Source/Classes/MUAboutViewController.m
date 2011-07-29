@@ -30,7 +30,7 @@
 
 #import "MUAboutViewController.h"
 
-@interface MUAboutViewController (Private)
+@interface MUAboutViewController ()
 - (void) doneButtonClicked:(UIBarButtonItem *)doneButton;
 @end
 

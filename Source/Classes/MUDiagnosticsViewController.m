@@ -37,7 +37,22 @@
 #import "MUApplicationDelegate.h"
 #import "MUDiagnosticsViewController.h"
 
-@interface MUDiagnosticsViewController (Private)
+@interface MUDiagnosticsViewController () {
+    UITableViewCell *_deviceCell;
+    UITableViewCell *_osCell;
+    UITableViewCell *_udidCell;
+
+    UITableViewCell *_versionCell;
+    UITableViewCell *_gitRevCell;
+    UITableViewCell *_buildDateCell;
+    UITableViewCell *_sinceLaunchCell;
+
+    UITableViewCell *_preprocessorCell;
+    UITableViewCell *_routeCell;
+
+    NSTimer *_updateTimer;
+}
+
 - (void) updateDiagnostics:(NSTimer *)timer;
 
 - (NSString *) deviceString;
@@ -256,7 +271,7 @@
 	[[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
 	[[_routeCell detailTextLabel] setText:[audio currentAudioRoute]];
 
-	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(AppDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
+	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(MUApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
 }
 
 - (NSData *) formEncodedDictionary:(NSDictionary *)dict boundary:(NSString *)boundary {

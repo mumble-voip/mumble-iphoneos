@@ -30,14 +30,7 @@
 
 #import <MumbleKit/MKServerModel.h>
 
-@interface MUChannelNavigationViewController : UITableViewController {
-	MKServerModel        *_serverModel;
-	NSMutableArray       *_modelItems;
-	NSMutableDictionary  *_userIndexMap;
-	NSMutableDictionary  *_channelIndexMap;
-}
-
+@interface MUChannelNavigationViewController : UITableViewController
 - (id) initWithServerModel:(MKServerModel *)serverModel;
 - (void) dealloc;
-
 @end

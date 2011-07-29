@@ -37,6 +37,12 @@
 
 #import "MUServerCell.h"
 
+@interface MUCountryServerListController () {
+    NSArray   *_countryServers;
+    NSString  *_countryName;
+}
+@end
+
 @implementation MUCountryServerListController
 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers {

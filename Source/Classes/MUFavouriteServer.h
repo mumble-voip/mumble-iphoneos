@@ -28,14 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUFavouriteServer : NSObject <NSCopying> {
-	NSInteger  _pkey;
-	NSString   *_displayName;
-	NSString   *_hostName;
-	NSUInteger _port;
-	NSString   *_userName;
-	NSString   *_password;
-}
+@interface MUFavouriteServer : NSObject <NSCopying>
 
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
 - (id) init;

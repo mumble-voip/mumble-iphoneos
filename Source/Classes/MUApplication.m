@@ -83,7 +83,9 @@ static void crashhandler_handle_crash() {
 	fclose(f);
 }
 
-@interface MUApplication (Private)
+@interface MUApplication () {
+    NSString *_crashTokenPath;
+}
 - (void) setupCrashHandler;
 - (void) setupLogFile;
 @end
@@ -103,8 +105,8 @@ static void crashhandler_handle_crash() {
 	[super dealloc];
 }
 
-- (AppDelegate *) delegate {
-	return (AppDelegate *)[super delegate];
+- (MUApplicationDelegate *) delegate {
+	return (MUApplicationDelegate *)[super delegate];
 }
 
 // Setup the crash notification handler

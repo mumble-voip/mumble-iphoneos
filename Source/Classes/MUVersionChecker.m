@@ -31,7 +31,10 @@
 #import "MUApplication.h"
 #import "MUVersionChecker.h"
 
-@interface MUVersionChecker (Private)
+@interface MUVersionChecker () {
+    NSURLConnection *_conn;
+	NSMutableData   *_buf;
+}
 - (void) connection:(NSURLConnection *)conn didReceiveData:(NSData *)data;
 - (void) connection:(NSURLConnection *)conn didFailWithError:(NSError *)error;
 - (void) connectionDidFinishLoading:(NSURLConnection *)conn;

@@ -30,12 +30,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MULanServerListController : UITableViewController {
-	NSNetServiceBrowser *_browser;
-	NSMutableArray *_netServices;
-}
-
+@interface MULanServerListController : UITableViewController
 - (id) init;
 - (void) dealloc;
-
 @end

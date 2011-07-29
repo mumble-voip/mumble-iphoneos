@@ -28,14 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUCountryServerListController : UITableViewController <UIActionSheetDelegate> {
-	NSArray *_countryServers;
-	NSString *_countryName;
-}
-
+@interface MUCountryServerListController : UITableViewController <UIActionSheetDelegate> 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers;
 - (void) dealloc;
-
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem;
-
 @end

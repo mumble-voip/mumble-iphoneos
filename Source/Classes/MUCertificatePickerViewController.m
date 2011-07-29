@@ -34,7 +34,12 @@
 
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUCertificatePickerViewController (Private)
+@interface MUCertificatePickerViewController () {
+    NSMutableArray                               *_certificateItems;
+    id<CertificatePickerViewControllerDelegate>  _delegate;
+    NSUInteger                                   _selectedRow;
+    NSData                                       *_selected;
+}
 - (void) fetchCertificates;
 @end
 

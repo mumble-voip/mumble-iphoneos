@@ -28,17 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUCertificateCreationProgressView : UIViewController {
-	IBOutlet UIActivityIndicatorView  *_activityIndicator;
-	IBOutlet UILabel                  *_nameLabel;
-	IBOutlet UILabel                  *_emailLabel;
-
-	NSString                          *_identityName;
-	NSString                          *_emailAddress;
-	id                                _delegate;
-}
-
+@interface MUCertificateCreationProgressView : UIViewController
 - (id) initWithName:(NSString *)name email:(NSString *)email;
 - (void) dealloc;
-
 @end

@@ -32,14 +32,7 @@
 
 @class MUFavouriteServer;
 
-@interface MUServerCell : UITableViewCell <MKServerPingerDelegate> {
-    NSString        *_displayname;
-    NSString        *_hostname;
-    NSString        *_port;
-    NSString        *_username;
-    MKServerPinger  *_pinger;
-}
-
+@interface MUServerCell : UITableViewCell <MKServerPingerDelegate>
 + (NSString *) reuseIdentifier;
 
 - (id) init;
