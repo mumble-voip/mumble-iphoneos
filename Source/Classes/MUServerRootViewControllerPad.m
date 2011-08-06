@@ -41,7 +41,7 @@
 #import "MULogViewController.h"
 #import "MUCertificateViewController.h"
 #import "MUServerCertificateTrustViewController.h"
-#import "MUChannelNavigationViewController.h"
+#import "MUServerViewController.h"
 
 @interface MUServerRootViewControllerPad () {
     MKConnection                      *_connection;
@@ -259,7 +259,7 @@
 	[[self tableView] reloadData];
 	
 	
-	MUChannelNavigationViewController *chanNav = [[MUChannelNavigationViewController alloc] initWithServerModel:_model];
+	MUServerViewController *chanNav = [[MUServerViewController alloc] initWithServerModel:_model];
 	chanNav.view.frame = CGRectMake(200, 200, 300, 400);
 	[self.view addSubview:chanNav.view];
 }
@@ -584,7 +584,7 @@
 
 // Channel picker
 - (void) channelsButtonClicked:(id)sender {
-	MUChannelNavigationViewController *channelView = [[MUChannelNavigationViewController alloc] initWithServerModel:_model];
+	MUServerViewController *channelView = [[MUServerViewController alloc] initWithServerModel:_model];
 	UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:channelView];
 	[channelView release];
 	[[self navigationController] presentModalViewController:navCtrl animated:YES];

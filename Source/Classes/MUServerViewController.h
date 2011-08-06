@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,6 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUServerRootViewController : UINavigationController
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password;
+#import <MumbleKit/MKServerModel.h>
+
+@interface MUServerViewController : UITableViewController
+- (id) initWithServerModel:(MKServerModel *)serverModel;
 @end

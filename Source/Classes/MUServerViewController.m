@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUChannelNavigationViewController.h"
+#import "MUServerViewController.h"
 
 
 #pragma mark -
@@ -78,7 +78,7 @@
 #pragma mark -
 #pragma mark MUChannelNavigationViewController
 
-@interface MUChannelNavigationViewController () {
+@interface MUServerViewController () {
     MKServerModel        *_serverModel;
 	NSMutableArray       *_modelItems;
 	NSMutableDictionary  *_userIndexMap;
@@ -88,7 +88,7 @@
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel;
 @end
 
-@implementation MUChannelNavigationViewController
+@implementation MUServerViewController
 
 #pragma mark -
 #pragma mark Initialization and lifecycle
@@ -107,13 +107,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonClicked:)];
-	self.navigationItem.rightBarButtonItem = doneButton;
-	[doneButton release];
-	
-	self.navigationItem.title = @"Server View";
-	self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-	
+    NSLog(@"MUServerViewController: RebuildModel!");
 	[self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
 }
 
@@ -128,7 +122,10 @@
 	_channelIndexMap = [[NSMutableDictionary alloc] init];
 
 	[self addChannelTreeToModel:channel indentLevel:0];
+
 	[self.tableView reloadData];
+
+    NSLog(@"rebuilt it!");
 }
 
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {	
@@ -144,10 +141,9 @@
 	}
 }
 
-#pragma mark -
-#pragma mark Table view data source
+#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
 
@@ -187,8 +183,7 @@
     return cell;
 }
 
-#pragma mark -
-#pragma mark Table view delegate
+#pragma mark - Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
@@ -204,17 +199,10 @@
 	return 44.0f;
 }
 
-#pragma mark -
-#pragma mark Actions
-
-- (void) doneButtonClicked:(id)sender {
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-#pragma mark -
-#pragma mark MumbleKit notifications'n'stuff
+#pragma mark - MKServerModel delegate
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 - (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
@@ -225,10 +213,7 @@
 }
 
 - (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
-	NSLog(@"userTalkStateChanged!!");
 	NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
-	NSLog(@"userIndex = %i", userIndex);
-
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 
 	MKTalkState talkState = [user talkState];

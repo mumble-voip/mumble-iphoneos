@@ -38,7 +38,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 	}
 } 
 
-@interface MULanServerListController () {
+@interface MULanServerListController () <NSNetServiceBrowserDelegate> {
     NSNetServiceBrowser  *_browser;
     NSMutableArray       *_netServices;
 }

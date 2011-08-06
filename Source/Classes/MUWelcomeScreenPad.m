@@ -45,7 +45,6 @@
     NSInteger            _aboutLegalButton;
     UIPopoverController  *_preferencesPopover;
 }
-- (void) presentAboutDialog;
 @end
 
 @implementation MUWelcomeScreenPad

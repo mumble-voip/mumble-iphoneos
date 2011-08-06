@@ -34,15 +34,12 @@
 #import "MUFavouriteServer.h"
 #import "MUTableViewTextFieldCell.h"
 
-//
 // Placeholder text for the edit view fields.
-//
-static NSString *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
-static NSString *FavouriteServerPlaceholderHostName     = @"Hostname or IP address";
-static NSString *FavouriteServerPlaceholderPort         = @"64738";
-static NSUInteger FavouriteServerPlaceholderPortInteger = 64738;
-static NSString *FavouriteServerPlaceholderUsername     = @"MumbleUser";
-static NSString *FavouriteServerPlaceholderPassword     = @"Optional";
+static NSString   *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
+static NSString   *FavouriteServerPlaceholderHostName     = @"Hostname or IP address";
+static NSString   *FavouriteServerPlaceholderPort         = @"64738";
+static NSString   *FavouriteServerPlaceholderUsername     = @"MumbleUser";
+static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
 @interface MUFavouriteServerEditViewController () {
     BOOL               _editMode;

@@ -32,6 +32,5 @@
 #import <MumbleKit/MKServerModel.h>
 
 @interface MUChannelViewController : UITableViewController
-- (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model;
-- (void) dealloc;
+- (id) initWithServerModel:(MKServerModel *)model;
 @end

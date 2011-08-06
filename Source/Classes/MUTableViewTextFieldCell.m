@@ -34,6 +34,7 @@
     UILabel      *_label;
     UITextField  *_textField;
     SEL          _valueChangedAction;
+    id           _fieldTarget;
 }
 @end
 
@@ -82,15 +83,21 @@
 	// Should not be able to select these.
 }
 
+- (void) setTarget:(id)target {
+    _fieldTarget = target;
+}
+
+- (id) target {
+    return _fieldTarget;
+}
+
 #pragma mark -
 #pragma mark Action helper
 
 - (void) performValueChangedSelector {
-    id targ = [self target];
-	if ([targ respondsToSelector:_valueChangedAction])
-		[[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:targ argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
-	else
-		NSLog(@"TableViewTextFieldCell: Target does not respond to given selector.");
+	if ([_fieldTarget respondsToSelector:_valueChangedAction]) {
+		[[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:_fieldTarget argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+    }
 }
 
 #pragma mark -

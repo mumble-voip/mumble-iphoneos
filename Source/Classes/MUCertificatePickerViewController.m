@@ -98,7 +98,7 @@
 		NSString *NoneIdentifier = @"NoneButton";
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoneIdentifier];
 		if (!cell) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewStyleGrouped reuseIdentifier:NoneIdentifier];
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NoneIdentifier];
 		}
 		[[cell textLabel] setText:@"None"];
 		[[cell detailTextLabel] setText:nil];

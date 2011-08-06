@@ -30,146 +30,312 @@
 
 #import "MUChannelViewController.h"
 
-typedef enum {
-	ChannelViewSectionSubChannels    = 0,
-	ChannelViewSectionUsers          = 1,
-	ChannelViewSectionActions        = 2,
-} ChannelViewSection;
-
-typedef enum {
-	ChannelViewActionJoinChannel     = 0,
-} ChannelViewAction;
-
-@interface MUChannelViewController () {
-    MKChannel      *_channel;
-    MKServerModel  *_model;
+@interface MUChannelViewController () <MKServerModelDelegate> {
+    NSMutableArray  *_users;
+    MKChannel       *_channel;
+    MKServerModel   *_model;
 }
+- (UIView *) stateAccessoryViewForUser:(MKUser *)user;
 @end
 
 @implementation MUChannelViewController
 
-- (id) initWithChannel:(MKChannel *)channel serverModel:(MKServerModel *)model {
-	self = [super initWithNibName:@"ChannelViewController" bundle:nil];
-	if (! self)
-		return nil;
-
-	_channel = channel;
-	_model = model;
-
+- (id) initWithServerModel:(MKServerModel *)model {
+	if ((self = [super initWithStyle:UITableViewStylePlain])) {
+        _model = [model retain];
+    }
 	return self;
 }
 
 - (void) dealloc {
+    [_model release];
 	[super dealloc];
 }
 
-#pragma mark -
-
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 - (void) viewWillAppear:(BOOL)flag {
-	[[self navigationItem] setTitle:[_channel channelName]];
+    [_model addDelegate:self];
 
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
-	[[self navigationItem] setRightBarButtonItem:doneButton];
-	[doneButton release];
+    _channel = [[_model connectedUser] channel];
+    _users = [[_channel users] mutableCopy];
+
+    [self.tableView reloadData];
 }
+     
+- (void) viewWillDisappear:(BOOL)animated {
+    [_model removeDelegate:self];
 
-- (void) viewDidAppear:(BOOL)animated {
- }
+    _channel = nil;
+
+    [_users release];
+    _users = nil;
+
+    [self.tableView reloadData];
+}
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
+#pragma mark - MKServerModel Delegate
+
+// A user joined the server.
+- (void) serverModel:(MKServerModel *)server userJoined:(MKUser *)user {
+    // fixme(mkrautz): Implement.
+}
+
+// A user left the server.
+- (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
+	if (_channel == nil)
+        return;
+
+	NSUInteger userIndex = [_users indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[_users removeObjectAtIndex:userIndex];
+		[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+                              withRowAnimation:UITableViewRowAnimationRight];
+	}
+}
+
+// A user moved channel
+- (void) serverModel:(MKServerModel *)server userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
+	if (_channel == nil)
+		return;
+    
+	// Was this ourselves, or someone else?
+	if (user != [server connectedUser]) {
+		// Did the user join this channel?
+		if (chan == _channel) {
+			[_users addObject:user];
+			NSUInteger userIndex = [_users indexOfObject:user];
+			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationLeft];
+            // Or did he leave it?
+		} else {
+			NSUInteger userIndex = [_users indexOfObject:user];
+			if (userIndex != NSNotFound) {
+				[_users removeObjectAtIndex:userIndex];
+				[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]]
+                                      withRowAnimation:UITableViewRowAnimationRight];
+			}
+		}
+        
+        // We were moved. We need to redo the array holding the users of the
+        // current channel.
+	} else {
+		NSUInteger numUsers = [_users count];
+		[_users release];
+		_users = nil;
+        
+		NSMutableArray *array = [[NSMutableArray alloc] init];
+		for (NSUInteger i = 0; i < numUsers; i++) {
+			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+		}
+		[[self tableView] deleteRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationRight];
+        
+		_channel = chan;
+		_users = [[chan users] mutableCopy];
+        
+		[array removeAllObjects];
+		numUsers = [_users count];
+		for (NSUInteger i = 0; i < numUsers; i++) {
+			[array addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+		}
+		[self.tableView insertRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationLeft];
+		[array release];
+	}
+}
+
+// A channel was added.
+- (void) serverModel:(MKServerModel *)server channelAdded:(MKChannel *)channel {
+	NSLog(@"ServerViewController: channelAdded.");
+}
+
+// A channel was removed.
+- (void) serverModel:(MKServerModel *)server channelRemoved:(MKChannel *)channel {
+	NSLog(@"ServerViewController: channelRemoved.");
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMute:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMutedAndDeafened:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMuteAndDeafen:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+	NSUInteger userIndex = [_users indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+// --
+
+- (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ muted and deafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unmuted and undeafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userMuted:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ muted by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unmuted by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userDeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ deafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ undeafened by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userSuppressed:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ suppressed by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userUnsuppressed:(MKUser *)user byUser:(MKUser *)actor {
+	NSLog(@"%@ unsuppressed by %@", user, actor);
+}
+
+- (void) serverModel:(MKServerModel *)model userMuteStateChanged:(MKUser *)user {
+	NSInteger userIndex = [_users indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+// --
+
+- (void) serverModel:(MKServerModel *)model userPrioritySpeakerChanged:(MKUser *)user {
+	NSInteger userIndex = [_users indexOfObject:user];
+	if (userIndex != NSNotFound) {
+		[[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+	}
+}
+
+- (void) serverModel:(MKServerModel *)server userTalkStateChanged:(MKUser *)user {
+	NSUInteger userIndex = [_users indexOfObject:user];
+	if (userIndex == NSNotFound)
+		return;
+    
+	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+    
+	[[cell imageView] setImage:[UIImage imageNamed:talkImageName]];
+}
+
+#pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	return 3;
+	return 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section == ChannelViewSectionSubChannels) {
-		return [[_channel channels] count];
-	} else if (section == ChannelViewSectionUsers) {
-		return [[_channel users] count];
-	} else if (section == ChannelViewSectionActions) {
-		return 1;
-	}
-
-	return 0;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == ChannelViewSectionSubChannels) {
-		return @"Subchannels";
-	} else if (section == ChannelViewSectionUsers) {
-		return @"Users";
-	} else if (section == ChannelViewSectionActions) {
-		return @"Actions";
-	}
-
-	return nil;
+	return [_users count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"channelViewCell";
+    static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	ChannelViewSection section = [indexPath indexAtPosition:0];
-	NSUInteger row = [indexPath indexAtPosition:1];
+	NSUInteger row = [indexPath row];
+	MKUser *user = [_users objectAtIndex:row];
 
-	if (section == ChannelViewSectionSubChannels) {
-		MKChannel *childChannel = [[_channel channels] objectAtIndex:row];
-		cell.imageView.image = [UIImage imageNamed:@"channel"];
-		cell.textLabel.text = [childChannel channelName];
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-	} else if (section == ChannelViewSectionUsers) {
-		MKUser *channelUser = [[_channel users] objectAtIndex:row];
-		cell.imageView.image = [UIImage imageNamed:@"talking_off"];
-		cell.textLabel.text = [channelUser userName];
-		cell.accessoryType = UITableViewCellAccessoryNone;
-	} else if (section == ChannelViewSectionActions) {
-		// Join Channel
-		if (row == 0) {
-			cell.textLabel.text = @"Join Channel";
-		}
+	cell.textLabel.text = [user userName];
+	if ([_model connectedUser] == user) {
+		cell.textLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+	} else {
+		cell.textLabel.font = [UIFont systemFontOfSize:18.0f];
 	}
+
+	MKTalkState talkState = [user talkState];
+	NSString *talkImageName = nil;
+	if (talkState == MKTalkStatePassive)
+		talkImageName = @"talking_off";
+	else if (talkState == MKTalkStateTalking)
+		talkImageName = @"talking_on";
+	else if (talkState == MKTalkStateWhispering)
+		talkImageName = @"talking_whisper";
+	else if (talkState == MKTalkStateShouting)
+		talkImageName = @"talking_alt";
+	cell.imageView.image = [UIImage imageNamed:talkImageName];
+
+	cell.accessoryView = [self stateAccessoryViewForUser:user];
 
     return cell;
 }
 
-#pragma mark Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	ChannelViewSection section = [indexPath indexAtPosition:0];
-	NSUInteger row = [indexPath indexAtPosition:1];
-
-	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-	if (section == ChannelViewSectionSubChannels) {
-		MKChannel *childChannel = [[_channel channels] objectAtIndex:row];
-		MUChannelViewController *channelView = [[MUChannelViewController alloc] initWithChannel:childChannel serverModel:_model];
-		[self.navigationController pushViewController:channelView animated:YES];
-		[channelView release];
-	} else if (section == ChannelViewSectionActions) {
-		if (row == ChannelViewActionJoinChannel) {
-			[_model joinChannel:_channel];
-			[[self navigationController] dismissModalViewControllerAnimated:YES];
-		}
+- (UIView *) stateAccessoryViewForUser:(MKUser *)user {
+	const CGFloat iconHeight = 28.0f;
+	const CGFloat iconWidth = 22.0f;
+    
+	NSMutableArray *states = [[NSMutableArray alloc] init];
+	if ([user isAuthenticated])
+		[states addObject:@"authenticated"];
+	if ([user isSelfDeafened])
+		[states addObject:@"deafened_self"];
+	if ([user isSelfMuted])
+		[states addObject:@"muted_self"];
+	if ([user isMuted])
+		[states addObject:@"muted_server"];
+	if ([user isDeafened])
+		[states addObject:@"deafened_server"];
+	if ([user isLocalMuted])
+		[states addObject:@"muted_local"];
+	if ([user isSuppressed])
+		[states addObject:@"muted_suppressed"];
+	if ([user isPrioritySpeaker])
+		[states addObject:@"priorityspeaker"];
+    
+	CGFloat widthOffset = [states count] * iconWidth;
+	UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
+	for (NSString *imageName in states) {
+		UIImage *img = [UIImage imageNamed:imageName];
+		UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+		CGFloat ypos = (iconHeight - img.size.height)/2.0f;
+		CGFloat xpos = (iconWidth - img.size.width)/2.0f;
+		widthOffset -= iconWidth - xpos;
+		imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
+		[stateView addSubview:imgView];
 	}
+
+	[states release];
+	return [stateView autorelease];
 }
 
 #pragma mark -
-#pragma mark Target/actions
+#pragma mark UITableView delegate
 
-- (void) doneButtonClicked:(id)button {
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	return 44.0f;
 }
 
 @end

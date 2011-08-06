@@ -160,10 +160,9 @@
 			[serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
         }
         
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:serverRoot];
-		[[self navigationController] presentModalViewController:nav animated:YES];
+        
+		[[self navigationController] presentModalViewController:serverRoot animated:YES];
 		[serverRoot release];
-		[nav release];
         
         // Edit
 	} else if (index == 1) {

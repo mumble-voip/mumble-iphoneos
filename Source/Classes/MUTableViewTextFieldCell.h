@@ -35,6 +35,9 @@
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void) dealloc;
 
+- (void) setTarget:(id)target;
+- (id) target;
+
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated;
 
 - (void) setLabel:(NSString *)labelText;

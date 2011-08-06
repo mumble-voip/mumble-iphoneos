@@ -39,7 +39,6 @@
 
 @interface MUPreferencesViewController ()
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
-- (void) audioDuckingChanged:(UISwitch *)duckSwitch;
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch;
 @end
 

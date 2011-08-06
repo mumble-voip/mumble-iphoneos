@@ -47,51 +47,29 @@
 
 - (id) initWithConnection:(MKConnection *)conn {
 	if (self = [super initWithCertificates:[conn peerCertificates]]) {
-		_conn = conn;
+		_conn = [conn retain];
 	}
 	return self;
 }
 
 - (void) dealloc {
+    [_conn release];
 	[super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)];
-	self.navigationItem.leftBarButtonItem = cancelButton;
-	[cancelButton release];
-
-	UIBarButtonItem *ignoreButton = [[UIBarButtonItem alloc] initWithTitle:@"Ignore" style:UIBarButtonItemStyleBordered target:self action:@selector(ignoreClicked:)];
-	UIBarButtonItem *trustButton = [[UIBarButtonItem alloc] initWithTitle:@"Trust" style:UIBarButtonItemStyleDone target:self action:@selector(trustClicked:)];
-	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-	[self setToolbarItems:[NSArray arrayWithObjects:ignoreButton, flexSpace, trustButton, nil]];
-	[self.navigationController setToolbarHidden:NO animated:YES];
-	[trustButton release];
-	[ignoreButton release];
-	[flexSpace release];
+	UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissClicked:)];
+	self.navigationItem.leftBarButtonItem = dismissButton;
+	[dismissButton release];
 }
 
 #pragma mark -
 #pragma mark Actions
 
-- (void) cancelClicked:(id)sender {
+- (void) dismissClicked:(id)sender {
 	[_conn disconnect];
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-- (void) ignoreClicked:(id)sender {
-	[_conn setIgnoreSSLVerification:YES];
-	[_conn reconnect];
-	[self dismissModalViewControllerAnimated:YES];
-}
-
-- (void) trustClicked:(id)sender {
-	NSString *digest = [[[_conn peerCertificates] objectAtIndex:0] hexDigest];
-	[MUDatabase storeDigest:digest forServerWithHostname:[_conn hostname] port:[_conn port]];
-	[_conn setIgnoreSSLVerification:YES];
-	[_conn reconnect];
 	[self dismissModalViewControllerAnimated:YES];
 }
 

@@ -44,7 +44,6 @@
     NSInteger    _aboutContribButton;
     NSInteger    _aboutLegalButton;
 }
-- (void) presentAboutDialog;
 @end
 
 

@@ -11,6 +11,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
+		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
+		280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */; };
 		280EDE8912FE1E7C00774B3B /* MUServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */; };
 		282F6A2513620BD5008F555B /* MUCertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 282F6A2413620BD5008F555B /* MUCertificateController.m */; };
 		2830A18C11CE983B00970A41 /* MUDiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* MUDiagnosticsViewController.m */; };
@@ -34,9 +36,7 @@
 		287639F911D29D99009DB8B6 /* MUCertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */; };
 		287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */; };
 		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
-		287852DB117BC866009E26B1 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287852DA117BC866009E26B1 /* MUServerRootViewController.m */; };
 		287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
-		287A60591176201E00DD4FFB /* MUChannelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287A60571176201E00DD4FFB /* MUChannelViewController.xib */; };
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
@@ -50,7 +50,7 @@
 		28942C0F1245476400C63A07 /* MUCertificatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942C0E1245476400C63A07 /* MUCertificatePickerViewController.m */; };
 		28942D7C12456F9200C63A07 /* MUCertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* MUCertificateCreationView.m */; };
 		28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28990AB0132FDA540034B406 /* libMumbleKit.a */; };
-		289CBA18125693040015E58E /* MUChannelNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* MUChannelNavigationViewController.m */; };
+		289CBA18125693040015E58E /* MUServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289CBA17125693040015E58E /* MUServerViewController.m */; };
 		289D254C11BC28BC00E39F2C /* MULanServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 289D254B11BC28BC00E39F2C /* MULanServerListController.m */; };
 		28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* MULogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* MULogEntry.m */; };
@@ -167,6 +167,10 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* MUPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUPreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUPreferencesViewController.m; sourceTree = "<group>"; };
+		280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewController.h; sourceTree = "<group>"; };
+		280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewController.m; sourceTree = "<group>"; };
+		280D9ADB13EB5ACB003B64A0 /* MUConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUConnectionViewController.h; sourceTree = "<group>"; };
+		280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUConnectionViewController.m; sourceTree = "<group>"; };
 		280EDE8712FE1E7C00774B3B /* MUServerRootViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewControllerPad.h; sourceTree = "<group>"; };
 		280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewControllerPad.m; sourceTree = "<group>"; };
 		282F6A2313620BD5008F555B /* MUCertificateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateController.h; sourceTree = "<group>"; };
@@ -206,11 +210,8 @@
 		287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCreationProgressView.m; sourceTree = "<group>"; };
 		287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCreationProgressView.xib; sourceTree = "<group>"; };
 		28763A4411D2AA91009DB8B6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		287852D9117BC866009E26B1 /* MUServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewController.h; sourceTree = "<group>"; };
-		287852DA117BC866009E26B1 /* MUServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* MUChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
-		287A60571176201E00DD4FFB /* MUChannelViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUChannelViewController.xib; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
 		287BA28F11B96C960010E031 /* MUDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDatabase.m; sourceTree = "<group>"; };
 		287BA33911B97C470010E031 /* MUFavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServer.h; sourceTree = "<group>"; };
@@ -232,8 +233,8 @@
 		28942D7A12456F9200C63A07 /* MUCertificateCreationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateCreationView.h; sourceTree = "<group>"; };
 		28942D7B12456F9200C63A07 /* MUCertificateCreationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCreationView.m; sourceTree = "<group>"; };
 		28990AB0132FDA540034B406 /* libMumbleKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libMumbleKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		289CBA16125693040015E58E /* MUChannelNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelNavigationViewController.h; sourceTree = "<group>"; };
-		289CBA17125693040015E58E /* MUChannelNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelNavigationViewController.m; sourceTree = "<group>"; };
+		289CBA16125693040015E58E /* MUServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerViewController.h; sourceTree = "<group>"; };
+		289CBA17125693040015E58E /* MUServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerViewController.m; sourceTree = "<group>"; };
 		289D254A11BC28BC00E39F2C /* MULanServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULanServerListController.h; sourceTree = "<group>"; };
 		289D254B11BC28BC00E39F2C /* MULanServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULanServerListController.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* MULogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogViewController.h; sourceTree = "<group>"; };
@@ -379,11 +380,6 @@
 				285C9EEF116BF5B100A9A6A7 /* MUWelcomeScreenPad.h */,
 				285C9EF0116BF5B100A9A6A7 /* MUWelcomeScreenPad.m */,
 				288DC2BC12FD9C810044DEF5 /* MUWelcomeScreenPad.xib */,
-				287A60551176201E00DD4FFB /* MUChannelViewController.h */,
-				287A60561176201E00DD4FFB /* MUChannelViewController.m */,
-				287A60571176201E00DD4FFB /* MUChannelViewController.xib */,
-				287852D9117BC866009E26B1 /* MUServerRootViewController.h */,
-				287852DA117BC866009E26B1 /* MUServerRootViewController.m */,
 				280EDE8712FE1E7C00774B3B /* MUServerRootViewControllerPad.h */,
 				280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */,
 				28A4CCD1117E064B006EB479 /* MULogViewController.h */,
@@ -402,10 +398,16 @@
 				2858DBA21233E31B000D6F75 /* MUVersionChecker.m */,
 				288B55DE1252903300563A28 /* MUServerCertificateTrustViewController.h */,
 				288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */,
-				289CBA16125693040015E58E /* MUChannelNavigationViewController.h */,
-				289CBA17125693040015E58E /* MUChannelNavigationViewController.m */,
 				28F0198F1364585B00E402F6 /* MUServerCell.h */,
 				28F019901364585B00E402F6 /* MUServerCell.m */,
+				280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */,
+				280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */,
+				289CBA16125693040015E58E /* MUServerViewController.h */,
+				289CBA17125693040015E58E /* MUServerViewController.m */,
+				287A60551176201E00DD4FFB /* MUChannelViewController.h */,
+				287A60561176201E00DD4FFB /* MUChannelViewController.m */,
+				280D9ADB13EB5ACB003B64A0 /* MUConnectionViewController.h */,
+				280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -708,7 +710,6 @@
 				2861C282116BE905002B8514 /* MUWelcomeScreenPhone.xib in Resources */,
 				285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */,
-				287A60591176201E00DD4FFB /* MUChannelViewController.xib in Resources */,
 				287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */,
 				2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */,
 				288DC2BD12FD9C810044DEF5 /* MUWelcomeScreenPad.xib in Resources */,
@@ -820,7 +821,6 @@
 				2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */,
 				2861C281116BE905002B8514 /* MUWelcomeScreenPhone.m in Sources */,
 				285C9EF2116BF5B100A9A6A7 /* MUWelcomeScreenPad.m in Sources */,
-				287852DB117BC866009E26B1 /* MUServerRootViewController.m in Sources */,
 				28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */,
 				28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */,
 				28F9174811B946250030D649 /* FMDatabase.m in Sources */,
@@ -844,12 +844,14 @@
 				28942D7C12456F9200C63A07 /* MUCertificateCreationView.m in Sources */,
 				284BBBA512495C4400366F4C /* MUApplication.m in Sources */,
 				288B55E01252903300563A28 /* MUServerCertificateTrustViewController.m in Sources */,
-				289CBA18125693040015E58E /* MUChannelNavigationViewController.m in Sources */,
+				289CBA18125693040015E58E /* MUServerViewController.m in Sources */,
 				2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */,
 				280EDE8912FE1E7C00774B3B /* MUServerRootViewControllerPad.m in Sources */,
 				282F6A2513620BD5008F555B /* MUCertificateController.m in Sources */,
 				28F019911364585C00E402F6 /* MUServerCell.m in Sources */,
 				28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */,
+				280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */,
+				280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

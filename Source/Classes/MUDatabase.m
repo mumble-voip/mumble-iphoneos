@@ -34,7 +34,6 @@
 static FMDatabase *db = nil;
 
 @interface MUDatabase ()
-+ (BOOL) enableForeignKeySupport;
 @end
 
 @implementation MUDatabase

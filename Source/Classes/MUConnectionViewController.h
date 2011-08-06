@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,9 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKServerModel.h>
+@class MKServerModel;
 
-@interface MUChannelNavigationViewController : UITableViewController
-- (id) initWithServerModel:(MKServerModel *)serverModel;
-- (void) dealloc;
+@interface MUConnectionViewController : UITableViewController
+- (id) initWithServerModel:(MKServerModel *)model;
 @end
