@@ -325,6 +325,7 @@
 		widthOffset -= iconWidth - xpos;
 		imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
 		[stateView addSubview:imgView];
+        [imgView release];
 	}
 
 	[states release];

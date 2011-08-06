@@ -47,6 +47,7 @@
         if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
             NSData *secData = (NSData *)SecCertificateCopyData(secCert);
             cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+            [secData release];
         }
     }
     return cert;

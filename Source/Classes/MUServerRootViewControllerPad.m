@@ -257,11 +257,6 @@
 
 	[[self navigationItem] setTitle:[_currentChannel channelName]];
 	[[self tableView] reloadData];
-	
-	
-	MUServerViewController *chanNav = [[MUServerViewController alloc] initWithServerModel:_model];
-	chanNav.view.frame = CGRectMake(200, 200, 300, 400);
-	[self.view addSubview:chanNav.view];
 }
 
 // A user joined the server.
@@ -510,6 +505,7 @@
 		widthOffset -= iconWidth - xpos;
 		imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
 		[stateView addSubview:imgView];
+        [imgView release];
 	}
 
 	[states release];

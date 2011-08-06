@@ -171,6 +171,7 @@ static FMDatabase *db = nil;
 		[fs setUserName:[res stringForColumnIndex:4]];
 		[fs setPassword:[res stringForColumnIndex:5]];
 		[favs addObject:fs];
+        [fs release];
 	}
 	[res close];
 	return [favs autorelease];

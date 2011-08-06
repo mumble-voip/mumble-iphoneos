@@ -62,6 +62,7 @@
 		[_activityIndicator startAnimating];
 		UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
 		self.navigationItem.rightBarButtonItem = rightButton;
+        [rightButton release];
 		[_activityIndicator release];
 	}
 }
