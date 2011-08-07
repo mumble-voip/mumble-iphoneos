@@ -44,7 +44,6 @@
 - (void) dealloc;
 - (id) object;
 - (NSInteger) indentLevel;
-
 @end
 
 @implementation MUChannelNavigationItem
@@ -172,10 +171,23 @@
 			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
 	} else if ([object class] == [MKUser class]) {
 		MKUser *user = object;
-		cell.imageView.image = [UIImage imageNamed:@"talking_off"];
+
 		cell.textLabel.text = [user userName];
 		if (user == connectedUser)
 			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        
+        MKTalkState talkState = [user talkState];
+        NSString *talkImageName = nil;
+        if (talkState == MKTalkStatePassive)
+            talkImageName = @"talking_off";
+        else if (talkState == MKTalkStateTalking)
+            talkImageName = @"talking_on";
+        else if (talkState == MKTalkStateWhispering)
+            talkImageName = @"talking_whisper";
+        else if (talkState == MKTalkStateShouting)
+            talkImageName = @"talking_alt";
+        
+        cell.imageView.image = [UIImage imageNamed:talkImageName];
 	}
 
 	cell.indentationLevel = [navItem indentLevel];

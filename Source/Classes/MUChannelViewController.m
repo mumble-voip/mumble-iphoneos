@@ -30,10 +30,13 @@
 
 #import "MUChannelViewController.h"
 
+#import <MumbleKit/MKAudio.h>
+
 @interface MUChannelViewController () <MKServerModelDelegate> {
     NSMutableArray  *_users;
     MKChannel       *_channel;
     MKServerModel   *_model;
+    BOOL            _pttState;
 }
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user;
 @end
@@ -63,8 +66,13 @@
     _users = [[_channel users] mutableCopy];
 
     [self.tableView reloadData];
+
+    UIBarButtonItem *pttButton = [[[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)] autorelease];
+    UIBarButtonItem *flexSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
+    self.toolbarItems = [NSArray arrayWithObjects:flexSpace, pttButton, flexSpace, nil];
+    self.navigationController.toolbarHidden = NO;
 }
-     
+
 - (void) viewWillDisappear:(BOOL)animated {
     [_model removeDelegate:self];
 
@@ -74,6 +82,7 @@
     _users = nil;
 
     [self.tableView reloadData];
+    self.navigationController.toolbarHidden = YES;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -232,6 +241,8 @@
 	NSUInteger userIndex = [_users indexOfObject:user];
 	if (userIndex == NSNotFound)
 		return;
+
+    NSLog(@"UserTalkStateChanged!");
     
 	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 	MKTalkState talkState = [user talkState];
@@ -337,6 +348,13 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return 44.0f;
+}
+
+#pragma mark - PushToTalk
+
+- (void) pushToTalkClicked:(id)sender {
+    _pttState = !_pttState;
+    [[MKAudio sharedAudio] setForceTransmit:_pttState];
 }
 
 @end
