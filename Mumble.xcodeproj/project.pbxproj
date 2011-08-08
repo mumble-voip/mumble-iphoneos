@@ -14,8 +14,13 @@
 		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
 		280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */; };
 		280EDE8912FE1E7C00774B3B /* MUServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */; };
+		28234D5F13F09148006B830D /* talkbutton_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5B13F09148006B830D /* talkbutton_off.png */; };
+		28234D6013F09148006B830D /* talkbutton_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5C13F09148006B830D /* talkbutton_off@2x.png */; };
+		28234D6113F09148006B830D /* talkbutton_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5D13F09148006B830D /* talkbutton_on.png */; };
+		28234D6213F09148006B830D /* talkbutton_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5E13F09148006B830D /* talkbutton_on@2x.png */; };
 		282F6A2513620BD5008F555B /* MUCertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 282F6A2413620BD5008F555B /* MUCertificateController.m */; };
 		2830A18C11CE983B00970A41 /* MUDiagnosticsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2830A18B11CE983B00970A41 /* MUDiagnosticsViewController.m */; };
+		283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */; };
 		2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */; };
 		284BBBA512495C4400366F4C /* MUApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 284BBBA412495C4400366F4C /* MUApplication.m */; };
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
@@ -173,10 +178,16 @@
 		280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUConnectionViewController.m; sourceTree = "<group>"; };
 		280EDE8712FE1E7C00774B3B /* MUServerRootViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewControllerPad.h; sourceTree = "<group>"; };
 		280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewControllerPad.m; sourceTree = "<group>"; };
+		28234D5B13F09148006B830D /* talkbutton_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talkbutton_off.png; path = Resources/talkbutton_off.png; sourceTree = "<group>"; };
+		28234D5C13F09148006B830D /* talkbutton_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talkbutton_off@2x.png"; path = "Resources/talkbutton_off@2x.png"; sourceTree = "<group>"; };
+		28234D5D13F09148006B830D /* talkbutton_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talkbutton_on.png; path = Resources/talkbutton_on.png; sourceTree = "<group>"; };
+		28234D5E13F09148006B830D /* talkbutton_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talkbutton_on@2x.png"; path = "Resources/talkbutton_on@2x.png"; sourceTree = "<group>"; };
 		282F6A2313620BD5008F555B /* MUCertificateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateController.h; sourceTree = "<group>"; };
 		282F6A2413620BD5008F555B /* MUCertificateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateController.m; sourceTree = "<group>"; };
 		2830A18A11CE983B00970A41 /* MUDiagnosticsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDiagnosticsViewController.h; sourceTree = "<group>"; };
 		2830A18B11CE983B00970A41 /* MUDiagnosticsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDiagnosticsViewController.m; sourceTree = "<group>"; };
+		283363D913EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioTransmissionPreferencesViewController.h; sourceTree = "<group>"; };
+		283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioTransmissionPreferencesViewController.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* MUCertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificatePreferencesViewController.h; sourceTree = "<group>"; };
 		2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificatePreferencesViewController.m; sourceTree = "<group>"; };
 		284BBBA312495C4400366F4C /* MUApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUApplication.h; sourceTree = "<group>"; };
@@ -430,6 +441,8 @@
 				2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */,
 				2830A18A11CE983B00970A41 /* MUDiagnosticsViewController.h */,
 				2830A18B11CE983B00970A41 /* MUDiagnosticsViewController.m */,
+				283363D913EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.h */,
+				283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -490,6 +503,10 @@
 		28DC1C1213DE59120037CDC2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				28234D5B13F09148006B830D /* talkbutton_off.png */,
+				28234D5C13F09148006B830D /* talkbutton_off@2x.png */,
+				28234D5D13F09148006B830D /* talkbutton_on.png */,
+				28234D5E13F09148006B830D /* talkbutton_on@2x.png */,
 				28DC1C1313DE596B0037CDC2 /* authenticated.png */,
 				28DC1C1413DE596B0037CDC2 /* authenticated@2x.png */,
 				28DC1C1513DE596B0037CDC2 /* certificate.svg */,
@@ -786,6 +803,10 @@
 				28DC1CA213DE596B0037CDC2 /* talking_whisper@2x.png in Resources */,
 				28DC1CA313DE596B0037CDC2 /* up.png in Resources */,
 				28DC1CA413DE596B0037CDC2 /* up@2x.png in Resources */,
+				28234D5F13F09148006B830D /* talkbutton_off.png in Resources */,
+				28234D6013F09148006B830D /* talkbutton_off@2x.png in Resources */,
+				28234D6113F09148006B830D /* talkbutton_on.png in Resources */,
+				28234D6213F09148006B830D /* talkbutton_on@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -852,6 +873,7 @@
 				28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */,
 				280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */,
 				280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */,
+				283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

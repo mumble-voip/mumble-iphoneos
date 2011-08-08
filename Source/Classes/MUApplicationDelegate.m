@@ -121,8 +121,15 @@
 - (void) setupAudio {
 	// Set up a good set of default audio settings.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
 	MKAudioSettings settings;
+    if ([[defaults stringForKey:@"xmit"] isEqualToString:@"vad"])
+        settings.transmitType = MKTransmitTypeVAD;
+    else if ([[defaults stringForKey:@"xmit"] isEqualToString:@"continuous"])
+        settings.transmitType = MKTransmitTypeContinuous;
+    else if ([[defaults stringForKey:@"xmit"] isEqualToString:@"ptt"])
+        settings.transmitType = MKTransmitTypeToggle;
+    else
+        settings.transmitType = MKTransmitTypeVAD;
 	settings.codec = MKCodecFormatCELT;
 	settings.quality = 24000;
 	settings.audioPerPacket = 10;

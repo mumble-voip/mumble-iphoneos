@@ -37,6 +37,7 @@
     MKChannel       *_channel;
     MKServerModel   *_model;
     BOOL            _pttState;
+    UIButton        *_talkButton;
 }
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user;
 @end
@@ -67,10 +68,29 @@
 
     [self.tableView reloadData];
 
-    UIBarButtonItem *pttButton = [[[UIBarButtonItem alloc] initWithTitle:@"PushToTalk" style:UIBarButtonItemStyleBordered target:self action:@selector(pushToTalkClicked:)] autorelease];
-    UIBarButtonItem *flexSpace = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil] autorelease];
-    self.toolbarItems = [NSArray arrayWithObjects:flexSpace, pttButton, flexSpace, nil];
-    self.navigationController.toolbarHidden = NO;
+    if ([[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
+        UIImage *onImage = [UIImage imageNamed:@"talkbutton_on"];
+        UIImage *offImage = [UIImage imageNamed:@"talkbutton_off"];
+
+        UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+        CGRect windowRect = [window frame];
+        CGRect buttonRect = windowRect;
+        buttonRect.size = onImage.size;
+        buttonRect.origin.y = windowRect.size.height - (buttonRect.size.height + 40);
+        buttonRect.origin.x = (windowRect.size.width - buttonRect.size.width)/2;
+
+        _talkButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _talkButton.frame = buttonRect;
+        [_talkButton setBackgroundImage:onImage forState:UIControlStateHighlighted];
+        [_talkButton setBackgroundImage:offImage forState:UIControlStateNormal];
+        [_talkButton setOpaque:NO];
+        [_talkButton setAlpha:0.25f];
+        [window addSubview:_talkButton];
+
+        [_talkButton addTarget:self action:@selector(talkOn:) forControlEvents:UIControlEventTouchDown];
+        [_talkButton addTarget:self action:@selector(talkOff:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+    }
+    
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -81,8 +101,12 @@
     [_users release];
     _users = nil;
 
+    if (_talkButton) {
+        [_talkButton removeFromSuperview];
+        _talkButton = nil;
+    }
+    
     [self.tableView reloadData];
-    self.navigationController.toolbarHidden = YES;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -352,9 +376,14 @@
 
 #pragma mark - PushToTalk
 
-- (void) pushToTalkClicked:(id)sender {
-    _pttState = !_pttState;
-    [[MKAudio sharedAudio] setForceTransmit:_pttState];
+- (void) talkOn:(UIButton *)button {
+    [button setAlpha:1.0f];
+    [[MKAudio sharedAudio] setForceTransmit:YES];
+}
+
+- (void) talkOff:(UIButton *)button {
+    [button setAlpha:0.25f];
+    [[MKAudio sharedAudio] setForceTransmit:NO];
 }
 
 @end

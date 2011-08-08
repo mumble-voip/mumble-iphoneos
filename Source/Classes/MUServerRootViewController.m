@@ -74,6 +74,10 @@
     [_username release];
     [_password release];
 
+    [_serverView release];
+    [_channelView release];
+    [_connectionView release];
+    
     [_model release];
     [_connection disconnect];
     [_connection release];

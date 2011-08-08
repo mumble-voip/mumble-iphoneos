@@ -94,7 +94,7 @@
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {
 	if ((self = [super initWithStyle:UITableViewStylePlain])) {
-		_serverModel = serverModel;
+		_serverModel = [serverModel retain];
 		[_serverModel addDelegate:self];
 	}
 	return self;
@@ -102,6 +102,7 @@
 
 - (void) dealloc {
 	[_serverModel removeDelegate:self];
+    [_serverModel release];
 	[super dealloc];
 }
 

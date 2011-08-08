@@ -32,6 +32,7 @@
 #import "MUApplication.h"
 #import "MUApplicationDelegate.h"
 #import "MUCertificatePreferencesViewController.h"
+#import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUDiagnosticsViewController.h"
 #import "MUCertificateController.h"
 
@@ -64,8 +65,8 @@
 #pragma mark Looks
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setTitle:@"Preferences"];
-	[[self tableView] reloadData];
+    self.title = @"Preferences";
+	[self.tableView reloadData];
 }
 
 #pragma mark -
@@ -78,7 +79,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	// Audio
 	if (section == 0) {
-		return 1;
+		return 2;
 	// Network
 	} else if (section == 1) {
 		return 2;
@@ -112,6 +113,23 @@
 			[volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
 			[volSlider release];
 		}
+        // Transmit method
+        if ([indexPath row] == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioXmitCell"];
+            if (cell == nil)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioXmitCell"] autorelease];
+            cell.textLabel.text = @"Transmission";
+            NSString *xmit = [[NSUserDefaults standardUserDefaults] stringForKey:@"xmit"];
+            if ([xmit isEqualToString:@"vad"]) {
+                cell.detailTextLabel.text = @"Voice Activated";
+            } else if ([xmit isEqualToString:@"ptt"]) {
+                cell.detailTextLabel.text = @"Push-to-talk";
+            } else if ([xmit isEqualToString:@"continuous"]) {
+                cell.detailTextLabel.text = @"Continuous";
+            }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
+        }
 
 	// Network
 	} else if ([indexPath section] == 1) {
@@ -163,7 +181,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
-	if ([indexPath section] == 1) { // Network
+    if (indexPath.section == 0) { // Audio
+        if (indexPath.row == 1) { // Transmission
+            MUAudioTransmissionPreferencesViewController *audioXmit = [[MUAudioTransmissionPreferencesViewController alloc] init];
+            [self.navigationController pushViewController:audioXmit animated:YES];
+            [audioXmit release];
+        }
+    } else if ([indexPath section] == 1) { // Network
 		if ([indexPath row] == 1) { // Certificates
 			MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
 			[self.navigationController pushViewController:certPref animated:YES];
