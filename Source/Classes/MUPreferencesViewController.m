@@ -115,11 +115,11 @@
 		}
         // Transmit method
         if ([indexPath row] == 1) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioXmitCell"];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioTransmitCell"];
             if (cell == nil)
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioXmitCell"] autorelease];
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioTransmitCell"] autorelease];
             cell.textLabel.text = @"Transmission";
-            NSString *xmit = [[NSUserDefaults standardUserDefaults] stringForKey:@"xmit"];
+            NSString *xmit = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
             if ([xmit isEqualToString:@"vad"]) {
                 cell.detailTextLabel.text = @"Voice Activated";
             } else if ([xmit isEqualToString:@"ptt"]) {
@@ -135,7 +135,7 @@
 	} else if ([indexPath section] == 1) {
 		if ([indexPath row] == 0) {
 			UISwitch *tcpSwitch = [[UISwitch alloc] init];
-			[tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"ForceTCP"]];
+			[tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
 			[[cell textLabel] setText:@"Force TCP"];
 			[cell setAccessoryView:tcpSwitch];
 			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -210,7 +210,7 @@
 }
 
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch {
-	[[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"ForceTCP"];
+	[[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"NetworkForceTCP"];
 }
 
 @end

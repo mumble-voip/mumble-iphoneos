@@ -88,7 +88,7 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"xmit"];
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     cell.accessoryType = UITableViewCellAccessoryNone;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
@@ -130,11 +130,11 @@
         }
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         if (indexPath.row == 0) {
-            [[NSUserDefaults standardUserDefaults] setObject:@"vad" forKey:@"xmit"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"vad" forKey:@"AudioTransmitMethod"];
         } else if (indexPath.row == 1) {
-            [[NSUserDefaults standardUserDefaults] setObject:@"ptt" forKey:@"xmit"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"ptt" forKey:@"AudioTransmitMethod"];
         } else if (indexPath.row == 2) {
-            [[NSUserDefaults standardUserDefaults] setObject:@"continuous" forKey:@"xmit"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"continuous" forKey:@"AudioTransmitMethod"];
         }
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

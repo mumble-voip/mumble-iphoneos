@@ -58,6 +58,15 @@
 
 	[window makeKeyAndVisible];
 
+    // Register default settings
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                // Audio
+                                                                [NSNumber numberWithFloat:1.0f],   @"AudioOutputVolume",
+                                                                @"vad",                            @"AudioTransmitMethod",
+                                                                // Network
+                                                                [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
+                                                             nil]];
+    
 	[self reloadPreferences];
 	[MUDatabase initializeDatabase];
 
@@ -122,11 +131,11 @@
 	// Set up a good set of default audio settings.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	MKAudioSettings settings;
-    if ([[defaults stringForKey:@"xmit"] isEqualToString:@"vad"])
+    if ([[defaults stringForKey:@"AudioTransmitMethod"] isEqualToString:@"vad"])
         settings.transmitType = MKTransmitTypeVAD;
-    else if ([[defaults stringForKey:@"xmit"] isEqualToString:@"continuous"])
+    else if ([[defaults stringForKey:@"AudioTransmitMethod"] isEqualToString:@"continuous"])
         settings.transmitType = MKTransmitTypeContinuous;
-    else if ([[defaults stringForKey:@"xmit"] isEqualToString:@"ptt"])
+    else if ([[defaults stringForKey:@"AudioTransmitMethod"] isEqualToString:@"ptt"])
         settings.transmitType = MKTransmitTypeToggle;
     else
         settings.transmitType = MKTransmitTypeVAD;
