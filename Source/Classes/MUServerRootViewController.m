@@ -144,7 +144,12 @@
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    // On iPad, we support all interface orientations.
+	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+		return YES;
+	}
+
+	return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 - (void) segmentChanged:(id)sender {

@@ -50,7 +50,7 @@
 @implementation MUWelcomeScreenPad
 
 - (id) init {
-	self = [super initWithNibName:@"WelcomeScreenPad" bundle:nil];
+	self = [super initWithNibName:@"MUWelcomeScreenPad" bundle:nil];
 	if (self == nil)
 		return nil;
     

@@ -40,6 +40,7 @@
     UIButton        *_talkButton;
 }
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user;
+- (void) repositionTalkButton;
 @end
 
 @implementation MUChannelViewController
@@ -89,6 +90,9 @@
 
         [_talkButton addTarget:self action:@selector(talkOn:) forControlEvents:UIControlEventTouchDown];
         [_talkButton addTarget:self action:@selector(talkOff:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositionTalkButton) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        [self repositionTalkButton];
     }
     
 }
@@ -104,6 +108,8 @@
     if (_talkButton) {
         [_talkButton removeFromSuperview];
         _talkButton = nil;
+
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     }
     
     [self.tableView reloadData];
@@ -375,6 +381,49 @@
 }
 
 #pragma mark - PushToTalk
+
+- (void) repositionTalkButton {
+    UIDevice *device = [UIDevice currentDevice];
+    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
+    CGRect windowRect = window.frame;
+    CGRect buttonRect;
+    CGSize buttonSize;
+
+    UIImage *onImage = [UIImage imageNamed:@"talkbutton_on"];
+    buttonRect.size = onImage.size;
+    buttonRect.origin = CGPointMake(0, 0);
+    _talkButton.transform = CGAffineTransformIdentity;
+    buttonSize = onImage.size;
+    buttonRect.size = buttonSize;
+
+
+    UIDeviceOrientation orientation = device.orientation;
+    if (orientation == UIDeviceOrientationLandscapeLeft) {
+        _talkButton.transform = CGAffineTransformMakeRotation(M_PI_2);
+        buttonRect = _talkButton.frame;
+        buttonRect.origin.y = (windowRect.size.height - buttonSize.width)/2;
+        buttonRect.origin.x = 40;
+        _talkButton.frame = buttonRect;
+    } else if (orientation == UIDeviceOrientationLandscapeRight) {
+        _talkButton.transform = CGAffineTransformMakeRotation(-M_PI_2);
+        buttonRect = _talkButton.frame;
+        buttonRect.origin.y = (windowRect.size.height - buttonSize.width)/2;
+        buttonRect.origin.x = windowRect.size.width - (buttonSize.height + 40);
+        _talkButton.frame = buttonRect;
+    } else if (orientation == UIDeviceOrientationPortrait) {
+        _talkButton.transform = CGAffineTransformMakeRotation(0.0f);
+        buttonRect = _talkButton.frame;
+        buttonRect.origin.y = windowRect.size.height - (buttonSize.height + 40);
+        buttonRect.origin.x = (windowRect.size.width - buttonSize.width)/2;
+        _talkButton.frame = buttonRect;
+    } else if (orientation == UIDeviceOrientationPortraitUpsideDown) {
+        _talkButton.transform = CGAffineTransformMakeRotation(M_PI);
+        buttonRect = _talkButton.frame;
+        buttonRect.origin.y = 40;
+        buttonRect.origin.x = (windowRect.size.width - buttonSize.width)/2;
+        _talkButton.frame = buttonRect;
+    }
+}
 
 - (void) talkOn:(UIButton *)button {
     [button setAlpha:1.0f];
