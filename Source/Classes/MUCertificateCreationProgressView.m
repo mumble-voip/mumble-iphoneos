@@ -44,7 +44,7 @@
 @implementation MUCertificateCreationProgressView
 
 - (id) initWithName:(NSString *)name email:(NSString *)email {
-	if (self = [super initWithNibName:@"CertificateCreationProgressView" bundle:nil]) {
+	if (self = [super initWithNibName:@"MUCertificateCreationProgressView" bundle:nil]) {
 		_identityName = [name retain];
 		_emailAddress = [email retain];
 		NSLog(@"name = %@, email = %@", _identityName, _emailAddress);
