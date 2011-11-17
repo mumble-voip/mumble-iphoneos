@@ -55,12 +55,14 @@
     MUChannelViewController     *_channelView;
     MUConnectionViewController  *_connectionView;
 }
+- (void) establishConnection;
+- (void) teardownConnection;
 @end
 
 @implementation MUServerRootViewController
 
 - (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
-    if ([self init]) {
+    if ([super init]) {
         _hostname = [host retain];
         _port = port;
         _username = [username retain];
@@ -77,10 +79,8 @@
     [_serverView release];
     [_channelView release];
     [_connectionView release];
-    
-    [_model release];
-    [_connection disconnect];
-    [_connection release];
+
+    [self teardownConnection];
 
     [super dealloc];
 }
@@ -114,6 +114,14 @@
     }
 
     [_connection connectToHost:_hostname port:_port];
+}
+
+- (void) teardownConnection {
+    [_model removeDelegate:self];
+    [_model release];
+    [_connection setDelegate:nil];
+    [_connection disconnect];
+    [_connection release]; 
 }
 
 #pragma mark - View lifecycle
