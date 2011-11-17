@@ -37,41 +37,41 @@
 @implementation MUAboutViewController
 
 - (id) initWithContent:(NSString *)content {
-	[self init];
+    [self init];
 
-	NSBundle *bundle = [NSBundle mainBundle];
-	NSString *file = nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *file = nil;
 
-	if ([content isEqual:@"Legal"]) {
-		[self setTitle:content];
-		file = [bundle pathForResource:content ofType:@"html"];
-	} else if ([content isEqual:@"Contributors"]) {
-		[self setTitle:content];
-		file = [bundle pathForResource:content ofType:@"html"];
-	}
+    if ([content isEqual:@"Legal"]) {
+        [self setTitle:content];
+        file = [bundle pathForResource:content ofType:@"html"];
+    } else if ([content isEqual:@"Contributors"]) {
+        [self setTitle:content];
+        file = [bundle pathForResource:content ofType:@"html"];
+    }
 
-	if (file) {
-		NSData *html = [NSData dataWithContentsOfFile:file];
-		if (html) {
-			[(UIWebView *)[self view] loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
-		}
-	}
+    if (file) {
+        NSData *html = [NSData dataWithContentsOfFile:file];
+        if (html) {
+            [(UIWebView *)[self view] loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
+        }
+    }
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
-	[[self navigationItem] setRightBarButtonItem:doneButton];
-	[doneButton release];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+    [[self navigationItem] setRightBarButtonItem:doneButton];
+    [doneButton release];
 }
 
 - (void) doneButtonClicked:(UIBarButtonItem *)doneButton {
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 @end

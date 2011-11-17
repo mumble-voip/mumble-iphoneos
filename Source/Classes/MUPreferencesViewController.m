@@ -49,16 +49,16 @@
 #pragma mark Initialization
 
 - (id) init {
-	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[[NSUserDefaults standardUserDefaults] synchronize];
-	[[MumbleApp delegate] reloadPreferences];
-	[super dealloc];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[MumbleApp delegate] reloadPreferences];
+    [super dealloc];
 }
 
 #pragma mark -
@@ -66,29 +66,29 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.title = @"Preferences";
-	[self.tableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 3;
+    return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	// Audio
-	if (section == 0) {
-		return 2;
-	// Network
-	} else if (section == 1) {
-		return 2;
-	// Beta
-	} else if (section == 2) {
-		return 1;
-	}
+    // Audio
+    if (section == 0) {
+        return 2;
+    // Network
+    } else if (section == 1) {
+        return 2;
+    // Beta
+    } else if (section == 2) {
+        return 1;
+    }
 
-	return 0;
+    return 0;
 }
 
 // Customize the appearance of table view cells.
@@ -99,20 +99,20 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	// Audio section
-	if ([indexPath section] == 0) {
-		// Volume
-		if ([indexPath row] == 0) {
-			UISlider *volSlider = [[UISlider alloc] init];
-			[volSlider setMaximumValue:1.0f];
-			[volSlider setMinimumValue:0.0f];
-			[volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
-			[[cell textLabel] setText:@"Volume"];
-			[cell setAccessoryView:volSlider];
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-			[volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-			[volSlider release];
-		}
+    // Audio section
+    if ([indexPath section] == 0) {
+        // Volume
+        if ([indexPath row] == 0) {
+            UISlider *volSlider = [[UISlider alloc] init];
+            [volSlider setMaximumValue:1.0f];
+            [volSlider setMinimumValue:0.0f];
+            [volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
+            [[cell textLabel] setText:@"Volume"];
+            [cell setAccessoryView:volSlider];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
+            [volSlider release];
+        }
         // Transmit method
         if ([indexPath row] == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioTransmitCell"];
@@ -131,55 +131,55 @@
             return cell;
         }
 
-	// Network
-	} else if ([indexPath section] == 1) {
-		if ([indexPath row] == 0) {
-			UISwitch *tcpSwitch = [[UISwitch alloc] init];
-			[tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
-			[[cell textLabel] setText:@"Force TCP"];
-			[cell setAccessoryView:tcpSwitch];
-			[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-			[tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
-			[tcpSwitch release];
-		} else if ([indexPath row] == 1) {
+    // Network
+    } else if ([indexPath section] == 1) {
+        if ([indexPath row] == 0) {
+            UISwitch *tcpSwitch = [[UISwitch alloc] init];
+            [tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
+            [[cell textLabel] setText:@"Force TCP"];
+            [cell setAccessoryView:tcpSwitch];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
+            [tcpSwitch release];
+        } else if ([indexPath row] == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
             if (cell == nil)
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
             MKCertificate *cert = [MUCertificateController defaultCertificate];
-			cell.textLabel.text = @"Certificate";
-			cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+            cell.textLabel.text = @"Certificate";
+            cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             return cell;
-		}
-	
-	// Beta
-	} else if ([indexPath section] == 2) {
-		if ([indexPath row] == 0) {
-			cell.textLabel.text = @"Diagnostics";
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		}
-	}
+        }
+    
+    // Beta
+    } else if ([indexPath section] == 2) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = @"Diagnostics";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+    }
 
     return cell;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == 0) // Audio
-		return @"Audio";
-	else if (section == 1) // Network
-		return @"Network";
-	else if (section == 2) // Beta
-		return @"Beta";
+    if (section == 0) // Audio
+        return @"Audio";
+    else if (section == 1) // Network
+        return @"Network";
+    else if (section == 2) // Beta
+        return @"Beta";
 
-	return @"Default";
+    return @"Default";
 }
 
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
     if (indexPath.section == 0) { // Audio
         if (indexPath.row == 1) { // Transmission
@@ -188,29 +188,29 @@
             [audioXmit release];
         }
     } else if ([indexPath section] == 1) { // Network
-		if ([indexPath row] == 1) { // Certificates
-			MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
-			[self.navigationController pushViewController:certPref animated:YES];
-			[certPref release];
-		}
-	} else if ([indexPath section] == 2) { // Beta
-		if ([indexPath row] == 0) {
-			MUDiagnosticsViewController *diagView = [[MUDiagnosticsViewController alloc] init];
-			[self.navigationController pushViewController:diagView animated:YES];
-			[diagView release];
-		}
-	}
+        if ([indexPath row] == 1) { // Certificates
+            MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
+            [self.navigationController pushViewController:certPref animated:YES];
+            [certPref release];
+        }
+    } else if ([indexPath section] == 2) { // Beta
+        if ([indexPath row] == 0) {
+            MUDiagnosticsViewController *diagView = [[MUDiagnosticsViewController alloc] init];
+            [self.navigationController pushViewController:diagView animated:YES];
+            [diagView release];
+        }
+    }
 }
 
 #pragma mark -
 #pragma mark Change notification
 
 - (void) audioVolumeChanged:(UISlider *)volumeSlider {
-	[[NSUserDefaults standardUserDefaults] setFloat:[volumeSlider value] forKey:@"AudioOutputVolume"];
+    [[NSUserDefaults standardUserDefaults] setFloat:[volumeSlider value] forKey:@"AudioOutputVolume"];
 }
 
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch {
-	[[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"NetworkForceTCP"];
+    [[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"NetworkForceTCP"];
 }
 
 @end

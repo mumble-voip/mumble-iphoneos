@@ -51,45 +51,45 @@
 @synthesize password           = _password;
 
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord {
-	self = [super init];
-	if (self == nil)
-		return nil;
+    self = [super init];
+    if (self == nil)
+        return nil;
 
-	_pkey = -1;
-	_displayName = [displayName copy];
-	_hostName = [hostName copy];
-	_port = port;
-	_userName = [userName copy];
-	_password = [passWord copy];
+    _pkey = -1;
+    _displayName = [displayName copy];
+    _hostName = [hostName copy];
+    _port = port;
+    _userName = [userName copy];
+    _password = [passWord copy];
 
-	return self;
+    return self;
 }
 
 - (id) init {
-	return [self initWithDisplayName:nil hostName:nil port:0 userName:nil password:nil];
+    return [self initWithDisplayName:nil hostName:nil port:0 userName:nil password:nil];
 }
 
 - (void) dealloc {
-	[_displayName release];
-	[_hostName release];
-	[_userName release];
-	[_password release];
-	[super dealloc];
+    [_displayName release];
+    [_hostName release];
+    [_userName release];
+    [_password release];
+    [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)zone {
-	MUFavouriteServer *favServ = [[MUFavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName password:_password];
-	if ([self hasPrimaryKey])
-		[favServ setPrimaryKey:[self primaryKey]];
-	return favServ;
+    MUFavouriteServer *favServ = [[MUFavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName password:_password];
+    if ([self hasPrimaryKey])
+        [favServ setPrimaryKey:[self primaryKey]];
+    return favServ;
 }
 
 - (BOOL) hasPrimaryKey {
-	return _pkey != -1;
+    return _pkey != -1;
 }
 
 - (NSComparisonResult) compare:(MUFavouriteServer *)favServ {
-	return [_displayName caseInsensitiveCompare:[favServ displayName]];
+    return [_displayName caseInsensitiveCompare:[favServ displayName]];
 }
 
 @end

@@ -36,11 +36,11 @@
 #import <MumbleKit/MKCertificate.h>
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    });
 }
 
 @interface MUCertificateCreationView () {
@@ -55,26 +55,26 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Initialization
 
 - (id) init {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setTitle:@"New Certificate"];
+    [self setTitle:@"New Certificate"];
 
-	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
-	[[self navigationItem] setLeftBarButtonItem:cancelButton];
-	[cancelButton release];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
+    [[self navigationItem] setLeftBarButtonItem:cancelButton];
+    [cancelButton release];
 
-	UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
-	[[self navigationItem] setRightBarButtonItem:createButton];
-	[createButton release];
+    UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
+    [[self navigationItem] setRightBarButtonItem:createButton];
+    [createButton release];
 }
 
 #pragma mark -
@@ -95,25 +95,25 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     static NSString *CellIdentifier = @"CertGenCell";
     MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-		cell = [[[MUTableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[MUTableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
     }
 
-	NSUInteger row = [indexPath row];
-	if (row == 0) { // Full name
-		[cell setLabel:@"Name"];
-		[cell setPlaceholder:@"Mumble User"];
-		[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-		[cell setValueChangedAction:@selector(nameChanged:)];
-		[cell setTextValue:_fullName];
-		[cell setTarget:self];
-	} else if (row == 1) { // Email
-		[cell setLabel:@"Email"];
-		[cell setPlaceholder:@"(Optional)"];
-		[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-		[cell setValueChangedAction:@selector(emailChanged:)];
-		[cell setTextValue:_emailAddress];
-		[cell setTarget:self];
-	}
+    NSUInteger row = [indexPath row];
+    if (row == 0) { // Full name
+        [cell setLabel:@"Name"];
+        [cell setPlaceholder:@"Mumble User"];
+        [cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [cell setValueChangedAction:@selector(nameChanged:)];
+        [cell setTextValue:_fullName];
+        [cell setTarget:self];
+    } else if (row == 1) { // Email
+        [cell setLabel:@"Email"];
+        [cell setPlaceholder:@"(Optional)"];
+        [cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [cell setValueChangedAction:@selector(emailChanged:)];
+        [cell setTextValue:_emailAddress];
+        [cell setTarget:self];
+    }
 
     return (UITableViewCell *)cell;
 }
@@ -128,85 +128,85 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Target/actions
 
 - (void) nameChanged:(MUTableViewTextFieldCell *)sender {
-	[_fullName release];
-	_fullName = [[sender textValue] copy];
+    [_fullName release];
+    _fullName = [[sender textValue] copy];
 }
 
 - (void) emailChanged:(MUTableViewTextFieldCell *)sender {
-	[_emailAddress release];
-	_emailAddress = [[sender textValue] copy];
+    [_emailAddress release];
+    _emailAddress = [[sender textValue] copy];
 }
 
 - (void) cancelClicked:(id)sender {
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void) createClicked:(id)sender {
-	NSString *name, *email;
-	
-	if (_fullName == nil || [_fullName length] == 0) {
-		name = @"Mumble User";
-	} else {
-		name = _fullName;
-	}
-	
-	if (_emailAddress == nil || [_emailAddress length] == 0) {
-		email = nil;
-	} else {
-		// fixme(mkrautz): RegEx this or do a DNS lookup like the desktop client to determine if
-		// the email has a chance to be valid.
-		email = _emailAddress;
-	}
+    NSString *name, *email;
+    
+    if (_fullName == nil || [_fullName length] == 0) {
+        name = @"Mumble User";
+    } else {
+        name = _fullName;
+    }
+    
+    if (_emailAddress == nil || [_emailAddress length] == 0) {
+        email = nil;
+    } else {
+        // fixme(mkrautz): RegEx this or do a DNS lookup like the desktop client to determine if
+        // the email has a chance to be valid.
+        email = _emailAddress;
+    }
 
-	MUCertificateCreationProgressView *progress = [[MUCertificateCreationProgressView alloc] initWithName:name email:email];
-	[[self navigationController] pushViewController:progress animated:YES];
-	[progress release];
-	
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		OSStatus err = noErr;
-		
-		// Generate a certificate for this identity.
-		MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:name email:email];
-		NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
-		if (pkcs12 == nil) {
-			ShowAlertDialog(@"Unable to generate certificate",
-							@"Mumble was unable to generate a certificate for the your identity.");
-		} else {
-			NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
-			NSArray *items = nil;
-			err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
-			if (err == errSecSuccess && [items count] > 0) {
-				NSDictionary *pkcsDict = [items objectAtIndex:0];
-				// Get the SecIdentityRef
-				SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
-				NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-									(id)identity, kSecValueRef,
-									kCFBooleanTrue, kSecReturnPersistentRef, nil];
-				NSData *data = nil;
-				err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
-				if (err == noErr && data != nil) {
-					// Success!
-					// Now, check if there's already a default certificate set.
+    MUCertificateCreationProgressView *progress = [[MUCertificateCreationProgressView alloc] initWithName:name email:email];
+    [[self navigationController] pushViewController:progress animated:YES];
+    [progress release];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OSStatus err = noErr;
+        
+        // Generate a certificate for this identity.
+        MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:name email:email];
+        NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
+        if (pkcs12 == nil) {
+            ShowAlertDialog(@"Unable to generate certificate",
+                            @"Mumble was unable to generate a certificate for the your identity.");
+        } else {
+            NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
+            NSArray *items = nil;
+            err = SecPKCS12Import((CFDataRef)pkcs12, (CFDictionaryRef)dict, (CFArrayRef *)&items);
+            if (err == errSecSuccess && [items count] > 0) {
+                NSDictionary *pkcsDict = [items objectAtIndex:0];
+                // Get the SecIdentityRef
+                SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
+                NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    (id)identity, kSecValueRef,
+                                    kCFBooleanTrue, kSecReturnPersistentRef, nil];
+                NSData *data = nil;
+                err = SecItemAdd((CFDictionaryRef)op, (CFTypeRef *)&data);
+                if (err == noErr && data != nil) {
+                    // Success!
+                    // Now, check if there's already a default certificate set.
                     if ([MUCertificateController defaultCertificate] == nil) {
                         [MUCertificateController setDefaultCertificateByPersistentRef:data];
                     }
 
-				// This happens when a certificate with a duplicate subject name is added.
-				} else if (err == noErr && data == nil) {
-					ShowAlertDialog(@"Unable to add identity",
-									@"The certificate of the just-added identity could not be added to the certificate store because it "
-									@"has the same name as a certificate already found in the store.");
-				}
-			} else {
-				ShowAlertDialog(@"Unable to import generated certificate",
-								@"Mumble was unable to import the generated certificate into the certificate store.");
-			}
-		}
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[[self navigationController] dismissModalViewControllerAnimated:YES];
-		});
-	});	
+                // This happens when a certificate with a duplicate subject name is added.
+                } else if (err == noErr && data == nil) {
+                    ShowAlertDialog(@"Unable to add identity",
+                                    @"The certificate of the just-added identity could not be added to the certificate store because it "
+                                    @"has the same name as a certificate already found in the store.");
+                }
+            } else {
+                ShowAlertDialog(@"Unable to import generated certificate",
+                                @"Mumble was unable to import the generated certificate into the certificate store.");
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[self navigationController] dismissModalViewControllerAnimated:YES];
+        });
+    });    
 }
 
 @end

@@ -33,11 +33,11 @@
 #import "MUCertificateCell.h"
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-		[alert show];
-		[alert release];
-	});
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    });
 }
 
 @interface MUCertificateDiskImportViewController () {
@@ -126,7 +126,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 85.0f;
+    return 85.0f;
 }
 
 #pragma mark - Table view delegate

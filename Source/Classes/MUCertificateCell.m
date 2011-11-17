@@ -43,24 +43,24 @@
 @implementation MUCertificateCell
 
 + (MUCertificateCell *) loadFromNib {
-	NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
-	return [array objectAtIndex:0];
+    NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
+    return [array objectAtIndex:0];
 }
 
 - (void) setSubjectName:(NSString *)name {
-	_nameLabel.text = name;
+    _nameLabel.text = name;
 }
 
 - (void) setEmail:(NSString *)email {
-	_emailLabel.text = email;
+    _emailLabel.text = email;
 }
 
 - (void) setIssuerText:(NSString *)issuerText {
-	_issuerLabel.text = issuerText;
+    _issuerLabel.text = issuerText;
 }
 
 - (void) setExpiryText:(NSString *)expiryText {
-	_expiryLabel.text = expiryText;
+    _expiryLabel.text = expiryText;
 }
 
 - (void) setIsCurrentCertificate:(BOOL)isCurrent {

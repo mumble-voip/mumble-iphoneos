@@ -46,31 +46,31 @@
 @implementation MUServerCertificateTrustViewController
 
 - (id) initWithConnection:(MKConnection *)conn {
-	if (self = [super initWithCertificates:[conn peerCertificates]]) {
-		_conn = [conn retain];
-	}
-	return self;
+    if (self = [super initWithCertificates:[conn peerCertificates]]) {
+        _conn = [conn retain];
+    }
+    return self;
 }
 
 - (void) dealloc {
     [_conn release];
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
+    [super viewWillAppear:animated];
 
-	UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissClicked:)];
-	self.navigationItem.leftBarButtonItem = dismissButton;
-	[dismissButton release];
+    UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss" style:UIBarButtonItemStyleBordered target:self action:@selector(dismissClicked:)];
+    self.navigationItem.leftBarButtonItem = dismissButton;
+    [dismissButton release];
 }
 
 #pragma mark -
 #pragma mark Actions
 
 - (void) dismissClicked:(id)sender {
-	[_conn disconnect];
-	[self dismissModalViewControllerAnimated:YES];
+    [_conn disconnect];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

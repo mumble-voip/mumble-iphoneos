@@ -31,11 +31,11 @@
 #import "MULanServerListController.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
-	if (reverse) {
-		return [[arg1 name] compare:[arg2 name]];
-	} else {
-		return [[arg2 name] compare:[arg1 name]];
-	}
+    if (reverse) {
+        return [[arg1 name] compare:[arg2 name]];
+    } else {
+        return [[arg2 name] compare:[arg1 name]];
+    }
 } 
 
 @interface MULanServerListController () <NSNetServiceBrowserDelegate> {
@@ -50,49 +50,49 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark Initialization
 
 - (id) init {
-	self = [super initWithStyle:UITableViewStylePlain];
-	if (self == nil)
-		return nil;
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self == nil)
+        return nil;
 
-	_browser = [[NSNetServiceBrowser alloc] init];
-	[_browser setDelegate:self];
-	[_browser scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    _browser = [[NSNetServiceBrowser alloc] init];
+    [_browser setDelegate:self];
+    [_browser scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 
-	_netServices = [[NSMutableArray alloc] init];
+    _netServices = [[NSMutableArray alloc] init];
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[_browser release];
-	[_netServices release];
-	[super dealloc];
+    [_browser release];
+    [_netServices release];
+    [super dealloc];
 }
 
 #pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated {
-	[[self navigationItem] setTitle:@"LAN Servers"];
+    [[self navigationItem] setTitle:@"LAN Servers"];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-	[_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
+    [_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
 }
 
 #pragma mark -
 #pragma mark NSNetServiceBrowser delegate
 
-- (void) netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)netService moreComing:(BOOL)moreServices {	
-	[_netServices addObject:netService];
-	[_netServices sortUsingFunction:NetServiceAlphabeticalSort context:nil];
-	NSInteger newIndex = [_netServices indexOfObject:netService];
-	[[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+- (void) netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)netService moreComing:(BOOL)moreServices {    
+    [_netServices addObject:netService];
+    [_netServices sortUsingFunction:NetServiceAlphabeticalSort context:nil];
+    NSInteger newIndex = [_netServices indexOfObject:netService];
+    [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)netService moreComing:(BOOL)moreServices {
-	NSInteger curIndex = [_netServices indexOfObject:netService];
-	[_netServices removeObjectAtIndex:curIndex];
-	[[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
+    NSInteger curIndex = [_netServices indexOfObject:netService];
+    [_netServices removeObjectAtIndex:curIndex];
+    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
 
 }
 
@@ -100,7 +100,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark NSNetServiceDelegate
 
 - (void) netServiceDidResolveAddress:(NSNetService *)netService {
-	// We should resolve before we can connect..
+    // We should resolve before we can connect..
 }
 
 #pragma mark -
@@ -111,18 +111,18 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [_netServices count];
+    return [_netServices count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"LanServerCell";
+    static NSString *CellIdentifier = @"LanServerCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-	
-	NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
-	cell.textLabel.text = [netService name];
+    
+    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+    cell.textLabel.text = [netService name];
     
     return cell;
 }
@@ -131,7 +131,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSLog(@"Selected");
+    NSLog(@"Selected");
 }
 
 @end

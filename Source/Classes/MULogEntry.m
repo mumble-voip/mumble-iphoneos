@@ -39,28 +39,28 @@
 @implementation MULogEntry
 
 - (id) initWithText:(NSString *)text {
-	self = [super init];
-	if (self == nil)
-		return nil;
+    self = [super init];
+    if (self == nil)
+        return nil;
 
-	_date = [[NSDate alloc] init];
-	_text = [text copy];
+    _date = [[NSDate alloc] init];
+    _text = [text copy];
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[_date release];
-	[_text release];
-	[super dealloc];
+    [_date release];
+    [_text release];
+    [super dealloc];
 }
 
 - (NSDate *) date {
-	return _date;
+    return _date;
 }
 
 - (NSString *) text {
-	return _text;
+    return _text;
 }
 
 @end

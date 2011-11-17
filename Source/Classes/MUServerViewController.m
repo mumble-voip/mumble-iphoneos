@@ -35,8 +35,8 @@
 #pragma mark MUChannelNavigationItem
 
 @interface MUChannelNavigationItem : NSObject {
-	id         _object;
-	NSInteger  _indentLevel;
+    id         _object;
+    NSInteger  _indentLevel;
 }
 
 + (MUChannelNavigationItem *) navigationItemWithObject:(id)obj indentLevel:(NSInteger)indentLevel;
@@ -49,27 +49,27 @@
 @implementation MUChannelNavigationItem
 
 + (MUChannelNavigationItem *) navigationItemWithObject:(id)obj indentLevel:(NSInteger)indentLevel {
-	return [[[MUChannelNavigationItem alloc] initWithObject:obj indentLevel:indentLevel] autorelease];
+    return [[[MUChannelNavigationItem alloc] initWithObject:obj indentLevel:indentLevel] autorelease];
 }
 
 - (id) initWithObject:(id)obj indentLevel:(NSInteger)indentLevel {
-	if (self = [super init]) {
-		_object = obj;
-		_indentLevel = indentLevel;
-	}
-	return self;
+    if (self = [super init]) {
+        _object = obj;
+        _indentLevel = indentLevel;
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[super dealloc];
+    [super dealloc];
 }
 
 - (id) object {
-	return _object;
+    return _object;
 }
 
 - (NSInteger) indentLevel {
-	return _indentLevel;
+    return _indentLevel;
 }
 
 @end
@@ -79,9 +79,9 @@
 
 @interface MUServerViewController () {
     MKServerModel        *_serverModel;
-	NSMutableArray       *_modelItems;
-	NSMutableDictionary  *_userIndexMap;
-	NSMutableDictionary  *_channelIndexMap;
+    NSMutableArray       *_modelItems;
+    NSMutableDictionary  *_userIndexMap;
+    NSMutableDictionary  *_channelIndexMap;
 }
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel;
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel;
@@ -93,62 +93,62 @@
 #pragma mark Initialization and lifecycle
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {
-	if ((self = [super initWithStyle:UITableViewStylePlain])) {
-		_serverModel = [serverModel retain];
-		[_serverModel addDelegate:self];
-	}
-	return self;
+    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+        _serverModel = [serverModel retain];
+        [_serverModel addDelegate:self];
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[_serverModel removeDelegate:self];
+    [_serverModel removeDelegate:self];
     [_serverModel release];
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     NSLog(@"MUServerViewController: RebuildModel!");
-	[self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
+    [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
 }
 
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel {
-	[_modelItems release];
-	_modelItems = [[NSMutableArray alloc] init];
-	
-	[_userIndexMap release];
-	_userIndexMap = [[NSMutableDictionary alloc] init];
+    [_modelItems release];
+    _modelItems = [[NSMutableArray alloc] init];
+    
+    [_userIndexMap release];
+    _userIndexMap = [[NSMutableDictionary alloc] init];
 
-	[_channelIndexMap release];
-	_channelIndexMap = [[NSMutableDictionary alloc] init];
+    [_channelIndexMap release];
+    _channelIndexMap = [[NSMutableDictionary alloc] init];
 
-	[self addChannelTreeToModel:channel indentLevel:0];
+    [self addChannelTreeToModel:channel indentLevel:0];
 
-	[self.tableView reloadData];
+    [self.tableView reloadData];
 
     NSLog(@"rebuilt it!");
 }
 
-- (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {	
-	[_channelIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[channel channelId]]];
-	[_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:channel indentLevel:indentLevel]];
+- (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
+    [_channelIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[channel channelId]]];
+    [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:channel indentLevel:indentLevel]];
 
-	for (MKUser *user in [channel users]) {
-		[_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
-		[_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:user indentLevel:indentLevel+1]];
-	}
-	for (MKChannel *chan in [channel channels]) {
-		[self addChannelTreeToModel:chan indentLevel:indentLevel+1];
-	}
+    for (MKUser *user in [channel users]) {
+        [_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
+        [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:user indentLevel:indentLevel+1]];
+    }
+    for (MKChannel *chan in [channel channels]) {
+        [self addChannelTreeToModel:chan indentLevel:indentLevel+1];
+    }
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+    return 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [_modelItems count];
+    return [_modelItems count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -158,24 +158,24 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
-	id object = [navItem object];
+    MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
+    id object = [navItem object];
 
-	MKUser *connectedUser = [_serverModel connectedUser];
+    MKUser *connectedUser = [_serverModel connectedUser];
 
-	cell.textLabel.font = [UIFont systemFontOfSize:18];
-	if ([object class] == [MKChannel class]) {
-		MKChannel *chan = object;
-		cell.imageView.image = [UIImage imageNamed:@"channel"];
-		cell.textLabel.text = [chan channelName];
-		if (chan == [connectedUser channel])
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
-	} else if ([object class] == [MKUser class]) {
-		MKUser *user = object;
+    cell.textLabel.font = [UIFont systemFontOfSize:18];
+    if ([object class] == [MKChannel class]) {
+        MKChannel *chan = object;
+        cell.imageView.image = [UIImage imageNamed:@"channel"];
+        cell.textLabel.text = [chan channelName];
+        if (chan == [connectedUser channel])
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+    } else if ([object class] == [MKUser class]) {
+        MKUser *user = object;
 
-		cell.textLabel.text = [user userName];
-		if (user == connectedUser)
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        cell.textLabel.text = [user userName];
+        if (user == connectedUser)
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
         
         MKTalkState talkState = [user talkState];
         NSString *talkImageName = nil;
@@ -189,9 +189,9 @@
             talkImageName = @"talking_alt";
         
         cell.imageView.image = [UIImage imageNamed:talkImageName];
-	}
+    }
 
-	cell.indentationLevel = [navItem indentLevel];
+    cell.indentationLevel = [navItem indentLevel];
 
     return cell;
 }
@@ -199,17 +199,17 @@
 #pragma mark - Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
-	id object = [navItem object];
-	if ([object class] == [MKChannel class]) {
-		[_serverModel joinChannel:object];
-	}
+    MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
+    id object = [navItem object];
+    if ([object class] == [MKChannel class]) {
+        [_serverModel joinChannel:object];
+    }
 
-	[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 44.0f;
+    return 44.0f;
 }
 
 #pragma mark - MKServerModel delegate
@@ -222,37 +222,37 @@
 }
 
 - (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
-	[self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 - (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
-	NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
-	UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
+    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 
-	MKTalkState talkState = [user talkState];
-	NSString *talkImageName = nil;
-	if (talkState == MKTalkStatePassive)
-		talkImageName = @"talking_off";
-	else if (talkState == MKTalkStateTalking)
-		talkImageName = @"talking_on";
-	else if (talkState == MKTalkStateWhispering)
-		talkImageName = @"talking_whisper";
-	else if (talkState == MKTalkStateShouting)
-		talkImageName = @"talking_alt";
+    MKTalkState talkState = [user talkState];
+    NSString *talkImageName = nil;
+    if (talkState == MKTalkStatePassive)
+        talkImageName = @"talking_off";
+    else if (talkState == MKTalkStateTalking)
+        talkImageName = @"talking_on";
+    else if (talkState == MKTalkStateWhispering)
+        talkImageName = @"talking_whisper";
+    else if (talkState == MKTalkStateShouting)
+        talkImageName = @"talking_alt";
 
-	cell.imageView.image = [UIImage imageNamed:talkImageName];
+    cell.imageView.image = [UIImage imageNamed:talkImageName];
 }
 
 - (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
-	[self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 - (void) serverModel:(MKServerModel *)model channelRemoved:(MKChannel *)channel {
-	[self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
-	[self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
 
 @end

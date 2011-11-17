@@ -72,98 +72,98 @@
 #pragma mark Initialization
 
 - (id) init {
-	self = [super initWithStyle:UITableViewStyleGrouped];
-	if (self == nil)
-		return nil;
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self == nil)
+        return nil;
 
-	UIDevice *device = [UIDevice currentDevice];
+    UIDevice *device = [UIDevice currentDevice];
 
-	// System
-	_deviceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_deviceCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_deviceCell textLabel] setText:@"Device"];
-	[[_deviceCell detailTextLabel] setText:[self deviceString]];
-	[[_deviceCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    // System
+    _deviceCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_deviceCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_deviceCell textLabel] setText:@"Device"];
+    [[_deviceCell detailTextLabel] setText:[self deviceString]];
+    [[_deviceCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	_osCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_osCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_osCell textLabel] setText:@"System"];
-	[[_osCell detailTextLabel] setText:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]]];
-	[[_osCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    _osCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_osCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_osCell textLabel] setText:@"System"];
+    [[_osCell detailTextLabel] setText:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]]];
+    [[_osCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	_udidCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_udidCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_udidCell textLabel] setText:@"UDID"];
-	[[_udidCell detailTextLabel] setText:[device uniqueIdentifier]];
-	[[_udidCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    _udidCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_udidCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_udidCell textLabel] setText:@"UDID"];
+    [[_udidCell detailTextLabel] setText:[device uniqueIdentifier]];
+    [[_udidCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	// Application
-	_versionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_versionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_versionCell textLabel] setText:@"Version"];
-	[[_versionCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+    // Application
+    _versionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_versionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_versionCell textLabel] setText:@"Version"];
+    [[_versionCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 
-	_gitRevCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_gitRevCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_gitRevCell textLabel] setText:@"Git Revision"];
-	[[_gitRevCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+    _gitRevCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_gitRevCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_gitRevCell textLabel] setText:@"Git Revision"];
+    [[_gitRevCell detailTextLabel] setText:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
 
-	_buildDateCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_buildDateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_buildDateCell textLabel] setText:@"Build Date"];
-	[[_buildDateCell detailTextLabel] setText:[[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] description]];
-	[[_buildDateCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    _buildDateCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_buildDateCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_buildDateCell textLabel] setText:@"Build Date"];
+    [[_buildDateCell detailTextLabel] setText:[[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"] description]];
+    [[_buildDateCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	_sinceLaunchCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_sinceLaunchCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_sinceLaunchCell textLabel] setText:@"Time Since Launch"];
-	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [[MumbleApp delegate] timeIntervalSinceLaunch]]];
-	[[_sinceLaunchCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    _sinceLaunchCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_sinceLaunchCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_sinceLaunchCell textLabel] setText:@"Time Since Launch"];
+    [[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [[MumbleApp delegate] timeIntervalSinceLaunch]]];
+    [[_sinceLaunchCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	// Audio
-	_preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
-	[_preprocessorCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_preprocessorCell textLabel] setText:@"Preprocessor"];
-	[[_preprocessorCell detailTextLabel] setText:@"∞ µs"];
-	[[_preprocessorCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    // Audio
+    _preprocessorCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DiagnosticsCell"];
+    [_preprocessorCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_preprocessorCell textLabel] setText:@"Preprocessor"];
+    [[_preprocessorCell detailTextLabel] setText:@"∞ µs"];
+    [[_preprocessorCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	_routeCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RouteCell"];
-	[_routeCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[_routeCell textLabel] setText:@"Route"];
-	[[_routeCell detailTextLabel] setText:@"Unknown"];
-	[[_routeCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    _routeCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RouteCell"];
+    [_routeCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[_routeCell textLabel] setText:@"Route"];
+    [[_routeCell detailTextLabel] setText:@"Unknown"];
+    [[_routeCell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	_updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
-	[self updateDiagnostics:nil];
-	
-	[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	
-	return self;
+    _updateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDiagnostics:) userInfo:nil repeats:YES];
+    [self updateDiagnostics:nil];
+    
+    [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    
+    return self;
 }
 
 - (void) dealloc {
-	[_updateTimer invalidate];
+    [_updateTimer invalidate];
 
-	[_deviceCell release];
-	[_osCell release];
-	[_udidCell release];
+    [_deviceCell release];
+    [_osCell release];
+    [_udidCell release];
 
-	[_versionCell release];
-	[_gitRevCell release];
-	[_buildDateCell release];
+    [_versionCell release];
+    [_gitRevCell release];
+    [_buildDateCell release];
 
-	[_preprocessorCell release];
-	[_routeCell release];
+    [_preprocessorCell release];
+    [_routeCell release];
 
-	[super dealloc];
+    [super dealloc];
 }
 
 #pragma mark -
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-	[[self navigationItem] setTitle:@"Diagnostics"];
-	[self setSubmitButton];
+    [[self navigationItem] setTitle:@"Diagnostics"];
+    [self setSubmitButton];
 }
 
 #pragma mark -
@@ -174,52 +174,52 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section == 0) // System
-		return 3;
-	if (section == 1) // Application
-		return 4;
-	if (section == 2) // Audio
-		return 2;
-	return 0;
+    if (section == 0) // System
+        return 3;
+    if (section == 1) // Application
+        return 4;
+    if (section == 2) // Audio
+        return 2;
+    return 0;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == 0)
-		return @"System";
-	if (section == 1)
-		return @"Application";
-	if (section == 2)
-		return @"Audio";
-	return @"Default";
+    if (section == 0)
+        return @"System";
+    if (section == 1)
+        return @"Application";
+    if (section == 2)
+        return @"Audio";
+    return @"Default";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath section] == 0) { // System
-		if ([indexPath row] == 0) { // Device
-			return _deviceCell;
-		} else if ([indexPath row] == 1) { // OS
-			return _osCell;
-		} else if ([indexPath row] == 2) { // UDID
-			return _udidCell;
-		}
-	} else if ([indexPath section] == 1) { // Application
-		if ([indexPath row] == 0) { // Version
-			return _versionCell;
-		} else if ([indexPath row] == 1) { // Git Revision
-			return _gitRevCell;
-		} else if ([indexPath row] == 2) { // Build Date
-			return _buildDateCell;
-		} else if ([indexPath row] == 3) { // Time since launch
-			return _sinceLaunchCell;
-		}
-	} else if ([indexPath section] == 2) { // Audio
-		if ([indexPath row] == 0) { // Preprocessor
-			return _preprocessorCell;
-		} else if ([indexPath row] == 1) { // Route
-			return _routeCell;
-		}
-	}
-	return nil;
+    if ([indexPath section] == 0) { // System
+        if ([indexPath row] == 0) { // Device
+            return _deviceCell;
+        } else if ([indexPath row] == 1) { // OS
+            return _osCell;
+        } else if ([indexPath row] == 2) { // UDID
+            return _udidCell;
+        }
+    } else if ([indexPath section] == 1) { // Application
+        if ([indexPath row] == 0) { // Version
+            return _versionCell;
+        } else if ([indexPath row] == 1) { // Git Revision
+            return _gitRevCell;
+        } else if ([indexPath row] == 2) { // Build Date
+            return _buildDateCell;
+        } else if ([indexPath row] == 3) { // Time since launch
+            return _sinceLaunchCell;
+        }
+    } else if ([indexPath section] == 2) { // Audio
+        if ([indexPath row] == 0) { // Preprocessor
+            return _preprocessorCell;
+        } else if ([indexPath row] == 1) { // Route
+            return _routeCell;
+        }
+    }
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -229,115 +229,115 @@
 #pragma mark Device query
 
 - (NSString *) deviceString {
-	NSString *devString = nil;
-	char *devName = NULL;
-	size_t size = 0;
+    NSString *devString = nil;
+    char *devName = NULL;
+    size_t size = 0;
 
-	sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-	devName = malloc(size);
-	sysctlbyname("hw.machine", devName, &size, NULL, 0);
-	devString = [NSString stringWithUTF8String:devName];
-	free(devName);
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    devName = malloc(size);
+    sysctlbyname("hw.machine", devName, &size, NULL, 0);
+    devString = [NSString stringWithUTF8String:devName];
+    free(devName);
 
-	return devString;
+    return devString;
 }
 
 #pragma mark -
 #pragma mark Helpers
 
 - (void) setSubmitButton {
-	// Submit button
-	UIBarButtonItem *submitButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleDone target:self action:@selector(submitButtonClicked:)];
-	[[self navigationItem] setRightBarButtonItem:submitButton];
-	[submitButton release];
+    // Submit button
+    UIBarButtonItem *submitButton = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleDone target:self action:@selector(submitButtonClicked:)];
+    [[self navigationItem] setRightBarButtonItem:submitButton];
+    [submitButton release];
 }
 
 - (void) setActivityIndicator {
-	// Swap submit button for activity indicator
-	UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-	[activity startAnimating];
-	UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:activity];
-	[[self navigationItem] setRightBarButtonItem:rightButton];
-	[rightButton release];
-	[activity release];
+    // Swap submit button for activity indicator
+    UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activity startAnimating];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:activity];
+    [[self navigationItem] setRightBarButtonItem:rightButton];
+    [rightButton release];
+    [activity release];
 }
 
 - (void) updateDiagnostics:(NSTimer *)timer {
-	MKAudio *audio = [MKAudio sharedAudio];
+    MKAudio *audio = [MKAudio sharedAudio];
 
-	MKAudioBenchmark data;
-	[audio getBenchmarkData:&data];
+    MKAudioBenchmark data;
+    [audio getBenchmarkData:&data];
 
-	[[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
-	[[_routeCell detailTextLabel] setText:[audio currentAudioRoute]];
+    [[_preprocessorCell detailTextLabel] setText:[NSString stringWithFormat:@"%li µs", data.avgPreprocessorRuntime]];
+    [[_routeCell detailTextLabel] setText:[audio currentAudioRoute]];
 
-	[[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(MUApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
+    [[_sinceLaunchCell detailTextLabel] setText:[NSString stringWithFormat:@"%.2f", [(MUApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]]];
 }
 
 - (NSData *) formEncodedDictionary:(NSDictionary *)dict boundary:(NSString *)boundary {
-	NSMutableData *data = [[NSMutableData alloc] init];
+    NSMutableData *data = [[NSMutableData alloc] init];
 
-	[dict enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
-		[data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-		[data appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", (NSString *)key] dataUsingEncoding:NSUTF8StringEncoding]];
-		[data appendData:[(NSString *)object dataUsingEncoding:NSUTF8StringEncoding]];
-	}];
-	[data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id object, BOOL *stop) {
+        [data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [data appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", (NSString *)key] dataUsingEncoding:NSUTF8StringEncoding]];
+        [data appendData:[(NSString *)object dataUsingEncoding:NSUTF8StringEncoding]];
+    }];
+    [data appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 
-	return [data autorelease];
+    return [data autorelease];
 }
 
 - (void) submitDiagnostics {
-	static NSString *boundary = @"DFfsafwEFQFQWEfq";
+    static NSString *boundary = @"DFfsafwEFQFQWEfq";
 
-	MKAudioBenchmark bench;
-	[[MKAudio sharedAudio] getBenchmarkData:&bench];
-	UIDevice *device = [UIDevice currentDevice];
+    MKAudioBenchmark bench;
+    [[MKAudio sharedAudio] getBenchmarkData:&bench];
+    UIDevice *device = [UIDevice currentDevice];
 
-	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-	// System
-	[dict setObject:[self deviceString] forKey:@"device"];
-	[dict setObject:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]] forKey:@"operating-system"];
-	[dict setObject:[device uniqueIdentifier] forKey:@"udid"];
-	// Application
-	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
-	[dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    // System
+    [dict setObject:[self deviceString] forKey:@"device"];
+    [dict setObject:[NSString stringWithFormat:@"%@ %@", [device systemName], [device systemVersion]] forKey:@"operating-system"];
+    [dict setObject:[device uniqueIdentifier] forKey:@"udid"];
+    // Application
+    [dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] forKey:@"version"];
+    [dict setObject:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"] forKey:@"git-revision"];
 
-	NSDate *buildDate = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"];
-	NSString *buildDateString = [NSString stringWithFormat:@"%.2f", [buildDate timeIntervalSince1970]];
-	[dict setObject:buildDateString forKey:@"build-date-epoch"];
+    NSDate *buildDate = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleBuildDate"];
+    NSString *buildDateString = [NSString stringWithFormat:@"%.2f", [buildDate timeIntervalSince1970]];
+    [dict setObject:buildDateString forKey:@"build-date-epoch"];
 
-	[dict setObject:[NSString stringWithFormat:@"%.2f", [(MUApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
-	// Audio
-	[dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
+    [dict setObject:[NSString stringWithFormat:@"%.2f", [(MUApplicationDelegate *)[[UIApplication sharedApplication] delegate] timeIntervalSinceLaunch]] forKey:@"time-since-launch"];
+    // Audio
+    [dict setObject:[NSString stringWithFormat:@"%li", bench.avgPreprocessorRuntime] forKey:@"preprocessor-avg-runtime"];
 
-	NSURL *url = [NSURL URLWithString:@"https://mumble-ios.appspot.com/diagnostics"];
-	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0f];
-	[req setHTTPMethod:@"POST"];
-	[req setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
-	[req setHTTPBody:[self formEncodedDictionary:dict boundary:boundary]];
-	[NSURLConnection connectionWithRequest:req delegate:self];
+    NSURL *url = [NSURL URLWithString:@"https://mumble-ios.appspot.com/diagnostics"];
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0f];
+    [req setHTTPMethod:@"POST"];
+    [req setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary] forHTTPHeaderField:@"Content-Type"];
+    [req setHTTPBody:[self formEncodedDictionary:dict boundary:boundary]];
+    [NSURLConnection connectionWithRequest:req delegate:self];
 
-	[dict release];
+    [dict release];
 }
 
 #pragma mark -
 #pragma mark NSURLConnection delegate
 
-- (void) connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {												
-	[self setSubmitButton];
+- (void) connection:(NSURLConnection *)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {                                                
+    [self setSubmitButton];
 }
 
 - (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	[self setSubmitButton];
+    [self setSubmitButton];
 }
 
 #pragma mark -
 #pragma mark Target/actions
 
 - (void) submitButtonClicked:(UIBarButtonItem *)submitButton {
-	[self setActivityIndicator];
-	[self submitDiagnostics];
+    [self setActivityIndicator];
+    [self submitDiagnostics];
 }
 
 @end

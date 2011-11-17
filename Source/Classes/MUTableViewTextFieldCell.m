@@ -42,35 +42,35 @@
 
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-	if (self == nil)
-		return nil;
+    if (self == nil)
+        return nil;
 
-	[self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
 
-	UIView *view = self.contentView;
+    UIView *view = self.contentView;
 
-	_label = [[UILabel alloc] init];
-	[_label setText:@"DefaultLabelText"];
-	[_label setFont:[UIFont boldSystemFontOfSize:16.0f]];
-	[view addSubview:_label];
-	[_label setOpaque:NO];
-	[_label setBackgroundColor:[UIColor clearColor]];
-	[_label release];
+    _label = [[UILabel alloc] init];
+    [_label setText:@"DefaultLabelText"];
+    [_label setFont:[UIFont boldSystemFontOfSize:16.0f]];
+    [view addSubview:_label];
+    [_label setOpaque:NO];
+    [_label setBackgroundColor:[UIColor clearColor]];
+    [_label release];
 
-	_textField = [[UITextField alloc] init];
-	[_textField setFont:[UIFont systemFontOfSize:14.0f]];
-	[_textField setTextColor:[UIColor colorWithRed:(CGFloat)0x32/0xff green:(CGFloat)0x4f/0xff blue:(CGFloat)0x85/0xff alpha:0xff]];
-	[_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    _textField = [[UITextField alloc] init];
+    [_textField setFont:[UIFont systemFontOfSize:14.0f]];
+    [_textField setTextColor:[UIColor colorWithRed:(CGFloat)0x32/0xff green:(CGFloat)0x4f/0xff blue:(CGFloat)0x85/0xff alpha:0xff]];
+    [_textField setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
 
 #if 1
     // fixme(mkrautz): Lion iOS simluator bug.
     [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];
 #endif
 
-	[_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
-	[_textField setDelegate:self];
-	[view addSubview:_textField];
-	[_textField release];
+    [_textField setClearButtonMode:UITextFieldViewModeWhileEditing];
+    [_textField setDelegate:self];
+    [view addSubview:_textField];
+    [_textField release];
 
     return self;
 }
@@ -80,7 +80,7 @@
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
-	// Should not be able to select these.
+    // Should not be able to select these.
 }
 
 - (void) setTarget:(id)target {
@@ -95,8 +95,8 @@
 #pragma mark Action helper
 
 - (void) performValueChangedSelector {
-	if ([_fieldTarget respondsToSelector:_valueChangedAction]) {
-		[[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:_fieldTarget argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
+    if ([_fieldTarget respondsToSelector:_valueChangedAction]) {
+        [[NSRunLoop currentRunLoop] performSelector:_valueChangedAction target:_fieldTarget argument:self order:0 modes:[NSArray arrayWithObject:NSDefaultRunLoopMode]];
     }
 }
 
@@ -104,154 +104,154 @@
 #pragma mark Layout
 
 - (void) layoutSubviews {
-	[super layoutSubviews];
+    [super layoutSubviews];
 
-	CGRect contentBounds = [[self contentView] bounds];
-	CGFloat x = contentBounds.origin.x;
-	CGFloat y = contentBounds.origin.y;
-	CGFloat w = contentBounds.size.width;
-	CGFloat h = contentBounds.size.height;
+    CGRect contentBounds = [[self contentView] bounds];
+    CGFloat x = contentBounds.origin.x;
+    CGFloat y = contentBounds.origin.y;
+    CGFloat w = contentBounds.size.width;
+    CGFloat h = contentBounds.size.height;
 
-	CGFloat labelWidth = (3*w)/8;
-	CGFloat textFieldWidth = (5*w)/8;
+    CGFloat labelWidth = (3*w)/8;
+    CGFloat textFieldWidth = (5*w)/8;
 
-	x += 8.0f;
-	labelWidth -= 8.0f;
-	CGRect labelFrame = CGRectIntegral(CGRectMake(x, y, labelWidth, h));
+    x += 8.0f;
+    labelWidth -= 8.0f;
+    CGRect labelFrame = CGRectIntegral(CGRectMake(x, y, labelWidth, h));
 
-	x += labelWidth;
-	textFieldWidth -= 8.0f;
-	CGRect textFieldFrame = CGRectIntegral(CGRectMake(x, y, textFieldWidth, h));
+    x += labelWidth;
+    textFieldWidth -= 8.0f;
+    CGRect textFieldFrame = CGRectIntegral(CGRectMake(x, y, textFieldWidth, h));
 
-	[_label setFrame:labelFrame];
-	[_textField setFrame:textFieldFrame];
+    [_label setFrame:labelFrame];
+    [_textField setFrame:textFieldFrame];
 }
 
 #pragma mark -
 #pragma mark Accessors
 
 - (void) setLabel:(NSString *)labelText {
-	[_label setText:labelText];
+    [_label setText:labelText];
 }
 
 - (NSString *) label {
-	return [_label text];
+    return [_label text];
 }
 
 - (void) setPlaceholder:(NSString *)defaultValue {
-	[_textField setPlaceholder:defaultValue];
+    [_textField setPlaceholder:defaultValue];
 }
 
 - (NSString *) placeholder {
-	return [_textField placeholder];
+    return [_textField placeholder];
 }
 
 - (void) setTextValue:(NSString *)val {
-	if ([val length] == 0)
-		val = nil;
-	[_textField setText:val];
-	[self performValueChangedSelector];
+    if ([val length] == 0)
+        val = nil;
+    [_textField setText:val];
+    [self performValueChangedSelector];
 }
 
 - (NSString *) textValue {
-	NSString *value = [[_textField text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	if ([value length] == 0) {
-		return nil;
-	}
-	return value;
+    NSString *value = [[_textField text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if ([value length] == 0) {
+        return nil;
+    }
+    return value;
 }
 
 - (void) setIntValue:(int)val {
-	[_textField setText:[NSString stringWithFormat:@"%i", val]];
-	[self performValueChangedSelector];
+    [_textField setText:[NSString stringWithFormat:@"%i", val]];
+    [self performValueChangedSelector];
 }
 
 - (int) intValue {
-	return [[_textField text] intValue];
+    return [[_textField text] intValue];
 }
 
 - (void) setValueChangedAction:(SEL)selector {
-	_valueChangedAction = selector;
+    _valueChangedAction = selector;
 }
 
 - (SEL) valueChangedAction {
-	return _valueChangedAction;
+    return _valueChangedAction;
 }
 
 #pragma mark -
 #pragma mark UITextFieldDelegate
 
 - (void) textFieldDidEndEditing:(UITextField *)textField {
-	[self performValueChangedSelector];
+    [self performValueChangedSelector];
 }
 
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-	[self performValueChangedSelector];
-	return YES;
+    [self performValueChangedSelector];
+    return YES;
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
-	[textField resignFirstResponder];
-	return TRUE;
+    [textField resignFirstResponder];
+    return TRUE;
 }
 
 #pragma mark -
 #pragma mark UITextInptTraits protocol
 
 - (UITextAutocapitalizationType) autocapitalizationType {
-	return [_textField autocapitalizationType];
+    return [_textField autocapitalizationType];
 }
 
 - (void) setAutocapitalizationType:(UITextAutocapitalizationType)autoCap {
-	[_textField setAutocapitalizationType:autoCap];
+    [_textField setAutocapitalizationType:autoCap];
 }
 
 - (UITextAutocorrectionType) autocorrectionType {
-	return [_textField autocorrectionType];
+    return [_textField autocorrectionType];
 }
 
 - (void) setAutocorrectionType:(UITextAutocorrectionType)autoCorrection {
-	[_textField setAutocorrectionType:autoCorrection];
+    [_textField setAutocorrectionType:autoCorrection];
 }
 
 - (BOOL) enablesReturnKeyAutomatically {
-	return [_textField enablesReturnKeyAutomatically];
+    return [_textField enablesReturnKeyAutomatically];
 }
 
 - (void) setEnablesReturnKeyAutomatically:(BOOL)enableKey {
-	[_textField setEnablesReturnKeyAutomatically:enableKey];
+    [_textField setEnablesReturnKeyAutomatically:enableKey];
 }
 
 - (UIKeyboardAppearance) keyboardAppearance {
-	return [_textField keyboardAppearance];
+    return [_textField keyboardAppearance];
 }
 
 - (void) setKeyboardAppearance:(UIKeyboardAppearance)appearance {
-	[_textField setKeyboardAppearance:appearance];
+    [_textField setKeyboardAppearance:appearance];
 }
 
 - (UIKeyboardType) keyboardType {
-	return [_textField keyboardType];
+    return [_textField keyboardType];
 }
 
 - (void) setKeyboardType:(UIKeyboardType)type {
-	[_textField setKeyboardType:type];
+    [_textField setKeyboardType:type];
 }
 
 - (UIReturnKeyType) returnKeyType {
-	return [_textField returnKeyType];
+    return [_textField returnKeyType];
 }
 
 - (void) setReturnKeyType:(UIReturnKeyType)type {
-	[_textField setReturnKeyType:type];
+    [_textField setReturnKeyType:type];
 }
 
 - (BOOL) secureTextEntry {
-	return [_textField isSecureTextEntry];
+    return [_textField isSecureTextEntry];
 }
 
 - (void) setSecureTextEntry:(BOOL)flag {
-	[_textField setSecureTextEntry:flag];
+    [_textField setSecureTextEntry:flag];
 }
 
 @end

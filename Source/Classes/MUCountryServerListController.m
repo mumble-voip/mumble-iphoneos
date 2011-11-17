@@ -46,30 +46,30 @@
 @implementation MUCountryServerListController
 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers {
-	self = [super init];
-	if (self == nil)
-		return nil;
+    self = [super init];
+    if (self == nil)
+        return nil;
 
-	_countryServers = [servers retain];
-	_countryName = [[country copy] retain];
+    _countryServers = [servers retain];
+    _countryName = [[country copy] retain];
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[_countryName release];
-	[_countryServers release];
+    [_countryName release];
+    [_countryServers release];
 
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-	[[self navigationItem] setTitle:_countryName];
+    [[self navigationItem] setTitle:_countryName];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-	[super viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -84,7 +84,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [_countryServers count];
+    return [_countryServers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -105,63 +105,63 @@
 #pragma mark Selection
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
-	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"] delegate:self
-											cancelButtonTitle:@"Cancel"
-											destructiveButtonTitle:nil
-											otherButtonTitles:@"Connect", @"Add as favourite", nil];
-	[sheet showInView:[self tableView]];
-	[sheet release];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"] delegate:self
+                                            cancelButtonTitle:@"Cancel"
+                                            destructiveButtonTitle:nil
+                                            otherButtonTitles:@"Connect", @"Add as favourite", nil];
+    [sheet showInView:[self tableView]];
+    [sheet release];
 }
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-	NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
-	NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
-	// Connect
-	if (index == 0) {
-		NSLog(@"Connect...");
+    // Connect
+    if (index == 0) {
+        NSLog(@"Connect...");
 
-	// Add as favourite
-	} else if (index == 1) {
-		[self presentAddAsFavouriteDialogForServer:serverItem];
-	}
+    // Add as favourite
+    } else if (index == 1) {
+        [self presentAddAsFavouriteDialogForServer:serverItem];
+    }
 }
 
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem {
-	MUFavouriteServer *favServ = [[MUFavouriteServer alloc] init];
-	[favServ setDisplayName:[serverItem objectForKey:@"name"]];
-	[favServ setHostName:[serverItem objectForKey:@"ip"]];
-	[favServ setPort:[[serverItem objectForKey:@"port"] intValue]];
+    MUFavouriteServer *favServ = [[MUFavouriteServer alloc] init];
+    [favServ setDisplayName:[serverItem objectForKey:@"name"]];
+    [favServ setHostName:[serverItem objectForKey:@"ip"]];
+    [favServ setPort:[[serverItem objectForKey:@"port"] intValue]];
 
-	UINavigationController *modalNav = [[UINavigationController alloc] init];
-	MUFavouriteServerEditViewController *editView = [[MUFavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];
+    UINavigationController *modalNav = [[UINavigationController alloc] init];
+    MUFavouriteServerEditViewController *editView = [[MUFavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];
 
-	[editView setTarget:self];
-	[editView setDoneAction:@selector(doneButtonClicked:)];
-	[modalNav pushViewController:editView animated:NO];
-	[editView release];
+    [editView setTarget:self];
+    [editView setDoneAction:@selector(doneButtonClicked:)];
+    [modalNav pushViewController:editView animated:NO];
+    [editView release];
 
-	[[self navigationController] presentModalViewController:modalNav animated:YES];
+    [[self navigationController] presentModalViewController:modalNav animated:YES];
 
-	[modalNav release];
-	[favServ release];
+    [modalNav release];
+    [favServ release];
 }
 
 - (void) doneButtonClicked:(id)sender {
-	MUFavouriteServerEditViewController *editView = (MUFavouriteServerEditViewController *)sender;
-	MUFavouriteServer *favServ = [editView copyFavouriteFromContent];
-	[MUDatabase storeFavourite:favServ];
-	[favServ release];
+    MUFavouriteServerEditViewController *editView = (MUFavouriteServerEditViewController *)sender;
+    MUFavouriteServer *favServ = [editView copyFavouriteFromContent];
+    [MUDatabase storeFavourite:favServ];
+    [favServ release];
 
-	MUFavouriteServerListController *favController = [[MUFavouriteServerListController alloc] init];
-	UINavigationController *navCtrl = [self navigationController];
-	[navCtrl popToRootViewControllerAnimated:NO];
-	[navCtrl pushViewController:favController animated:YES];
-	[favController release];
+    MUFavouriteServerListController *favController = [[MUFavouriteServerListController alloc] init];
+    UINavigationController *navCtrl = [self navigationController];
+    [navCtrl popToRootViewControllerAnimated:NO];
+    [navCtrl pushViewController:favController animated:YES];
+    [favController release];
 }
 
 

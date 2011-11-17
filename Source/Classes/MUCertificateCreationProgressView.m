@@ -32,49 +32,49 @@
 
 @interface MUCertificateCreationProgressView () {
     IBOutlet UIActivityIndicatorView  *_activityIndicator;
-	IBOutlet UILabel                  *_nameLabel;
-	IBOutlet UILabel                  *_emailLabel;
+    IBOutlet UILabel                  *_nameLabel;
+    IBOutlet UILabel                  *_emailLabel;
     
-	NSString                          *_identityName;
-	NSString                          *_emailAddress;
-	id                                _delegate;
+    NSString                          *_identityName;
+    NSString                          *_emailAddress;
+    id                                _delegate;
 }
 @end
 
 @implementation MUCertificateCreationProgressView
 
 - (id) initWithName:(NSString *)name email:(NSString *)email {
-	if (self = [super initWithNibName:@"MUCertificateCreationProgressView" bundle:nil]) {
-		_identityName = [name retain];
-		_emailAddress = [email retain];
-		NSLog(@"name = %@, email = %@", _identityName, _emailAddress);
-		
-		if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-			[self.view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-		}
-	}
-	return self;
+    if (self = [super initWithNibName:@"MUCertificateCreationProgressView" bundle:nil]) {
+        _identityName = [name retain];
+        _emailAddress = [email retain];
+        NSLog(@"name = %@, email = %@", _identityName, _emailAddress);
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+            [self.view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+        }
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[_identityName release];
-	[_emailAddress release];
-	[super dealloc];
+    [_identityName release];
+    [_emailAddress release];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[[self navigationItem] setTitle:@"Generating Certificate"];
-	[[self navigationItem] setHidesBackButton:YES];
+    [[self navigationItem] setTitle:@"Generating Certificate"];
+    [[self navigationItem] setHidesBackButton:YES];
 
-	[_nameLabel	setText:_identityName];
+    [_nameLabel    setText:_identityName];
 
-	if (_emailAddress != nil && _emailAddress.length > 0) {
-		[_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
-	} else {
-		[_emailLabel setText:nil];
-	}
+    if (_emailAddress != nil && _emailAddress.length > 0) {
+        [_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
+    } else {
+        [_emailLabel setText:nil];
+    }
 
-	[_activityIndicator startAnimating];
+    [_activityIndicator startAnimating];
 }
 
 @end

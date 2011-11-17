@@ -41,158 +41,158 @@ static FMDatabase *db = nil;
 // Initialize the database.
 + (void) initializeDatabase {
 
-	NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
+    NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
 
-	NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-																	   NSUserDomainMask,
-																	   YES);
-	NSString *directory = [documentDirectories objectAtIndex:0];
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                       NSUserDomainMask,
+                                                                       YES);
+    NSString *directory = [documentDirectories objectAtIndex:0];
 
-	NSError *err = nil;
-	NSFileManager *manager = [NSFileManager defaultManager];
+    NSError *err = nil;
+    NSFileManager *manager = [NSFileManager defaultManager];
 
-	// Hide the SQLite database from the iTunes document inspector.
-	NSString *oldPath = [directory stringByAppendingPathComponent:@"mumble.sqlite"];
-	NSString *newPath = [directory stringByAppendingPathComponent:@".mumble.sqlite"];
-	if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
-		if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
-			NSLog(@"Database: Unable to move file to new spot");
-		}
-	}
+    // Hide the SQLite database from the iTunes document inspector.
+    NSString *oldPath = [directory stringByAppendingPathComponent:@"mumble.sqlite"];
+    NSString *newPath = [directory stringByAppendingPathComponent:@".mumble.sqlite"];
+    if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
+        if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
+            NSLog(@"Database: Unable to move file to new spot");
+        }
+    }
 
-	NSString *dbPath = newPath;
-	db = [[FMDatabase alloc] initWithPath:dbPath];
-	if (!db)
-		return;
+    NSString *dbPath = newPath;
+    db = [[FMDatabase alloc] initWithPath:dbPath];
+    if (!db)
+        return;
 
-	if ([db open]) {
-		NSLog(@"Database: Initialized database at %@", dbPath);
-	} else {
-		NSLog(@"Database: Could not open database at %@", dbPath);
-		[db release];
-		db = nil;
-		return;
-	}
+    if ([db open]) {
+        NSLog(@"Database: Initialized database at %@", dbPath);
+    } else {
+        NSLog(@"Database: Could not open database at %@", dbPath);
+        [db release];
+        db = nil;
+        return;
+    }
 
-	//[Database dropAllTables];
+    //[Database dropAllTables];
 
-	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `favourites` "
-					  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
-					  @" `name` TEXT,"
-					  @" `hostname` TEXT,"
-	                  @" `port` INTEGER DEFAULT 64738,"
-	                  @" `username` TEXT,"
-	                  @" `password` TEXT)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `favourites` "
+                      @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      @" `name` TEXT,"
+                      @" `hostname` TEXT,"
+                      @" `port` INTEGER DEFAULT 64738,"
+                      @" `username` TEXT,"
+                      @" `password` TEXT)"];
 
-	[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `cert` "
-	                  @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
-	                  @" `hostname` TEXT,"
-	                  @" `port` INTEGER,"
-	                  @" `digest` TEXT)"];
-	[db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `cert_host_port`"
-	                  @" on `cert`(`hostname`,`port`)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `cert` "
+                      @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      @" `hostname` TEXT,"
+                      @" `port` INTEGER,"
+                      @" `digest` TEXT)"];
+    [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `cert_host_port`"
+                      @" on `cert`(`hostname`,`port`)"];
 
-	[db executeUpdate:@"VACUUM"];
+    [db executeUpdate:@"VACUUM"];
 
-	if ([db hadError]) {
-		NSLog(@"Database: Error: %@ (Code: %i)", [db lastErrorMessage], [db lastErrorCode]);
-	}
+    if ([db hadError]) {
+        NSLog(@"Database: Error: %@ (Code: %i)", [db lastErrorMessage], [db lastErrorCode]);
+    }
 }
 
 // Tear down the database
 + (void) teardown {
-	[db release];
+    [db release];
 }
 
 + (void) dropAllTables {
-	[db executeUpdate:@"DROP TABLE `identities`"];
-	[db executeUpdate:@"DROP TABLE `servers`"];
-	[db executeUpdate:@"DROP TABLE `favourites`"];
+    [db executeUpdate:@"DROP TABLE `identities`"];
+    [db executeUpdate:@"DROP TABLE `servers`"];
+    [db executeUpdate:@"DROP TABLE `favourites`"];
 }
 
 // Store a single favourite
 + (void) storeFavourite:(MUFavouriteServer *)favServ {
-	// If the favourite already has a primary key, update the currently stored entity
-	if ([favServ hasPrimaryKey]) {
-		[db executeUpdate:@"UPDATE `favourites` SET `name`=?, `hostname`=?, `port`=?, `username`=?, `password`=? WHERE `id`=?",
-			[favServ displayName],
-			[favServ hostName],
-			[NSString stringWithFormat:@"%u", [favServ port]],
-			[favServ userName],
-			[favServ password],
-			[NSNumber numberWithInt:[favServ primaryKey]]];
-	// If it isn't already stored, store it and update the object's pkey.
-	} else {
-		// We're already inside a transaction if we were called from within
-		// storeFavourites. If that isn't the case, make sure we start a new
-		// transaction.
-		BOOL newTransaction = ![db inTransaction];
-		if (newTransaction)
-			[db beginTransaction];
-		[db executeUpdate:@"INSERT INTO `favourites` (`name`, `hostname`, `port`, `username`, `password`) VALUES (?, ?, ?, ?, ?)",
-			[favServ displayName],
-			[favServ hostName],
-			[NSString stringWithFormat:@"%u", [favServ port]],
-			[favServ userName],
-			[favServ password]];
-		FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
-		[res next];
-		[favServ setPrimaryKey:[res intForColumnIndex:0]];
-		if (newTransaction)
-			[db commit];
-	}
+    // If the favourite already has a primary key, update the currently stored entity
+    if ([favServ hasPrimaryKey]) {
+        [db executeUpdate:@"UPDATE `favourites` SET `name`=?, `hostname`=?, `port`=?, `username`=?, `password`=? WHERE `id`=?",
+            [favServ displayName],
+            [favServ hostName],
+            [NSString stringWithFormat:@"%u", [favServ port]],
+            [favServ userName],
+            [favServ password],
+            [NSNumber numberWithInt:[favServ primaryKey]]];
+    // If it isn't already stored, store it and update the object's pkey.
+    } else {
+        // We're already inside a transaction if we were called from within
+        // storeFavourites. If that isn't the case, make sure we start a new
+        // transaction.
+        BOOL newTransaction = ![db inTransaction];
+        if (newTransaction)
+            [db beginTransaction];
+        [db executeUpdate:@"INSERT INTO `favourites` (`name`, `hostname`, `port`, `username`, `password`) VALUES (?, ?, ?, ?, ?)",
+            [favServ displayName],
+            [favServ hostName],
+            [NSString stringWithFormat:@"%u", [favServ port]],
+            [favServ userName],
+            [favServ password]];
+        FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
+        [res next];
+        [favServ setPrimaryKey:[res intForColumnIndex:0]];
+        if (newTransaction)
+            [db commit];
+    }
 }
 
 // Delete a particular favourite
 + (void) deleteFavourite:(MUFavouriteServer *)favServ {
-	NSAssert([favServ hasPrimaryKey], @"Cannot delete a FavouriteServer not originated from the database.");
-	[db executeUpdate:@"DELETE FROM `favourites` WHERE `id`=?", [NSNumber numberWithInt:[favServ primaryKey]]];
+    NSAssert([favServ hasPrimaryKey], @"Cannot delete a FavouriteServer not originated from the database.");
+    [db executeUpdate:@"DELETE FROM `favourites` WHERE `id`=?", [NSNumber numberWithInt:[favServ primaryKey]]];
 }
 
 // Save favourites
 + (void) storeFavourites:(NSArray *)favourites {
-	[db beginTransaction];
-	for (MUFavouriteServer *favServ in favourites) {
-		[MUDatabase storeFavourite:favServ];
-	}
-	[db commit];
+    [db beginTransaction];
+    for (MUFavouriteServer *favServ in favourites) {
+        [MUDatabase storeFavourite:favServ];
+    }
+    [db commit];
 }
 
 // Fetch all favourites
 + (NSMutableArray *) fetchAllFavourites {
-	NSMutableArray *favs = [[NSMutableArray alloc] init];
-	FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `username`, `password` FROM `favourites`"];
-	while ([res next]) {
-		MUFavouriteServer *fs = [[MUFavouriteServer alloc] init];
-		[fs setPrimaryKey:[res intForColumnIndex:0]];
-		[fs setDisplayName:[res stringForColumnIndex:1]];
-		[fs setHostName:[res stringForColumnIndex:2]];
-		[fs setPort:[res intForColumnIndex:3]];
-		[fs setUserName:[res stringForColumnIndex:4]];
-		[fs setPassword:[res stringForColumnIndex:5]];
-		[favs addObject:fs];
+    NSMutableArray *favs = [[NSMutableArray alloc] init];
+    FMResultSet *res = [db executeQuery:@"SELECT `id`, `name`, `hostname`, `port`, `username`, `password` FROM `favourites`"];
+    while ([res next]) {
+        MUFavouriteServer *fs = [[MUFavouriteServer alloc] init];
+        [fs setPrimaryKey:[res intForColumnIndex:0]];
+        [fs setDisplayName:[res stringForColumnIndex:1]];
+        [fs setHostName:[res stringForColumnIndex:2]];
+        [fs setPort:[res intForColumnIndex:3]];
+        [fs setUserName:[res stringForColumnIndex:4]];
+        [fs setPassword:[res stringForColumnIndex:5]];
+        [favs addObject:fs];
         [fs release];
-	}
-	[res close];
-	return [favs autorelease];
+    }
+    [res close];
+    return [favs autorelease];
 }
 
 #pragma mark -
 #pragma mark Certificate verification
 
 + (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port {
-	[db executeUpdate:@"REPLACE INTO `cert` (`hostname`,`port`,`digest`) VALUES (?,?,?)",
-	       hostname, [NSNumber numberWithInteger:port], hash];
+    [db executeUpdate:@"REPLACE INTO `cert` (`hostname`,`port`,`digest`) VALUES (?,?,?)",
+           hostname, [NSNumber numberWithInteger:port], hash];
 
 }
 
 + (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port {
-	FMResultSet *result = [db executeQuery:@"SELECT `digest` FROM `cert` WHERE `hostname` = ? AND `port` = ?",
-	                             hostname, [NSNumber numberWithInteger:port]];
-	if ([result next]) {
-		return [result stringForColumnIndex:0];
-	}
-	return nil;
+    FMResultSet *result = [db executeQuery:@"SELECT `digest` FROM `cert` WHERE `hostname` = ? AND `port` = ?",
+                                 hostname, [NSNumber numberWithInteger:port]];
+    if ([result next]) {
+        return [result stringForColumnIndex:0];
+    }
+    return nil;
 }
 
 @end

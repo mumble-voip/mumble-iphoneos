@@ -38,9 +38,9 @@
 #import <MumbleKit/MKCertificate.h>
 
 @interface MUCertificatePreferencesViewController () {
-	NSMutableArray   *_certificateItems;
-	BOOL             _picker;
-	NSUInteger       _selectedIndex;
+    NSMutableArray   *_certificateItems;
+    BOOL             _picker;
+    NSUInteger       _selectedIndex;
 }
 - (void) fetchCertificates;
 - (void) deleteCertificateForRow:(NSUInteger)row;
@@ -52,15 +52,15 @@
 #pragma mark Initialization
 
 - (id) init {
-	if ((self = [super init])) {
-		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
+    if ((self = [super init])) {
+        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[_certificateItems release];
-	[super dealloc];
+    [_certificateItems release];
+    [super dealloc];
 }
 
 #pragma mark -
@@ -69,11 +69,11 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Certificates";
 
-	[[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
 
-	[self fetchCertificates];
-	[self.tableView reloadData];
-	
+    [self fetchCertificates];
+    [self.tableView reloadData];
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [self.navigationItem setRightBarButtonItem:addButton];
     [addButton release];
@@ -91,18 +91,18 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"CertificateCell";
-	MUCertificateCell *cell = (MUCertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil)
-		cell = [MUCertificateCell loadFromNib];
-	
-	// Configure the cell...
-	NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
-	MKCertificate *cert = [dict objectForKey:@"cert"];
-	[cell setSubjectName:[cert commonName]];
-	[cell setEmail:[cert emailAddress]];
-	[cell setIssuerText:[cert issuerName]];
-	[cell setExpiryText:[[cert notAfter] description]];
+    static NSString *CellIdentifier = @"CertificateCell";
+    MUCertificateCell *cell = (MUCertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil)
+        cell = [MUCertificateCell loadFromNib];
+    
+    // Configure the cell...
+    NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+    MKCertificate *cert = [dict objectForKey:@"cert"];
+    [cell setSubjectName:[cert commonName]];
+    [cell setEmail:[cert emailAddress]];
+    [cell setIssuerText:[cert issuerName]];
+    [cell setExpiryText:[[cert notAfter] description]];
 
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
@@ -115,8 +115,8 @@
     }
     
     [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
-	
-	return (UITableViewCell *) cell;
+    
+    return (UITableViewCell *) cell;
 }
 
 
@@ -127,11 +127,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+    NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
-	[[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
+    [[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
 
-	MUCertificateCell *prevCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
+    MUCertificateCell *prevCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
     MUCertificateCell *curCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
     [prevCell setIsCurrentCertificate:NO];
     [curCell setIsCurrentCertificate:YES];
@@ -142,13 +142,13 @@
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-		[self deleteCertificateForRow:[indexPath row]];
-		[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
-	}
+        [self deleteCertificateForRow:[indexPath row]];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
+    }
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 85.0f;
+    return 85.0f;
 }
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
@@ -163,45 +163,45 @@
 #pragma mark Target/actions
 
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
-	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Add Certificate"
-													   delegate:self
-											  cancelButtonTitle:@"Cancel"
-										 destructiveButtonTitle:nil
-											  otherButtonTitles:@"Generate New Certificate",
-																@"Import From iTunes",
-							nil];
-	[sheet showInView:[self tableView]];
-	[sheet release];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Add Certificate"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:@"Generate New Certificate",
+                                                                @"Import From iTunes",
+                            nil];
+    [sheet showInView:[self tableView]];
+    [sheet release];
 }
 
 #pragma mark -
 #pragma mark UIActionSheet delegate
 
 - (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)idx {
-	if (idx == 0) { // Generate New Certificate
-		UINavigationController *navCtrl = [[UINavigationController alloc] init];
-		navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
-		MUCertificateCreationView *certGen = [[MUCertificateCreationView alloc] init];
-		[navCtrl pushViewController:certGen animated:NO];
-		[certGen release];
-		[[self navigationController] presentModalViewController:navCtrl animated:YES];
-		[navCtrl release];
-	} else if (idx == 1) { // Import From Disk
+    if (idx == 0) { // Generate New Certificate
+        UINavigationController *navCtrl = [[UINavigationController alloc] init];
+        navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
+        MUCertificateCreationView *certGen = [[MUCertificateCreationView alloc] init];
+        [navCtrl pushViewController:certGen animated:NO];
+        [certGen release];
+        [[self navigationController] presentModalViewController:navCtrl animated:YES];
+        [navCtrl release];
+    } else if (idx == 1) { // Import From Disk
         MUCertificateDiskImportViewController *diskImportViewController = [[MUCertificateDiskImportViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
         [[self navigationController] presentModalViewController:navController animated:YES];
         [diskImportViewController release];
         [navController release];
-	}
+    }
 }
 
 #pragma mark -
 #pragma mark Utils
 
 - (void) fetchCertificates {
-	NSArray *persistentRefs = [MUCertificateController allPersistentRefs];
+    NSArray *persistentRefs = [MUCertificateController allPersistentRefs];
 
-	[_certificateItems release];
+    [_certificateItems release];
     _certificateItems = nil;
 
     if (persistentRefs) {
@@ -217,12 +217,12 @@
 }
 
 - (void) deleteCertificateForRow:(NSUInteger)row {
-	// Delete a certificate from the keychain
-	NSDictionary *dict = [_certificateItems objectAtIndex:row];
-	OSStatus err = [MUCertificateController deleteCertificateWithPersistentRef:[dict objectForKey:@"persistentRef"]];
-	if (err == noErr) {
-		[_certificateItems removeObjectAtIndex:row];
-	}
+    // Delete a certificate from the keychain
+    NSDictionary *dict = [_certificateItems objectAtIndex:row];
+    OSStatus err = [MUCertificateController deleteCertificateWithPersistentRef:[dict objectForKey:@"persistentRef"]];
+    if (err == noErr) {
+        [_certificateItems removeObjectAtIndex:row];
+    }
 }
 
 @end

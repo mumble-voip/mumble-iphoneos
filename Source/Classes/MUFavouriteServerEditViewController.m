@@ -56,36 +56,36 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 #pragma mark Initialization
 
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ {
-	self = [super initWithStyle:UITableViewStyleGrouped];
-	if (self == nil)
-		return nil;
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self == nil)
+        return nil;
 
-	_editMode = editMode;
-	if (favServ) {
-		_favourite = [favServ copy];
-	} else {
-		_favourite = [[MUFavouriteServer alloc] init];
-	}
+    _editMode = editMode;
+    if (favServ) {
+        _favourite = [favServ copy];
+    } else {
+        _favourite = [[MUFavouriteServer alloc] init];
+    }
 
-	return self;
+    return self;
 }
 
 - (id) init {
-	return [self initInEditMode:NO withContentOfFavouriteServer:nil];
+    return [self initInEditMode:NO withContentOfFavouriteServer:nil];
 }
 
 - (void) dealloc {
-	[_favourite release];
-	[super dealloc];
+    [_favourite release];
+    [super dealloc];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	// On iPad, we support all interface orientations.
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-		return YES;
-	}
-	
-	return toInterfaceOrientation == UIInterfaceOrientationPortrait;
+    // On iPad, we support all interface orientations.
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return YES;
+    }
+    
+    return toInterfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 #pragma mark -
@@ -94,99 +94,99 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-	// View title
-	if (!_editMode) {
-		[[self navigationItem] setTitle:@"New Favourite"];
-	} else {
-		[[self navigationItem] setTitle:@"Edit Favourite"];
-	}
+    // View title
+    if (!_editMode) {
+        [[self navigationItem] setTitle:@"New Favourite"];
+    } else {
+        [[self navigationItem] setTitle:@"Edit Favourite"];
+    }
 
-	// Cancel button
-	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
-	[[self navigationItem] setLeftBarButtonItem:cancelButton];
-	[cancelButton release];
+    // Cancel button
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
+    [[self navigationItem] setLeftBarButtonItem:cancelButton];
+    [cancelButton release];
 
-	// Done
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)];
-	[[self navigationItem] setRightBarButtonItem:doneButton];
-	[doneButton release];
+    // Done
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)];
+    [[self navigationItem] setRightBarButtonItem:doneButton];
+    [doneButton release];
 }
 
 #pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
- 	return 1;
+     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	// Mumble Server
-	if (section == 0) {
-		return 5;
-	}
-	return 0;
+    // Mumble Server
+    if (section == 0) {
+        return 5;
+    }
+    return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == 0) {
-		return @"Mumble Server";
-	}
-	return @"Default";
+    if (section == 0) {
+        return @"Mumble Server";
+    }
+    return @"Default";
 }
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSUInteger section = [indexPath section];
-	NSUInteger row = [indexPath row];
+    NSUInteger section = [indexPath section];
+    NSUInteger row = [indexPath row];
 
-	// Mumble Server
-	if (section == 0) {
-		static NSString *CellIdentifier = @"FavouriteServerEditCell";
-		MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-		if (cell == nil) {
-			cell = [[[MUTableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
-		}
+    // Mumble Server
+    if (section == 0) {
+        static NSString *CellIdentifier = @"FavouriteServerEditCell";
+        MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[MUTableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+        }
 
-		[cell setTarget:self];
+        [cell setTarget:self];
 
-		if (row == 0) {
-			[cell setLabel:@"Description"];
-			[cell setPlaceholder:FavouriteServerPlaceholderDisplayName];
-			[cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-			[cell setValueChangedAction:@selector(descriptionChanged:)];
-			[cell setTextValue:[_favourite displayName]];
-		} else if (row == 1) {
-			[cell setLabel:@"Address"];
-			[cell setPlaceholder:FavouriteServerPlaceholderHostName];
-			[cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-			[cell setKeyboardType:UIKeyboardTypeURL];
-			[cell setValueChangedAction:@selector(hostnameChanged:)];
-			[cell setTextValue:[_favourite hostName]];
-		} else if (row == 2) {
-			[cell setLabel:@"Port"];
-			[cell setPlaceholder:FavouriteServerPlaceholderPort];
-			[cell setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
-			[cell setValueChangedAction:@selector(portChanged:)];
-			if ([_favourite port] != 0)
-				[cell setIntValue:[_favourite port]];
-			else
-				[cell setTextValue:nil];
-		} else if (row == 3) {
-			[cell setLabel:@"Username"];
-			[cell setPlaceholder:FavouriteServerPlaceholderUsername];
-			[cell setSecureTextEntry:NO];
-			[cell setValueChangedAction:@selector(usernameChanged:)];
-			[cell setTextValue:[_favourite userName]];
-		} else if (row == 4) {
-			[cell setLabel:@"Password"];
-			[cell setPlaceholder:FavouriteServerPlaceholderPassword];
-			[cell setSecureTextEntry:YES];
-			[cell setValueChangedAction:@selector(passwordChanged:)];
-			[cell setTextValue:[_favourite password]];
-		}
+        if (row == 0) {
+            [cell setLabel:@"Description"];
+            [cell setPlaceholder:FavouriteServerPlaceholderDisplayName];
+            [cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+            [cell setValueChangedAction:@selector(descriptionChanged:)];
+            [cell setTextValue:[_favourite displayName]];
+        } else if (row == 1) {
+            [cell setLabel:@"Address"];
+            [cell setPlaceholder:FavouriteServerPlaceholderHostName];
+            [cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+            [cell setKeyboardType:UIKeyboardTypeURL];
+            [cell setValueChangedAction:@selector(hostnameChanged:)];
+            [cell setTextValue:[_favourite hostName]];
+        } else if (row == 2) {
+            [cell setLabel:@"Port"];
+            [cell setPlaceholder:FavouriteServerPlaceholderPort];
+            [cell setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+            [cell setValueChangedAction:@selector(portChanged:)];
+            if ([_favourite port] != 0)
+                [cell setIntValue:[_favourite port]];
+            else
+                [cell setTextValue:nil];
+        } else if (row == 3) {
+            [cell setLabel:@"Username"];
+            [cell setPlaceholder:FavouriteServerPlaceholderUsername];
+            [cell setSecureTextEntry:NO];
+            [cell setValueChangedAction:@selector(usernameChanged:)];
+            [cell setTextValue:[_favourite userName]];
+        } else if (row == 4) {
+            [cell setLabel:@"Password"];
+            [cell setPlaceholder:FavouriteServerPlaceholderPassword];
+            [cell setSecureTextEntry:YES];
+            [cell setValueChangedAction:@selector(passwordChanged:)];
+            [cell setTextValue:[_favourite password]];
+        }
 
-		return cell;
-	}
+        return cell;
+    }
 
     return nil;
 }
@@ -195,88 +195,88 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath section] != 1 && [indexPath row] != 0)
-		return;
+    if ([indexPath section] != 1 && [indexPath row] != 0)
+        return;
 
-	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark -
 #pragma mark TableViewTextFieldCell actions
 
 - (void) descriptionChanged:(id)sender {
-	MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
-	[_favourite setDisplayName:[cell textValue]];
+    MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
+    [_favourite setDisplayName:[cell textValue]];
 }
 
 - (void) hostnameChanged:(id)sender {
-	MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
-	[_favourite setHostName:[cell textValue]];
+    MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
+    [_favourite setHostName:[cell textValue]];
 }
 
 - (void) portChanged:(id)sender {
-	MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
-	[_favourite setPort:(NSUInteger)[[cell textValue] intValue]];
+    MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)sender;
+    [_favourite setPort:(NSUInteger)[[cell textValue] intValue]];
 }
 
 - (void) usernameChanged:(id)sender {
-	[_favourite setUserName:[sender textValue]];
+    [_favourite setUserName:[sender textValue]];
 }
-	
+    
 - (void) passwordChanged:(id)sender {
-	[_favourite setPassword:[sender textValue]];
+    [_favourite setPassword:[sender textValue]];
 }
 
 #pragma mark -
 #pragma mark UIBarButton actions
 
 - (void) cancelClicked:(id)sender {
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void) doneClicked:(id)sender {
-	// Perform some basic tidying up. For example, for the port field, we
-	// want the default port number to be used if it wasn't filled out.
-	NSLog(@"%p", [_favourite displayName]);
-	if ([_favourite displayName] == nil) {
-		[_favourite setDisplayName:FavouriteServerPlaceholderDisplayName];
-	}
-	if ([_favourite port] == 0) {
-		[_favourite setPort:[FavouriteServerPlaceholderPort intValue]];
-	}
+    // Perform some basic tidying up. For example, for the port field, we
+    // want the default port number to be used if it wasn't filled out.
+    NSLog(@"%p", [_favourite displayName]);
+    if ([_favourite displayName] == nil) {
+        [_favourite setDisplayName:FavouriteServerPlaceholderDisplayName];
+    }
+    if ([_favourite port] == 0) {
+        [_favourite setPort:[FavouriteServerPlaceholderPort intValue]];
+    }
 
-	// Get rid of oureslves and call back to our target to tell it that
-	// we're done.
-	[[self navigationController] dismissModalViewControllerAnimated:YES];
-	if ([_target respondsToSelector:_doneAction]) {
-		[_target performSelector:_doneAction withObject:self];
-	}
+    // Get rid of oureslves and call back to our target to tell it that
+    // we're done.
+    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    if ([_target respondsToSelector:_doneAction]) {
+        [_target performSelector:_doneAction withObject:self];
+    }
 }
 
 #pragma mark -
 #pragma mark Data accessors
 
 - (MUFavouriteServer *) copyFavouriteFromContent {
-	return [_favourite copy];
+    return [_favourite copy];
 }
 
 #pragma mark -
 #pragma mark Target/actions
 
 - (void) setTarget:(id)target {
-	_target = target;
+    _target = target;
 }
 
 - (id) target {
-	return _target;
+    return _target;
 }
 
 - (void) setDoneAction:(SEL)action {
-	_doneAction = action;
+    _doneAction = action;
 }
 
 - (SEL) doneAction {
-	return _doneAction;
+    return _doneAction;
 }
 
 @end

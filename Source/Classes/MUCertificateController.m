@@ -57,11 +57,11 @@
 // todo(mkrautz): Don't leak OSStatus.
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef {
     // This goes against what the documentation says for this function, but Apple has stated that
-	// this is the intended way to delete via a persistent ref through a rdar.
-	NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-						persistentRef, kSecValuePersistentRef,
-						nil];
-	return SecItemDelete((CFDictionaryRef)op);
+    // this is the intended way to delete via a persistent ref through a rdar.
+    NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
+                        persistentRef, kSecValuePersistentRef,
+                        nil];
+    return SecItemDelete((CFDictionaryRef)op);
 }
 
 // Returns the certificate set as the default or 'active' certificate.

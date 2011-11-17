@@ -49,34 +49,34 @@
 #pragma mark Initialization
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
-	self = [super initWithStyle:UITableViewStyleGrouped];
+    self = [super initWithStyle:UITableViewStyleGrouped];
 
-	if (self != nil) {
-		[self fetchCertificates];
-		_selected = persistentRef;
-	}
+    if (self != nil) {
+        [self fetchCertificates];
+        _selected = persistentRef;
+    }
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[_certificateItems release];
-	[super dealloc];
+    [_certificateItems release];
+    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	[self setTitle:@"Choose..."];
+    [self setTitle:@"Choose..."];
 }
 
 #pragma mark -
 #pragma mark Delegate
 
 - (id<CertificatePickerViewControllerDelegate>) delegate {
-	return _delegate;
+    return _delegate;
 }
 
 - (void) setDelegate:(id<CertificatePickerViewControllerDelegate>)delegate {
-	_delegate = delegate;
+    _delegate = delegate;
 }
 
 #pragma mark -
@@ -91,76 +91,76 @@
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSUInteger row = [indexPath row];
+    NSUInteger row = [indexPath row];
 
-	// The 'none' choice.
-	if (row == 0) {
-		NSString *NoneIdentifier = @"NoneButton";
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoneIdentifier];
-		if (!cell) {
-			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NoneIdentifier] autorelease];
-		}
-		[[cell textLabel] setText:@"None"];
-		[[cell detailTextLabel] setText:nil];
-		if (_selected != nil) {
-			[cell setAccessoryType:UITableViewCellAccessoryNone];
-		} else {
-			[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-			_selectedRow = row;
-		}
-		return cell;
-	}
+    // The 'none' choice.
+    if (row == 0) {
+        NSString *NoneIdentifier = @"NoneButton";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoneIdentifier];
+        if (!cell) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:NoneIdentifier] autorelease];
+        }
+        [[cell textLabel] setText:@"None"];
+        [[cell detailTextLabel] setText:nil];
+        if (_selected != nil) {
+            [cell setAccessoryType:UITableViewCellAccessoryNone];
+        } else {
+            [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+            _selectedRow = row;
+        }
+        return cell;
+    }
 
-	static NSString *CellIdentifier = @"CertificateCell";
-	MUCertificateCell *cell = (MUCertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil)
-		cell = [MUCertificateCell loadFromNib];
+    static NSString *CellIdentifier = @"CertificateCell";
+    MUCertificateCell *cell = (MUCertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil)
+        cell = [MUCertificateCell loadFromNib];
 
-	NSDictionary *dict = [_certificateItems objectAtIndex:row-1];
-	MKCertificate *cert = [dict objectForKey:@"cert"];
-	[cell setSubjectName:[cert commonName]];
-	[cell setEmail:[cert emailAddress]];
-	[cell setIssuerText:[cert issuerName]];
-	[cell setExpiryText:[[cert notAfter] description]];
-	if ([_selected isEqualToData:[dict objectForKey:@"persistentRef"]]) {
-		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-		_selectedRow = row;
-	} else {
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
-	}
+    NSDictionary *dict = [_certificateItems objectAtIndex:row-1];
+    MKCertificate *cert = [dict objectForKey:@"cert"];
+    [cell setSubjectName:[cert commonName]];
+    [cell setEmail:[cert emailAddress]];
+    [cell setIssuerText:[cert issuerName]];
+    [cell setExpiryText:[[cert notAfter] description]];
+    if ([_selected isEqualToData:[dict objectForKey:@"persistentRef"]]) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        _selectedRow = row;
+    } else {
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
+    }
 
-	return (UITableViewCell *) cell;
+    return (UITableViewCell *) cell;
 }
 
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	NSUInteger row = [indexPath row];
+    NSUInteger row = [indexPath row];
 
-	if (row != _selectedRow) {
-		UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedRow inSection:0]];
-		[cell setAccessoryType:UITableViewCellAccessoryNone];
+    if (row != _selectedRow) {
+        UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedRow inSection:0]];
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
 
-		cell = [[self tableView] cellForRowAtIndexPath:indexPath];
-		[cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-		_selectedRow = row;
+        cell = [[self tableView] cellForRowAtIndexPath:indexPath];
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        _selectedRow = row;
 
-		NSDictionary *dict = row > 0 ? [_certificateItems objectAtIndex:row-1] : nil;
-		_selected = [dict objectForKey:@"persistentRef"];
-		if ([(id)_delegate respondsToSelector:@selector(certificatePickerViewController:didSelectCertificate:)]) {
-			[_delegate certificatePickerViewController:self didSelectCertificate:_selected];
-		}
-	}
+        NSDictionary *dict = row > 0 ? [_certificateItems objectAtIndex:row-1] : nil;
+        _selected = [dict objectForKey:@"persistentRef"];
+        if ([(id)_delegate respondsToSelector:@selector(certificatePickerViewController:didSelectCertificate:)]) {
+            [_delegate certificatePickerViewController:self didSelectCertificate:_selected];
+        }
+    }
 
-	[[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([indexPath row] == 0) {
-		return 44.0f;
-	}
-	return 85.0f;
+    if ([indexPath row] == 0) {
+        return 44.0f;
+    }
+    return 85.0f;
 }
 
 #pragma mark -
@@ -168,9 +168,9 @@
 
 - (void) fetchCertificates {
     NSArray *persistentRefs = [MUCertificateController allPersistentRefs];
-	_certificateItems = [[NSMutableArray alloc] initWithCapacity:[persistentRefs count]];
+    _certificateItems = [[NSMutableArray alloc] initWithCapacity:[persistentRefs count]];
 
-	for (NSData *persistentRef in persistentRefs) {
+    for (NSData *persistentRef in persistentRefs) {
         MKCertificate *cert = [MUCertificateController certificateWithPersistentRef:persistentRef];
         [_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                       cert, @"cert", persistentRef, @"persistentRef", nil]];

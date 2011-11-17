@@ -33,11 +33,11 @@
 @implementation Version
 
 + (unsigned int) hex {
-	return 0x10201;
+    return 0x10201;
 }
 
 + (NSString *) string {
-	return @"1.2.1";
+    return @"1.2.1";
 }
 
 @end

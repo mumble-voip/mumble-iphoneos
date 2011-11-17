@@ -41,36 +41,36 @@
 @implementation MULogViewController
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {
-	self = [super init];
-	if (self == nil)
-		return nil;
+    self = [super init];
+    if (self == nil)
+        return nil;
 
-	_serverModel = serverModel;
-	[_serverModel addDelegate:self];
+    _serverModel = serverModel;
+    [_serverModel addDelegate:self];
 
-	_logEntries = [[NSMutableArray alloc] init];
-	_dateFormatter = [[NSDateFormatter alloc] init];
+    _logEntries = [[NSMutableArray alloc] init];
+    _dateFormatter = [[NSDateFormatter alloc] init];
 
-	[_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
+    [_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
 
-	return self;
+    return self;
 }
 
 - (void) dealloc {
-	[_serverModel removeDelegate:self];
-	[_logEntries release];
+    [_serverModel removeDelegate:self];
+    [_logEntries release];
 
-	[super dealloc];
+    [super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated {
-	self.navigationItem.title = @"Log";
+    self.navigationItem.title = @"Log";
 }
 
 #pragma mark -
@@ -79,33 +79,33 @@
 // A user joined the server.
 //
 - (void) serverModel:(MKServerModel *)server userJoined:(MKUser *)user {
-	MULogEntry *entry = [[MULogEntry alloc] initWithText:@"User Joined"];
-	[_logEntries addObject:entry];
-	[entry release];
+    MULogEntry *entry = [[MULogEntry alloc] initWithText:@"User Joined"];
+    [_logEntries addObject:entry];
+    [entry release];
 
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 //
 // A user left the server.
 //
 - (void) serverModel:(MKServerModel *)server userLeft:(MKUser *)user {
-	MULogEntry *entry = [[MULogEntry alloc] initWithText:@"User Left"];
-	[_logEntries addObject:entry];
-	[entry release];
+    MULogEntry *entry = [[MULogEntry alloc] initWithText:@"User Left"];
+    [_logEntries addObject:entry];
+    [entry release];
 
-	[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+    return 1;
 }
 
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [_logEntries count];
+    return [_logEntries count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -117,16 +117,16 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	// Ascending
-	NSUInteger idx = 0;
-	if (_logEntries.count > 0) {
-		idx = (_logEntries.count - 1) - indexPath.row;
-	}
+    // Ascending
+    NSUInteger idx = 0;
+    if (_logEntries.count > 0) {
+        idx = (_logEntries.count - 1) - indexPath.row;
+    }
 
-	MULogEntry *entry = [_logEntries objectAtIndex:idx];
+    MULogEntry *entry = [_logEntries objectAtIndex:idx];
 
-	cell.textLabel.text = [entry text];
-	cell.detailTextLabel.text = [_dateFormatter stringFromDate:[entry date]];
+    cell.textLabel.text = [entry text];
+    cell.detailTextLabel.text = [_dateFormatter stringFromDate:[entry date]];
 
     return cell;
 }

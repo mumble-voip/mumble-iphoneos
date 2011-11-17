@@ -52,156 +52,156 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Initialization
 
 - (id) initWithCertificate:(MKCertificate *)cert {
-	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-		_certificates = [[NSArray alloc] initWithObjects:cert, nil];
-		_curIdx = 0;
-		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        _certificates = [[NSArray alloc] initWithObjects:cert, nil];
+        _curIdx = 0;
+        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    }
+    return self;
 }
 
 - (id) initWithCertificates:(NSArray *)cert {
-	if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-		_certificates = [[NSArray alloc] initWithArray:cert];
-		_curIdx = 0;
-		[self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
-	}
-	return self;
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        _certificates = [[NSArray alloc] initWithArray:cert];
+        _curIdx = 0;
+        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+    }
+    return self;
 }
 
 - (void) dealloc {
-	[_subjectItems release];
-	[_issuerItems release];
-	[_certTitle release];
-	[_arrows release];
-	[super dealloc];
+    [_subjectItems release];
+    [_issuerItems release];
+    [_certTitle release];
+    [_arrows release];
+    [super dealloc];
 }
 
 - (void) viewDidLoad {
-	[self setTitle:_certTitle];
+    [self setTitle:_certTitle];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-	if (_arrows == nil) {
-		_arrows = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:
-					[UIImage imageNamed:@"up.png"],
-					[UIImage imageNamed:@"down.png"],
-				nil]];
+    if (_arrows == nil) {
+        _arrows = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:
+                    [UIImage imageNamed:@"up.png"],
+                    [UIImage imageNamed:@"down.png"],
+                nil]];
 
-		_arrows.segmentedControlStyle = UISegmentedControlStyleBar;
-		_arrows.momentary = YES;
-		[_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
-	}
+        _arrows.segmentedControlStyle = UISegmentedControlStyleBar;
+        _arrows.momentary = YES;
+        [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
+    }
 
-	UIBarButtonItem *segmentedContainer = [[UIBarButtonItem alloc] initWithCustomView:_arrows];
-	self.navigationItem.rightBarButtonItem = segmentedContainer;
-	[segmentedContainer release];
+    UIBarButtonItem *segmentedContainer = [[UIBarButtonItem alloc] initWithCustomView:_arrows];
+    self.navigationItem.rightBarButtonItem = segmentedContainer;
+    [segmentedContainer release];
 
-	[self updateCertificateDisplay];
+    [self updateCertificateDisplay];
 }
 
 - (void) showDataForCertificate:(MKCertificate *)cert {
-	NSMutableArray *subject = [[NSMutableArray alloc] init];
-	NSMutableArray *issuer = [[NSMutableArray alloc] init];
-	NSString *str = nil;
+    NSMutableArray *subject = [[NSMutableArray alloc] init];
+    NSMutableArray *issuer = [[NSMutableArray alloc] init];
+    NSString *str = nil;
 
-	// Subject DN + additional
-	str = [cert subjectItem:MKCertificateItemCommonName];
-	if (str) {
-		[subject addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
-		_certTitle = [str copy];
-	} else
-		_certTitle = @"Unknown Certificate";
+    // Subject DN + additional
+    str = [cert subjectItem:MKCertificateItemCommonName];
+    if (str) {
+        [subject addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+        _certTitle = [str copy];
+    } else
+        _certTitle = @"Unknown Certificate";
 
-	str = [cert subjectItem:MKCertificateItemOrganization];
-	if (str)
-		[subject addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+    str = [cert subjectItem:MKCertificateItemOrganization];
+    if (str)
+        [subject addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
 
-	str = [[cert notBefore] description];
-	if (str)
-		[subject addObject:[NSArray arrayWithObjects:@"Not Before", str, nil]];
+    str = [[cert notBefore] description];
+    if (str)
+        [subject addObject:[NSArray arrayWithObjects:@"Not Before", str, nil]];
 
-	str = [[cert notAfter] description];
-	if (str)
-		[subject addObject:[NSArray arrayWithObjects:@"Not After", str, nil]];
+    str = [[cert notAfter] description];
+    if (str)
+        [subject addObject:[NSArray arrayWithObjects:@"Not After", str, nil]];
 
-	str = [cert emailAddress];
-	if (str)
-		[subject addObject:[NSArray arrayWithObjects:@"Email", str, nil]];
+    str = [cert emailAddress];
+    if (str)
+        [subject addObject:[NSArray arrayWithObjects:@"Email", str, nil]];
 
-	// Issuer DN
-	str = [cert issuerItem:MKCertificateItemCommonName];
-	if (str)
-		[issuer addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+    // Issuer DN
+    str = [cert issuerItem:MKCertificateItemCommonName];
+    if (str)
+        [issuer addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
 
-	str = [cert issuerItem:MKCertificateItemOrganization];
-	if (str)
-		[issuer addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+    str = [cert issuerItem:MKCertificateItemOrganization];
+    if (str)
+        [issuer addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
 
-	[_subjectItems release];
-	_subjectItems = subject;
+    [_subjectItems release];
+    _subjectItems = subject;
 
-	[_issuerItems release];
-	_issuerItems = issuer;
+    [_issuerItems release];
+    _issuerItems = issuer;
 
-	[self.tableView reloadData];
+    [self.tableView reloadData];
 }
 
 - (void) updateCertificateDisplay {
-	[self showDataForCertificate:[_certificates objectAtIndex:_curIdx]];
+    [self showDataForCertificate:[_certificates objectAtIndex:_curIdx]];
 
-	self.navigationItem.title = [NSString stringWithFormat:@"%i of %i", _curIdx+1, [_certificates count]];
-	[_arrows setEnabled:(_curIdx != [_certificates count]-1) forSegmentAtIndex:0];
-	[_arrows setEnabled:(_curIdx != 0) forSegmentAtIndex:1];
+    self.navigationItem.title = [NSString stringWithFormat:@"%i of %i", _curIdx+1, [_certificates count]];
+    [_arrows setEnabled:(_curIdx != [_certificates count]-1) forSegmentAtIndex:0];
+    [_arrows setEnabled:(_curIdx != 0) forSegmentAtIndex:1];
 }
 
 #pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-	return CertificateViewSectionTotal;
+    return CertificateViewSectionTotal;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if (section == CertificateViewSectionSubject) {
-		return [_subjectItems count];
-	} else if (section == CertificateViewSectionIssuer) {
-		return [_issuerItems count];
-	}
-	return 0;
+    if (section == CertificateViewSectionSubject) {
+        return [_subjectItems count];
+    } else if (section == CertificateViewSectionIssuer) {
+        return [_issuerItems count];
+    }
+    return 0;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == CertificateViewSectionSubject) {
-		return @"Subject";
-	} else if (section == CertificateViewSectionIssuer) {
-		return @"Issuer";
-	}
-	return @"Unknown";
+    if (section == CertificateViewSectionSubject) {
+        return @"Subject";
+    } else if (section == CertificateViewSectionIssuer) {
+        return @"Issuer";
+    }
+    return @"Unknown";
 }
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"CertificateViewCell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if (cell == nil) {
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
-	}
+    static NSString *CellIdentifier = @"CertificateViewCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+    }
 
-	[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-	[[cell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [[cell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
 
-	NSUInteger section = [indexPath section];
-	NSUInteger row = [indexPath row];
+    NSUInteger section = [indexPath section];
+    NSUInteger row = [indexPath row];
 
-	NSArray *item = nil;
-	if (section == CertificateViewSectionSubject)
-		item = [_subjectItems objectAtIndex:row];
-	else if (section == CertificateViewSectionIssuer)
-		item = [_issuerItems objectAtIndex:row];
+    NSArray *item = nil;
+    if (section == CertificateViewSectionSubject)
+        item = [_subjectItems objectAtIndex:row];
+    else if (section == CertificateViewSectionIssuer)
+        item = [_issuerItems objectAtIndex:row];
 
-	cell.textLabel.text = [item objectAtIndex:0];
-	cell.detailTextLabel.text = [item objectAtIndex:1];
+    cell.textLabel.text = [item objectAtIndex:0];
+    cell.detailTextLabel.text = [item objectAtIndex:1];
 
     return cell;
 }
@@ -210,18 +210,18 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Actions
 
 - (void) certificateSwitch:(id)sender {
-	if ([_arrows selectedSegmentIndex] == 0) {
-		if (_curIdx < [_certificates count]-1) {
+    if ([_arrows selectedSegmentIndex] == 0) {
+        if (_curIdx < [_certificates count]-1) {
             _curIdx += 1;
         }
-	} else {
-		if (_curIdx > 0) {
-			_curIdx -= 1;
+    } else {
+        if (_curIdx > 0) {
+            _curIdx -= 1;
         }
         
-	}
+    }
 
-	[self updateCertificateDisplay];
+    [self updateCertificateDisplay];
 }
 
 @end

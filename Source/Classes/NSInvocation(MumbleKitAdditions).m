@@ -35,27 +35,27 @@
 static void *_nilPointerLocation = nil;
 
 + (NSInvocation *) invocationWithTarget:(id)target selector:(SEL)selector {
-	NSInvocation *invocation = nil;
-	
-	if ([target respondsToSelector:selector]) {
-		NSMethodSignature *ms = [target methodSignatureForSelector:selector];
-		invocation = [NSInvocation invocationWithMethodSignature:ms];
-		[invocation setTarget:target];
-		[invocation setSelector:selector];
-	} else {
-		NSLog(@"NSInvocation(MumbleKitAdditions): Target %@ (%p) does not respond to selector %@. Returning nil.",
-			  NSStringFromClass(target), target, NSStringFromSelector(selector));
-	}
-		
-	return invocation;
+    NSInvocation *invocation = nil;
+    
+    if ([target respondsToSelector:selector]) {
+        NSMethodSignature *ms = [target methodSignatureForSelector:selector];
+        invocation = [NSInvocation invocationWithMethodSignature:ms];
+        [invocation setTarget:target];
+        [invocation setSelector:selector];
+    } else {
+        NSLog(@"NSInvocation(MumbleKitAdditions): Target %@ (%p) does not respond to selector %@. Returning nil.",
+              NSStringFromClass(target), target, NSStringFromSelector(selector));
+    }
+        
+    return invocation;
 }
 
 + (void **) nilPointerLocation {
-	return &_nilPointerLocation;
+    return &_nilPointerLocation;
 }
 
 - (void) invokeOnMainThread {
-	[self performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:NO];
 }
 
 @end
