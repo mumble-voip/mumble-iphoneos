@@ -364,7 +364,7 @@
         CGFloat ypos = (iconHeight - img.size.height)/2.0f;
         CGFloat xpos = (iconWidth - img.size.width)/2.0f;
         widthOffset -= iconWidth - xpos;
-        imgView.frame = CGRectMake(widthOffset, ypos, img.size.width, img.size.height);
+        imgView.frame = CGRectMake(ceilf(widthOffset), ceilf(ypos), img.size.width, img.size.height);
         [stateView addSubview:imgView];
         [imgView release];
     }
