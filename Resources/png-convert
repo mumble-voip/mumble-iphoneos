@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+# png->svg converter
+# licensed under the same terms as Mumble itself
+
+import subprocess
+
+INKSCAPE = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+
+class SVGFile(object):
+
+	def __init__(self, fn, inkscape=INKSCAPE):
+		self.fn = fn
+		self.inkscape = inkscape
+		# cause an exception if fn does not exist
+		open(fn)
+
+	@property
+	def width(self):
+		if not hasattr(self, '_width'):
+			p = subprocess.Popen([self.inkscape, '--query-width', self.fn], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			p.stderr.read()
+			self._width = float(p.stdout.read())
+		return self._width
+	
+	@property
+	def height(self):
+		if not hasattr(self, '_height'):
+			p = subprocess.Popen([self.inkscape, '--query-height', self.fn], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			p.stderr.read()
+			self._height = float(p.stdout.read())
+		return self._height
+
+	def pngconvert(self, pngfn, width=-1, height=-1):
+		if width == -1 and height == -1:
+			raise Exception('bad width or height')
+		elif width != -1 and height != -1:
+			raise Exception('bad width or height')
+		elif width != -1:
+			height = self.height * (width / self.width)
+		elif height != -1:
+			width = self.width * (height / self.height)
+		p = subprocess.Popen([self.inkscape, '--export-area-drawing', '--export-png=%s' % pngfn, '--export-width=%f' % width, '--export-height=%f' % height, self.fn], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		p.communicate()
+
+# Accessory views
+for icon in ['authenticated', 'deafened_self', 'muted_self',  'muted_server', 'deafened_server', 'muted_local', 'muted_suppressed', 'priorityspeaker']:
+	svg = SVGFile(icon+'.svg')
+	svg.pngconvert(icon+'.png', width=24)
+	svg.pngconvert(icon+'@2x.png', width=48)
+
+# Lips
+for icon in ['talking_on', 'talking_off', 'talking_whisper', 'talking_alt']:
+	svg = SVGFile(icon+'.svg')
+	svg.pngconvert(icon+'.png', width=44)
+	svg.pngconvert(icon+'@2x.png', width=88)
+
+# Channels
+for icon in ['channel']:
+	svg = SVGFile(icon+'.svg')
+	svg.pngconvert(icon+'.png', width=30)
+	svg.pngconvert(icon+'@2x.png', width=60)
+
+# Talk buttons
+svg = SVGFile('talking_on.svg')
+svg.pngconvert('talkbutton_on.png', width=170)
+svg.pngconvert('talkbutton_on@2x.png', width=340)
+icon = 'talking_off'
+svg = SVGFile('talking_off.svg')
+svg.pngconvert('talkbutton_off.png', width=170)
+svg.pngconvert('talkbutton_off@2x.png', width=340)

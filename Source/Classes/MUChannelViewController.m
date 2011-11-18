@@ -335,9 +335,9 @@
 }
 
 - (UIView *) stateAccessoryViewForUser:(MKUser *)user {
-    const CGFloat iconHeight = 28.0f;
-    const CGFloat iconWidth = 22.0f;
-    
+    const CGFloat iconHeight = 24.0f;
+    const CGFloat iconWidth = 28.0f;
+
     NSMutableArray *states = [[NSMutableArray alloc] init];
     if ([user isAuthenticated])
         [states addObject:@"authenticated"];
@@ -355,7 +355,7 @@
         [states addObject:@"muted_suppressed"];
     if ([user isPrioritySpeaker])
         [states addObject:@"priorityspeaker"];
-    
+
     CGFloat widthOffset = [states count] * iconWidth;
     UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
     for (NSString *imageName in states) {
