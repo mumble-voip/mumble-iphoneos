@@ -73,13 +73,6 @@
     self.navigationController.toolbarHidden = YES;
     [window addSubview:[navigationController view]];
 
-    // Create a fake splash screen that we can animate to give us
-    // a pretty fade-in launch...
-    UIScreen *screen = [UIScreen mainScreen];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:[screen applicationFrame]];
-    [imageView setImage:[UIImage imageNamed:@"Splash.png"]];
-    [window addSubview:imageView];
-
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     if (idiom == UIUserInterfaceIdiomPad) {
         MUWelcomeScreenPad *welcomeScreen = [[MUWelcomeScreenPad alloc] init];
@@ -91,15 +84,7 @@
         [welcomeScreen release];
     }
 
-    [UIView animateWithDuration:0.8f animations:^{
-        imageView.alpha = 0.0f;
-    } completion:^(BOOL finished){
-        [imageView removeFromSuperview];
-        [imageView release];
-
-        [self notifyCrash];
-        _verCheck = [[MUVersionChecker alloc] init];
-    }];
+    [self notifyCrash];
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
