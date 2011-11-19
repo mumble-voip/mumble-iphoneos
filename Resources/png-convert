@@ -3,6 +3,8 @@
 # licensed under the same terms as Mumble itself
 
 import subprocess
+import Image
+import os
 
 INKSCAPE = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
 
@@ -13,6 +15,15 @@ class SVGFile(object):
 		self.inkscape = inkscape
 		# cause an exception if fn does not exist
 		open(fn)
+
+	def get_page_dimensions(self):
+		if not hasattr(self, '_pagewidth') or not hasattr(self, '_pageheight'):
+			fn = '.'+self.fn+'.size.png'
+			p = subprocess.Popen([self.inkscape, '--verb=FitCanvasToDrawing', '--export-png=%s' % fn, self.fn], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			p.communicate()
+			self._pagewidth, self._pageheight = Image.open(fn).size
+			os.remove(fn)
+		return float(self._pagewidth), float(self._pageheight)
 
 	@property
 	def width(self):
@@ -30,41 +41,49 @@ class SVGFile(object):
 			self._height = float(p.stdout.read())
 		return self._height
 
-	def pngconvert(self, pngfn, width=-1, height=-1):
+	def pngconvert(self, pngfn, width=-1, height=-1, type=None):
+		cw = self.width
+		ch = self.height
+		if type == 'pagesize':
+			cw, ch = self.get_page_dimensions()
 		if width == -1 and height == -1:
 			raise Exception('bad width or height')
 		elif width != -1 and height != -1:
-			raise Exception('bad width or height')
+			pass
 		elif width != -1:
-			height = self.height * (width / self.width)
+			height = ch * (width / cw)
 		elif height != -1:
-			width = self.width * (height / self.height)
-		p = subprocess.Popen([self.inkscape, '--export-area-drawing', '--export-png=%s' % pngfn, '--export-width=%f' % width, '--export-height=%f' % height, self.fn], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			width = cw * (height / ch)
+		args = [self.inkscape]
+		if type == 'drawingarea':
+			args.append('--export-area-drawing')
+		args.extend(['--export-width=%f' % width, '--export-height=%f' % height, '--export-png=%s' % pngfn, self.fn])
+		p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		p.communicate()
 
 # Accessory views
 for icon in ['authenticated', 'deafened_self', 'muted_self',  'muted_server', 'deafened_server', 'muted_local', 'muted_suppressed', 'priorityspeaker']:
 	svg = SVGFile(icon+'.svg')
-	svg.pngconvert(icon+'.png', width=24)
-	svg.pngconvert(icon+'@2x.png', width=48)
+	svg.pngconvert(icon+'.png', width=24, height=24)
+	svg.pngconvert(icon+'@2x.png', width=48, height=48)
 
 # Lips
 for icon in ['talking_on', 'talking_off', 'talking_whisper', 'talking_alt']:
 	svg = SVGFile(icon+'.svg')
-	svg.pngconvert(icon+'.png', width=44)
-	svg.pngconvert(icon+'@2x.png', width=88)
+	svg.pngconvert(icon+'.png', width=33, type='pagesize')
+	svg.pngconvert(icon+'@2x.png', width=66, type='pagesize')
 
 # Channels
 for icon in ['channel']:
 	svg = SVGFile(icon+'.svg')
-	svg.pngconvert(icon+'.png', width=30)
-	svg.pngconvert(icon+'@2x.png', width=60)
+	svg.pngconvert(icon+'.png', width=30, type='drawingarea')
+	svg.pngconvert(icon+'@2x.png', width=60, type='drawingarea')
 
 # Talk buttons
 svg = SVGFile('talking_on.svg')
-svg.pngconvert('talkbutton_on.png', width=170)
-svg.pngconvert('talkbutton_on@2x.png', width=340)
+svg.pngconvert('talkbutton_on.png', height=80, type='pagesize')
+svg.pngconvert('talkbutton_on@2x.png', height=160, type='pagesize')
 icon = 'talking_off'
 svg = SVGFile('talking_off.svg')
-svg.pngconvert('talkbutton_off.png', width=170)
-svg.pngconvert('talkbutton_off@2x.png', width=340)
+svg.pngconvert('talkbutton_off.png', height=80, type='pagesize')
+svg.pngconvert('talkbutton_off@2x.png', height=160, type='pagesize')
