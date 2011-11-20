@@ -65,15 +65,20 @@
     [_displayname release];
     _displayname = [displayName copy];
 
-    [_hostname release];
-    _hostname = [hostName copy];
-
     [_port release];
     _port = [port copy];
-
+    
     [_pinger release];
-    _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
-    [_pinger setDelegate:self];
+    _pinger = nil;
+    
+    [_hostname release];
+    if ([hostName length] > 0) {
+        _hostname = [hostName copy];
+        _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
+        [_pinger setDelegate:self];
+    } else {
+        _hostname = @"(No Server)";
+    }
 
     self.textLabel.text = _displayname;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@:%@", _hostname, _port];
@@ -94,18 +99,18 @@
     if ([[favServ userName] length] > 0) {
         _username = [[favServ userName] copy];
     } else {
-        _username = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
+        _username = [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"] copy];
     }
 
     [_pinger release];
     _pinger = nil;
     if ([_hostname length] > 0) {
         _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
-        [_pinger setDelegate:self];
+        [_pinger setDelegate:self]; 
     } else {
         _hostname = @"(No Server)";
     }
-
+    
     self.textLabel.text = _displayname;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%@", _username, _hostname, _port];
     self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];

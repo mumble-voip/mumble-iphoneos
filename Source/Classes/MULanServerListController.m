@@ -29,6 +29,12 @@
 */
 
 #import "MULanServerListController.h"
+#import "MUServerRootViewController.h"
+#import "MUFavouriteServer.h"
+#import "MUFavouriteServerEditViewController.h"
+#import "MUServerCell.h"
+#import "MUDatabase.h"
+#import "MUFavouriteServerListController.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     if (reverse) {
@@ -38,10 +44,11 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     }
 } 
 
-@interface MULanServerListController () <NSNetServiceBrowserDelegate> {
+@interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate, UIActionSheetDelegate> {
     NSNetServiceBrowser  *_browser;
     NSMutableArray       *_netServices;
 }
+- (void) presentAddAsFavouriteDialogForServer:(NSNetService *)netService;
 @end
 
 @implementation MULanServerListController
@@ -50,16 +57,13 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark Initialization
 
 - (id) init {
-    self = [super initWithStyle:UITableViewStylePlain];
-    if (self == nil)
-        return nil;
+    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+        _browser = [[NSNetServiceBrowser alloc] init];
+        [_browser setDelegate:self];
+        [_browser scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 
-    _browser = [[NSNetServiceBrowser alloc] init];
-    [_browser setDelegate:self];
-    [_browser scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-
-    _netServices = [[NSMutableArray alloc] init];
-
+        _netServices = [[NSMutableArray alloc] init];
+    }
     return self;
 }
 
@@ -86,21 +90,29 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [_netServices addObject:netService];
     [_netServices sortUsingFunction:NetServiceAlphabeticalSort context:nil];
     NSInteger newIndex = [_netServices indexOfObject:netService];
-    [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+    [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+
+    [netService scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [netService setDelegate:self];
+    [netService resolveWithTimeout:10.0f];
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)netService moreComing:(BOOL)moreServices {
     NSInteger curIndex = [_netServices indexOfObject:netService];
     [_netServices removeObjectAtIndex:curIndex];
-    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
+    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
+    [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 #pragma mark -
-#pragma mark NSNetServiceDelegate
+#pragma mark NSNetService delegate
 
 - (void) netServiceDidResolveAddress:(NSNetService *)netService {
-    // We should resolve before we can connect..
+    NSInteger index = [_netServices indexOfObject:netService];
+    if (index >= 0) {
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark -
@@ -115,23 +127,91 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"LanServerCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
     NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
-    cell.textLabel.text = [netService name];
-    
-    return cell;
+    MUServerCell *cell = (MUServerCell *)[tableView dequeueReusableCellWithIdentifier:[MUServerCell reuseIdentifier]];
+    if (cell == nil) {
+        cell = [[[MUServerCell alloc] init] autorelease];
+    }
+    [cell populateFromDisplayName:[netService name] hostName:[netService hostName] port:[NSString stringWithFormat:@"%li", [netService port]]];
+    return (UITableViewCell *) cell;
 }
 
 #pragma mark -
-#pragma mark Table view delegate
+#pragma mark Selection
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Selected");
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+    // Server not yet resolved
+    if ([netService hostName] == nil) {
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
+    
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[netService name] delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:@"Connect", @"Add as favourite", nil];
+    [sheet showInView:[self tableView]];
+    [sheet release];
+}
+
+- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+    
+    // Connect
+    if (index == 0) {
+        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
+        MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc]
+                                                  initWithHostname:[netService hostName]
+                                                  port:[netService port]
+                                                  username:userName
+                                                  password:nil];
+        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+            [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        }
+        [[self navigationController] presentModalViewController:serverRoot animated:YES];
+        [serverRoot release];
+        
+        // Add as favourite
+    } else if (index == 1) {
+        [self presentAddAsFavouriteDialogForServer:netService];
+    }
+}
+
+- (void) presentAddAsFavouriteDialogForServer:(NSNetService *)netService {
+    MUFavouriteServer *favServ = [[MUFavouriteServer alloc] init];
+    [favServ setDisplayName:[netService name]];
+    [favServ setHostName:[netService hostName]];
+    [favServ setPort:[netService port]];
+    
+    UINavigationController *modalNav = [[UINavigationController alloc] init];
+    MUFavouriteServerEditViewController *editView = [[MUFavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];
+    
+    [editView setTarget:self];
+    [editView setDoneAction:@selector(doneButtonClicked:)];
+    [modalNav pushViewController:editView animated:NO];
+    [editView release];
+    
+    [[self navigationController] presentModalViewController:modalNav animated:YES];
+    
+    [modalNav release];
+    [favServ release];
+}
+
+- (void) doneButtonClicked:(id)sender {
+    MUFavouriteServerEditViewController *editView = (MUFavouriteServerEditViewController *)sender;
+    MUFavouriteServer *favServ = [editView copyFavouriteFromContent];
+    [MUDatabase storeFavourite:favServ];
+    [favServ release];
+    
+    MUFavouriteServerListController *favController = [[MUFavouriteServerListController alloc] init];
+    UINavigationController *navCtrl = [self navigationController];
+    [navCtrl popToRootViewControllerAnimated:NO];
+    [navCtrl pushViewController:favController animated:YES];
+    [favController release];
 }
 
 @end
