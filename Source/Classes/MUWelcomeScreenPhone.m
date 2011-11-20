@@ -100,11 +100,16 @@
     return 0;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0)
-        return @"Servers";
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIImage *img = [UIImage imageNamed:@"WelcomeScreenIcon"];
+    UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
+    [imgView setFrame:CGRectMake(0, 0, img.size.width, img.size.height)];
+    return imgView;
+}
 
-    return @"Unknown";
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    UIImage *img = [UIImage imageNamed:@"WelcomeScreenIcon"];
+    return img.size.height;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
