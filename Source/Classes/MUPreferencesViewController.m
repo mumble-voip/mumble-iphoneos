@@ -199,7 +199,12 @@
             [tf setAdjustsFontSizeToFitWidth:YES];
             [tf setPlaceholder:@"MumbleUser"];
             [tf setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-            [tf setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"]];
+            NSString *defaultUserName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
+            if (![defaultUserName isEqualToString:@"MumbleUser"]) {
+                [tf setText:defaultUserName];
+            } else {
+                [tf setText:nil];
+            }
             [tf setTextAlignment:UITextAlignmentRight];
             [[cell contentView] addSubview:tf];
             [tf release];
@@ -282,7 +287,11 @@
 }
 
 - (void) textFieldDidChange:(UITextField *)sender {
-    [[NSUserDefaults standardUserDefaults] setObject:[sender text] forKey:@"DefaultUserName"];
+    if ([[sender text] isEqualToString:@""]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@"MumbleUser" forKey:@"DefaultUserName"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setObject:[sender text] forKey:@"DefaultUserName"];
+    }
 }
 
 - (void) textFieldDidEndOnExit:(UITextField *)sender {

@@ -94,7 +94,7 @@
     if ([[favServ userName] length] > 0) {
         _username = [[favServ userName] copy];
     } else {
-        _username = @"MumbleUser";
+        _username = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
     }
 
     [_pinger release];

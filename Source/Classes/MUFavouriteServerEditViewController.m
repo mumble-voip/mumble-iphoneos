@@ -38,7 +38,6 @@
 static NSString   *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
 static NSString   *FavouriteServerPlaceholderHostName     = @"Hostname or IP address";
 static NSString   *FavouriteServerPlaceholderPort         = @"64738";
-static NSString   *FavouriteServerPlaceholderUsername     = @"MumbleUser";
 static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
 @interface MUFavouriteServerEditViewController () {
@@ -150,7 +149,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         [_usernameField setAdjustsFontSizeToFitWidth:NO];
         [_usernameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_usernameField setTextAlignment:UITextAlignmentLeft];
-        [_usernameField setPlaceholder:FavouriteServerPlaceholderUsername];
+        [_usernameField setPlaceholder:[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"]];
         [_usernameField setSecureTextEntry:NO];
         [_usernameField setText:[_favourite userName]];
         [_usernameField setClearButtonMode:UITextFieldViewModeWhileEditing];

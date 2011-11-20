@@ -124,10 +124,11 @@
 
     // Connect
     if (index == 0) {
+        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
         MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc]
                                                     initWithHostname:[serverItem objectForKey:@"ip"]
                                                                 port:[[serverItem objectForKey:@"port"] intValue]
-                                                            username:@"MumbleUser"
+                                                            username:userName
                                                             password:nil];
         if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
             [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
