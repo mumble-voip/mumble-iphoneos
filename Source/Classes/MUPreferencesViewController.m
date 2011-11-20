@@ -73,7 +73,11 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#ifdef MUMBLE_BETA_DIST
     return 3;
+#else
+    return 2;
+#endif
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -83,10 +87,13 @@
     // Network
     } else if (section == 1) {
         return 2;
+    }
+#ifdef MUMBLE_BETA_DIST
     // Beta
-    } else if (section == 2) {
+    else if (section == 2) {
         return 1;
     }
+#endif
 
     return 0;
 }
@@ -152,14 +159,16 @@
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             return cell;
         }
-    
+    }
+#ifdef MUMBLE_BETA_DIST
     // Beta
-    } else if ([indexPath section] == 2) {
+    else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = @"Diagnostics";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
+#endif
 
     return cell;
 }
@@ -169,8 +178,10 @@
         return @"Audio";
     else if (section == 1) // Network
         return @"Network";
+#ifdef MUMBLE_BETA_DIST
     else if (section == 2) // Beta
         return @"Beta";
+#endif
 
     return @"Default";
 }

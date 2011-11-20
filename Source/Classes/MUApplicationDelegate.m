@@ -42,16 +42,35 @@
     UIWindow                  *window;
     UINavigationController    *navigationController;
     NSDate                    *_launchDate;
+#ifdef MUMBLE_BETA_DIST
     MUVersionChecker          *_verCheck;
+#endif
 }
 - (void) setupAudio;
+#ifdef MUMBLE_BETA_DIST
 - (void) notifyCrash;
+#endif
 @end
 
 @implementation MUApplicationDelegate
 
 @synthesize window;
 @synthesize navigationController;
+
+#ifdef MUMBLE_BETA_DIST
+- (void) notifyCrash {
+    if ([MumbleApp didCrashRecently]) {
+        NSString *title = @"Beta Crash Reporting";
+        NSString *msg = @"Mumble has detected that it has recently crashed.\n\n"
+        "Don't forget to report your crashes to the beta portal using the crash reporting tool.\n";
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+        
+        [MumbleApp resetCrashCount];
+    }
+}
+#endif
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
     _launchDate = [[NSDate alloc] init];
@@ -84,7 +103,9 @@
         [welcomeScreen release];
     }
 
+#ifdef MUMBLE_BETA_DIST
     [self notifyCrash];
+#endif
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {
@@ -92,24 +113,13 @@
 }
 
 - (void) dealloc {
+#ifdef MUMBLE_BETA_DIST
     [_verCheck release];
+#endif
     [_launchDate release];
     [navigationController release];
     [window release];
     [super dealloc];
-}
-
-- (void) notifyCrash {
-    if ([MumbleApp didCrashRecently]) {
-        NSString *title = @"Beta Crash Reporting";
-        NSString *msg = @"Mumble has detected that it has recently crashed.\n\n"
-                        "Don't forget to report your crashes to the beta portal using the crash reporting tool.\n";
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        [alertView release];
-
-        [MumbleApp resetCrashCount];
-    }
 }
 
 - (void) setupAudio {

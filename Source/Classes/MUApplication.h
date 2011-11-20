@@ -36,6 +36,8 @@
 - (id) init;
 - (void) dealloc;
 - (MUApplicationDelegate *) delegate;
+#ifdef MUMBLE_BETA_DIST
 - (BOOL) didCrashRecently;
 - (void) resetCrashCount;
+#endif
 @end

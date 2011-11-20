@@ -34,6 +34,7 @@
 #import "MUApplication.h"
 #import "MUApplicationDelegate.h"
 
+#ifdef MUMBLE_BETA_DIST
 static char crashhandler_fn[PATH_MAX] = { 0, };
 static void crashhandler_signal_handler();
 static void crashhandler_signals_setup();
@@ -82,32 +83,42 @@ static void crashhandler_handle_crash() {
     fflush(f);
     fclose(f);
 }
+#endif
 
-@interface MUApplication () {
+@interface MUApplication ()
+#ifdef MUMBLE_BETA_DIST
+{
     NSString *_crashTokenPath;
 }
 - (void) setupCrashHandler;
 - (void) setupLogFile;
+#endif
 @end
 
 @implementation MUApplication
 
 - (id) init {
-    if (self = [super init]) {
+    if ((self = [super init])) {
+#ifdef MUMBLE_BETA_DIST
         [self setupCrashHandler];
         [self setupLogFile];
+#endif
     }
     return self;
 }
 
 - (void) dealloc {
+#ifdef MUMBLE_BETA_DIST
     [_crashTokenPath release];
+#endif
     [super dealloc];
 }
 
 - (MUApplicationDelegate *) delegate {
     return (MUApplicationDelegate *)[super delegate];
 }
+
+#ifdef MUMBLE_BETA_DIST
 
 // Setup the crash notification handler
 - (void) setupCrashHandler {
@@ -132,7 +143,6 @@ static void crashhandler_handle_crash() {
 
 // Setup the log file
 - (void) setupLogFile {
-#ifdef MUMBLE_BETA_DIST
     NSRange r = [[[UIDevice currentDevice] name] rangeOfString:@"Simulator"];
     if (r.location == NSNotFound) {
         NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -140,7 +150,8 @@ static void crashhandler_handle_crash() {
         FILE *f = fopen([logFilePath UTF8String], "a+");
         dup2(fileno(f), fileno(stderr));
     }
-#endif
 }
+
+#endif
 
 @end
