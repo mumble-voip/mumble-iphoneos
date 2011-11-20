@@ -39,7 +39,6 @@
     NSInteger        _editingRow;
     
     UITableViewCell  *_editingCell;
-    UITextField      *_editingField;
 }
 - (void) editItemAtIndex:(NSInteger)row;
 @end
@@ -57,7 +56,6 @@
 - (void) dealloc {
     [_model release];
     [_editingCell release];
-    [_editingField release];
     [super dealloc];
 }
 
@@ -133,6 +131,8 @@
 }
 
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_editingRow != -1)
+        return NO;
     return YES;
 }
 
@@ -161,17 +161,19 @@
     _tokenValue = [[_tokens objectAtIndex:row] copy];
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
-    _editingField = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 10.0, _editingCell.frame.size.width-10, _editingCell.frame.size.height-10)];
-    [_editingField setFont:[UIFont boldSystemFontOfSize:20.0f]];
-    [_editingField setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [_editingField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
-    [_editingField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
-    [_editingField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-    [_editingField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
-    [_editingField setText:_tokenValue];
-    [_editingField setReturnKeyType:UIReturnKeyDone];
-    [[_editingCell contentView] addSubview:_editingField];
-    [_editingField becomeFirstResponder];
+    UITextField *editingField = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 10.0, _editingCell.frame.size.width-10, _editingCell.frame.size.height-10)];
+    [editingField setFont:[UIFont boldSystemFontOfSize:20.0f]];
+    [editingField setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [editingField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+    [editingField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
+    [editingField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    [editingField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
+    [editingField setText:_tokenValue];
+    [editingField setReturnKeyType:UIReturnKeyDone];
+    [[_editingCell contentView] addSubview:editingField];
+    [editingField release];
+
+    [editingField becomeFirstResponder];
 }
 
 - (void) addButtonClicked:(id)sender {
@@ -207,8 +209,6 @@
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     [_editingCell release];
     _editingCell = nil;
-    [_editingField release];
-    _editingField = nil;
 }
 
 - (void) keyboardWasShown:(NSNotification*)aNotification {
