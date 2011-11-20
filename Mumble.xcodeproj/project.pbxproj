@@ -120,7 +120,7 @@
 		28F019911364585C00E402F6 /* MUServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F019901364585B00E402F6 /* MUServerCell.m */; };
 		28F79C69147966840003B8BA /* WelcomeScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C68147966840003B8BA /* WelcomeScreenIcon.png */; };
 		28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */; };
-		28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 28F8B04211D97E0B006EFCBC /* sqlite3.c */; };
+		28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */; };
 		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
 		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
@@ -315,9 +315,7 @@
 		28F019901364585B00E402F6 /* MUServerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCell.m; sourceTree = "<group>"; };
 		28F79C68147966840003B8BA /* WelcomeScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WelcomeScreenIcon.png; path = Resources/WelcomeScreenIcon.png; sourceTree = "<group>"; };
 		28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon@2x.png"; path = "Resources/WelcomeScreenIcon@2x.png"; sourceTree = "<group>"; };
-		28F8B04211D97E0B006EFCBC /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = Dependencies/sqlite/sqlite3.c; sourceTree = "<group>"; };
-		28F8B04311D97E0B006EFCBC /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = Dependencies/sqlite/sqlite3.h; sourceTree = "<group>"; };
-		28F8B04411D97E0B006EFCBC /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3ext.h; path = Dependencies/sqlite/sqlite3ext.h; sourceTree = "<group>"; };
+		28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
 		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
 		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -334,6 +332,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -434,7 +433,6 @@
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				28F8B04011D97E00006EFCBC /* sqlite */,
 				28F9173911B9460D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
@@ -568,16 +566,6 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		28F8B04011D97E00006EFCBC /* sqlite */ = {
-			isa = PBXGroup;
-			children = (
-				28F8B04211D97E0B006EFCBC /* sqlite3.c */,
-				28F8B04311D97E0B006EFCBC /* sqlite3.h */,
-				28F8B04411D97E0B006EFCBC /* sqlite3ext.h */,
-			);
-			name = sqlite;
-			sourceTree = "<group>";
-		};
 		28F9173911B9460D0030D649 /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
@@ -618,6 +606,7 @@
 			isa = PBXGroup;
 			children = (
 				28990AB0132FDA540034B406 /* libMumbleKit.a */,
+				28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */,
 				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
@@ -824,7 +813,6 @@
 				2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */,
 				2830A18C11CE983B00970A41 /* MUDiagnosticsViewController.m in Sources */,
 				287639F911D29D99009DB8B6 /* MUCertificateCreationProgressView.m in Sources */,
-				28F8B04511D97E0B006EFCBC /* sqlite3.c in Sources */,
 				2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */,
 				2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */,
 				288D6B60123D08EE00D37EDE /* MUCertificateViewController.m in Sources */,
@@ -871,7 +859,6 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -882,7 +869,7 @@
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -899,7 +886,6 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -910,7 +896,7 @@
 				PRODUCT_NAME = Mumble;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -947,7 +933,6 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -960,7 +945,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B326866D-9225-41D6-8507-A34798324CFE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
@@ -997,7 +982,6 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
-					"${PROJECT_DIR}/Dependencies/sqlite/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1010,7 +994,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = BetaDist;
