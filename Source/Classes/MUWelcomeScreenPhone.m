@@ -167,7 +167,7 @@
     
     UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
                                               cancelButtonTitle:@"OK"
-                                              otherButtonTitles:@"Website", @"Contributors", @"Legal", nil];
+                                              otherButtonTitles:@"Website", @"Legal", nil];
     [aboutView show];
     [aboutView release];
 }
@@ -183,14 +183,7 @@
 - (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumble.info/"]];
-    } else if (buttonIndex ==  2) { 
-        MUAboutViewController *contribView = [[MUAboutViewController alloc] initWithContent:@"Contributors"];
-        UINavigationController *navController = [[UINavigationController alloc] init];
-        [navController pushViewController:contribView animated:NO];
-        [contribView release];
-        [[self navigationController] presentModalViewController:navController animated:YES];
-        [navController release];
-    } else if (buttonIndex == 3) {
+    } else if (buttonIndex == 2) {
         MUAboutViewController *legalView = [[MUAboutViewController alloc] initWithContent:@"Legal"];
         UINavigationController *navController = [[UINavigationController alloc] init];
         [navController pushViewController:legalView animated:NO];

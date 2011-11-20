@@ -84,7 +84,6 @@
 		28DC1C6E13DE596B0037CDC2 /* cloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2513DE596B0037CDC2 /* cloud@2x.png */; };
 		28DC1C6F13DE596B0037CDC2 /* connection.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2613DE596B0037CDC2 /* connection.png */; };
 		28DC1C7013DE596B0037CDC2 /* Continents.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2713DE596B0037CDC2 /* Continents.plist */; };
-		28DC1C7113DE596B0037CDC2 /* Contributors.html in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2813DE596B0037CDC2 /* Contributors.html */; };
 		28DC1C7213DE596B0037CDC2 /* Countries.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2913DE596B0037CDC2 /* Countries.plist */; };
 		28DC1C7313DE596B0037CDC2 /* deafened_self.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2A13DE596B0037CDC2 /* deafened_self.png */; };
 		28DC1C7413DE596B0037CDC2 /* deafened_self@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C2B13DE596B0037CDC2 /* deafened_self@2x.png */; };
@@ -267,7 +266,6 @@
 		28DC1C2513DE596B0037CDC2 /* cloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cloud@2x.png"; path = "Resources/cloud@2x.png"; sourceTree = "<group>"; };
 		28DC1C2613DE596B0037CDC2 /* connection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = connection.png; path = Resources/connection.png; sourceTree = "<group>"; };
 		28DC1C2713DE596B0037CDC2 /* Continents.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Continents.plist; path = Resources/Continents.plist; sourceTree = "<group>"; };
-		28DC1C2813DE596B0037CDC2 /* Contributors.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Contributors.html; path = Resources/Contributors.html; sourceTree = "<group>"; };
 		28DC1C2913DE596B0037CDC2 /* Countries.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Countries.plist; path = Resources/Countries.plist; sourceTree = "<group>"; };
 		28DC1C2A13DE596B0037CDC2 /* deafened_self.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = deafened_self.png; path = Resources/deafened_self.png; sourceTree = "<group>"; };
 		28DC1C2B13DE596B0037CDC2 /* deafened_self@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "deafened_self@2x.png"; path = "Resources/deafened_self@2x.png"; sourceTree = "<group>"; };
@@ -519,7 +517,6 @@
 				28DC1C2513DE596B0037CDC2 /* cloud@2x.png */,
 				28DC1C2613DE596B0037CDC2 /* connection.png */,
 				28DC1C2713DE596B0037CDC2 /* Continents.plist */,
-				28DC1C2813DE596B0037CDC2 /* Contributors.html */,
 				28DC1C2913DE596B0037CDC2 /* Countries.plist */,
 				28DC1C2A13DE596B0037CDC2 /* deafened_self.png */,
 				28DC1C2B13DE596B0037CDC2 /* deafened_self@2x.png */,
@@ -733,7 +730,6 @@
 				28DC1C6E13DE596B0037CDC2 /* cloud@2x.png in Resources */,
 				28DC1C6F13DE596B0037CDC2 /* connection.png in Resources */,
 				28DC1C7013DE596B0037CDC2 /* Continents.plist in Resources */,
-				28DC1C7113DE596B0037CDC2 /* Contributors.html in Resources */,
 				28DC1C7213DE596B0037CDC2 /* Countries.plist in Resources */,
 				28DC1C7313DE596B0037CDC2 /* deafened_self.png in Resources */,
 				28DC1C7413DE596B0037CDC2 /* deafened_self@2x.png in Resources */,
