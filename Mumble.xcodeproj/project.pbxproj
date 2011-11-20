@@ -122,6 +122,7 @@
 		28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */; };
 		28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */; };
 		28F79C70147973D60003B8BA /* MUUserStateAcessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */; };
+		28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C72147991480003B8BA /* MUAccessTokenViewController.m */; };
 		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
 		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
@@ -319,6 +320,8 @@
 		28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		28F79C6E147973D40003B8BA /* MUUserStateAcessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUUserStateAcessoryView.h; sourceTree = "<group>"; };
 		28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUUserStateAcessoryView.m; sourceTree = "<group>"; };
+		28F79C71147991480003B8BA /* MUAccessTokenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAccessTokenViewController.h; sourceTree = "<group>"; };
+		28F79C72147991480003B8BA /* MUAccessTokenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAccessTokenViewController.m; sourceTree = "<group>"; };
 		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
 		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
 		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -407,6 +410,8 @@
 				28A2AEC014788BE300F3B83F /* MUColor.m */,
 				28F79C6E147973D40003B8BA /* MUUserStateAcessoryView.h */,
 				28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */,
+				28F79C71147991480003B8BA /* MUAccessTokenViewController.h */,
+				28F79C72147991480003B8BA /* MUAccessTokenViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -836,6 +841,7 @@
 				283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */,
 				28A2AEC114788BE300F3B83F /* MUColor.m in Sources */,
 				28F79C70147973D60003B8BA /* MUUserStateAcessoryView.m in Sources */,
+				28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

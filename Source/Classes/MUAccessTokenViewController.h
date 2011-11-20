@@ -28,28 +28,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <FMDatabase.h>
+#import <MumbleKit/MKServerModel.h>
 
-@class MUFavouriteServer;
-@class Identity;
-
-@interface MUDatabase : NSObject
-
-+ (void) initializeDatabase;
-+ (void) teardown;
-
-// FavouriteServer
-+ (void) storeFavourite:(MUFavouriteServer *)favServ;
-+ (void) deleteFavourite:(MUFavouriteServer *)favServ;
-+ (void) storeFavourites:(NSArray *)favourites;
-+ (NSMutableArray *) fetchAllFavourites;
-
-// Cert verification
-+ (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
-+ (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
-
-// Access tokens
-+ (void) storeAccessTokens:(NSArray *)tokens forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
-+ (NSArray *) accessTokensForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
-
+@interface MUAccessTokenViewController : UITableViewController
+- (id) initWithServerModel:(MKServerModel *)model;
 @end

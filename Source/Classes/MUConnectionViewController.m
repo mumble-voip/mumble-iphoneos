@@ -29,13 +29,25 @@
 */
 
 #import "MUConnectionViewController.h"
+#import "MUAccessTokenViewController.h"
+
+@interface MUConnectionViewController () {
+    MKServerModel *_model;
+}
+@end
 
 @implementation MUConnectionViewController
 
 - (id) initWithServerModel:(MKServerModel *)model {
-    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        _model = [model retain];
     }
     return self;
+}
+
+- (void) dealloc {
+    [_model release];
+    [super dealloc];
 }
 
 - (void) didReceiveMemoryWarning {
@@ -63,18 +75,25 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    if (section == 0) {
+        return 2;
+    }
+    return 0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"ConnectionViewCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    if ([indexPath section] == 0 && [indexPath row] == 0) {
-        cell.textLabel.text = @"Disconnect";
+    if ([indexPath section] == 0) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = @"Disconnect";
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = @"Access Tokens";
+        }
     }
 
     return cell;
@@ -92,8 +111,14 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([indexPath section] == 0 && [indexPath row] == 0) {
-        [self dismissModalViewControllerAnimated:YES];
+    if ([indexPath section] == 0) {
+        if ([indexPath row] == 0) { // Disconnect
+            [self dismissModalViewControllerAnimated:YES];
+        } else if ([indexPath row] == 1) { // Access tokens
+            MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
+            [[self navigationController] pushViewController:tokenViewController animated:YES];
+            [tokenViewController release];
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -74,8 +74,6 @@ static FMDatabase *db = nil;
         return;
     }
 
-    //[Database dropAllTables];
-
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `favourites` "
                       @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
                       @" `name` TEXT,"
@@ -91,7 +89,13 @@ static FMDatabase *db = nil;
                       @" `digest` TEXT)"];
     [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `cert_host_port`"
                       @" on `cert`(`hostname`,`port`)"];
-
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `tokens` "
+                      @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      @" `hostname` TEXT,"
+                      @" `port` INTEGER,"
+                      @" `tokens` BLOB)"];
+    [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `tokens_host_port`"
+                      @" on `tokens`(`hostname`,`port`)"];
     [db executeUpdate:@"VACUUM"];
 
     if ([db hadError]) {
@@ -102,12 +106,6 @@ static FMDatabase *db = nil;
 // Tear down the database
 + (void) teardown {
     [db release];
-}
-
-+ (void) dropAllTables {
-    [db executeUpdate:@"DROP TABLE `identities`"];
-    [db executeUpdate:@"DROP TABLE `servers`"];
-    [db executeUpdate:@"DROP TABLE `favourites`"];
 }
 
 // Store a single favourite
@@ -191,6 +189,39 @@ static FMDatabase *db = nil;
                                  hostname, [NSNumber numberWithInteger:port]];
     if ([result next]) {
         return [result stringForColumnIndex:0];
+    }
+    return nil;
+}
+
+#pragma mark -
+#pragma mark Access tokens
+
++ (void) storeAccessTokens:(NSArray *)tokens forServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+    NSData *tokensJSON = nil;
+    if (tokens != nil) {
+        NSError *err = nil;
+        tokensJSON = [NSJSONSerialization dataWithJSONObject:tokens options:0 error:&err];
+        if (err != nil) {
+            NSLog(@"MUDatabase#storeAccessTokens:forServerWithHostname:port: %@", err);
+            return;
+        }
+    }
+    [db executeUpdate:@"REPLACE INTO `tokens` (`hostname`,`port`,`tokens`) VALUES (?,?,?)",
+        hostname, [NSNumber numberWithInteger:port], tokensJSON];
+}
+
++ (NSArray *) accessTokensForServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+    FMResultSet *result = [db executeQuery:@"SELECT `tokens` FROM `tokens` WHERE `hostname` = ? AND `port` = ?",
+                           hostname, [NSNumber numberWithInteger:port]];
+    if ([result next]) {
+        NSError *err = nil;
+        NSData *tokensJSON = [result dataForColumnIndex:0];
+        NSArray *tokens = [NSJSONSerialization JSONObjectWithData:tokensJSON options:0 error:&err];
+        if (err != nil) {
+            NSLog(@"MUDatabase#accessTokensForServerWithHostname:port: %@", err);
+            return nil;
+        }
+        return tokens;
     }
     return nil;
 }

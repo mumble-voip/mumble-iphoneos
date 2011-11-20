@@ -181,7 +181,8 @@
 
 
 - (void) connectionOpened:(MKConnection *)conn {
-    [conn authenticateWithUsername:_username password:_password];
+    NSArray *tokens = [MUDatabase accessTokensForServerWithHostname:[conn hostname] port:[conn port]];
+    [conn authenticateWithUsername:_username password:_password accessTokens:tokens];
 }
 
 - (void) connectionClosed:(MKConnection *)conn {
