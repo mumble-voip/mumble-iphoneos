@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,57 +28,10 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUCertificateCell.h"
-#import "MUColor.h"
-
-@interface MUCertificateCell () {
-    IBOutlet UIImageView  *_certImage;
-    IBOutlet UILabel      *_nameLabel;
-    IBOutlet UILabel      *_emailLabel;
-    IBOutlet UILabel      *_issuerLabel;
-    IBOutlet UILabel      *_expiryLabel;
-    BOOL                  _isCurrentCert;
-}
-@end
-
-@implementation MUCertificateCell
-
-+ (MUCertificateCell *) loadFromNib {
-    NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
-    return [array objectAtIndex:0];
-}
-
-- (void) setSubjectName:(NSString *)name {
-    _nameLabel.text = name;
-}
-
-- (void) setEmail:(NSString *)email {
-    _emailLabel.text = email;
-}
-
-- (void) setIssuerText:(NSString *)issuerText {
-    _issuerLabel.text = issuerText;
-}
-
-- (void) setExpiryText:(NSString *)expiryText {
-    _expiryLabel.text = expiryText;
-}
-
-- (void) setIsCurrentCertificate:(BOOL)isCurrent {
-    _isCurrentCert = isCurrent;
-    if (isCurrent) {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell-selected"]];
-        [_nameLabel setTextColor:[MUColor selectedTextColor]];
-        [_emailLabel setTextColor:[MUColor selectedTextColor]];
-    } else {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];
-        [_nameLabel setTextColor:[UIColor blackColor]];
-        [_emailLabel setTextColor:[UIColor blackColor]];
-    }
-}
-
-- (BOOL) isCurrentCertificate {
-    return _isCurrentCert;
-}
-
+@interface MUColor : NSObject
++ (UIColor *) selectedTextColor;
++ (UIColor *) goodPingColor;
++ (UIColor *) mediumPingColor;
++ (UIColor *) badPingColor;
++ (UIColor *) userCountColor;
 @end

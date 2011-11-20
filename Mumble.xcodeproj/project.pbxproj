@@ -61,6 +61,7 @@
 		28A2AEBA14786E6000F3B83F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28A2AEB614786E6000F3B83F /* Default@2x.png */; };
 		28A2AEBB14786E6000F3B83F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28A2AEB714786E6000F3B83F /* Icon.png */; };
 		28A2AEBC14786E6000F3B83F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28A2AEB814786E6000F3B83F /* Icon@2x.png */; };
+		28A2AEC114788BE300F3B83F /* MUColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A2AEC014788BE300F3B83F /* MUColor.m */; };
 		28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* MULogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* MULogEntry.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
@@ -235,6 +236,8 @@
 		28A2AEB614786E6000F3B83F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		28A2AEB714786E6000F3B83F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		28A2AEB814786E6000F3B83F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		28A2AEBF14788BE300F3B83F /* MUColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUColor.h; sourceTree = "<group>"; };
+		28A2AEC014788BE300F3B83F /* MUColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUColor.m; sourceTree = "<group>"; };
 		28A4CCD1117E064B006EB479 /* MULogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogViewController.h; sourceTree = "<group>"; };
 		28A4CCD2117E064B006EB479 /* MULogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULogViewController.m; sourceTree = "<group>"; };
 		28A4CCF3117E1D4D006EB479 /* MULogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogEntry.h; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 				287A60561176201E00DD4FFB /* MUChannelViewController.m */,
 				280D9ADB13EB5ACB003B64A0 /* MUConnectionViewController.h */,
 				280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */,
+				28A2AEBF14788BE300F3B83F /* MUColor.h */,
+				28A2AEC014788BE300F3B83F /* MUColor.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -838,6 +843,7 @@
 				280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */,
 				280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */,
 				283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */,
+				28A2AEC114788BE300F3B83F /* MUColor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

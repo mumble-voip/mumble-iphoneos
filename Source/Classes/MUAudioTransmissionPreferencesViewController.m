@@ -29,6 +29,7 @@
 */
 
 #import "MUAudioTransmissionPreferencesViewController.h"
+#import "MUColor.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
 }
@@ -90,19 +91,26 @@
     
     NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.textLabel.textColor = [UIColor blackColor];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Voice Activated";
-            if ([current isEqualToString:@"vad"])
+            if ([current isEqualToString:@"vad"]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.textLabel.textColor = [MUColor selectedTextColor];
+            }
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Push-to-talk";
-            if ([current isEqualToString:@"ptt"])
+            if ([current isEqualToString:@"ptt"]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.textLabel.textColor = [MUColor selectedTextColor];
+            }
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"Continuous";
-            if ([current isEqualToString:@"continuous"])
+            if ([current isEqualToString:@"continuous"]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.textLabel.textColor = [MUColor selectedTextColor];
+            }
         }
     }
 
@@ -127,6 +135,7 @@
         for (int i = 0; i < 3; i++) {
             cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.textColor = [UIColor blackColor];
         }
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         if (indexPath.row == 0) {
@@ -138,6 +147,7 @@
         }
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.textLabel.textColor = [MUColor selectedTextColor];
     }
 }
 

@@ -29,6 +29,7 @@
 */
 
 #import "MUServerCell.h"
+#import "MUColor.h"
 #import "MUFavouriteServer.h"
 
 @interface MUServerCell () {
@@ -116,21 +117,14 @@
 
 - (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andUserCount:(NSUInteger)userCount isFull:(BOOL)isFull {
     UIImage *img = nil;
-
-    // #609a4b
-    UIColor *goodPing = [UIColor colorWithRed:0x60/255.0f green:0x9a/255.0f blue:0x4b/255.0f alpha:1.0f];
-    // #F2DE69
-    UIColor *mediumPing = [UIColor colorWithRed:0xf2/255.0f green:0xde/255.0f blue:0x69/255.0f alpha:1.0f];
-    // #D14D54
-    UIColor *badPing = [UIColor colorWithRed:0xd1/255.0f green:0x4d/255.0f blue:0x54/255.0f alpha:1.0f];
     
-    UIColor *pingColor = badPing;
+    UIColor *pingColor = [MUColor badPingColor];
     if (pingMs <= 125)
-        pingColor = goodPing;
+        pingColor = [MUColor goodPingColor];
     else if (pingMs > 125 && pingMs <= 250)
-        pingColor = mediumPing;
+        pingColor = [MUColor mediumPingColor];
     else if (pingMs > 250)
-        pingColor = badPing;
+        pingColor = [MUColor badPingColor];
     NSString *pingStr = [NSString stringWithFormat:@"%u\nms", pingMs];
     if (pingMs >= 999)
         pingStr = @"∞\nms";
@@ -149,12 +143,11 @@
 
     if (!isFull) {
         // Non-full servers get the mild iOS blue color
-        UIColor *usersColor = [UIColor colorWithRed:0x7c/255.0f green:0x91/255.0f blue:0xaa/255.0f alpha:1.0f];
-        CGContextSetFillColorWithColor(ctx, usersColor.CGColor);
+        CGContextSetFillColorWithColor(ctx, [MUColor userCountColor].CGColor);
     } else {
         // Mark full servers with the same red as we use for
         // 'bad' pings...
-        CGContextSetFillColorWithColor(ctx, badPing.CGColor);
+        CGContextSetFillColorWithColor(ctx, [MUColor badPingColor].CGColor);
     }
     CGContextFillRect(ctx, CGRectMake(34.0, 0, 32.0, 32.0));
 

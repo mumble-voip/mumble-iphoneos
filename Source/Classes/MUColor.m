@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,57 +28,33 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUCertificateCell.h"
 #import "MUColor.h"
 
-@interface MUCertificateCell () {
-    IBOutlet UIImageView  *_certImage;
-    IBOutlet UILabel      *_nameLabel;
-    IBOutlet UILabel      *_emailLabel;
-    IBOutlet UILabel      *_issuerLabel;
-    IBOutlet UILabel      *_expiryLabel;
-    BOOL                  _isCurrentCert;
-}
-@end
+@implementation MUColor
 
-@implementation MUCertificateCell
-
-+ (MUCertificateCell *) loadFromNib {
-    NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
-    return [array objectAtIndex:0];
++ (UIColor *) selectedTextColor {
+    // #365386
+    return [UIColor colorWithRed:0x36/255.0f green:0x53/255.0f blue:0x86/255.0f alpha:1.0f];
 }
 
-- (void) setSubjectName:(NSString *)name {
-    _nameLabel.text = name;
++ (UIColor *) goodPingColor {
+    // #609a4b
+    return [UIColor colorWithRed:0x60/255.0f green:0x9a/255.0f blue:0x4b/255.0f alpha:1.0f];
 }
 
-- (void) setEmail:(NSString *)email {
-    _emailLabel.text = email;
++ (UIColor *) mediumPingColor {
+    // #F2DE69
+    return [UIColor colorWithRed:0xf2/255.0f green:0xde/255.0f blue:0x69/255.0f alpha:1.0f];
 }
 
-- (void) setIssuerText:(NSString *)issuerText {
-    _issuerLabel.text = issuerText;
++ (UIColor *) badPingColor {
+    // #D14D54
+    return [UIColor colorWithRed:0xd1/255.0f green:0x4d/255.0f blue:0x54/255.0f alpha:1.0f];
 }
 
-- (void) setExpiryText:(NSString *)expiryText {
-    _expiryLabel.text = expiryText;
-}
-
-- (void) setIsCurrentCertificate:(BOOL)isCurrent {
-    _isCurrentCert = isCurrent;
-    if (isCurrent) {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell-selected"]];
-        [_nameLabel setTextColor:[MUColor selectedTextColor]];
-        [_emailLabel setTextColor:[MUColor selectedTextColor]];
-    } else {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];
-        [_nameLabel setTextColor:[UIColor blackColor]];
-        [_emailLabel setTextColor:[UIColor blackColor]];
-    }
-}
-
-- (BOOL) isCurrentCertificate {
-    return _isCurrentCert;
++ (UIColor *) userCountColor {
+    // #7C91AA
+    return [UIColor colorWithRed:0x7c/255.0f green:0x91/255.0f blue:0xaa/255.0f alpha:1.0f];
 }
 
 @end
