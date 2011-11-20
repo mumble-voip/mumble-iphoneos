@@ -934,10 +934,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Mikkel Krautz";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Mikkel Krautz";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Mumble.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "MUMBLE_APP_STORE=1";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = NO;
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
@@ -951,6 +954,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Mumble;
+				PROVISIONING_PROFILE = "B326866D-9225-41D6-8507-A34798324CFE";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B326866D-9225-41D6-8507-A34798324CFE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Dependencies/sqlite/";
