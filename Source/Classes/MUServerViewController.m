@@ -29,7 +29,7 @@
 */
 
 #import "MUServerViewController.h"
-
+#import "MUUserStateAcessoryView.h"
 
 #pragma mark -
 #pragma mark MUChannelNavigationItem
@@ -44,6 +44,7 @@
 - (void) dealloc;
 - (id) object;
 - (NSInteger) indentLevel;
+- (void) reloadUser:(MKUser *)user;
 @end
 
 @implementation MUChannelNavigationItem
@@ -111,6 +112,13 @@
     [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
 }
 
+- (void) reloadUser:(MKUser *)user {
+    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    if (userIndex != NSNotFound) {
+        [[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel {
     [_modelItems release];
     _modelItems = [[NSMutableArray alloc] init];
@@ -170,6 +178,7 @@
         cell.textLabel.text = [chan channelName];
         if (chan == [connectedUser channel])
             cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        cell.accessoryView = nil;
     } else if ([object class] == [MKUser class]) {
         MKUser *user = object;
 
@@ -189,6 +198,7 @@
             talkImageName = @"talking_alt";
         
         cell.imageView.image = [UIImage imageNamed:talkImageName];
+        cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
     }
 
     cell.indentationLevel = [navItem indentLevel];
@@ -254,6 +264,68 @@
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
     [self rebuildModelArrayFromChannel:[model rootChannel]];
 }
+
+- (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMute:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMutedAndDeafened:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userRemovedSelfMuteAndDeafen:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+}
+
+// --
+
+- (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ muted and deafened by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ unmuted and undeafened by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userMuted:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ muted by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ unmuted by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userDeafened:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ deafened by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ undeafened by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userSuppressed:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ suppressed by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userUnsuppressed:(MKUser *)user byUser:(MKUser *)actor {
+    NSLog(@"%@ unsuppressed by %@", user, actor);
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userMuteStateChanged:(MKUser *)user {
+   [self reloadUser:user];
+}
+
 
 @end
 
