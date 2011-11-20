@@ -131,11 +131,11 @@
         pingColor = mediumPing;
     else if (pingMs > 250)
         pingColor = badPing;
-    NSString *pingStr = [NSString stringWithFormat:@"%u ms", pingMs];
+    NSString *pingStr = [NSString stringWithFormat:@"%u\nms", pingMs];
     if (pingMs >= 999)
-        pingStr = @"999+ ms";
+        pingStr = @"999+\nms";
 
-    UIGraphicsBeginImageContext(sz);
+    UIGraphicsBeginImageContextWithOptions(sz, NO, [[UIScreen mainScreen] scale]);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(ctx, pingColor.CGColor);
     CGContextFillRect(ctx, CGRectMake(0, 0, sz.width, sz.height));
