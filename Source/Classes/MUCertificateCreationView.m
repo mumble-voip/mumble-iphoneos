@@ -29,9 +29,9 @@
 */
 
 #import "MUCertificateCreationView.h"
-#import "MUTableViewTextFieldCell.h"
 #import "MUCertificateCreationProgressView.h"
 #import "MUCertificateController.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -44,8 +44,14 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 @interface MUCertificateCreationView () {
-    NSString  *_fullName;
-    NSString  *_emailAddress;
+    NSString         *_fullName;
+    NSString         *_emailAddress;
+    UITableViewCell  *_nameCell;
+    UITextField      *_nameField;
+    UITableViewCell  *_emailCell;
+    UITextField      *_emailField;
+    UITableViewCell  *_activeCell;
+    UITextField      *_activeTextField;
 }
 @end
 
@@ -55,8 +61,45 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Initialization
 
 - (id) init {
-    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        
+        _nameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
+        [_nameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[_nameCell textLabel] setText:@"Name"];
+        _nameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        [_nameField setTextColor:[MUColor selectedTextColor]];
+        [_nameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+        [_nameField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
+        [_nameField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        [_nameField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
+        [_nameField setReturnKeyType:UIReturnKeyNext];
+        [_nameField setAdjustsFontSizeToFitWidth:NO];
+        [_nameField setTextAlignment:UITextAlignmentLeft];
+        [_nameField setPlaceholder:@"Mumble User"];
+        [_nameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [_nameField setText:_fullName];
+        [_nameField setClearButtonMode:UITextFieldViewModeWhileEditing];
+        [[_nameCell contentView] addSubview:_nameField];
+
+        _emailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
+        [_emailCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [[_emailCell textLabel] setText:@"Email"];
+        _emailField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        [_emailField setTextColor:[MUColor selectedTextColor]];
+        [_emailField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+        [_emailField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
+        [_emailField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+        [_emailField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
+        [_emailField setReturnKeyType:UIReturnKeyDefault];
+        [_emailField setAdjustsFontSizeToFitWidth:NO];
+        [_emailField setTextAlignment:UITextAlignmentLeft];
+        [_emailField setPlaceholder:@"(Optional)"];
+        [_emailField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [_emailField setKeyboardType:UIKeyboardTypeEmailAddress];
+        [_emailField setText:_fullName];
+        [_emailField setClearButtonMode:UITextFieldViewModeWhileEditing];
+        [[_emailCell contentView] addSubview:_emailField];
     }
     return self;
 }
@@ -66,6 +109,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     [self setTitle:@"New Certificate"];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
@@ -75,6 +120,20 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
     [[self navigationItem] setRightBarButtonItem:createButton];
     [createButton release];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 #pragma mark -
@@ -92,50 +151,87 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"CertGenCell";
-    MUTableViewTextFieldCell *cell = (MUTableViewTextFieldCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[MUTableViewTextFieldCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
-    }
-
     NSUInteger row = [indexPath row];
     if (row == 0) { // Full name
-        [cell setLabel:@"Name"];
-        [cell setPlaceholder:@"Mumble User"];
-        [cell setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-        [cell setValueChangedAction:@selector(nameChanged:)];
-        [cell setTextValue:_fullName];
-        [cell setTarget:self];
+        return _nameCell;
     } else if (row == 1) { // Email
-        [cell setLabel:@"Email"];
-        [cell setPlaceholder:@"(Optional)"];
-        [cell setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        [cell setValueChangedAction:@selector(emailChanged:)];
-        [cell setTextValue:_emailAddress];
-        [cell setTarget:self];
+        return _emailCell;
     }
-
-    return (UITableViewCell *)cell;
+    return nil;
 }
 
 #pragma mark -
-#pragma mark Table view delegate
+#pragma mark Text field handling
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) textFieldBeganEditing:(UITextField *)sender {
+    _activeTextField = sender;
+    if (sender == _nameField) {
+        _activeCell = _nameCell;
+    } else if (sender == _emailField) {
+        _activeCell = _emailCell;
+    }
 }
+
+- (void) textFieldEndedEditing:(UITextField *)sender {
+    _activeTextField = nil;
+}
+
+- (void) textFieldDidChange:(UITextField *)sender {
+    if (sender == _nameField) {
+        [_fullName release];
+        _fullName = [[sender text] copy];
+    } else if (sender == _emailField) {
+        [_emailAddress release];
+        _emailAddress = [[sender text] copy];
+    }
+}
+
+- (void) textFieldDidEndOnExit:(UITextField *)sender {
+    if (sender == _nameField) {
+        [_emailField becomeFirstResponder];
+        _activeTextField = _emailField;
+        _activeCell = _emailCell;
+    } else if (sender == _emailField) {
+        [_emailField resignFirstResponder];
+        _activeTextField = nil;
+        _activeCell = nil;
+    }
+    if (_activeCell) {
+        [self.tableView scrollToRowAtIndexPath:[self.tableView indexPathForCell:_activeCell]
+                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+- (void) keyboardWasShown:(NSNotification*)aNotification {
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    [UIView animateWithDuration:0.2f animations:^{
+        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
+    } completion:^(BOOL finished) {
+        if (!finished)
+            return;
+        [self.tableView scrollToRowAtIndexPath:[self.tableView indexPathForCell:_activeCell]
+                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
+    }];
+}
+
+- (void) keyboardWillBeHidden:(NSNotification*)aNotification {
+    [UIView animateWithDuration:0.2f animations:^{
+        UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
+    } completion:^(BOOL finished) {
+        // ...
+    }];
+}
+
 
 #pragma mark -
 #pragma mark Target/actions
-
-- (void) nameChanged:(MUTableViewTextFieldCell *)sender {
-    [_fullName release];
-    _fullName = [[sender textValue] copy];
-}
-
-- (void) emailChanged:(MUTableViewTextFieldCell *)sender {
-    [_emailAddress release];
-    _emailAddress = [[sender textValue] copy];
-}
 
 - (void) cancelClicked:(id)sender {
     [[self navigationController] dismissModalViewControllerAnimated:YES];

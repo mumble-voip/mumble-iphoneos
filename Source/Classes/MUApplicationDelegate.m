@@ -84,6 +84,7 @@
                                                                 @"vad",                            @"AudioTransmitMethod",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
+                                                                @"MumbleUser",                     @"DefaultUserName",
                                                              nil]];
     
     [self reloadPreferences];

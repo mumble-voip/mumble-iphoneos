@@ -47,7 +47,6 @@
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
 		287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */; };
-		287BA42B11B9A1DB0010E031 /* MUTableViewTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA42A11B9A1DB0010E031 /* MUTableViewTextFieldCell.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288B55E01252903300563A28 /* MUServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* MUCertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* MUCertificateViewController.m */; };
@@ -214,8 +213,6 @@
 		287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerListController.m; sourceTree = "<group>"; };
 		287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServerEditViewController.h; sourceTree = "<group>"; };
 		287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerEditViewController.m; sourceTree = "<group>"; };
-		287BA42911B9A1DB0010E031 /* MUTableViewTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUTableViewTextFieldCell.h; sourceTree = "<group>"; };
-		287BA42A11B9A1DB0010E031 /* MUTableViewTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTableViewTextFieldCell.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		288B55DE1252903300563A28 /* MUServerCertificateTrustViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerCertificateTrustViewController.h; sourceTree = "<group>"; };
 		288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCertificateTrustViewController.m; sourceTree = "<group>"; };
@@ -382,8 +379,6 @@
 				28A4CCF4117E1D4D006EB479 /* MULogEntry.m */,
 				287BA33E11B97EEE0010E031 /* MUFavouriteServerListController.h */,
 				287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */,
-				287BA42911B9A1DB0010E031 /* MUTableViewTextFieldCell.h */,
-				287BA42A11B9A1DB0010E031 /* MUTableViewTextFieldCell.m */,
 				287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */,
 				287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */,
 				289D254A11BC28BC00E39F2C /* MULanServerListController.h */,
@@ -816,7 +811,6 @@
 				287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */,
 				287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */,
 				287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */,
-				287BA42B11B9A1DB0010E031 /* MUTableViewTextFieldCell.m in Sources */,
 				28C6EF0A11BBF38100E426C8 /* MUCountryServerListController.m in Sources */,
 				289D254C11BC28BC00E39F2C /* MULanServerListController.m in Sources */,
 				2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */,

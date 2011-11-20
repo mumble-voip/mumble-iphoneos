@@ -35,10 +35,13 @@
 #import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUDiagnosticsViewController.h"
 #import "MUCertificateController.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUPreferencesViewController ()
+@interface MUPreferencesViewController () {
+    UITextField *_activeTextField;
+}
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch;
 @end
@@ -65,8 +68,24 @@
 #pragma mark Looks
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+
     self.title = @"Preferences";
     [self.tableView reloadData];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 #pragma mark -
@@ -86,7 +105,7 @@
         return 2;
     // Network
     } else if (section == 1) {
-        return 2;
+        return 3;
     }
 #ifdef MUMBLE_BETA_DIST
     // Beta
@@ -158,6 +177,34 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             return cell;
+        } else if ([indexPath row] == 2) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefTextFieldCell"];
+            if (cell == nil)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefTextFieldCell"] autorelease];
+            
+            for (UIView *subview in [[cell contentView] subviews]) {
+                [subview removeFromSuperview];
+            }
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [[cell textLabel] setText:@"Username"];
+    
+            UITextField *tf = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+            [tf setTextColor:[MUColor selectedTextColor]];
+            [tf addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+            [tf addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
+            [tf addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+            [tf addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
+            [tf setReturnKeyType:UIReturnKeyDone];
+            [tf setAdjustsFontSizeToFitWidth:YES];
+            [tf setPlaceholder:@"MumbleUser"];
+            [tf setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+            [tf setText:[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"]];
+            [tf setTextAlignment:UITextAlignmentRight];
+            [[cell contentView] addSubview:tf];
+            [tf release];
+
+            return cell;
         }
     }
 #ifdef MUMBLE_BETA_DIST
@@ -186,6 +233,13 @@
     return @"Default";
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 1) // Network
+        return @"This username is the default username used for connections to public and LAN servers.";
+    else
+        return nil;
+}
+
 #pragma mark -
 #pragma mark Table view delegate
 
@@ -204,17 +258,64 @@
             [self.navigationController pushViewController:certPref animated:YES];
             [certPref release];
         }
-    } else if ([indexPath section] == 2) { // Beta
+    }
+#ifdef MUMBLE_BETA_DIST
+    else if ([indexPath section] == 2) { // Beta
         if ([indexPath row] == 0) {
             MUDiagnosticsViewController *diagView = [[MUDiagnosticsViewController alloc] init];
             [self.navigationController pushViewController:diagView animated:YES];
             [diagView release];
         }
     }
+#endif
 }
 
 #pragma mark -
 #pragma mark Change notification
+
+- (void) textFieldBeganEditing:(UITextField *)sender {
+    _activeTextField = sender;
+}
+
+- (void) textFieldEndedEditing:(UITextField *)sender {
+    _activeTextField = nil;
+}
+
+- (void) textFieldDidChange:(UITextField *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:[sender text] forKey:@"DefaultUserName"];
+}
+
+- (void) textFieldDidEndOnExit:(UITextField *)sender {
+    _activeTextField = nil;
+    [sender resignFirstResponder];
+}
+
+- (void) keyboardWasShown:(NSNotification*)aNotification {
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+
+    [UIView animateWithDuration:0.2f animations:^{
+        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
+    } completion:^(BOOL finished) {
+        if (!finished)
+            return;
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]
+                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+    }];
+}
+
+- (void) keyboardWillBeHidden:(NSNotification*)aNotification {
+    [UIView animateWithDuration:0.2f animations:^{
+        UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+        self.tableView.contentInset = contentInsets;
+        self.tableView.scrollIndicatorInsets = contentInsets;
+    } completion:^(BOOL finished) {
+        // ...
+    }];
+}
 
 - (void) audioVolumeChanged:(UISlider *)volumeSlider {
     [[NSUserDefaults standardUserDefaults] setFloat:[volumeSlider value] forKey:@"AudioOutputVolume"];
