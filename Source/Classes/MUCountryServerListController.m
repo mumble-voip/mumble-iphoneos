@@ -34,6 +34,7 @@
 #import "MUFavouriteServer.h"
 #import "MUFavouriteServerListController.h"
 #import "MUFavouriteServerEditViewController.h"
+#import "MUServerRootViewController.h"
 
 #import "MUServerCell.h"
 
@@ -123,7 +124,16 @@
 
     // Connect
     if (index == 0) {
-        NSLog(@"Connect...");
+        MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc]
+                                                    initWithHostname:[serverItem objectForKey:@"ip"]
+                                                                port:[[serverItem objectForKey:@"port"] intValue]
+                                                            username:@"MumbleUser"
+                                                            password:nil];
+        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
+            [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        }
+        [[self navigationController] presentModalViewController:serverRoot animated:YES];
+        [serverRoot release];
 
     // Add as favourite
     } else if (index == 1) {
