@@ -38,7 +38,7 @@
     NSString        *_username;
     MKServerPinger  *_pinger;
 }
-- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andSize:(CGSize)sz;
+- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andUserCount:(NSUInteger)userCount isFull:(BOOL)isFull;
 @end
 
 @implementation MUServerCell
@@ -76,7 +76,7 @@
 
     self.textLabel.text = _displayname;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@:%@", _hostname, _port];
-    self.imageView.image = [self drawPingImageWithPingValue:999 andSize:CGSizeMake(32.0, 32.0)];
+    self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];
 }
 
 - (void) populateFromFavouriteServer:(MUFavouriteServer *)favServ {
@@ -107,14 +107,14 @@
 
     self.textLabel.text = _displayname;
     self.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%@", _username, _hostname, _port];
-    self.imageView.image = [self drawPingImageWithPingValue:999 andSize:CGSizeMake(32.0, 32.0)];
+    self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
 
-- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andSize:(CGSize)sz {
+- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andUserCount:(NSUInteger)userCount isFull:(BOOL)isFull {
     UIImage *img = nil;
 
     // #609a4b
@@ -133,20 +133,38 @@
         pingColor = badPing;
     NSString *pingStr = [NSString stringWithFormat:@"%u\nms", pingMs];
     if (pingMs >= 999)
-        pingStr = @"999+\nms";
+        pingStr = @"∞\nms";
 
-    UIGraphicsBeginImageContextWithOptions(sz, NO, [[UIScreen mainScreen] scale]);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(66.0f, 32.0f), NO, [[UIScreen mainScreen] scale]);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(ctx, pingColor.CGColor);
-    CGContextFillRect(ctx, CGRectMake(0, 0, sz.width, sz.height));
-    
+    CGContextFillRect(ctx, CGRectMake(0, 0, 32.0, 32.0));
+
     CGContextSetTextDrawingMode(ctx, kCGTextFill);
     CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    
-    [pingStr drawInRect:CGRectMake(0, 0, sz.width, sz.height)
-               withFont:[UIFont systemFontOfSize:12]
+    [pingStr drawInRect:CGRectMake(0.0, 0.0, 32.0, 32.0)
+               withFont:[UIFont boldSystemFontOfSize:12]
           lineBreakMode:UILineBreakModeTailTruncation
               alignment:UITextAlignmentCenter];
+
+    if (!isFull) {
+        // Non-full servers get the mild iOS blue color
+        UIColor *usersColor = [UIColor colorWithRed:0x7c/255.0f green:0x91/255.0f blue:0xaa/255.0f alpha:1.0f];
+        CGContextSetFillColorWithColor(ctx, usersColor.CGColor);
+    } else {
+        // Mark full servers with the same red as we use for
+        // 'bad' pings...
+        CGContextSetFillColorWithColor(ctx, badPing.CGColor);
+    }
+    CGContextFillRect(ctx, CGRectMake(34.0, 0, 32.0, 32.0));
+
+    CGContextSetTextDrawingMode(ctx, kCGTextFill);
+    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    NSString *usersStr = [NSString stringWithFormat:@"%u\nppl", userCount];
+    [usersStr drawInRect:CGRectMake(34.0, 0.0, 32.0, 32.0)
+                withFont:[UIFont boldSystemFontOfSize:12]
+           lineBreakMode:UILineBreakModeTailTruncation
+               alignment:UITextAlignmentCenter];
     
     img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -156,7 +174,9 @@
 
 - (void) serverPingerResult:(MKServerPingerResult *)result {
     NSUInteger pingValue = (NSUInteger)(result->ping * 1000.0f);
-    self.imageView.image = [self drawPingImageWithPingValue:pingValue andSize:CGSizeMake(32.0, 32.0)];
+    NSUInteger userCount = (NSUInteger)(result->cur_users);
+    BOOL isFull = result->cur_users == result->max_users;
+    self.imageView.image = [self drawPingImageWithPingValue:pingValue andUserCount:userCount isFull:isFull];
 }
 
 @end
