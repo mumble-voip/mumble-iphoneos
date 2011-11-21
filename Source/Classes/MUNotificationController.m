@@ -109,23 +109,24 @@
     [UIView animateWithDuration:0.1f animations:^{
         _notificationView.alpha = 1.0f;
     } completion:^(BOOL completed) {
-        [NSTimer scheduledTimerWithTimeInterval:0.3f target:self selector:@selector(hideCurrent) userInfo:nil repeats:NO];
+        NSTimer *timer = [NSTimer timerWithTimeInterval:0.3f target:self selector:@selector(hideCurrent) userInfo:nil repeats:NO];
+        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
     }];
 }
 
 - (void) hideCurrent {
-   [UIView animateWithDuration:0.1f animations:^{
-       _notificationView.alpha = 0.0f;
-   } completion:^(BOOL completed) {
-       [_notificationView removeFromSuperview];
-       [_notificationView release];
-       _notificationView = nil;
-       if ([_notificationQueue count] > 0) {
-           [self performSelectorOnMainThread:@selector(showNext) withObject:nil waitUntilDone:NO];
-       } else {
+    [UIView animateWithDuration:0.1f animations:^{
+        _notificationView.alpha = 0.0f;
+    } completion:^(BOOL completed) {
+        [_notificationView removeFromSuperview];
+        [_notificationView release];
+        _notificationView = nil;
+        if ([_notificationQueue count] > 0) {
+            [self performSelectorOnMainThread:@selector(showNext) withObject:nil waitUntilDone:NO];
+        } else {
            _running = NO;
-       }
-   }];
+        }
+    }];
 }
 
 @end
