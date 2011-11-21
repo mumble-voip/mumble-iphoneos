@@ -33,6 +33,7 @@
 #import "MUChannelViewController.h"
 #import "MUConnectionViewController.h"
 #import "MUServerCertificateTrustViewController.h"
+#import "MUNotificationController.h"
 #import "MUDatabase.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -182,8 +183,6 @@
 
 #pragma mark - MKConnection delegate
 
-
-
 - (void) connectionOpened:(MKConnection *)conn {
     NSArray *tokens = [MUDatabase accessTokensForServerWithHostname:[conn hostname] port:[conn port]];
     [conn authenticateWithUsername:_username password:_password accessTokens:tokens];
@@ -276,6 +275,54 @@
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
     NSLog(@"JoinedServerAsUser!");
+}
+
+- (void) serverModel:(MKServerModel *)model permissionDenied:(MKPermission)perm forUser:(MKUser *)user inChannel:(MKChannel *)channel {
+    [[MUNotificationController sharedController] addNotification:@"Permission denied"];
+}
+
+- (void) serverModelInvalidChannelNameError:(MKServerModel *)model {
+    [[MUNotificationController sharedController] addNotification:@"Invalid channel name"];
+}
+
+- (void) serverModelModifySuperUserError:(MKServerModel *)model {
+    [[MUNotificationController sharedController] addNotification:@"Cannot modify SuperUser"];
+}
+
+- (void) serverModelTextMessageTooLongError:(MKServerModel *)model {
+    [[MUNotificationController sharedController] addNotification:@"Message too long"];
+}
+
+- (void) serverModelTemporaryChannelError:(MKServerModel *)model {
+    [[MUNotificationController sharedController] addNotification:@"Not permitted in temporary channel"];
+}
+
+- (void) serverModel:(MKServerModel *)model missingCertificateErrorForUser:(MKUser *)user {
+    if (user == nil) {
+        [[MUNotificationController sharedController] addNotification:@"Missing certificate"];
+    } else {
+        [[MUNotificationController sharedController] addNotification:@"Missing certificate for user"];
+    }
+}
+
+- (void) serverModel:(MKServerModel *)model invalidUsernameErrorForName:(NSString *)name {
+    if (name == nil) {
+        [[MUNotificationController sharedController] addNotification:@"Invalid username"];
+    } else {
+        [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Invalid username: %@", name]];   
+    }
+}
+
+- (void) serverModelChannelFullError:(MKServerModel *)model {
+    [[MUNotificationController sharedController] addNotification:@"Channel is full"];
+}
+
+- (void) serverModel:(MKServerModel *)model permissionDeniedForReason:(NSString *)reason {
+    if (reason == nil) {
+        [[MUNotificationController sharedController] addNotification:@"Permission denied"];
+    } else {
+        [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Permission denied: %@", reason]];
+    }
 }
 
 #pragma mark - UIAlertView delegate

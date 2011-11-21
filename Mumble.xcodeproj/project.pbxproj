@@ -125,6 +125,7 @@
 		28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79CA01479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png */; };
 		28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79CA21479C23F0003B8BA /* BackgroundTextureBlackGradient.png */; };
 		28F79CA61479D7E80003B8BA /* MUTableViewHeaderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */; };
+		28F79CA9147AB62B0003B8BA /* MUNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79CA8147AB6280003B8BA /* MUNotificationController.m */; };
 		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
 		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
@@ -326,6 +327,8 @@
 		28F79CA21479C23F0003B8BA /* BackgroundTextureBlackGradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BackgroundTextureBlackGradient.png; path = Resources/BackgroundTextureBlackGradient.png; sourceTree = "<group>"; };
 		28F79CA41479D7E00003B8BA /* MUTableViewHeaderLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUTableViewHeaderLabel.h; sourceTree = "<group>"; };
 		28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTableViewHeaderLabel.m; sourceTree = "<group>"; };
+		28F79CA7147AB6260003B8BA /* MUNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUNotificationController.h; sourceTree = "<group>"; };
+		28F79CA8147AB6280003B8BA /* MUNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUNotificationController.m; sourceTree = "<group>"; };
 		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/FMDatabase.h; sourceTree = "<group>"; };
 		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/FMDatabase.m; sourceTree = "<group>"; };
 		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -418,6 +421,8 @@
 				28F79C72147991480003B8BA /* MUAccessTokenViewController.m */,
 				28F79CA41479D7E00003B8BA /* MUTableViewHeaderLabel.h */,
 				28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */,
+				28F79CA7147AB6260003B8BA /* MUNotificationController.h */,
+				28F79CA8147AB6280003B8BA /* MUNotificationController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -850,6 +855,7 @@
 				28F79C70147973D60003B8BA /* MUUserStateAcessoryView.m in Sources */,
 				28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */,
 				28F79CA61479D7E80003B8BA /* MUTableViewHeaderLabel.m in Sources */,
+				28F79CA9147AB62B0003B8BA /* MUNotificationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

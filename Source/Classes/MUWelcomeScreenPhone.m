@@ -36,6 +36,7 @@
 #import "MUPreferencesViewController.h"
 #import "MUServerRootViewController.h"
 #import "MUAboutViewController.h"
+#import "MUNotificationController.h"
 
 
 @interface MUWelcomeScreenPhone () {
