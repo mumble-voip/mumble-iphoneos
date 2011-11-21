@@ -29,6 +29,8 @@
 */
 
 #import "MUCertificateViewController.h"
+#import "MUTableViewHeaderLabel.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -93,6 +95,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
 
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    
     UIBarButtonItem *segmentedContainer = [[UIBarButtonItem alloc] initWithCustomView:_arrows];
     self.navigationItem.rightBarButtonItem = segmentedContainer;
     [segmentedContainer release];
@@ -171,15 +175,18 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     return 0;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == CertificateViewSectionSubject) {
-        return @"Subject";
+        return [MUTableViewHeaderLabel labelWithText:@"Subject"];
     } else if (section == CertificateViewSectionIssuer) {
-        return @"Issuer";
+        return [MUTableViewHeaderLabel labelWithText:@"Issuer"];
     }
-    return @"Unknown";
+    return nil;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
+}
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"CertificateViewCell";
@@ -202,6 +209,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
     cell.textLabel.text = [item objectAtIndex:0];
     cell.detailTextLabel.text = [item objectAtIndex:1];
+    cell.detailTextLabel.textColor = [MUColor selectedTextColor];
 
     return cell;
 }

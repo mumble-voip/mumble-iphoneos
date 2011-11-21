@@ -30,6 +30,7 @@
 
 #import "MUConnectionViewController.h"
 #import "MUAccessTokenViewController.h"
+#import "MUTableViewHeaderLabel.h"
 
 @interface MUConnectionViewController () {
     MKServerModel *_model;
@@ -58,6 +59,8 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -99,11 +102,15 @@
     return cell;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Connection";
+        return [MUTableViewHeaderLabel labelWithText:@"Connection"];
     }
-    return @"Unknown";
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
 
 #pragma mark - Table view delegate

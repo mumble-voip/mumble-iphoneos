@@ -97,6 +97,7 @@
         cell = [MUCertificateCell loadFromNib];
     
     // Configure the cell...
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     MKCertificate *cert = [dict objectForKey:@"cert"];
     [cell setSubjectName:[cert commonName]];

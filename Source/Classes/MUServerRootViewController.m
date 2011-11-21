@@ -131,6 +131,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     [self establishConnection];
 
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
@@ -149,6 +151,8 @@
     _serverView.navigationItem.titleView = _segmentedControl;
 
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
+
+    self.navigationBar.tintColor = [UIColor blackColor];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

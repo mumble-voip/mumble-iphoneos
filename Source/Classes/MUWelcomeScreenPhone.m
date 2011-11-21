@@ -68,6 +68,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Mumble";
     self.navigationController.toolbarHidden = YES;
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleBordered target:self action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
@@ -118,12 +119,13 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
     if (!cell) {
         cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"welcomeItem"] autorelease];
     }
-
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
     /* Servers section. */
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {

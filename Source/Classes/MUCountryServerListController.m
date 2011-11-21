@@ -98,6 +98,7 @@
     [cell populateFromDisplayName:[serverItem objectForKey:@"name"]
                          hostName:[serverItem objectForKey:@"ip"]
                              port:[serverItem objectForKey:@"port"]];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     return (UITableViewCell *) cell;
 }

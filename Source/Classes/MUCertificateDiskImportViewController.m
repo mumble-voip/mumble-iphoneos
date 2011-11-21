@@ -29,6 +29,7 @@
 */
 
 #import "MUCertificateDiskImportViewController.h"
+#import "MUTableViewHeaderLabel.h"
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
 
@@ -94,6 +95,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+
     [[self navigationItem] setTitle:@"iTunes Import"];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked:)];
@@ -121,6 +125,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [[cell imageView] setImage:[UIImage imageNamed:@"certificatecell"]];
     [[cell textLabel] setText:[_diskCertificates objectAtIndex:[indexPath row]]];
     [cell setAccessoryType:UITableViewCellAccessoryNone];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
 
     return cell;
 }
@@ -138,12 +143,21 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [self tryImportCertificateWithPassword:nil];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (_showHelp) {
-        return @"To import your own certificates into Mumble, please transfer them to your device via iTunes File Transfer.";
+        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:@"To import your own certificates into\n"
+                                                                            @"Mumble, please transfer them to your\n"
+                                                                            @"device via iTunes File Transfer."];
+        lbl.font = [UIFont systemFontOfSize:16.0f];
+        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.numberOfLines = 0;
+        return lbl;
     }
-
     return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 80.0f;
 }
 
 #pragma mark - Import logic

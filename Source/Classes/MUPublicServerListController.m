@@ -31,6 +31,7 @@
 #import "MUPublicServerList.h"
 #import "MUPublicServerListController.h"
 #import "MUCountryServerListController.h"
+#import "MUTableViewHeaderLabel.h"
 
 @interface MUPublicServerListController () {
     UIActivityIndicatorView   *_activityIndicator;
@@ -56,6 +57,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Public Servers";
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
 
     if (![_serverList loadCompleted]) {
         _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -88,9 +90,14 @@
     return [_serverList numberOfContinents];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [_serverList continentNameAtIndex:section];
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel labelWithText:[_serverList continentNameAtIndex:section]];
 }
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (![_serverList loadCompleted])
@@ -113,6 +120,7 @@
     cell.textLabel.text = [countryInfo objectForKey:@"name"];
     NSInteger numServers = [[countryInfo objectForKey:@"servers"] count];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%i %@", numServers, numServers > 1 ? @"servers" : @"server"];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     return cell;
 }

@@ -33,6 +33,7 @@
 #import "MUColor.h"
 #import "MUDatabase.h"
 #import "MUFavouriteServer.h"
+#import "MUTableViewHeaderLabel.h"
 
 // Placeholder text for the edit view fields.
 static NSString   *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
@@ -214,6 +215,9 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor]; 
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
@@ -261,11 +265,15 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
     return 0;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Mumble Server";
+        return [MUTableViewHeaderLabel labelWithText:@"Mumble Server"];
     }
-    return @"Default";
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

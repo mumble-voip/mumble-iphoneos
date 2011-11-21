@@ -28,32 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUColor.h"
+#import <UIKit/UIKit.h>
 
-@implementation MUColor
-
-+ (UIColor *) selectedTextColor {
-    // #5d5d5d
-    return [UIColor colorWithRed:0x5d/255.0f green:0x5d/255.0f blue:0x5d/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) goodPingColor {
-    // #609a4b
-    return [UIColor colorWithRed:0x60/255.0f green:0x9a/255.0f blue:0x4b/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) mediumPingColor {
-    // #F2DE69
-    return [UIColor colorWithRed:0xf2/255.0f green:0xde/255.0f blue:0x69/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) badPingColor {
-    // #D14D54
-    return [UIColor colorWithRed:0xd1/255.0f green:0x4d/255.0f blue:0x54/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) userCountColor {
-    return [UIColor darkGrayColor];
-}
-
+@interface MUTableViewHeaderLabel : UILabel
++ (MUTableViewHeaderLabel *) labelWithText:(NSString *)text;
++ (CGFloat) defaultHeaderHeight;
 @end

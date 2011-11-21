@@ -35,6 +35,7 @@
 #import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUDiagnosticsViewController.h"
 #import "MUCertificateController.h"
+#import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -69,6 +70,8 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -124,12 +127,14 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     // Audio section
     if ([indexPath section] == 0) {
         // Volume
         if ([indexPath row] == 0) {
             UISlider *volSlider = [[UISlider alloc] init];
+            [volSlider setMinimumTrackTintColor:[UIColor blackColor]];
             [volSlider setMaximumValue:1.0f];
             [volSlider setMinimumValue:0.0f];
             [volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
@@ -153,7 +158,9 @@
             } else if ([xmit isEqualToString:@"continuous"]) {
                 cell.detailTextLabel.text = @"Continuous";
             }
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
         }
 
@@ -165,6 +172,7 @@
             [[cell textLabel] setText:@"Force TCP"];
             [cell setAccessoryView:tcpSwitch];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [tcpSwitch setOnTintColor:[UIColor blackColor]];
             [tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
             [tcpSwitch release];
         } else if ([indexPath row] == 1) {
@@ -174,8 +182,9 @@
             MKCertificate *cert = [MUCertificateController defaultCertificate];
             cell.textLabel.text = @"Certificate";
             cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
         } else if ([indexPath row] == 2) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefTextFieldCell"];
@@ -225,24 +234,43 @@
     return cell;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) // Audio
-        return @"Audio";
-    else if (section == 1) // Network
-        return @"Network";
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return [MUTableViewHeaderLabel labelWithText:@"Audio"];
+    } else if (section == 1) {
+        return [MUTableViewHeaderLabel labelWithText:@"Network"];
+    }
 #ifdef MUMBLE_BETA_DIST
-    else if (section == 2) // Beta
-        return @"Beta";
+    else if (section == 2) {
+        return [MUTableViewHeaderLabel labelWithText:@"Beta"];
+    }
 #endif
-
-    return @"Default";
+    return nil;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (section == 1) // Network
-        return @"This username is the default username used for connections to public and LAN servers.";
-    else
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 1) { // Network
+        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:@"This username is the default username\n"
+                                                                            @"used for connections to public and LAN\n"
+                                                                            @"servers."];
+        lbl.font = [UIFont systemFontOfSize:16.0f];
+        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.numberOfLines = 0;
+        return lbl;
+    } else {
         return nil;
+    }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 1) {
+        return 70.0f;
+    }
+    return 0.0f;
 }
 
 #pragma mark -

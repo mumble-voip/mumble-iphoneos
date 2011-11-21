@@ -111,6 +111,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+
     [self setTitle:@"New Certificate"];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];

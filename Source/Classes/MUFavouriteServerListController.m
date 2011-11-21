@@ -33,6 +33,7 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServer.h"
 #import "MUFavouriteServerEditViewController.h"
+#import "MUTableViewHeaderLabel.h"
 
 #import "MUServerRootViewController.h"
 #import "MUServerRootViewControllerPad.h"
@@ -52,14 +53,7 @@
 
 - (id) init {
     if ((self = [super init])) {
-        [[self navigationItem] setTitle:@"Favourites"];
-        
-        UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
-        [[self navigationItem] setRightBarButtonItem:addButton];
-        [addButton release];
-        
-        _favouriteServers = [[MUDatabase fetchAllFavourites] retain];
-        [_favouriteServers sortUsingSelector:@selector(compare:)];
+        // ...
     }
     
     return self;
@@ -81,6 +75,19 @@
     return toInterfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    [[self navigationItem] setTitle:@"Favourites"];
+    
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
+    [[self navigationItem] setRightBarButtonItem:addButton];
+    [addButton release];
+    
+    _favouriteServers = [[MUDatabase fetchAllFavourites] retain];
+    [_favouriteServers sortUsingSelector:@selector(compare:)];
+}
+
 #pragma mark -
 #pragma mark Table view data source
 
@@ -99,6 +106,7 @@
         cell = [[[MUServerCell alloc] init] autorelease];
     }
     [cell populateFromFavouriteServer:favServ];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     return (UITableViewCell *) cell;
 }
 

@@ -29,6 +29,7 @@
 */
 
 #import "MUAudioTransmissionPreferencesViewController.h"
+#import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
@@ -52,6 +53,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.title = @"Transmission";
 }
 
@@ -92,6 +94,7 @@
     NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.textColor = [UIColor blackColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Voice Activated";
@@ -117,15 +120,16 @@
     return cell;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"Transmission method";
+        return [MUTableViewHeaderLabel labelWithText:@"Transmission Method"];
     }
-
-    return @"???";
+    return nil;
 }
 
-#pragma mark - Table view delegate
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return [MUTableViewHeaderLabel defaultHeaderHeight];
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;

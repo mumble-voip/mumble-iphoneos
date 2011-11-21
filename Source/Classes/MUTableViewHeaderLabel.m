@@ -28,32 +28,30 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUColor.h"
+#import "MUTableViewHeaderLabel.h"
 
-@implementation MUColor
+@implementation MUTableViewHeaderLabel
 
-+ (UIColor *) selectedTextColor {
-    // #5d5d5d
-    return [UIColor colorWithRed:0x5d/255.0f green:0x5d/255.0f blue:0x5d/255.0f alpha:1.0f];
+- (id) init {
+    if ((self = [super init])) {
+        self.font = [UIFont boldSystemFontOfSize:18.0f];
+        self.textColor = [UIColor whiteColor];
+        self.shadowColor = [UIColor darkGrayColor];
+        self.shadowOffset = CGSizeMake(2.0f, 2.0f);
+        self.backgroundColor = [UIColor clearColor];
+        self.textAlignment = UITextAlignmentCenter;
+    }
+    return self;
 }
 
-+ (UIColor *) goodPingColor {
-    // #609a4b
-    return [UIColor colorWithRed:0x60/255.0f green:0x9a/255.0f blue:0x4b/255.0f alpha:1.0f];
++ (CGFloat) defaultHeaderHeight {
+    return 44.0f;
 }
 
-+ (UIColor *) mediumPingColor {
-    // #F2DE69
-    return [UIColor colorWithRed:0xf2/255.0f green:0xde/255.0f blue:0x69/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) badPingColor {
-    // #D14D54
-    return [UIColor colorWithRed:0xd1/255.0f green:0x4d/255.0f blue:0x54/255.0f alpha:1.0f];
-}
-
-+ (UIColor *) userCountColor {
-    return [UIColor darkGrayColor];
++ (MUTableViewHeaderLabel *) labelWithText:(NSString *)text {
+    MUTableViewHeaderLabel *label = [[MUTableViewHeaderLabel alloc] init];
+    label.text = text;
+    return label;
 }
 
 @end
