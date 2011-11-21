@@ -202,6 +202,7 @@
     }
 
     cell.indentationLevel = [navItem indentLevel];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     return cell;
 }

@@ -152,7 +152,7 @@
 
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
 
-    self.navigationBar.tintColor = [UIColor blackColor];
+    self.navigationBar.barStyle = UIBarStyleBlackOpaque;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

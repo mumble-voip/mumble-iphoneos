@@ -68,6 +68,8 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Mumble";
     self.navigationController.toolbarHidden = YES;
+
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleBordered target:self action:@selector(aboutClicked:)];

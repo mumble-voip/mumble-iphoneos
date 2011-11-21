@@ -330,7 +330,8 @@
     cell.imageView.image = [UIImage imageNamed:talkImageName];
 
     cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
-
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
     return cell;
 }
 

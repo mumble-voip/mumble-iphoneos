@@ -33,7 +33,6 @@
 #import "MUApplicationDelegate.h"
 #import "MUCertificatePreferencesViewController.h"
 #import "MUAudioTransmissionPreferencesViewController.h"
-#import "MUDiagnosticsViewController.h"
 #import "MUCertificateController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
@@ -95,11 +94,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#ifdef MUMBLE_BETA_DIST
-    return 3;
-#else
     return 2;
-#endif
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -110,12 +105,6 @@
     } else if (section == 1) {
         return 3;
     }
-#ifdef MUMBLE_BETA_DIST
-    // Beta
-    else if (section == 2) {
-        return 1;
-    }
-#endif
 
     return 0;
 }
@@ -221,15 +210,6 @@
             return cell;
         }
     }
-#ifdef MUMBLE_BETA_DIST
-    // Beta
-    else if ([indexPath section] == 2) {
-        if ([indexPath row] == 0) {
-            cell.textLabel.text = @"Diagnostics";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-    }
-#endif
 
     return cell;
 }
@@ -240,11 +220,7 @@
     } else if (section == 1) {
         return [MUTableViewHeaderLabel labelWithText:@"Network"];
     }
-#ifdef MUMBLE_BETA_DIST
-    else if (section == 2) {
-        return [MUTableViewHeaderLabel labelWithText:@"Beta"];
-    }
-#endif
+
     return nil;
 }
 
@@ -292,15 +268,6 @@
             [certPref release];
         }
     }
-#ifdef MUMBLE_BETA_DIST
-    else if ([indexPath section] == 2) { // Beta
-        if ([indexPath row] == 0) {
-            MUDiagnosticsViewController *diagView = [[MUDiagnosticsViewController alloc] init];
-            [self.navigationController pushViewController:diagView animated:YES];
-            [diagView release];
-        }
-    }
-#endif
 }
 
 #pragma mark -

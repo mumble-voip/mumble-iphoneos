@@ -91,6 +91,8 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = @"Disconnect";
