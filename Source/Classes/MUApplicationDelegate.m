@@ -75,8 +75,6 @@
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
     _launchDate = [[NSDate alloc] init];
 
-    [window makeKeyAndVisible];
-
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                 // Audio
@@ -90,6 +88,15 @@
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
 
+    // Make our window the key window.
+    [window makeKeyAndVisible];
+    
+    // Put a background view in here, to have prettier transitions.
+    UIImageView *bgView =[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    [bgView setFrame:[[UIScreen mainScreen] bounds]];
+    [window addSubview:bgView];
+
+    // Add our default navigation controller
     self.navigationController.toolbarHidden = YES;
     [window addSubview:[navigationController view]];
 
