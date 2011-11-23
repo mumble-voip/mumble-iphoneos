@@ -30,6 +30,7 @@
 
 #import "MUConnectionViewController.h"
 #import "MUAccessTokenViewController.h"
+#import "MUCertificateViewController.h"
 #import "MUTableViewHeaderLabel.h"
 
 @interface MUConnectionViewController () {
@@ -79,7 +80,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 3;
     }
     return 0;
 }
@@ -98,6 +99,8 @@
             cell.textLabel.text = @"Disconnect";
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = @"Access Tokens";
+        } else if ([indexPath row] == 2) {
+            cell.textLabel.text = @"Certificate";
         }
     }
 
@@ -127,6 +130,10 @@
             MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
             [[self navigationController] pushViewController:tokenViewController animated:YES];
             [tokenViewController release];
+        } else if ([indexPath row] == 2) {
+            MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[_model serverCertificates]];
+            [[self navigationController] pushViewController:certView animated:YES];
+            [certView release];
         }
     }
 }
