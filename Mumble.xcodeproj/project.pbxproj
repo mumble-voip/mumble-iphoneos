@@ -27,8 +27,6 @@
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
 		285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */; };
 		285C9EF2116BF5B100A9A6A7 /* MUWelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 285C9EF0116BF5B100A9A6A7 /* MUWelcomeScreenPad.m */; };
-		2861C274116BE905002B8514 /* MUAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25B116BE905002B8514 /* MUAboutViewController.m */; };
-		2861C275116BE905002B8514 /* MUAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2861C25C116BE905002B8514 /* MUAboutViewController.xib */; };
 		2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MUApplicationDelegate.m */; };
 		2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* MUPublicServerList.m */; };
 		2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* MUPublicServerListController.m */; };
@@ -46,6 +44,8 @@
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
 		287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */; };
+		28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28851B92147DC97D00088C4F /* MULegalViewController.m */; };
+		28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28851B93147DC97D00088C4F /* MULegalViewController.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288B55E01252903300563A28 /* MUServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* MUCertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* MUCertificateViewController.m */; };
@@ -187,9 +187,6 @@
 		285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "../MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		285C9EEF116BF5B100A9A6A7 /* MUWelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUWelcomeScreenPad.h; sourceTree = "<group>"; };
 		285C9EF0116BF5B100A9A6A7 /* MUWelcomeScreenPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUWelcomeScreenPad.m; sourceTree = "<group>"; };
-		2861C25A116BE905002B8514 /* MUAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAboutViewController.h; sourceTree = "<group>"; };
-		2861C25B116BE905002B8514 /* MUAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAboutViewController.m; sourceTree = "<group>"; };
-		2861C25C116BE905002B8514 /* MUAboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUAboutViewController.xib; sourceTree = "<group>"; };
 		2861C25D116BE905002B8514 /* MUApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUApplicationDelegate.h; sourceTree = "<group>"; };
 		2861C25E116BE905002B8514 /* MUApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUApplicationDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* MUCountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCountryServerListController.h; sourceTree = "<group>"; };
@@ -218,6 +215,9 @@
 		287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerListController.m; sourceTree = "<group>"; };
 		287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServerEditViewController.h; sourceTree = "<group>"; };
 		287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerEditViewController.m; sourceTree = "<group>"; };
+		28851B91147DC97D00088C4F /* MULegalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULegalViewController.h; sourceTree = "<group>"; };
+		28851B92147DC97D00088C4F /* MULegalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULegalViewController.m; sourceTree = "<group>"; };
+		28851B93147DC97D00088C4F /* MULegalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MULegalViewController.xib; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		288B55DE1252903300563A28 /* MUServerCertificateTrustViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerCertificateTrustViewController.h; sourceTree = "<group>"; };
 		288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCertificateTrustViewController.m; sourceTree = "<group>"; };
@@ -368,9 +368,6 @@
 				2838EA0C1293165700035C5D /* Preferences */,
 				285C9E95116BEE1500A9A6A7 /* MainWindow-iPad.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
-				2861C25A116BE905002B8514 /* MUAboutViewController.h */,
-				2861C25B116BE905002B8514 /* MUAboutViewController.m */,
-				2861C25C116BE905002B8514 /* MUAboutViewController.xib */,
 				284BBBA312495C4400366F4C /* MUApplication.h */,
 				284BBBA412495C4400366F4C /* MUApplication.m */,
 				2861C25D116BE905002B8514 /* MUApplicationDelegate.h */,
@@ -423,6 +420,9 @@
 				28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */,
 				28F79CA7147AB6260003B8BA /* MUNotificationController.h */,
 				28F79CA8147AB6280003B8BA /* MUNotificationController.m */,
+				28851B91147DC97D00088C4F /* MULegalViewController.h */,
+				28851B92147DC97D00088C4F /* MULegalViewController.m */,
+				28851B93147DC97D00088C4F /* MULegalViewController.xib */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -717,7 +717,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
-				2861C275116BE905002B8514 /* MUAboutViewController.xib in Resources */,
 				2861C282116BE905002B8514 /* MUWelcomeScreenPhone.xib in Resources */,
 				285C9E96116BEE1500A9A6A7 /* MainWindow-iPad.xib in Resources */,
 				287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */,
@@ -787,6 +786,7 @@
 				28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */,
 				28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */,
 				28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */,
+				28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -816,7 +816,6 @@
 			files = (
 				287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
-				2861C274116BE905002B8514 /* MUAboutViewController.m in Sources */,
 				2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */,
 				2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */,
@@ -856,6 +855,7 @@
 				28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */,
 				28F79CA61479D7E80003B8BA /* MUTableViewHeaderLabel.m in Sources */,
 				28F79CA9147AB62B0003B8BA /* MUNotificationController.m in Sources */,
+				28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -35,7 +35,7 @@
 #import "MULanServerListController.h"
 #import "MUPreferencesViewController.h"
 #import "MUServerRootViewController.h"
-#import "MUAboutViewController.h"
+#import "MULegalViewController.h"
 
 
 @interface MUWelcomeScreenPad () {
@@ -193,7 +193,7 @@
     if (buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumble.info/"]];
     } else if (buttonIndex == 2) {
-        MUAboutViewController *legalView = [[MUAboutViewController alloc] initWithContent:@"Legal"];
+        MULegalViewController *legalView = [[MULegalViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] init];
         [navController pushViewController:legalView animated:NO];
         [legalView release];

@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2009-2011 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,50 +28,52 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import "MUAboutViewController.h"
+#import "MULegalViewController.h"
 
-@interface MUAboutViewController ()
-- (void) doneButtonClicked:(UIBarButtonItem *)doneButton;
+@interface MULegalViewController () <UIWebViewDelegate> {
+    IBOutlet UIWebView *_webView;
+}
 @end
 
-@implementation MUAboutViewController
+@implementation MULegalViewController
 
-- (id) initWithContent:(NSString *)content {
-    [self init];
-
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSString *file = nil;
-
-    if ([content isEqual:@"Legal"]) {
-        [self setTitle:content];
-        file = [bundle pathForResource:content ofType:@"html"];
-    } else if ([content isEqual:@"Contributors"]) {
-        [self setTitle:content];
-        file = [bundle pathForResource:content ofType:@"html"];
+- (id) init {
+    if ((self = [super initWithNibName:@"MULegalViewController" bundle:nil])) {
+        // ...
     }
-
-    if (file) {
-        NSData *html = [NSData dataWithContentsOfFile:file];
-        if (html) {
-            [(UIWebView *)[self view] loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
-        }
-    }
-
     return self;
 }
 
-- (void) dealloc {
-    [super dealloc];
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    _webView.backgroundColor = [UIColor clearColor];
+    _webView.opaque = NO;
+    _webView.delegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
-    [[self navigationItem] setRightBarButtonItem:doneButton];
-    [doneButton release];
+    self.navigationItem.title = @"Legal";
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = done;
+    [done release];
+
+    NSData *html = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Legal" ofType:@"html"]];
+    [_webView loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
 }
 
-- (void) doneButtonClicked:(UIBarButtonItem *)doneButton {
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void) webViewDidFinishLoad:(UIWebView *)webView {
+    _webView.backgroundColor = [UIColor blackColor];
+    _webView.opaque = YES;
+}
+
+- (void) doneButtonClicked:(id)sender {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end
