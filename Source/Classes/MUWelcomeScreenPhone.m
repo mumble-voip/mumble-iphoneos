@@ -172,7 +172,7 @@
     NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@",
                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 #endif
-    NSString *aboutMessage = @"Low-latency, high-quality voice chat";
+    NSString *aboutMessage = @"Low latency, high quality voice chat";
     
     UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
                                               cancelButtonTitle:@"OK"
