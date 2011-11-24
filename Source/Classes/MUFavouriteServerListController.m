@@ -44,6 +44,7 @@
     BOOL               _editMode;
     MUFavouriteServer  *_editedServer;
 }
+- (void) reloadFavourites;
 @end
 
 @implementation MUFavouriteServerListController
@@ -83,7 +84,12 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
     [addButton release];
-    
+
+    [self reloadFavourites];
+}
+
+- (void) reloadFavourites {
+    [_favouriteServers release];
     _favouriteServers = [[MUDatabase fetchAllFavourites] retain];
     [_favouriteServers sortUsingSelector:@selector(compare:)];
 }
@@ -99,7 +105,7 @@
     return [_favouriteServers count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     MUServerCell *cell = (MUServerCell *)[tableView dequeueReusableCellWithIdentifier:[MUServerCell reuseIdentifier]];
     if (cell == nil) {
@@ -131,7 +137,7 @@
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
     UIView *cellView = [[self tableView] cellForRowAtIndexPath:indexPath];
@@ -230,22 +236,13 @@
 #pragma mark -
 #pragma mark Done button target (from Edit View)
 
-//
-// We get called here when someone clicks 'Done' in a FavouriteServerEditViewController.
-//
+// Called when someone clicks 'Done' in a FavouriteServerEditViewController.
 - (void) doneButtonClicked:(id)sender {
     MUFavouriteServerEditViewController *editView = sender;
-    
-    if (_editMode)
-        [_favouriteServers removeObject:_editedServer];
-    
     MUFavouriteServer *newServer = [editView copyFavouriteFromContent];
-    [_favouriteServers addObject:newServer];
-    [newServer release];
-    
     [MUDatabase storeFavourite:newServer];
-    [_favouriteServers sortUsingSelector:@selector(compare:)];
-    [[self tableView] reloadData];
+    [self reloadFavourites];
+    [self.tableView reloadData];
 }
 
 @end
