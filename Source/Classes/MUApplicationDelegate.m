@@ -34,6 +34,7 @@
 #import "MUWelcomeScreenPhone.h"
 #import "MUWelcomeScreenPad.h"
 #import "MUDatabase.h"
+#import "MUPublicServerList.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
@@ -42,6 +43,7 @@
     UIWindow                  *window;
     UINavigationController    *navigationController;
     NSDate                    *_launchDate;
+    MUPublicServerListFetcher *_publistFetcher;
 #ifdef MUMBLE_BETA_DIST
     MUVersionChecker          *_verCheck;
 #endif
@@ -74,6 +76,10 @@
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {
     _launchDate = [[NSDate alloc] init];
+    
+    // Try to fetch an updated public server list
+    _publistFetcher = [[MUPublicServerListFetcher alloc] init];
+    [_publistFetcher attemptUpdate];
 
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:

@@ -32,38 +32,84 @@
 #import <MumbleKit/MKServices.h>
 
 @interface MUPublicServerList () {
-    NSURLConnection               *_conn;
-    NSMutableData                 *_buf;
+    NSData              *_serverListXML;
+    NSMutableDictionary *_continentCountries;
+    NSMutableDictionary *_countryServers;
+    NSDictionary        *_continentNames;
+    NSDictionary        *_countryNames;
+    NSMutableArray      *_modelContinents;
+    NSMutableArray      *_modelCountries;
+}
++ (NSString *) filePath;
+@end
 
-    NSMutableDictionary           *_continentCountries;
-    NSMutableDictionary           *_countryServers;
-
-    NSDictionary                  *_continentNames;
-    NSDictionary                  *_countryNames;
-
-    NSMutableArray                *_modelContinents;
-    NSMutableArray                *_modelCountries;
-
-    BOOL                          _loadCompleted;
-    id<PublicServerListDelegate>  _delegate;
+@interface MUPublicServerListFetcher () {
+    NSURLConnection *_conn;
+    NSMutableData   *_buf;
 }
 @end
 
-@implementation MUPublicServerList
+@implementation MUPublicServerListFetcher
 
 - (id) init {
-    if (self = [super init]) {
-        _continentNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Continents.plist", [[NSBundle mainBundle] resourcePath]]];
-        _countryNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Countries.plist", [[NSBundle mainBundle] resourcePath]]];
-        _loadCompleted = NO;
+    if ((self = [super init])) {
+        // ...
     }
     return self;
 }
 
 - (void) dealloc {
-    [_conn cancel];
-    [_conn release];
+    [super dealloc];
+}
 
+- (void) attemptUpdate {
+    NSURLRequest *req = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
+    _conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
+    _buf = [[NSMutableData alloc] init];
+}
+
+- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [_buf appendData:data];
+}
+
+- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+}
+
+- (void) connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSLog(@"stored %u bytes.", [_buf length]);
+    [_buf writeToFile:[MUPublicServerList filePath] atomically:YES];
+}
+
+
+@end
+
+
+@implementation MUPublicServerList
+
++ (NSString *) filePath {
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                                       NSUserDomainMask,
+                                                                       YES);
+    NSString *directory = [documentDirectories objectAtIndex:0];
+    return [directory stringByAppendingPathComponent:@".publist.xml"];
+}
+
+- (id) init {
+    if ((self = [super init])) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[MUPublicServerList filePath]]) {
+            _serverListXML = [[NSData alloc] initWithContentsOfFile:[MUPublicServerList filePath]];
+        } else {
+            _serverListXML = [[NSData alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"publist" ofType:@"xml"]];
+        }
+        
+        _continentNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Continents.plist", [[NSBundle mainBundle] resourcePath]]];
+        _countryNames = [[NSDictionary alloc] initWithContentsOfFile: [NSString stringWithFormat:@"%@/Countries.plist", [[NSBundle mainBundle] resourcePath]]];
+    }
+    return self;
+}
+
+- (void) dealloc {
+    [_serverListXML release];
     [_modelContinents release];
     [_modelCountries release];
     [_continentNames release];
@@ -71,48 +117,15 @@
     [super dealloc];
 }
 
-- (id<PublicServerListDelegate>) delegate {
-    return _delegate;
-}
-
-- (void) setDelegate:(id<PublicServerListDelegate>)delegate {
-    _delegate = delegate;
-}
-
-- (void) load {
-    NSURLRequest *req = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
-    _conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
-    _buf = [[NSMutableData alloc] init];
-}
-
-- (BOOL) loadCompleted {
-    return _loadCompleted;
-}
-
-#pragma mark -
-#pragma mark NSConnection delegate
-
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [_buf appendData:data];
-}
-
-- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"PublicServerList: Failed to fetch public server list.");
-    [_delegate publicServerListFailedLoading:error];
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSLog(@"PublicServerList: Finished loading list.");
-
+- (void) parse {
     _continentCountries = [[NSMutableDictionary alloc] initWithCapacity:[_continentNames count]];
     _countryServers = [[NSMutableDictionary alloc] init];
 
     // Parse XML server list
-    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:_buf];
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:_serverListXML];
     [parser setDelegate:(id<NSXMLParserDelegate>)self];
     [parser parse];
     [parser release];
-    [_buf release];
 
     // Transform from NSDictionary representation to a NSArray-model
     NSArray *continentCodes = [[_continentNames allKeys] sortedArrayUsingSelector:@selector(compare:)];
@@ -144,12 +157,6 @@
     [_countryServers release];
     _continentCountries = nil;
     _countryServers = nil;
-
-    _loadCompleted = YES;
-    [_delegate publicServerListDidLoad:self];
-
-    [_conn release];
-    _conn = nil;
 }
 
 #pragma mark -

@@ -1,0 +1,2 @@
+#!/bin/bash
+curl http://dk.mumble.info/list2.cgi > Resources/publist.xml

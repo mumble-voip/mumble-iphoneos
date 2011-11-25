@@ -34,7 +34,6 @@
 #import "MUTableViewHeaderLabel.h"
 
 @interface MUPublicServerListController () {
-    UIActivityIndicatorView   *_activityIndicator;
     MUPublicServerList        *_serverList;
 }
 @end
@@ -42,10 +41,8 @@
 @implementation MUPublicServerListController
 
 - (id) init {
-    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _serverList = [[MUPublicServerList alloc] init];
-        [_serverList setDelegate:self];
-        [_serverList load];
     }
     return self;
 }
@@ -56,37 +53,35 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewDidAppear:YES];
+
     self.navigationItem.title = @"Public Servers";
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
 
-    if (![_serverList loadCompleted]) {
-        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-        [_activityIndicator startAnimating];
-        UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:_activityIndicator];
-        self.navigationItem.rightBarButtonItem = rightButton;
-        [rightButton release];
-        [_activityIndicator release];
-    }
+    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIBarButtonItem *barActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
+    self.navigationItem.rightBarButtonItem = barActivityIndicator;
+    [activityIndicatorView startAnimating];
+    [barActivityIndicator release];
+    [activityIndicatorView release];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:YES];
 
-#pragma mark
-#pragma mark PublicServerList delegate
-
-- (void) publicServerListDidLoad:(MUPublicServerList *)publicList {
-    [[self tableView] reloadData];
-    [_activityIndicator stopAnimating];
-}
-
-- (void) publicServerListFailedLoading:(NSError *)error {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [_serverList parse];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.navigationItem.rightBarButtonItem = nil;
+            [self.tableView reloadData];
+        });
+    });
 }
 
 #pragma mark -
 #pragma mark UITableView data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (![_serverList loadCompleted])
-        return 0;
     return [_serverList numberOfContinents];
 }
 
@@ -100,8 +95,6 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (![_serverList loadCompleted])
-        return 0;
     return [_serverList numberOfCountriesAtContinentIndex:section];
 }
 
@@ -137,9 +130,6 @@
     [[self navigationController] pushViewController:countryController animated:YES];
     [countryController release];
 
-    // fixme(mkrautz): The feedback from this isn't visible. It'd be nice if
-    // we were able to visually show the 'last' selected country when going back to the
-    // list of countries.
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -28,25 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Foundation/Foundation.h>
-
-@class MUPublicServerList;
-
-@protocol PublicServerListDelegate
-- (void) publicServerListDidLoad:(MUPublicServerList *)list;
-- (void) publicServerListFailedLoading:(NSError *)error;
+@interface MUPublicServerListFetcher : NSObject
+- (void) attemptUpdate;
 @end
 
 @interface MUPublicServerList : NSObject <NSXMLParserDelegate> 
-- (id) init;
-- (void) dealloc;
-
-- (id<PublicServerListDelegate>) delegate;
-- (void) setDelegate:(id<PublicServerListDelegate>)selector;
-
-- (void) load;
-- (BOOL) loadCompleted;
-
+- (void) parse;
 - (NSInteger) numberOfContinents;
 - (NSString *) continentNameAtIndex:(NSInteger)index;
 - (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index;
