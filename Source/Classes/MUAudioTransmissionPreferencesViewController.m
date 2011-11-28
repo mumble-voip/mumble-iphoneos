@@ -30,6 +30,7 @@
 
 #import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MUAudioBarViewCell.h"
 #import "MUColor.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
@@ -77,11 +78,18 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    if (section == 0) {
+        return 3;
+    } else if (section == 1) {
+        return 1;
+    } else if (section == 2) {
+        return 2;
+    }
+    return 0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -92,6 +100,7 @@
     }
     
     NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
+    cell.accessoryView = nil;
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.textColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -103,7 +112,7 @@
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Push-to-talk";
+            cell.textLabel.text = @"Push-to-Talk";
             if ([current isEqualToString:@"ptt"]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 cell.textLabel.textColor = [MUColor selectedTextColor];
@@ -115,6 +124,38 @@
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            MUAudioBarViewCell *cell = [[[MUAudioBarViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AudioBarCell"] autorelease];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }
+    } else if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"Silence Below";
+            UISlider *slider = [[UISlider alloc] init];
+            [slider setMinimumValue:0.0f];
+            [slider setMaximumValue:1.0f];
+            [slider addTarget:self action:@selector(vadBelowChanged:) forControlEvents:UIControlEventValueChanged];
+            [slider setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioVADBelow"] floatValue]];
+            [slider setMaximumTrackTintColor:[UIColor blackColor]];
+            [slider setMinimumTrackTintColor:[UIColor blackColor]];
+            cell.accessoryView = slider;
+            [slider release];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"Speech Above";
+            UISlider *slider = [[UISlider alloc] init];
+            [slider setMinimumValue:0.0f];
+            [slider setMaximumValue:1.0f];
+            [slider addTarget:self action:@selector(vadAboveChanged:) forControlEvents:UIControlEventValueChanged];
+            [slider setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioVADAbove"] floatValue]];
+            [slider setMaximumTrackTintColor:[UIColor blackColor]];
+            [slider setMinimumTrackTintColor:[UIColor blackColor]];
+            cell.accessoryView = slider;
+            [slider release];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
     }
 
     return cell;
@@ -123,11 +164,17 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return [MUTableViewHeaderLabel labelWithText:@"Transmission Method"];
+    } else if (section == 1) {
+        return [MUTableViewHeaderLabel labelWithText:@"Voice Activity Setup"];
     }
     return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 2) {
+        return 0.0f;
+    }
+
     return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
 
@@ -153,6 +200,16 @@
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         cell.textLabel.textColor = [MUColor selectedTextColor];
     }
+}
+
+#pragma mark - Actions
+
+- (void) vadBelowChanged:(UISlider *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:[sender value]] forKey:@"AudioVADBelow"];
+}
+
+- (void) vadAboveChanged:(UISlider *)sender {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:[sender value]] forKey:@"AudioVADAbove"];
 }
 
 @end
