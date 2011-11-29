@@ -85,6 +85,9 @@
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                 // Audio
                                                                 [NSNumber numberWithFloat:1.0f],   @"AudioOutputVolume",
+                                                                [NSNumber numberWithFloat:0.6f],   @"AudioVADAbove",
+                                                                [NSNumber numberWithFloat:0.3f],   @"AudioVADBelow",
+                                                                @"amplitude",                      @"AudioVADKind",
                                                                 @"vad",                            @"AudioTransmitMethod",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
@@ -140,6 +143,7 @@
     // Set up a good set of default audio settings.
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     MKAudioSettings settings;
+
     if ([[defaults stringForKey:@"AudioTransmitMethod"] isEqualToString:@"vad"])
         settings.transmitType = MKTransmitTypeVAD;
     else if ([[defaults stringForKey:@"AudioTransmitMethod"] isEqualToString:@"continuous"])
@@ -148,6 +152,18 @@
         settings.transmitType = MKTransmitTypeToggle;
     else
         settings.transmitType = MKTransmitTypeVAD;
+    
+    if ([[defaults stringForKey:@"AudioVADKind"] isEqualToString:@"snr"]) {
+        settings.vadKind = MKVADKindSignalToNoise;
+    } else if ([[defaults stringForKey:@"AudioVADKind"] isEqualToString:@"amplitude"]) {
+        settings.vadKind = MKVADKindAmplitude;
+    } else {
+        settings.vadKind = MKVADKindAmplitude;
+    }
+    
+    settings.vadMin = [defaults floatForKey:@"AudioVADBelow"];
+    settings.vadMax = [defaults floatForKey:@"AudioVADAbove"];
+    
     settings.codec = MKCodecFormatCELT;
     settings.quality = 24000;
     settings.audioPerPacket = 10;

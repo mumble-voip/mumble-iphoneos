@@ -134,7 +134,12 @@
 
 - (void) tickTock {
     MKAudio *audio = [MKAudio sharedAudio];
-    _value = [audio speechProbablity];
+    NSString *kind = [[NSUserDefaults standardUserDefaults] objectForKey:@"AudioVADKind"];
+    if ([kind isEqualToString:@"snr"]) {
+        _value = [audio speechProbablity];
+    } else {
+        _value = ([audio peakCleanMic] + 96.0)/96.0;
+    }
     [self setNeedsDisplay];
 }
 

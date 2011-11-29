@@ -35,6 +35,7 @@
 		2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B1116BE9B7002B8514 /* CFNetwork.framework */; };
 		2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B5116BE9BA002B8514 /* Security.framework */; };
+		286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */; };
 		287639F911D29D99009DB8B6 /* MUCertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */; };
 		287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */; };
 		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
@@ -204,6 +205,8 @@
 		2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2861C2B1116BE9B7002B8514 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		2861C2B5116BE9BA002B8514 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		286E925E148452A000B13593 /* MUVoiceActivitySetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUVoiceActivitySetupViewController.h; sourceTree = "<group>"; };
+		286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUVoiceActivitySetupViewController.m; sourceTree = "<group>"; };
 		287639F711D29D99009DB8B6 /* MUCertificateCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateCreationProgressView.h; sourceTree = "<group>"; };
 		287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCreationProgressView.m; sourceTree = "<group>"; };
 		287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCreationProgressView.xib; sourceTree = "<group>"; };
@@ -457,6 +460,8 @@
 				2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */,
 				283363D913EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.h */,
 				283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */,
+				286E925E148452A000B13593 /* MUVoiceActivitySetupViewController.h */,
+				286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -872,6 +877,7 @@
 				28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */,
 				28F08362147F263C00DC126F /* MUAudioBarView.m in Sources */,
 				28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */,
+				286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
