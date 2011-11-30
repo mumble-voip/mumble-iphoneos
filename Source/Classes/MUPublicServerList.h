@@ -34,6 +34,7 @@
 
 @interface MUPublicServerList : NSObject <NSXMLParserDelegate> 
 - (void) parse;
+- (BOOL) isParsed;
 - (NSInteger) numberOfContinents;
 - (NSString *) continentNameAtIndex:(NSInteger)index;
 - (NSInteger) numberOfCountriesAtContinentIndex:(NSInteger)index;

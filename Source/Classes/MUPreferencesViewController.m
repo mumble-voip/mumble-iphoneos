@@ -80,7 +80,6 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
 
     self.title = @"Preferences";
-    [self.tableView reloadData];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -253,8 +252,6 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
     if (indexPath.section == 0) { // Audio
         if (indexPath.row == 1) { // Transmission
             MUAudioTransmissionPreferencesViewController *audioXmit = [[MUAudioTransmissionPreferencesViewController alloc] init];

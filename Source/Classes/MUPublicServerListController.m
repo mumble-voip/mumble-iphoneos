@@ -53,7 +53,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [super viewDidAppear:YES];
+    [super viewWillAppear:YES];
 
     self.navigationItem.title = @"Public Servers";
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
@@ -70,6 +70,10 @@
     [super viewDidAppear:YES];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([_serverList isParsed]) {
+            self.navigationItem.rightBarButtonItem = nil;
+            return;
+        }
         [_serverList parse];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.navigationItem.rightBarButtonItem = nil;
@@ -129,8 +133,6 @@
     MUCountryServerListController *countryController = [[MUCountryServerListController alloc] initWithName:countryName serverList:countryServers];
     [[self navigationController] pushViewController:countryController animated:YES];
     [countryController release];
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

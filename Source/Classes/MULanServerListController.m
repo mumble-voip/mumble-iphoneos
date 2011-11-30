@@ -76,10 +76,12 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     [[self navigationItem] setTitle:@"LAN Servers"];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:YES];
     [_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
 }
 
@@ -158,8 +160,6 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    
     NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
     
     // Connect
@@ -176,9 +176,12 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         [[self navigationController] presentModalViewController:serverRoot animated:YES];
         [serverRoot release];
         
-        // Add as favourite
+    // Add as favourite
     } else if (index == 1) {
         [self presentAddAsFavouriteDialogForServer:netService];
+    // Cancel
+    } else if (index == 2) {
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

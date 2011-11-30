@@ -154,6 +154,7 @@
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
 
     self.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.toolbar.barStyle = UIBarStyleBlackOpaque;
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -39,6 +39,7 @@
     NSDictionary        *_countryNames;
     NSMutableArray      *_modelContinents;
     NSMutableArray      *_modelCountries;
+    BOOL                _parsed;
 }
 + (NSString *) filePath;
 @end
@@ -118,6 +119,10 @@
 }
 
 - (void) parse {
+    // Job's done.
+    if (_parsed)
+        return;
+
     _continentCountries = [[NSMutableDictionary alloc] initWithCapacity:[_continentNames count]];
     _countryServers = [[NSMutableDictionary alloc] init];
 
@@ -157,6 +162,7 @@
     [_countryServers release];
     _continentCountries = nil;
     _countryServers = nil;
+    _parsed = YES;
 }
 
 #pragma mark -
@@ -214,6 +220,11 @@
 // Get a dictionary representing a country.
 - (NSDictionary *) countryAtIndexPath:(NSIndexPath *)indexPath {
     return [[_modelCountries objectAtIndex:[indexPath indexAtPosition:0]] objectAtIndex:[indexPath indexAtPosition:1]];
+}
+
+// Return whether or not the server list has already been parsed
+- (BOOL) isParsed {
+    return _parsed;
 }
 
 @end

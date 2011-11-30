@@ -50,10 +50,9 @@
 @implementation MUWelcomeScreenPhone
 
 - (id) init {
-    self = [super initWithNibName:@"MUWelcomeScreenPhone" bundle:nil];
-    if (self == nil)
-        return nil;
-
+    if ((self = [super initWithNibName:@"MUWelcomeScreenPhone" bundle:nil])) {
+        // ...
+    }
     return self;
 }
 
@@ -61,11 +60,9 @@
     [super dealloc];
 }
 
-- (void) viewDidLoad {
-    [super viewDidLoad];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     self.navigationItem.title = @"Mumble";
     self.navigationController.toolbarHidden = YES;
 
@@ -81,12 +78,8 @@
     [prefs release];
 }
 
-- (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    return NO;
+    return toInterfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 #pragma mark -
@@ -146,8 +139,6 @@
 
 // Override to support row selection in the table view.
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     /* Servers section. */
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {

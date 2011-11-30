@@ -119,8 +119,6 @@
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
     NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
     // Connect
@@ -140,6 +138,9 @@
     // Add as favourite
     } else if (index == 1) {
         [self presentAddAsFavouriteDialogForServer:serverItem];
+    // Cancel
+    } else if (index == 2) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

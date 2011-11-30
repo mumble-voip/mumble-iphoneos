@@ -67,9 +67,9 @@
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
-    self.navigationItem.title = @"Certificates";
+    [super viewWillAppear:animated];
 
-    [[self tableView] deselectRowAtIndexPath:[[self tableView] indexPathForSelectedRow] animated:YES];
+    self.navigationItem.title = @"Certificates";
 
     [self fetchCertificates];
     [self.tableView reloadData];
