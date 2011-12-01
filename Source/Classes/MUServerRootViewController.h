@@ -33,5 +33,5 @@
 
 @interface MUServerRootViewController : UINavigationController
 - (id) initWithConnection:(MKConnection *)conn andServerModel:(MKServerModel *)model;
-- (void) takeOwnershipOfConnection;
+- (void) takeOwnershipOfConnectionDelegate;
 @end

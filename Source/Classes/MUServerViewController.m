@@ -252,30 +252,6 @@
 - (void) serverModel:(MKServerModel *)model userDisconnected:(MKUser *)user {
 }
 
-- (void) serverModel:(MKServerModel *)model userKicked:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
-    if (user == [model connectedUser]) {
-        NSString *reasonMsg = reason ? reason : @"(No reason)";
-        NSString *alertMsg = [NSString stringWithFormat:@"Kicked by %@ for reason: \"%@\"", [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were kicked" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        [alertView release];
-
-        [self.navigationController dismissModalViewControllerAnimated:YES];
-    }
-}
-
-- (void) serverModel:(MKServerModel *)model userBanned:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
-    if (user == [model connectedUser]) {
-        NSString *reasonMsg = reason ? reason : @"(No reason)";
-        NSString *alertMsg = [NSString stringWithFormat:@"Banned by %@ for reason: \"%@\"", [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were banned" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        [alertView release];
-        
-        [self.navigationController dismissModalViewControllerAnimated:YES];
-    }
-}
-
 - (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
     NSInteger idx = [self indexForUser:user];
     [self rebuildModelArrayFromChannel:[model rootChannel]];

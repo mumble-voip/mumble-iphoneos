@@ -32,6 +32,7 @@
 #import "MUAccessTokenViewController.h"
 #import "MUCertificateViewController.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MUConnectionController.h"
 
 @interface MUConnectionViewController () {
     MKServerModel *_model;
@@ -123,7 +124,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) { // Disconnect
-            [self dismissModalViewControllerAnimated:YES];
+            [[MUConnectionController sharedController] disconnectFromServer];
         } else if ([indexPath row] == 1) { // Access tokens
             MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
             [[self navigationController] pushViewController:tokenViewController animated:YES];

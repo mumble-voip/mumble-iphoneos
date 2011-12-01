@@ -34,6 +34,7 @@
 #import "MUConnectionViewController.h"
 #import "MUServerCertificateTrustViewController.h"
 #import "MUNotificationController.h"
+#import "MUConnectionController.h"
 #import "MUDatabase.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -51,7 +52,6 @@
     MUChannelViewController     *_channelView;
     MUConnectionViewController  *_connectionView;
 }
-- (void) teardownConnection;
 @end
 
 @implementation MUServerRootViewController
@@ -69,22 +69,17 @@
     [_serverView release];
     [_channelView release];
     [_connectionView release];
-
-    [self teardownConnection];
-
-    [super dealloc];
-}
-
-- (void) takeOwnershipOfConnection {
-    [_connection setDelegate:self];
-}
-
-- (void) teardownConnection {
+   
     [_model removeDelegate:self];
     [_model release];
     [_connection setDelegate:nil];
-    [_connection disconnect];
-    [_connection release]; 
+    [_connection release];
+    
+    [super dealloc];
+}
+
+- (void) takeOwnershipOfConnectionDelegate {
+    [_connection setDelegate:self];
 }
 
 #pragma mark - View lifecycle
@@ -144,6 +139,18 @@
 
 #pragma mark - MKConnection delegate
 
+- (void) connectionOpened:(MKConnection *)conn {
+}
+
+- (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
+}
+
+- (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
+}
+
+- (void) connection:(MKConnection *)conn unableToConnectWithError:(NSError *)err {
+}
+
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     if (err) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Connection closed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -153,6 +160,30 @@
 }
 
 #pragma mark - MKServerModel delegate
+
+- (void) serverModel:(MKServerModel *)model userKicked:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
+    if (user == [model connectedUser]) {
+        NSString *reasonMsg = reason ? reason : @"(No reason)";
+        NSString *alertMsg = [NSString stringWithFormat:@"Kicked by %@ for reason: \"%@\"", [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were kicked" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+        
+        [[MUConnectionController sharedController] disconnectFromServer];
+    }
+}
+
+- (void) serverModel:(MKServerModel *)model userBanned:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
+    if (user == [model connectedUser]) {
+        NSString *reasonMsg = reason ? reason : @"(No reason)";
+        NSString *alertMsg = [NSString stringWithFormat:@"Banned by %@ for reason: \"%@\"", [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were banned" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+        
+        [[MUConnectionController sharedController] disconnectFromServer];
+    }
+}
 
 - (void) serverModel:(MKServerModel *)model permissionDenied:(MKPermission)perm forUser:(MKUser *)user inChannel:(MKChannel *)channel {
     [[MUNotificationController sharedController] addNotification:@"Permission denied"];
