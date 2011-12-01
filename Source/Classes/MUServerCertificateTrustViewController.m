@@ -35,7 +35,8 @@
 #import "MUDatabase.h"
 
 @interface MUServerCertificateTrustViewController () {
-    MKConnection  *_conn;
+    NSArray                                             *_certChain;
+    id<MUServerCertificateTrustViewControllerProtocol>  _delegate;
 }
 @end
 
@@ -45,16 +46,12 @@
 
 @implementation MUServerCertificateTrustViewController
 
-- (id) initWithConnection:(MKConnection *)conn {
-    if (self = [super initWithCertificates:[conn peerCertificates]]) {
-        _conn = [conn retain];
-    }
-    return self;
+- (void) setDelegate:(id<MUServerCertificateTrustViewControllerProtocol>)delegate {
+    _delegate = delegate;
 }
 
-- (void) dealloc {
-    [_conn release];
-    [super dealloc];
+- (id<MUServerCertificateTrustViewControllerProtocol>) delegate {
+    return _delegate;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -69,8 +66,8 @@
 #pragma mark Actions
 
 - (void) dismissClicked:(id)sender {
-    [_conn disconnect];
     [self dismissModalViewControllerAnimated:YES];
+    [_delegate serverCertificateTrustViewControllerDidDismiss:self];
 }
 
 @end

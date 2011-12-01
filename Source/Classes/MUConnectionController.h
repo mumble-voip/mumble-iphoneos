@@ -28,10 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <MumbleKit/MKConnection.h>
-#import <MumbleKit/MKServerModel.h>
-
-@interface MUServerRootViewController : UINavigationController
-- (id) initWithConnection:(MKConnection *)conn andServerModel:(MKServerModel *)model;
-- (void) takeOwnershipOfConnection;
+@interface MUConnectionController : UIView
++ (MUConnectionController *) sharedController;
+- (void) connetToHostname:(NSString *)hostName port:(NSUInteger)port withUsername:(NSString *)userName andPassword:(NSString *)password withParentViewController:(UIViewController *)parentViewController;
 @end

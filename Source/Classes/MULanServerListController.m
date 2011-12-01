@@ -35,6 +35,7 @@
 #import "MUServerCell.h"
 #import "MUDatabase.h"
 #import "MUFavouriteServerListController.h"
+#import "MUConnectionController.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     if (reverse) {
@@ -165,17 +166,13 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     // Connect
     if (index == 0) {
         NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-        MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc]
-                                                  initWithHostname:[netService hostName]
-                                                  port:[netService port]
-                                                  username:userName
-                                                  password:nil];
-        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-            [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-        }
-        [[self navigationController] presentModalViewController:serverRoot animated:YES];
-        [serverRoot release];
-        
+        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+        [connCtrlr connetToHostname:[netService hostName]
+                               port:[netService port]
+                       withUsername:userName
+                        andPassword:nil
+           withParentViewController:self];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     // Add as favourite
     } else if (index == 1) {
         [self presentAddAsFavouriteDialogForServer:netService];

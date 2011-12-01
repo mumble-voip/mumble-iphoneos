@@ -31,8 +31,13 @@
 #import "MUCertificateViewController.h"
 
 @class MKConnection;
+@class MUServerCertificateTrustViewController;
+
+@protocol MUServerCertificateTrustViewControllerProtocol
+- (void) serverCertificateTrustViewControllerDidDismiss:(MUServerCertificateTrustViewController *)trustView;
+@end
 
 @interface MUServerCertificateTrustViewController : MUCertificateViewController
-- (id) initWithConnection:(MKConnection *)conn;
-- (void) dealloc;
+- (id<MUServerCertificateTrustViewControllerProtocol>) delegate;
+- (void) setDelegate:(id<MUServerCertificateTrustViewControllerProtocol>)delegate;
 @end

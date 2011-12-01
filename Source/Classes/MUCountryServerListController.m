@@ -35,7 +35,7 @@
 #import "MUFavouriteServerListController.h"
 #import "MUFavouriteServerEditViewController.h"
 #import "MUServerRootViewController.h"
-
+#import "MUConnectionController.h"
 #import "MUServerCell.h"
 
 @interface MUCountryServerListController () {
@@ -124,23 +124,20 @@
     // Connect
     if (index == 0) {
         NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-        MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc]
-                                                    initWithHostname:[serverItem objectForKey:@"ip"]
-                                                                port:[[serverItem objectForKey:@"port"] intValue]
-                                                            username:userName
-                                                            password:nil];
-        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-            [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-        }
-        [[self navigationController] presentModalViewController:serverRoot animated:YES];
-        [serverRoot release];
+        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+        [connCtrlr connetToHostname:[serverItem objectForKey:@"ip"]
+                               port:[[serverItem objectForKey:@"port"] intValue]
+                       withUsername:userName
+                        andPassword:nil
+           withParentViewController:self];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 
     // Add as favourite
     } else if (index == 1) {
         [self presentAddAsFavouriteDialogForServer:serverItem];
     // Cancel
     } else if (index == 2) {
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

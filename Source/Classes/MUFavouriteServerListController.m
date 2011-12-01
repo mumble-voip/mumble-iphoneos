@@ -34,9 +34,7 @@
 #import "MUFavouriteServer.h"
 #import "MUFavouriteServerEditViewController.h"
 #import "MUTableViewHeaderLabel.h"
-
-#import "MUServerRootViewController.h"
-#import "MUServerRootViewControllerPad.h"
+#import "MUConnectionController.h"
 #import "MUServerCell.h"
 
 @interface MUFavouriteServerListController () {
@@ -165,22 +163,23 @@
     
     // Connect
     if (index == 0) {
-        MUServerRootViewController *serverRoot = [[MUServerRootViewController alloc] initWithHostname:[favServ hostName]
-                                                                                             port:[favServ port]
-                                                                                          username:[favServ userName]
-                                                                                         password:[favServ password]];
-        
-        if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-            [serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        NSString *userName = [favServ userName];
+        if (userName == nil) {
+            userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
         }
-        
-        
-        [[self navigationController] presentModalViewController:serverRoot animated:YES];
-        [serverRoot release];
-        
-        // Edit
+        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+        [connCtrlr connetToHostname:[favServ hostName]
+                               port:[favServ port]
+                            withUsername:userName
+                        andPassword:[favServ password]
+           withParentViewController:self];
+            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    // Edit
     } else if (index == 1) {
         [self presentEditDialogForFavourite:favServ];
+    // Cancel
+    } else if (index == 2) {
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

@@ -84,6 +84,9 @@
     NSMutableDictionary  *_userIndexMap;
     NSMutableDictionary  *_channelIndexMap;
 }
+- (NSInteger) indexForUser:(MKUser *)user;
+- (void) reloadUser:(MKUser *)user;
+- (void) reloadChannel:(MKChannel *)channel;
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel;
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel;
 @end
@@ -108,14 +111,31 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    NSLog(@"MUServerViewController: RebuildModel!");
     [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
+    [self.tableView reloadData];
+}
+
+- (NSInteger) indexForUser:(MKUser *)user {
+    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    return userIndex;
+}
+
+- (NSInteger) indexForChannel:(MKChannel *)channel {
+    NSInteger channelIndex = [[_channelIndexMap objectForKey:[NSNumber numberWithInt:[channel channelId]]] integerValue];
+    return channelIndex;
 }
 
 - (void) reloadUser:(MKUser *)user {
-    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    NSInteger userIndex = [self indexForUser:user];
     if (userIndex != NSNotFound) {
         [[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void) reloadChannel:(MKChannel *)channel {
+    NSInteger idx = [self indexForChannel:channel];
+    if (idx != NSNotFound) {
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -130,10 +150,6 @@
     _channelIndexMap = [[NSMutableDictionary alloc] init];
 
     [self addChannelTreeToModel:channel indentLevel:0];
-
-    [self.tableView reloadData];
-
-    NSLog(@"rebuilt it!");
 }
 
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
@@ -227,13 +243,43 @@
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
     [self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self.tableView reloadData];
 }
 
 - (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
 }
 
+- (void) serverModel:(MKServerModel *)model userDisconnected:(MKUser *)user {
+}
+
+- (void) serverModel:(MKServerModel *)model userKicked:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
+    if (user == [model connectedUser]) {
+        NSString *reasonMsg = reason ? reason : @"(No reason)";
+        NSString *alertMsg = [NSString stringWithFormat:@"Kicked by %@ for reason: \"%@\"", [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were kicked" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }
+}
+
+- (void) serverModel:(MKServerModel *)model userBanned:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
+    if (user == [model connectedUser]) {
+        NSString *reasonMsg = reason ? reason : @"(No reason)";
+        NSString *alertMsg = [NSString stringWithFormat:@"Banned by %@ for reason: \"%@\"", [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were banned" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
+        
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+    }
+}
+
 - (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
+    NSInteger idx = [self indexForUser:user];
     [self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
@@ -256,14 +302,36 @@
 
 - (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
     [self rebuildModelArrayFromChannel:[model rootChannel]];
+    NSInteger idx = [self indexForChannel:channel];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) serverModel:(MKServerModel *)model channelRemoved:(MKChannel *)channel {
     [self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self.tableView reloadData];
 }
 
-- (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan byUser:(MKUser *)mover {
+- (void) serverModel:(MKServerModel *)model channelMoved:(MKChannel *)channel {
     [self rebuildModelArrayFromChannel:[model rootChannel]];
+    [self.tableView reloadData];
+}
+
+- (void) serverModel:(MKServerModel *)model channelRenamed:(MKChannel *)channel {
+    [self reloadChannel:channel];
+}
+
+- (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
+    [self.tableView beginUpdates]; 
+    if (user == [model connectedUser]) {
+        [self reloadChannel:chan];
+        [self reloadChannel:prevChan];
+    }
+    NSInteger prevIdx = [self indexForUser:user];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self rebuildModelArrayFromChannel:[model rootChannel]];
+    NSInteger newIdx = [self indexForUser:user];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
 }
 
 - (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
@@ -284,42 +352,34 @@
 // --
 
 - (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ muted and deafened by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ unmuted and undeafened by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userMuted:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ muted by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ unmuted by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userDeafened:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ deafened by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ undeafened by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userSuppressed:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ suppressed by %@", user, actor);
     [self reloadUser:user];
 }
 
 - (void) serverModel:(MKServerModel *)model userUnsuppressed:(MKUser *)user byUser:(MKUser *)actor {
-    NSLog(@"%@ unsuppressed by %@", user, actor);
     [self reloadUser:user];
 }
 

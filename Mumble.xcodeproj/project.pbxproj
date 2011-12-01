@@ -14,6 +14,7 @@
 		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
 		280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */; };
 		280EDE8912FE1E7C00774B3B /* MUServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */; };
+		2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2822AC0514878AC500E9DB17 /* MUConnectionController.m */; };
 		28234D5F13F09148006B830D /* talkbutton_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5B13F09148006B830D /* talkbutton_off.png */; };
 		28234D6013F09148006B830D /* talkbutton_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5C13F09148006B830D /* talkbutton_off@2x.png */; };
 		28234D6113F09148006B830D /* talkbutton_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5D13F09148006B830D /* talkbutton_on.png */; };
@@ -171,6 +172,8 @@
 		280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUConnectionViewController.m; sourceTree = "<group>"; };
 		280EDE8712FE1E7C00774B3B /* MUServerRootViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewControllerPad.h; sourceTree = "<group>"; };
 		280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewControllerPad.m; sourceTree = "<group>"; };
+		2822AC0414878AC500E9DB17 /* MUConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUConnectionController.h; sourceTree = "<group>"; };
+		2822AC0514878AC500E9DB17 /* MUConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUConnectionController.m; sourceTree = "<group>"; };
 		28234D5B13F09148006B830D /* talkbutton_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talkbutton_off.png; path = Resources/talkbutton_off.png; sourceTree = "<group>"; };
 		28234D5C13F09148006B830D /* talkbutton_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talkbutton_off@2x.png"; path = "Resources/talkbutton_off@2x.png"; sourceTree = "<group>"; };
 		28234D5D13F09148006B830D /* talkbutton_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talkbutton_on.png; path = Resources/talkbutton_on.png; sourceTree = "<group>"; };
@@ -438,6 +441,8 @@
 				28F08361147F263B00DC126F /* MUAudioBarView.m */,
 				28F08363147F369100DC126F /* MUAudioBarViewCell.h */,
 				28F08364147F369200DC126F /* MUAudioBarViewCell.m */,
+				2822AC0414878AC500E9DB17 /* MUConnectionController.h */,
+				2822AC0514878AC500E9DB17 /* MUConnectionController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -878,6 +883,7 @@
 				28F08362147F263C00DC126F /* MUAudioBarView.m in Sources */,
 				28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */,
 				286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */,
+				2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

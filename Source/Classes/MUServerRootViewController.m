@@ -43,11 +43,6 @@
 @interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate> {
     MKConnection                *_connection;
     MKServerModel               *_model;
-
-    NSString                    *_hostname;
-    NSUInteger                  _port;
-    NSString                    *_username;
-    NSString                    *_password;
     
     NSInteger                   _segmentIndex;
     UISegmentedControl          *_segmentedControl;
@@ -56,27 +51,21 @@
     MUChannelViewController     *_channelView;
     MUConnectionViewController  *_connectionView;
 }
-- (void) establishConnection;
 - (void) teardownConnection;
 @end
 
 @implementation MUServerRootViewController
 
-- (id) initWithHostname:(NSString *)host port:(NSUInteger)port username:(NSString *)username password:(NSString *)password {
+- (id) initWithConnection:(MKConnection *)conn andServerModel:(MKServerModel *)model {
     if ([super init]) {
-        _hostname = [host retain];
-        _port = port;
-        _username = [username retain];
-        _password = [password retain];
+        _connection = [conn retain];
+        _model = [model retain];
+        [_model addDelegate:self];
     }
     return self;
 }
 
 - (void) dealloc {
-    [_hostname release];
-    [_username release];
-    [_password release];
-
     [_serverView release];
     [_channelView release];
     [_connectionView release];
@@ -86,35 +75,8 @@
     [super dealloc];
 }
 
-- (void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (void) establishConnection {
-    _connection = [[MKConnection alloc] init];
+- (void) takeOwnershipOfConnection {
     [_connection setDelegate:self];
-
-    _model = [[MKServerModel alloc] initWithConnection:_connection];
-    [_model addDelegate:self];
-
-    // Set the connection's client cert if one is set in the app's preferences...
-    NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
-    if (certPersistentId != nil) {
-        // Try to fetch our given identity's SecIdentityRef by its persistent reference.
-        // If we're able to fetch it, set it as the connection's client certificate.
-        SecIdentityRef secIdentity = NULL;
-        NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                               certPersistentId,        kSecValuePersistentRef,
-                               kCFBooleanTrue,            kSecReturnRef,
-                               kSecMatchLimitOne,        kSecMatchLimit,
-                               nil];
-        if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
-            [_connection setClientIdentity:secIdentity];
-            CFRelease(secIdentity);
-        }
-    }
-
-    [_connection connectToHost:_hostname port:_port];
 }
 
 - (void) teardownConnection {
@@ -133,8 +95,6 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    [self establishConnection];
 
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
     _channelView = [[MUChannelViewController alloc] initWithServerModel:_model];
@@ -184,99 +144,15 @@
 
 #pragma mark - MKConnection delegate
 
-- (void) connectionOpened:(MKConnection *)conn {
-    NSArray *tokens = [MUDatabase accessTokensForServerWithHostname:[conn hostname] port:[conn port]];
-    [conn authenticateWithUsername:_username password:_password accessTokens:tokens];
-}
-
-- (void) connectionClosed:(MKConnection *)conn {
-    NSLog(@"MUServerRootViewController: Connection closed.");
-}
-
-// The connection encountered an invalid SSL certificate chain.
-- (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
-    // Check the database whether the user trusts the leaf certificate of this server.
-    NSString *storedDigest = [MUDatabase digestForServerWithHostname:[conn hostname] port:[conn port]];
-    NSString *serverDigest = [[[conn peerCertificates] objectAtIndex:0] hexDigest];
-    if (storedDigest) {
-        // Match?
-        if ([storedDigest isEqualToString:serverDigest]) {
-            [conn setIgnoreSSLVerification:YES];
-            [conn reconnect];
-            return;
-            
-            // Mismatch.  The server is using a new certificate, different from the one it previously
-            // presented to us.
-        } else {
-            NSString *title = @"Certificate Mismatch";
-            NSString *msg = @"The server presented a different certificate than the one stored for this server";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-            [alert addButtonWithTitle:@"Ignore"];
-            [alert addButtonWithTitle:@"Trust New Certificate"];
-            [alert addButtonWithTitle:@"Show Certificates"];
-            [alert show];
-            [alert release];
-        }
-        
-        // No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
-        // what to do.
-    } else {
-        NSString *title = @"Unable to validate server certificate";
-        NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alert addButtonWithTitle:@"Ignore"];
-        [alert addButtonWithTitle:@"Trust Certificate"];
-        [alert addButtonWithTitle:@"Show Certificates"];
-        [alert show];
-        [alert release];
+- (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
+    if (err) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Connection closed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
     }
-}
-
-// The server rejected our connection.
-- (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
-    NSString *title = @"Connection Rejected";
-    NSString *msg = nil;
-    
-    switch (reason) {
-        case MKRejectReasonNone:
-            msg = @"No reason";
-            break;
-        case MKRejectReasonWrongVersion:
-            msg = @"Version mismatch between client and server.";
-            break;
-        case MKRejectReasonInvalidUsername:
-            msg = @"Invalid username";
-            break;
-        case MKRejectReasonWrongUserPassword:
-            msg = @"Wrong user password";
-            break;
-        case MKRejectReasonWrongServerPassword:
-            msg = @"Wrong server password";
-            break;
-        case MKRejectReasonUsernameInUse:
-            msg = @"Username already in use";
-            break;
-        case MKRejectReasonServerIsFull:
-            msg = @"Server is full";
-            break;
-        case MKRejectReasonNoCertificate:
-            msg = @"A certificate is needed to connect to this server";
-            break;
-    }
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
-    
-    [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark - MKServerModel delegate
-
-- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
-    NSLog(@"JoinedServerAsUser!");
-}
 
 - (void) serverModel:(MKServerModel *)model permissionDenied:(MKPermission)perm forUser:(MKUser *)user inChannel:(MKChannel *)channel {
     [[MUNotificationController sharedController] addNotification:@"Permission denied"];
@@ -323,42 +199,6 @@
         [[MUNotificationController sharedController] addNotification:@"Permission denied"];
     } else {
         [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Permission denied: %@", reason]];
-    }
-}
-
-#pragma mark - UIAlertView delegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // Cancel
-    if (buttonIndex == 0) {
-        // Tear down the connection.
-        [_connection disconnect];
-        
-    // Ignore
-    } else if (buttonIndex == 1) {
-        // Ignore just reconnects to the server without
-        // performing any verification on the certificate chain
-        // the server presents us.
-        [_connection setIgnoreSSLVerification:YES];
-        [_connection reconnect];
-        
-    // Trust
-    } else if (buttonIndex == 2) {
-        // Store the cert hash of the leaf certificate.  We then ignore certificate
-        // verification errors from this host as long as it keeps on presenting us
-        // the same certificate it always has.
-        NSString *digest = [[[_connection peerCertificates] objectAtIndex:0] hexDigest];
-        [MUDatabase storeDigest:digest forServerWithHostname:[_connection hostname] port:[_connection port]];
-        [_connection setIgnoreSSLVerification:YES];
-        [_connection reconnect];
-        
-    // Show certificates
-    } else if (buttonIndex == 3) {
-        MUServerCertificateTrustViewController *certTrustView = [[MUServerCertificateTrustViewController alloc] initWithConnection:_connection];
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certTrustView];
-        [certTrustView release];
-        [self presentModalViewController:navCtrl animated:YES];
-        [navCtrl release];
     }
 }
 
