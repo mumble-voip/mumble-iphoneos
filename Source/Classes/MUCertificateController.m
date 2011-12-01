@@ -53,6 +53,38 @@
     return cert;
 }
 
+// Retrieve a certificate by its persistent reference.
++ (MKCertificate *) certificateAndPrivateKeyWithPersistentRef:(NSData *)persistentRef {
+    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                           persistentRef,      kSecValuePersistentRef,
+                           kCFBooleanTrue,     kSecReturnRef,
+                           kSecMatchLimitOne,  kSecMatchLimit,
+                           nil];
+    SecIdentityRef identity = NULL;
+    MKCertificate *cert = nil;
+    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
+        SecCertificateRef secCert;
+        if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+            SecKeyRef secKey;
+            if (SecIdentityCopyPrivateKey(identity, &secKey) == noErr) {
+                NSData *certData = (NSData *)SecCertificateCopyData(secCert);
+                NSData *pkeyData = nil;
+                query = [NSDictionary dictionaryWithObjectsAndKeys:
+                         (CFTypeRef) secKey, kSecValueRef,
+                         kCFBooleanTrue,     kSecReturnData,
+                         kSecMatchLimitOne,  kSecMatchLimit,
+                         nil];
+                if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&pkeyData) == noErr) {
+                    cert = [MKCertificate certificateWithCertificate:certData privateKey:pkeyData];
+                    [pkeyData release];
+                    [certData release];
+                }
+            }
+        }
+    }
+    return cert;
+}
+
 // Delete the certificate referenced by the persistent reference persistentRef.
 // todo(mkrautz): Don't leak OSStatus.
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef {

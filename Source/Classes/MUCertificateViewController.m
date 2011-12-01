@@ -30,21 +30,25 @@
 
 #import "MUCertificateViewController.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MUCertificateController.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
 
 static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
+static const NSUInteger CertificateViewSectionActions            = 2;
 static const NSUInteger CertificateViewSectionTotal              = 2;
 
-@interface MUCertificateViewController () {
+@interface MUCertificateViewController () <UIAlertViewDelegate> {
     NSInteger           _curIdx;
+    NSData              *_persistentRef;
     NSArray             *_certificates;
     NSArray             *_subjectItems;
     NSArray             *_issuerItems;
     NSString            *_certTitle;
     UISegmentedControl  *_arrows;
+    BOOL                _allowExportAndDelete;
 }
 @end
 
@@ -52,6 +56,17 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 #pragma mark -
 #pragma mark Initialization
+
+- (id) initWithPersistentRef:(NSData *)persistentRef {
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        [MUCertificateController certificateWithPersistentRef:persistentRef];
+        _certificates = [[NSArray arrayWithObject:[MUCertificateController certificateAndPrivateKeyWithPersistentRef:persistentRef]] retain];
+        _allowExportAndDelete = YES;
+        _persistentRef = [persistentRef retain];
+        
+    }
+    return self;
+}
 
 - (id) initWithCertificate:(MKCertificate *)cert {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
@@ -76,6 +91,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     [_issuerItems release];
     [_certTitle release];
     [_arrows release];
+    [_persistentRef release];
     [super dealloc];
 }
 
@@ -89,13 +105,13 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
                     [UIImage imageNamed:@"up.png"],
                     [UIImage imageNamed:@"down.png"],
                 nil]];
-
         _arrows.segmentedControlStyle = UISegmentedControlStyleBar;
         _arrows.momentary = YES;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     
     UIBarButtonItem *segmentedContainer = [[UIBarButtonItem alloc] initWithCustomView:_arrows];
@@ -164,7 +180,11 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return CertificateViewSectionTotal;
+    if (_allowExportAndDelete && _curIdx == 0) { // Only for the first certificate in the chain
+        return CertificateViewSectionTotal + 1;
+    } else {
+        return CertificateViewSectionTotal;
+    }
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -172,6 +192,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         return [_subjectItems count];
     } else if (section == CertificateViewSectionIssuer) {
         return [_issuerItems count];
+    } else if (section == CertificateViewSectionActions) {
+        return 2;
     }
     return 0;
 }
@@ -181,6 +203,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         return [MUTableViewHeaderLabel labelWithText:@"Subject"];
     } else if (section == CertificateViewSectionIssuer) {
         return [MUTableViewHeaderLabel labelWithText:@"Issuer"];
+    } else if (section == CertificateViewSectionActions) {
+        return [MUTableViewHeaderLabel labelWithText:@"Actions"];
     }
     return nil;
 }
@@ -188,6 +212,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
+
 // Customize the appearance of table view cells.
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"CertificateViewCell";
@@ -198,25 +223,109 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[cell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    [cell setBackgroundColor:[UIColor whiteColor]];
 
     NSUInteger section = [indexPath section];
     NSUInteger row = [indexPath row];
 
-    NSArray *item = nil;
-    if (section == CertificateViewSectionSubject)
-        item = [_subjectItems objectAtIndex:row];
-    else if (section == CertificateViewSectionIssuer)
-        item = [_issuerItems objectAtIndex:row];
+    if ([indexPath section] == 2) {
+        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = @"Export Certificate Chain";
+            cell.textLabel.textColor = [UIColor blackColor];
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = @"Delete Certificate Chain";
+            cell.textLabel.textColor = [UIColor whiteColor];
+            cell.textLabel.opaque = NO;
+            cell.textLabel.backgroundColor = [UIColor clearColor];
+            cell.detailTextLabel.opaque = NO;
+            cell.detailTextLabel.text = nil;
+            cell.opaque = NO;
+            cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"DestructivePattern"]];
+        }
+    } else {
+        NSArray *item = nil;
+        if (section == CertificateViewSectionSubject)
+            item = [_subjectItems objectAtIndex:row];
+        else if (section == CertificateViewSectionIssuer)
+            item = [_issuerItems objectAtIndex:row];
 
-    cell.textLabel.text = [item objectAtIndex:0];
-    cell.detailTextLabel.text = [item objectAtIndex:1];
-    cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+        cell.textLabel.text = [item objectAtIndex:0];
+        cell.detailTextLabel.text = [item objectAtIndex:1];
+        cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+    }
 
     return cell;
 }
 
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([indexPath section] == 2) {
+        if ([indexPath row] == 0) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Certificate Chain"
+                                                                message:nil
+                                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Export", nil];
+            [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+            [[alertView textFieldAtIndex:0] setPlaceholder:@"Filename"];
+            [[alertView textFieldAtIndex:1] setPlaceholder:@"Password (for importing)"];
+            [alertView show];
+            [alertView release];
+        } else if ([indexPath row] == 1) {
+            NSString *msg = @"Are you sure you want to delete this certificate chain?\n\nThis will permanently remove any rights associated with the certificate chain on any Mumble servers.";
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Certificate Chain"
+                                                                message:msg
+                                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+            [alertView show];
+            [alertView release];
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Actions
+
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    // Export certificate chain
+    if (alertView.alertViewStyle == UIAlertViewStyleLoginAndPasswordInput && buttonIndex == 1) {
+        if ([_certificates count] > 1) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:@"Mumble can only export self-signed certificates at present." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            [alertView release];
+            return;
+        }
+
+        MKCertificate *cert = [_certificates objectAtIndex:0];
+        NSString *password = [[alertView textFieldAtIndex:1] text];
+        NSData *data = [cert exportPKCS12WithPassword:password];
+        if (data == nil) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:@"Mumble could not export the certificate from the certificate store." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            [alertView release];
+            return;
+        }
+
+        NSString *fileName = [[alertView textFieldAtIndex:0] text];
+        if ([[fileName pathExtension] isEqualToString:@""]) {
+            fileName = [fileName stringByAppendingPathExtension:@"pkcs12"];
+        }
+
+        NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *pkcs12File = [[documentDirs objectAtIndex:0] stringByAppendingPathComponent:fileName];        
+        NSError *err = nil;
+        if (![data writeToFile:pkcs12File options:NSDataWritingAtomic error:&err]) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            [alertView release];
+            return;
+        }
+    }
+
+    // Delete certificate chain
+    if (alertView.alertViewStyle == UIAlertViewStyleDefault && buttonIndex == 1) {
+        [MUCertificateController deleteCertificateWithPersistentRef:_persistentRef];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 - (void) certificateSwitch:(id)sender {
     if ([_arrows selectedSegmentIndex] == 0) {

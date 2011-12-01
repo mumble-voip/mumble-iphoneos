@@ -154,8 +154,8 @@
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
-    MKCertificate *cert = [dict objectForKey:@"cert"];
-    MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificate:cert];
+    NSData *persistentRef = [dict objectForKey:@"persistentRef"];
+    MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithPersistentRef:persistentRef];
     [[self navigationController] pushViewController:certView animated:YES];
     [certView release];
 }

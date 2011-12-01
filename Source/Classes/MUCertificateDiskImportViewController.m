@@ -95,7 +95,10 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    if (self.tableView.style == UITableViewStyleGrouped) {
+        self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    }
+
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 
     [[self navigationItem] setTitle:@"iTunes Import"];
@@ -157,7 +160,10 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 80.0f;
+    if (_showHelp) {
+        return 80.0f;
+    }
+    return 0.0f;
 }
 
 #pragma mark - Import logic
@@ -169,8 +175,19 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSData *pkcs12Data = [NSData dataWithContentsOfFile:pkcs12File];
 
     MKCertificate *tmpCert = [MKCertificate certificateWithPKCS12:pkcs12Data password:password];
+    if (tmpCert == nil) {
+        [self showPasswordDialog];
+        [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
+        return;
+    }
+    
     NSData *transformedPkcs12Data = [tmpCert exportPKCS12WithPassword:@""];
-
+    if (transformedPkcs12Data == nil) {
+        ShowAlertDialog(@"Import Error", @"Mumble was unable to export the specified certificate for use in the iOS Keychain.");
+        [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
+        return;
+    }
+    
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
     NSArray *items = nil;
     OSStatus err = SecPKCS12Import((CFDataRef)transformedPkcs12Data, (CFDictionaryRef)dict, (CFArrayRef *)&items);
@@ -203,7 +220,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             return;
         } else if (err == errSecDuplicateItem || (err == noErr && data == nil)) {
             ShowAlertDialog(@"Import Error",
-                            @"The certificate of the just-added identity could not be added to the certificate store because it "
+                            @"The certificate of the imported identity could not be added to the certificate store because it "
                             @"has the same name as a certificate already found in the store.");
         } else {
             NSString *msg = [NSString stringWithFormat:@"Unable to import certificate.\nError Code: %li", err];
@@ -214,6 +231,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
     } else if (err == errSecAuthFailed) {
         [self showPasswordDialog];
+        [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     } else if (err == errSecDecode) {
         ShowAlertDialog(@"Import Error", @"Unable to decode PKCS12 file");
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
@@ -227,28 +245,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     UIAlertView *dialog = [[UIAlertView alloc] init];
     [dialog setDelegate:self];
     [dialog setTitle:@"Enter Password"];
-    [dialog setMessage:@" "];
+    [dialog setMessage:@"The certificate is protected by a password. Please enter it below:"];
     [dialog addButtonWithTitle:@"Cancel"];
     [dialog addButtonWithTitle:@"OK"];
-
-    UITextField *passwordField = [[UITextField alloc] initWithFrame:CGRectMake(20.0, 45.0, 245.0, 25.0)];
-    [passwordField setSecureTextEntry:YES];
-    [passwordField setBackgroundColor:[UIColor whiteColor]];
-    [passwordField setBorderStyle:UITextBorderStyleLine];
-    [passwordField setDelegate:self];
-    [dialog addSubview:passwordField];
-
-    [passwordField becomeFirstResponder];
-
-    _passwordField = passwordField;
-
+    [dialog setAlertViewStyle:UIAlertViewStyleSecureTextInput];
     [dialog show];
     [dialog release];
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) { // OK
-        [self tryImportCertificateWithPassword:[_passwordField text]];
+        [self tryImportCertificateWithPassword:[[alertView textFieldAtIndex:0] text]];
     }
 
     _passwordField = nil;

@@ -34,6 +34,7 @@
 
 @interface MUCertificateViewController : UITableViewController
 
+- (id) initWithPersistentRef:(NSData *)persistentRef;
 - (id) initWithCertificate:(MKCertificate *)cert;
 - (id) initWithCertificates:(NSArray *)certs;
 - (void) dealloc;
