@@ -49,6 +49,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 - (void) tryImportCertificateWithPassword:(NSString *)password;
 - (void) showPasswordDialog;
+- (void) removeAllDiskCertificates;
 @end
 
 @implementation MUCertificateDiskImportViewController
@@ -106,6 +107,13 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
     [doneButton release];
+
+    if (!_showHelp) {
+        UIBarButtonItem *removeAllButton = [[UIBarButtonItem alloc] initWithTitle:@"Remove All" style:UIBarButtonItemStyleDone target:self action:@selector(removeAllClicked:)];
+        [removeAllButton setTintColor:[UIColor redColor]];
+        [[self navigationItem] setRightBarButtonItem:removeAllButton];
+        [removeAllButton release];
+    }
 }
 
 #pragma mark - Table view data source
@@ -254,17 +262,52 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) { // OK
-        [self tryImportCertificateWithPassword:[[alertView textFieldAtIndex:0] text]];
+    // Password view
+    if (alertView.alertViewStyle == UIAlertViewStyleSecureTextInput) {
+        if (buttonIndex == 1) { // OK
+            [self tryImportCertificateWithPassword:[[alertView textFieldAtIndex:0] text]];
+        }
+        _passwordField = nil;
     }
+    // Delete all view
+    if (alertView.alertViewStyle == UIAlertViewStyleDefault) {
+        if (buttonIndex == 1) { // Remove 'Em
+            [self removeAllDiskCertificates];
+        }
+    }
+}
 
-    _passwordField = nil;
+- (void) removeAllDiskCertificates {
+    NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *directory = [documentDirs objectAtIndex:0];
+    NSArray *diskCerts = [_diskCertificates copy];
+    for (int i = 0; i < [diskCerts count]; i++) {
+        NSError *err = nil;
+        NSString *fn = [diskCerts objectAtIndex:i];
+        [[NSFileManager defaultManager] removeItemAtPath:[directory stringByAppendingPathComponent:fn] error:&err];
+        if (err != nil) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to remove file" message:[NSString stringWithFormat:@"File '%@' could not be deleted: %@", fn, [err localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+            [alertView release];
+        } else {
+            [_diskCertificates removeObjectIdenticalTo:fn];
+        }
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - Actions
 
 - (void) doneClicked:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void) removeAllClicked:(id)sender {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove All" message:@"This will remove all certificates that can be imported into Mumble.\n\n"
+                                                                                      @"Certificates already imported into Mumble will not be touched."
+                                                       delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Remove 'Em", nil];
+    [alertView show];
+    [alertView release];
 }
 
 @end
