@@ -91,6 +91,7 @@
                                                                 @"vad",                            @"AudioTransmitMethod",
                                                                 [NSNumber numberWithBool:YES],     @"AudioPreprocessor",
                                                                 [NSNumber numberWithFloat:1.0f],   @"AudioMicBoost",
+                                                                @"balanced",                       @"AudioQualityKind",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
@@ -155,20 +156,39 @@
     else
         settings.transmitType = MKTransmitTypeVAD;
     
+    settings.vadKind = MKVADKindAmplitude;
     if ([[defaults stringForKey:@"AudioVADKind"] isEqualToString:@"snr"]) {
         settings.vadKind = MKVADKindSignalToNoise;
     } else if ([[defaults stringForKey:@"AudioVADKind"] isEqualToString:@"amplitude"]) {
-        settings.vadKind = MKVADKindAmplitude;
-    } else {
         settings.vadKind = MKVADKindAmplitude;
     }
     
     settings.vadMin = [defaults floatForKey:@"AudioVADBelow"];
     settings.vadMax = [defaults floatForKey:@"AudioVADAbove"];
     
-    settings.codec = MKCodecFormatCELT;
-    settings.quality = 24000;
-    settings.audioPerPacket = 10;
+    NSString *quality = [defaults stringForKey:@"AudioQualityKind"];
+    if ([quality isEqualToString:@"low"]) {
+        settings.codec = MKCodecFormatSpeex;
+        settings.quality = 16000;
+        settings.audioPerPacket = 6;
+    } else if ([quality isEqualToString:@"balanced"]) {
+        settings.codec = MKCodecFormatCELT;
+        settings.quality = 40000;
+        settings.audioPerPacket = 2;
+    } else if ([quality isEqualToString:@"high"]) {
+        settings.codec = MKCodecFormatCELT;
+        settings.quality = 72000;
+        settings.audioPerPacket = 1;
+    } else if ([quality isEqualToString:@"custom"]) {
+        settings.codec = MKCodecFormatCELT;
+        if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"celt"])
+            settings.codec = MKCodecFormatCELT;
+        if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"speex"])
+            settings.codec = MKCodecFormatSpeex;
+        settings.quality = [defaults integerForKey:@"AudioQualityBitrate"];
+        settings.audioPerPacket = [defaults integerForKey:@"AudioQualityFrames"];
+    }
+
     settings.noiseSuppression = -42; /* -42 dB */
     settings.amplification = 20.0f;
     settings.jitterBufferSize = 0; /* 10 ms */

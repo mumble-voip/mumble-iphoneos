@@ -32,6 +32,7 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUApplication.h"
 #import "MUApplicationDelegate.h"
+#import "MUAudioQualityPreferencesViewController.h"
 #import "MUColor.h"
 
 @implementation MUAdvancedAudioPreferencesViewController
@@ -49,6 +50,8 @@
     self.title = @"Advanced Audio";
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    [self.tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -67,49 +70,68 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (section == 0) {
         return 1 + ([defaults boolForKey:@"AudioPreprocessor"] ? 0 : 1);
+    } else if (section == 1) {
+        return 1;
     }
     return 0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"MUAdvancedAudioPreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
     }
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-    if ([indexPath row] == 0) {
-        cell.textLabel.text = @"Preprocessing";
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UISwitch *preprocSwitch = [[[UISwitch alloc] init] autorelease];
-        preprocSwitch.onTintColor = [UIColor blackColor];
-        preprocSwitch.on = [defaults boolForKey:@"AudioPreprocessor"];
-        [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = preprocSwitch;
-    } else if ([indexPath row] == 1) {
-        cell.textLabel.text = @"Mic Boost";
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UISlider *slider = [[[UISlider alloc] init] autorelease];
-        [slider setMaximumValue:2.0f];
-        [slider setMinimumValue:0.0f];
-        float boost = [defaults floatForKey:@"AudioMicBoost"];
-        if (boost > 1.0f) {
-            [slider setMinimumTrackTintColor:[MUColor badPingColor]];
-        } else {
-            [slider setMinimumTrackTintColor:[MUColor goodPingColor]];
+    if ([indexPath section] == 0) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = @"Preprocessing";
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *preprocSwitch = [[[UISwitch alloc] init] autorelease];
+            preprocSwitch.onTintColor = [UIColor blackColor];
+            preprocSwitch.on = [defaults boolForKey:@"AudioPreprocessor"];
+            [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = preprocSwitch;
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = @"Mic Boost";
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISlider *slider = [[[UISlider alloc] init] autorelease];
+            [slider setMaximumValue:2.0f];
+            [slider setMinimumValue:0.0f];
+            float boost = [defaults floatForKey:@"AudioMicBoost"];
+            if (boost > 1.0f) {
+                [slider setMinimumTrackTintColor:[MUColor badPingColor]];
+            } else {
+                [slider setMinimumTrackTintColor:[MUColor goodPingColor]];
+            }
+            [slider setValue:boost];
+            [slider addTarget:self action:@selector(micBoostChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = slider;
         }
-        [slider setValue:boost];
-        [slider addTarget:self action:@selector(micBoostChanged:) forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = slider;
+    } else if ([indexPath section] == 1) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = @"Quality";
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
+                cell.detailTextLabel.text = @"Low";
+            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
+                cell.detailTextLabel.text = @"Balanced";
+            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
+                cell.detailTextLabel.text = @"High";
+            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"])
+                cell.detailTextLabel.text = @"Custom";
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        }
     }
     
     return cell;
@@ -118,6 +140,8 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) { // Input
         return [MUTableViewHeaderLabel labelWithText:@"Audio Input"];
+    } else if (section == 1) {
+        return [MUTableViewHeaderLabel labelWithText:@"Transmission Quality"];
     } else {
         return nil;
     }
@@ -126,26 +150,23 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
+    } else if (section == 1) {
+        return [MUTableViewHeaderLabel defaultHeaderHeight];
     }
     return 0.0f;
 }
 
 #pragma mark - Table view delegate
 
-#if 0
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 1 && [indexPath row] == 0) {
+        MUAudioQualityPreferencesViewController *audioQual = [[MUAudioQualityPreferencesViewController alloc] init];
+        [self.navigationController pushViewController:audioQual animated:YES];
+        [audioQual release];
+    }
 }
-#endif
-  #pragma mark - Actions
+
+#pragma mark - Actions
 
 - (void) preprocessingChanged:(UISwitch *)sender {
     [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioPreprocessor"];

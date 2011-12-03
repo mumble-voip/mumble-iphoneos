@@ -67,6 +67,7 @@
 		28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* MULogViewController.m */; };
 		28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* MULogEntry.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
+		28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
 		28C6EF0A11BBF38100E426C8 /* MUCountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */; };
 		28DC1C5C13DE596B0037CDC2 /* authenticated.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1313DE596B0037CDC2 /* authenticated.png */; };
@@ -258,6 +259,8 @@
 		28A4CCF3117E1D4D006EB479 /* MULogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogEntry.h; sourceTree = "<group>"; };
 		28A4CCF4117E1D4D006EB479 /* MULogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULogEntry.m; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ../MainWindow.xib; sourceTree = "<group>"; };
+		28ADA301148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioQualityPreferencesViewController.h; sourceTree = "<group>"; };
+		28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioQualityPreferencesViewController.m; sourceTree = "<group>"; };
 		28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateDiskImportViewController.h; sourceTree = "<group>"; };
 		28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateDiskImportViewController.m; sourceTree = "<group>"; };
 		28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCountryServerListController.m; sourceTree = "<group>"; };
@@ -476,6 +479,8 @@
 				286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */,
 				28F04B2014898A7100C90909 /* MUAdvancedAudioPreferencesViewController.h */,
 				28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */,
+				28ADA301148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.h */,
+				28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -898,6 +903,7 @@
 				286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */,
 				2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */,
 				28F04B2214898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m in Sources */,
+				28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
