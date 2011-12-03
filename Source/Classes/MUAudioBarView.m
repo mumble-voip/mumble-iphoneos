@@ -29,6 +29,7 @@
 */
 
 #import "MUAudioBarView.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -77,23 +78,23 @@
     _below = [[NSUserDefaults standardUserDefaults] floatForKey:@"AudioVADBelow"];
     _above = [[NSUserDefaults standardUserDefaults] floatForKey:@"AudioVADAbove"];
     
-    if (_above < _below) {
-        CGContextSetFillColorWithColor(ctx, [[UIColor redColor] colorWithAlphaComponent:0.6f].CGColor);
-        CGContextFillRect(ctx, bounds);
-        return;
-    }
-    
     CGFloat scale = bounds.size.width / (_max - _min);
     int below = (int)((_below-_min)*scale);
     int above = (int)((_above-_min)*scale);
     int value = (int)((_value-_min)*scale);
     
-    CGColorRef redA = [[UIColor redColor] colorWithAlphaComponent:0.6f].CGColor;
-    CGColorRef redO = [UIColor redColor].CGColor;
-    CGColorRef yellowA = [[UIColor yellowColor] colorWithAlphaComponent:0.6f].CGColor;
-    CGColorRef yellowO = [UIColor yellowColor].CGColor;
-    CGColorRef greenA = [[UIColor greenColor] colorWithAlphaComponent:0.6f].CGColor;
-    CGColorRef greenO = [UIColor greenColor].CGColor;
+    CGColorRef redA = [[MUColor badPingColor] colorWithAlphaComponent:0.6f].CGColor;
+    CGColorRef redO = [MUColor badPingColor].CGColor;
+    CGColorRef yellowA = [[MUColor mediumPingColor] colorWithAlphaComponent:0.6f].CGColor;
+    CGColorRef yellowO = [MUColor mediumPingColor].CGColor;
+    CGColorRef greenA = [[MUColor goodPingColor] colorWithAlphaComponent:0.6f].CGColor;
+    CGColorRef greenO = [MUColor goodPingColor].CGColor;
+    
+    if (_above < _below) {
+        CGContextSetFillColorWithColor(ctx, redA);
+        CGContextFillRect(ctx, bounds);
+        return;
+    }
     
     CGRect redBounds = CGRectMake(bounds.origin.x, 0, below, bounds.size.height);
     CGContextSetFillColorWithColor(ctx, redA);
