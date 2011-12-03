@@ -89,6 +89,8 @@
                                                                 [NSNumber numberWithFloat:0.3f],   @"AudioVADBelow",
                                                                 @"amplitude",                      @"AudioVADKind",
                                                                 @"vad",                            @"AudioTransmitMethod",
+                                                                [NSNumber numberWithBool:YES],     @"AudioPreprocessor",
+                                                                [NSNumber numberWithFloat:1.0f],   @"AudioMicBoost",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
@@ -172,7 +174,8 @@
     settings.jitterBufferSize = 0; /* 10 ms */
     settings.volume = [defaults floatForKey:@"AudioOutputVolume"];
     settings.outputDelay = 0; /* 10 ms */
-    settings.enablePreprocessor = YES;
+    settings.micBoost = [defaults floatForKey:@"AudioMicBoost"];
+    settings.enablePreprocessor = [defaults boolForKey:@"AudioPreprocessor"];
     settings.enableBenchmark = YES;
 
     MKAudio *audio = [MKAudio sharedAudio];

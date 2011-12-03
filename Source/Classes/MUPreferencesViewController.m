@@ -33,6 +33,7 @@
 #import "MUApplicationDelegate.h"
 #import "MUCertificatePreferencesViewController.h"
 #import "MUAudioTransmissionPreferencesViewController.h"
+#import "MUAdvancedAudioPreferencesViewController.h"
 #import "MUCertificateController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
@@ -99,7 +100,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Audio
     if (section == 0) {
-        return 2;
+        return 3;
     // Network
     } else if (section == 1) {
         return 3;
@@ -116,7 +117,8 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
-
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
     // Audio section
     if ([indexPath section] == 0) {
         // Volume
@@ -150,6 +152,9 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
              cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
+        } else if ([indexPath row] == 2) {
+            cell.textLabel.text = @"Advanced";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
     // Network
@@ -257,6 +262,10 @@
             MUAudioTransmissionPreferencesViewController *audioXmit = [[MUAudioTransmissionPreferencesViewController alloc] init];
             [self.navigationController pushViewController:audioXmit animated:YES];
             [audioXmit release];
+        } else if (indexPath.row == 2) { // Advanced
+            MUAdvancedAudioPreferencesViewController *advAudio = [[MUAdvancedAudioPreferencesViewController alloc] init];
+            [self.navigationController pushViewController:advAudio animated:YES];
+            [advAudio release];
         }
     } else if ([indexPath section] == 1) { // Network
         if ([indexPath row] == 1) { // Certificates

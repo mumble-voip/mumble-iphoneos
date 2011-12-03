@@ -121,6 +121,7 @@
 		28DC1CA313DE596B0037CDC2 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C5A13DE596B0037CDC2 /* up.png */; };
 		28DC1CA413DE596B0037CDC2 /* up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C5B13DE596B0037CDC2 /* up@2x.png */; };
 		28F019911364585C00E402F6 /* MUServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F019901364585B00E402F6 /* MUServerCell.m */; };
+		28F04B2214898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */; };
 		28F0835F147F102F00DC126F /* publist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28F0835E147F102F00DC126F /* publist.xml */; };
 		28F08362147F263C00DC126F /* MUAudioBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F08361147F263B00DC126F /* MUAudioBarView.m */; };
 		28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F08364147F369200DC126F /* MUAudioBarViewCell.m */; };
@@ -329,6 +330,8 @@
 		28DC1C5B13DE596B0037CDC2 /* up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "up@2x.png"; path = "Resources/up@2x.png"; sourceTree = "<group>"; };
 		28F0198F1364585B00E402F6 /* MUServerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerCell.h; sourceTree = "<group>"; };
 		28F019901364585B00E402F6 /* MUServerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCell.m; sourceTree = "<group>"; };
+		28F04B2014898A7100C90909 /* MUAdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
+		28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAdvancedAudioPreferencesViewController.m; sourceTree = "<group>"; };
 		28F0835E147F102F00DC126F /* publist.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publist.xml; path = Resources/publist.xml; sourceTree = "<group>"; };
 		28F08360147F263B00DC126F /* MUAudioBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioBarView.h; sourceTree = "<group>"; };
 		28F08361147F263B00DC126F /* MUAudioBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioBarView.m; sourceTree = "<group>"; };
@@ -471,6 +474,8 @@
 				283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */,
 				286E925E148452A000B13593 /* MUVoiceActivitySetupViewController.h */,
 				286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */,
+				28F04B2014898A7100C90909 /* MUAdvancedAudioPreferencesViewController.h */,
+				28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -892,6 +897,7 @@
 				28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */,
 				286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */,
 				2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */,
+				28F04B2214898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
