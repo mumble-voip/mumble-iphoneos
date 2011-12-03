@@ -81,6 +81,7 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
 
     self.title = @"Preferences";
+    [self.tableView reloadData];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
