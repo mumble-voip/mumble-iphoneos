@@ -35,6 +35,7 @@
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
+#import <MumbleKit/MKCertificate.h>
 
 @interface MUConnectionController () <MKConnectionDelegate, MKServerModelDelegate, MUServerCertificateTrustViewControllerProtocol> {
     MKConnection               *_connection;
@@ -200,7 +201,8 @@
 - (void) connection:(MKConnection *)conn trustFailureInCertificateChain:(NSArray *)chain {
     // Check the database whether the user trusts the leaf certificate of this server.
     NSString *storedDigest = [MUDatabase digestForServerWithHostname:[conn hostname] port:[conn port]];
-    NSString *serverDigest = [[[conn peerCertificates] objectAtIndex:0] hexDigest];
+    MKCertificate *cert = [[conn peerCertificates] objectAtIndex:0];
+    NSString *serverDigest = [cert hexDigest];
     if (storedDigest) {
         // Match?
         if ([storedDigest isEqualToString:serverDigest]) {
@@ -408,7 +410,8 @@
         // Store the cert hash of the leaf certificate.  We then ignore certificate
         // verification errors from this host as long as it keeps on presenting us
         // the same certificate it always has.
-        NSString *digest = [[[_connection peerCertificates] objectAtIndex:0] hexDigest];
+        MKCertificate *cert = [[_connection peerCertificates] objectAtIndex:0];
+        NSString *digest = [cert hexDigest];
         [MUDatabase storeDigest:digest forServerWithHostname:[_connection hostname] port:[_connection port]];
         [_connection setIgnoreSSLVerification:YES];
         [_connection reconnect];
