@@ -44,7 +44,6 @@
 - (void) dealloc;
 - (id) object;
 - (NSInteger) indentLevel;
-- (void) reloadUser:(MKUser *)user;
 @end
 
 @implementation MUChannelNavigationItem
