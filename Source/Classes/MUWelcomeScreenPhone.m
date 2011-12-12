@@ -116,7 +116,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithFrame:CGRectZero reuseIdentifier:@"welcomeItem"] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"] autorelease];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
