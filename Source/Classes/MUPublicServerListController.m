@@ -58,12 +58,14 @@
     self.navigationItem.title = @"Public Servers";
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
 
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    UIBarButtonItem *barActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-    self.navigationItem.rightBarButtonItem = barActivityIndicator;
-    [activityIndicatorView startAnimating];
-    [barActivityIndicator release];
-    [activityIndicatorView release];
+    if (![_serverList isParsed]) {
+        UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        UIBarButtonItem *barActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
+        self.navigationItem.rightBarButtonItem = barActivityIndicator;
+        [activityIndicatorView startAnimating];
+        [barActivityIndicator release];
+        [activityIndicatorView release];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
