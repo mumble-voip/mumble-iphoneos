@@ -109,7 +109,7 @@
         [_talkButton removeFromSuperview];
         _talkButton = nil;
 
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
     
     [self.tableView reloadData];
