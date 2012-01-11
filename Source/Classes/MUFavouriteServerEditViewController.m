@@ -217,6 +217,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
     
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)

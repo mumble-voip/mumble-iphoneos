@@ -113,6 +113,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [self setTitle:@"New Certificate"];
 

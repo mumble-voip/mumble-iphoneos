@@ -50,7 +50,7 @@
 @implementation MUWelcomeScreenPhone
 
 - (id) init {
-    if ((self = [super initWithNibName:@"MUWelcomeScreenPhone" bundle:nil])) {
+    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         // ...
     }
     return self;
@@ -68,6 +68,7 @@
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleBordered target:self action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
