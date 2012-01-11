@@ -37,10 +37,9 @@
 
 static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
-static const NSUInteger CertificateViewSectionActions            = 2;
 static const NSUInteger CertificateViewSectionTotal              = 2;
 
-@interface MUCertificateViewController () <UIAlertViewDelegate> {
+@interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
     NSInteger           _curIdx;
     NSData              *_persistentRef;
     NSArray             *_certificates;
@@ -114,9 +113,26 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     
-    UIBarButtonItem *segmentedContainer = [[UIBarButtonItem alloc] initWithCustomView:_arrows];
-    self.navigationItem.rightBarButtonItem = segmentedContainer;
-    [segmentedContainer release];
+    UIBarButtonItem *actions = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
+    [actions setStyle:UIBarButtonItemStyleBordered];
+    [actions autorelease];
+
+    // If there's more than one certificate in the chain, show the arrows
+    if ([_certificates count] > 1) {
+        UIBarButtonItem *segmentedContainer = [[[UIBarButtonItem alloc] initWithCustomView:_arrows] autorelease];
+        if (_allowExportAndDelete) {
+            UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 125, 45)] autorelease];
+            [toolbar setBarStyle:UIBarStyleBlackOpaque];
+            [toolbar setItems:[NSArray arrayWithObjects:actions, segmentedContainer, nil]];
+    
+            UIBarButtonItem *toolbarContainer = [[[UIBarButtonItem alloc] initWithCustomView:toolbar] autorelease];        
+            self.navigationItem.rightBarButtonItem = toolbarContainer;
+        } else {
+            self.navigationItem.rightBarButtonItem = segmentedContainer;
+        }
+    } else if ([_certificates count] == 1 &&_allowExportAndDelete) {
+        self.navigationItem.rightBarButtonItem = actions;
+    }
 
     [self updateCertificateDisplay];
 }
@@ -180,11 +196,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (_allowExportAndDelete && _curIdx == 0) { // Only for the first certificate in the chain
-        return CertificateViewSectionTotal + 1;
-    } else {
-        return CertificateViewSectionTotal;
-    }
+    return CertificateViewSectionTotal;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -192,8 +204,6 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         return [_subjectItems count];
     } else if (section == CertificateViewSectionIssuer) {
         return [_issuerItems count];
-    } else if (section == CertificateViewSectionActions) {
-        return 2;
     }
     return 0;
 }
@@ -203,8 +213,6 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         return [MUTableViewHeaderLabel labelWithText:@"Subject"];
     } else if (section == CertificateViewSectionIssuer) {
         return [MUTableViewHeaderLabel labelWithText:@"Issuer"];
-    } else if (section == CertificateViewSectionActions) {
-        return [MUTableViewHeaderLabel labelWithText:@"Actions"];
     }
     return nil;
 }
@@ -227,58 +235,16 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
     NSUInteger section = [indexPath section];
     NSUInteger row = [indexPath row];
+    NSArray *item = nil;
+    if (section == CertificateViewSectionSubject)
+        item = [_subjectItems objectAtIndex:row];
+    else if (section == CertificateViewSectionIssuer)
+        item = [_issuerItems objectAtIndex:row];
 
-    if ([indexPath section] == 2) {
-        [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
-        if ([indexPath row] == 0) {
-            cell.textLabel.text = @"Export Certificate Chain";
-            cell.textLabel.textColor = [UIColor blackColor];
-        } else if ([indexPath row] == 1) {
-            cell.textLabel.text = @"Delete Certificate Chain";
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.textLabel.opaque = NO;
-            cell.textLabel.backgroundColor = [UIColor clearColor];
-            cell.detailTextLabel.opaque = NO;
-            cell.detailTextLabel.text = nil;
-            cell.opaque = NO;
-            cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"DestructivePattern"]];
-        }
-    } else {
-        NSArray *item = nil;
-        if (section == CertificateViewSectionSubject)
-            item = [_subjectItems objectAtIndex:row];
-        else if (section == CertificateViewSectionIssuer)
-            item = [_issuerItems objectAtIndex:row];
-
-        cell.textLabel.text = [item objectAtIndex:0];
-        cell.detailTextLabel.text = [item objectAtIndex:1];
-        cell.detailTextLabel.textColor = [MUColor selectedTextColor];
-    }
-
+    cell.textLabel.text = [item objectAtIndex:0];
+    cell.detailTextLabel.text = [item objectAtIndex:1];
+    cell.detailTextLabel.textColor = [MUColor selectedTextColor];
     return cell;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([indexPath section] == 2) {
-        if ([indexPath row] == 0) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Certificate Chain"
-                                                                message:nil
-                                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Export", nil];
-            [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-            [[alertView textFieldAtIndex:0] setPlaceholder:@"Filename"];
-            [[alertView textFieldAtIndex:1] setPlaceholder:@"Password (for importing)"];
-            [alertView show];
-            [alertView release];
-        } else if ([indexPath row] == 1) {
-            NSString *msg = @"Are you sure you want to delete this certificate chain?\n\nThis will permanently remove any rights associated with the certificate chain on any Mumble servers.";
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Certificate Chain"
-                                                                message:msg
-                                                               delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
-            [alertView show];
-            [alertView release];
-        }
-    }
 }
 
 #pragma mark -
@@ -340,6 +306,35 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     }
 
     [self updateCertificateDisplay];
+}
+
+- (void) actionClicked:(id)sender {
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Certificate Chain Actions" delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:@"Delete"
+                                              otherButtonTitles:@"Export to iTunes", nil];
+    [sheet showInView:self.tableView];
+    [sheet release];
+}
+
+- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) { // Export
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Certificate Chain"
+                                                            message:nil
+                                                           delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Export", nil];
+        [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+        [[alertView textFieldAtIndex:0] setPlaceholder:@"Filename"];
+        [[alertView textFieldAtIndex:1] setPlaceholder:@"Password (for importing)"];
+        [alertView show];
+        [alertView release];
+    } else if (buttonIndex == 0) { // Delete
+        NSString *msg = @"Are you sure you want to delete this certificate chain?\n\nThis will permanently remove any rights associated with the certificate chain on any Mumble servers.";
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Certificate Chain"
+                                                            message:msg
+                                                           delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+        [alertView show];
+        [alertView release];
+    }
 }
 
 @end
