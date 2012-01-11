@@ -167,13 +167,14 @@
         if (userName == nil) {
             userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
         }
+        
         MUConnectionController *connCtrlr = [MUConnectionController sharedController];
         [connCtrlr connetToHostname:[favServ hostName]
                                port:[favServ port]
                             withUsername:userName
                         andPassword:[favServ password]
            withParentViewController:self];
-            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     // Edit
     } else if (index == 1) {
         [self presentEditDialogForFavourite:favServ];

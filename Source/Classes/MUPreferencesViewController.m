@@ -102,7 +102,7 @@
         return 3;
     // Network
     } else if (section == 1) {
-        return 3;
+        return 2;
     }
 
     return 0;
@@ -153,6 +153,7 @@
             return cell;
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = @"Advanced";
+            cell.accessoryView = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
@@ -178,39 +179,6 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
-        } else if ([indexPath row] == 2) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefTextFieldCell"];
-            if (cell == nil)
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefTextFieldCell"] autorelease];
-            
-            for (UIView *subview in [[cell contentView] subviews]) {
-                [subview removeFromSuperview];
-            }
-            
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [[cell textLabel] setText:@"Username"];
-    
-            UITextField *tf = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
-            [tf setTextColor:[MUColor selectedTextColor]];
-            [tf addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
-            [tf addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
-            [tf addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
-            [tf addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
-            [tf setReturnKeyType:UIReturnKeyDone];
-            [tf setAdjustsFontSizeToFitWidth:YES];
-            [tf setPlaceholder:@"MumbleUser"];
-            [tf setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-            NSString *defaultUserName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-            if (![defaultUserName isEqualToString:@"MumbleUser"]) {
-                [tf setText:defaultUserName];
-            } else {
-                [tf setText:nil];
-            }
-            [tf setTextAlignment:UITextAlignmentRight];
-            [[cell contentView] addSubview:tf];
-            [tf release];
-
-            return cell;
         }
     }
 
@@ -229,27 +197,6 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return [MUTableViewHeaderLabel defaultHeaderHeight];
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 1) { // Network
-        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:@"This username is the default username\n"
-                                                                            @"used for connections to public and LAN\n"
-                                                                            @"servers."];
-        lbl.font = [UIFont systemFontOfSize:16.0f];
-        lbl.lineBreakMode = UILineBreakModeWordWrap;
-        lbl.numberOfLines = 0;
-        return lbl;
-    } else {
-        return nil;
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 1) {
-        return 70.0f;
-    }
-    return 0.0f;
 }
 
 #pragma mark -
@@ -273,57 +220,6 @@
             [certPref release];
         }
     }
-}
-
-#pragma mark -
-#pragma mark Change notification
-
-- (void) textFieldBeganEditing:(UITextField *)sender {
-    _activeTextField = sender;
-}
-
-- (void) textFieldEndedEditing:(UITextField *)sender {
-    _activeTextField = nil;
-}
-
-- (void) textFieldDidChange:(UITextField *)sender {
-    if ([[sender text] isEqualToString:@""]) {
-        [[NSUserDefaults standardUserDefaults] setObject:@"MumbleUser" forKey:@"DefaultUserName"];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setObject:[sender text] forKey:@"DefaultUserName"];
-    }
-}
-
-- (void) textFieldDidEndOnExit:(UITextField *)sender {
-    _activeTextField = nil;
-    [sender resignFirstResponder];
-}
-
-- (void) keyboardWasShown:(NSNotification*)aNotification {
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-
-    [UIView animateWithDuration:0.2f animations:^{
-        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-        self.tableView.contentInset = contentInsets;
-        self.tableView.scrollIndicatorInsets = contentInsets;
-    } completion:^(BOOL finished) {
-        if (!finished)
-            return;
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]
-                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-
-    }];
-}
-
-- (void) keyboardWillBeHidden:(NSNotification*)aNotification {
-    [UIView animateWithDuration:0.2f animations:^{
-        UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-        self.tableView.contentInset = contentInsets;
-        self.tableView.scrollIndicatorInsets = contentInsets;
-    } completion:^(BOOL finished) {
-        // ...
-    }];
 }
 
 - (void) audioVolumeChanged:(UISlider *)volumeSlider {

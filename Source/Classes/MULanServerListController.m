@@ -45,7 +45,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     }
 } 
 
-@interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate, UIActionSheetDelegate> {
+@interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
     NSNetServiceBrowser  *_browser;
     NSMutableArray       *_netServices;
 }
@@ -165,14 +165,15 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     
     // Connect
     if (index == 0) {
-        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
-        [connCtrlr connetToHostname:[netService hostName]
-                               port:[netService port]
-                       withUsername:userName
-                        andPassword:nil
-           withParentViewController:self];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
+                                                        message:@"Please enter the username you wish to use on this server"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Connect", nil];
+        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [alert show];
+        [alert release];
+
     // Add as favourite
     } else if (index == 1) {
         [self presentAddAsFavouriteDialogForServer:netService];
@@ -213,6 +214,22 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [navCtrl popToRootViewControllerAnimated:NO];
     [navCtrl pushViewController:favController animated:YES];
     [favController release];
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+
+    if (buttonIndex == 1) {
+        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+        [connCtrlr connetToHostname:[netService hostName]
+                               port:[netService port]
+                       withUsername:[[alertView textFieldAtIndex:0] text]
+                        andPassword:nil
+           withParentViewController:self];
+    }
+
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

@@ -38,7 +38,7 @@
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
 
-@interface MUCountryServerListController () {
+@interface MUCountryServerListController () <UIAlertViewDelegate> {
     NSArray   *_countryServers;
     NSString  *_countryName;
 }
@@ -123,14 +123,14 @@
 
     // Connect
     if (index == 0) {
-        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
-        [connCtrlr connetToHostname:[serverItem objectForKey:@"ip"]
-                               port:[[serverItem objectForKey:@"port"] intValue]
-                       withUsername:userName
-                        andPassword:nil
-           withParentViewController:self];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
+                                                        message:@"Please enter the username you wish to use on this server"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                              otherButtonTitles:@"Connect", nil];
+        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [alert show];
+        [alert release];
 
     // Add as favourite
     } else if (index == 1) {
@@ -172,6 +172,22 @@
     [navCtrl popToRootViewControllerAnimated:NO];
     [navCtrl pushViewController:favController animated:YES];
     [favController release];
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+    NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+    
+    if (buttonIndex == 1) {
+        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+        [connCtrlr connetToHostname:[serverItem objectForKey:@"ip"]
+                               port:[[serverItem objectForKey:@"port"] intValue]
+                       withUsername:[[alertView textFieldAtIndex:0] text]
+                        andPassword:nil
+           withParentViewController:self];
+    }
+
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
