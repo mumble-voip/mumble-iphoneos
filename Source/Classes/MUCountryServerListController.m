@@ -129,6 +129,7 @@
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"Connect", nil];
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[serverItem objectForKey:@"ip"] port:[[serverItem objectForKey:@"port"] intValue]]];
         [alert show];
         [alert release];
 
@@ -146,6 +147,7 @@
     [favServ setDisplayName:[serverItem objectForKey:@"name"]];
     [favServ setHostName:[serverItem objectForKey:@"ip"]];
     [favServ setPort:[[serverItem objectForKey:@"port"] intValue]];
+    [favServ setUserName:[MUDatabase usernameForServerWithHostname:[serverItem objectForKey:@"ip"] port:[[serverItem objectForKey:@"port"] intValue]]];
 
     UINavigationController *modalNav = [[UINavigationController alloc] init];
     MUFavouriteServerEditViewController *editView = [[MUFavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];

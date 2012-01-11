@@ -89,6 +89,13 @@ static FMDatabase *db = nil;
                       @" `digest` TEXT)"];
     [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `cert_host_port`"
                       @" on `cert`(`hostname`,`port`)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `usernames` "
+                      @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      @" `hostname` TEXT,"
+                      @" `port` INTEGER,"
+                      @" `username` TEXT)"];
+    [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `usernames_host_port`"
+                      @" on `usernames`(`hostname`,`port`)"];
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `tokens` "
                       @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
                       @" `hostname` TEXT,"
@@ -187,6 +194,23 @@ static FMDatabase *db = nil;
 + (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port {
     FMResultSet *result = [db executeQuery:@"SELECT `digest` FROM `cert` WHERE `hostname` = ? AND `port` = ?",
                                  hostname, [NSNumber numberWithInteger:port]];
+    if ([result next]) {
+        return [result stringForColumnIndex:0];
+    }
+    return nil;
+}
+
+#pragma mark -
+#pragma mark Username rememberer
+
++ (void) storeUsername:(NSString *)username forServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+    [db executeUpdate:@"REPLACE INTO `usernames` (`hostname`,`port`,`username`) VALUES (?,?,?)",
+        hostname, [NSNumber numberWithInteger:port], username];
+}
+
++ (NSString *) usernameForServerWithHostname:(NSString *)hostname port:(NSInteger)port {
+    FMResultSet *result = [db executeQuery:@"SELECT `username` FROM `usernames` WHERE `hostname` = ? AND `port` = ?",
+                           hostname, [NSNumber numberWithInteger:port]];
     if ([result next]) {
         return [result stringForColumnIndex:0];
     }

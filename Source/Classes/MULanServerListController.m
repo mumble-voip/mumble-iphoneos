@@ -171,6 +171,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
                                               cancelButtonTitle:@"Cancel"
                                               otherButtonTitles:@"Connect", nil];
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[netService hostName] port:[netService port]]];
         [alert show];
         [alert release];
 
@@ -188,6 +189,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [favServ setDisplayName:[netService name]];
     [favServ setHostName:[netService hostName]];
     [favServ setPort:[netService port]];
+    [favServ setUserName:[MUDatabase usernameForServerWithHostname:[netService hostName] port:[netService port]]];
     
     UINavigationController *modalNav = [[UINavigationController alloc] init];
     MUFavouriteServerEditViewController *editView = [[MUFavouriteServerEditViewController alloc] initInEditMode:NO withContentOfFavouriteServer:favServ];

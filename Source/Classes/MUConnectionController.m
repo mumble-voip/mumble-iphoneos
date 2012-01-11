@@ -334,6 +334,8 @@
 #pragma mark - MKServerModelDelegate
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
+    [MUDatabase storeUsername:[user userName] forServerWithHostname:[model hostname] port:[model port]];
+
     [self hideConnectingView];
 
     [_serverRoot takeOwnershipOfConnectionDelegate];

@@ -48,6 +48,10 @@
 + (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 + (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 
+// Username-rememberer
++ (void) storeUsername:(NSString *)username forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
++ (NSString *) usernameForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
+
 // Access tokens
 + (void) storeAccessTokens:(NSArray *)tokens forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 + (NSArray *) accessTokensForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
