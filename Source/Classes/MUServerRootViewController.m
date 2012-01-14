@@ -35,6 +35,7 @@
 #import "MUServerCertificateTrustViewController.h"
 #import "MUNotificationController.h"
 #import "MUConnectionController.h"
+#import "MUMessagesViewController.h"
 #import "MUDatabase.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -50,6 +51,7 @@
 
     MUServerViewController      *_serverView;
     MUChannelViewController     *_channelView;
+    MUMessagesViewController    *_messagesView;
     MUConnectionViewController  *_connectionView;
 }
 @end
@@ -94,9 +96,10 @@
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
     _channelView = [[MUChannelViewController alloc] initWithServerModel:_model];
     _connectionView = [[MUConnectionViewController alloc] initWithServerModel:_model];
+    _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
     
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
-                            [NSArray arrayWithObjects:@"Server", @"Channel", @"Connection", nil]];
+                            [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", @"Connection", nil]];
 
     _segmentIndex = 0;
 
@@ -131,6 +134,9 @@
         _channelView.navigationItem.titleView = _segmentedControl;
         [self setViewControllers:[NSArray arrayWithObject:_channelView] animated:NO];
     } else if (_segmentedControl.selectedSegmentIndex == 2) {
+        _messagesView.navigationItem.titleView = _segmentedControl;
+        [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
+    } else if (_segmentedControl.selectedSegmentIndex == 3) {
         _connectionView.navigationItem.titleView = _segmentedControl;
         [self setViewControllers:[NSArray arrayWithObject:_connectionView] animated:NO];
     }
