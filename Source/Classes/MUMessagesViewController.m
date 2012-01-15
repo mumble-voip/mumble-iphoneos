@@ -32,27 +32,31 @@
 #import <MumbleKit/MKTextMessage.h>
 
 #import "MUMessagesViewController.h"
+#import "MUMessageBubbleTableViewCell.h"
 #import "MUColor.h"
 
 @interface MUTextMessage : NSObject {
     NSString  *_sender;
     NSString  *_msg;
     NSDate    *_date;
+    BOOL      _self;
 }
-- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date;
-+ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg;
+- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf;
++ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf;
 - (NSString *) sender;
 - (NSString *) message;
 - (NSDate *) date;
+- (BOOL) isSentBySelf;
 @end
 
 @implementation MUTextMessage
 
-- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date {
+- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf {
     if ((self = [super init])) {
         _sender = [sender retain];
         _msg = [msg retain];
         _date = [date retain];
+        _self = sentBySelf;
         // ...
     }
     return self;
@@ -77,8 +81,12 @@
     return _date;
 }
 
-+ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg {
-    return [[MUTextMessage alloc] initWithSender:sender andMessage:msg andDate:[NSDate date]];
+- (BOOL) isSentBySelf {
+    return _self;
+}
+
++ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf {
+    return [[MUTextMessage alloc] initWithSender:sender andMessage:msg andDate:[NSDate date] andSentBySelf:sentBySelf];
 }
             
 @end
@@ -193,6 +201,8 @@
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
     _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+    [_tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
@@ -274,34 +284,23 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"MUMessageViewCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    MUMessageBubbleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[MUMessageBubbleTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
     }
+
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
-    [[cell textLabel] setText:[txtMsg sender]];
-    [[cell detailTextLabel] setFont:[UIFont systemFontOfSize:14.0f]];
-    [[cell detailTextLabel] setLineBreakMode:UILineBreakModeWordWrap];
-    [[cell detailTextLabel] setNumberOfLines:0];
-    [[cell detailTextLabel] setText:[txtMsg message]];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setMessage:[txtMsg message]];
+    [cell setRightSide:[txtMsg isSentBySelf]];
     return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    NSString *title = [txtMsg sender];
-    NSString *msg = [txtMsg message];
-    CGSize constraintSize = CGSizeMake(tableView.frame.size.width - 40.0 - 50.0, CGFLOAT_MAX);
-    CGSize labelSize = [title sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
-    CGSize detailSize = [msg sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
-    CGFloat result = MAX(44.0, labelSize.height + detailSize.height);
-    return result;
+    return [MUMessageBubbleTableViewCell heightForCellWithMessage:[txtMsg message]];
 }
 
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         [_messages removeObjectAtIndex:[indexPath row]];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -381,7 +380,7 @@
 
     [_model sendTextMessage:[MKTextMessage messageWithPlainText:[textField text]] toChannel:[[_model connectedUser] channel]];
 
-    [_messages addObject:[MUTextMessage textMessageFromSender:[[_model connectedUser] userName] withMessage:[textField text]]];
+    [_messages addObject:[MUTextMessage textMessageFromSender:[[_model connectedUser] userName] withMessage:[textField text] isSentBySelf:YES]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -423,7 +422,7 @@
 }
 
 - (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
-    [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:[msg plainTextString]]];
+    [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:[msg plainTextString] isSentBySelf:NO]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging])
