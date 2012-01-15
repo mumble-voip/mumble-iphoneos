@@ -64,7 +64,7 @@
 }
 
 + (CGSize) cellSizeForText:(NSString *)text andHeader:(NSString *)header {
-    CGFloat padding = 6.0f; // top and bottom padding
+    CGFloat padding = 3.0f; // top and bottom padding
     CGSize textSize = [MUMessageBubbleView textSizeForText:text];
     CGSize headerSize = [MUMessageBubbleView headerSizeForText:header];
     return CGSizeMake(MAX(textSize.width, headerSize.width)+(19.0f + 11.0f), textSize.height+headerSize.height+(8.0f+10.0f)+(2*padding));
@@ -88,9 +88,9 @@
     CGSize textSize = [MUMessageBubbleView textSizeForText:text];
     CGSize headerSize = [MUMessageBubbleView headerSizeForText:header];
     
-    CGRect imgRect = CGRectMake(0.0f, 6.0f, MAX(textSize.width, headerSize.width)+(19.0f + 11.0f), textSize.height+headerSize.height+(8.0f+10.0f));
-    CGRect headerRect = CGRectMake(19.0f, 6.0f + 8.0f, headerSize.width, headerSize.height);
-    CGRect textRect = CGRectMake(19.0f, 6.0f + 8.0f + headerSize.height, textSize.width, textSize.height);
+    CGRect imgRect = CGRectMake(0.0f, 3.0f, MAX(textSize.width, headerSize.width)+(19.0f + 11.0f), textSize.height+headerSize.height+(8.0f+10.0f));
+    CGRect headerRect = CGRectMake(19.0f, 3.0f + 8.0f, headerSize.width, headerSize.height);
+    CGRect textRect = CGRectMake(19.0f, 3.0f + 8.0f + headerSize.height, textSize.width, textSize.height);
     if (_rightSide) {
         imgRect.origin.x = 320.0f - imgRect.size.width;
         headerRect.origin.x = imgRect.origin.x + 11.0f;
