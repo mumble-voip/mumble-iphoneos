@@ -292,13 +292,14 @@
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
     [cell setHeader:[txtMsg sender]];
     [cell setMessage:[txtMsg message]];
+    [cell setDate:[txtMsg date]];
     [cell setRightSide:[txtMsg isSentBySelf]];
     return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    return [MUMessageBubbleTableViewCell heightForCellWithHeader:[txtMsg sender] message:[txtMsg message]];
+    return [MUMessageBubbleTableViewCell heightForCellWithHeader:[txtMsg sender] message:[txtMsg message] date:[txtMsg date]];
 }
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
