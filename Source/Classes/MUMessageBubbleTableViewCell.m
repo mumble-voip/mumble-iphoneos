@@ -30,6 +30,20 @@
 
 #import "MUMessageBubbleTableViewCell.h"
 
+#define kBalloonWidth              190.0f
+#define kBalloonTopMargin          8.0f
+#define kBalloonBottomMargin       10.0f
+#define kBalloonMarginTailSide     19.0f
+#define kBalloonMarginNonTailSide  11.0f
+#define kBalloonTopPadding         3.0f
+#define kBalloonBottomPadding      3.0f
+#define kBalloonTimestampSpacing   5.0f
+#define kPhoneWidth                320.0f
+#define kBalloonTopInset           14.0f
+#define kBalloonBottomInset        17.0f
+#define kBalloonTailInset          23.0f
+#define kBalloonNoTailInset        16.0f
+
 @interface MUMessageBubbleView : UIView {
     NSString *_message;
     NSString *_header;
@@ -60,20 +74,17 @@
 }
 
 + (CGSize) textSizeForText:(NSString *)text {
-    CGFloat bubbleWidth = 190.0f;
-    CGSize constraintSize = CGSizeMake(bubbleWidth-(19.0f + 11.0f), CGFLOAT_MAX);
+    CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
     return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeCharacterWrap];
 }
 
 + (CGSize) headerSizeForText:(NSString *)text {
-    CGFloat bubbleWidth = 190.0f;
-    CGSize constraintSize = CGSizeMake(bubbleWidth-(19.0f + 11.0f), CGFLOAT_MAX);
+    CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
     return [text sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeCharacterWrap];
 }
 
 + (CGSize) timestampSizeForText:(NSString *)text {
-    CGFloat bubbleWidth = 190.0f;
-    CGSize constraintSize = CGSizeMake(bubbleWidth-(19.0f + 11.0f), CGFLOAT_MAX);
+    CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
     return [text sizeWithFont:[UIFont systemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeHeadTruncation];
 }
 
@@ -84,17 +95,12 @@
 }
 
 + (CGSize) cellSizeForText:(NSString *)text andHeader:(NSString *)header andDate:(NSDate *)date {
-    CGFloat padding = 3.0f; // top and bottom padding
     CGSize textSize = [MUMessageBubbleView textSizeForText:text];
     CGSize headerSize = [MUMessageBubbleView headerSizeForText:header];
     NSString *str = [MUMessageBubbleView stringForDate:date];
     CGSize timestampSize = [MUMessageBubbleView timestampSizeForText:str];
     
-    NSLog(@"textSize = %@", NSStringFromCGSize(textSize));
-    NSLog(@"headerSize = %@", NSStringFromCGSize(headerSize));
-    NSLog(@"timestampSize = %@", NSStringFromCGSize(timestampSize));
-    
-    return CGSizeMake(MAX(textSize.width, headerSize.width + 5.0f + timestampSize.width)+(19.0f + 11.0f), textSize.height+headerSize.height+(8.0f+10.0f)+(2*padding));
+    return CGSizeMake(MAX(textSize.width, headerSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headerSize.height+(kBalloonTopMargin+kBalloonBottomMargin)+(kBalloonTopPadding+kBalloonBottomPadding));
 }
 
 - (void) drawRect:(CGRect)rect {
@@ -104,10 +110,10 @@
     UIImage *stretchableBalloon = nil;
     if (_rightSide) {
         balloon = [UIImage imageNamed:@"Balloon_Blue"];
-        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(14.0f, 17.0f, 17.0f, 23.0f)];
+        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonNoTailInset, kBalloonBottomInset, kBalloonTailInset)];
     } else {
         balloon = [UIImage imageNamed:@"Balloon_2"];
-        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(14.0f, 23.0f, 17.0f, 16.0f)];
+        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonTailInset, kBalloonBottomInset, kBalloonNoTailInset)];
     }
 
     NSString *text = _message;
@@ -118,15 +124,15 @@
     NSString *dateStr = [MUMessageBubbleView stringForDate:_date];
     CGSize timestampSize = [MUMessageBubbleView timestampSizeForText:dateStr];
 
-    CGRect imgRect = CGRectMake(0.0f, 3.0f, MAX(textSize.width, headerSize.width + 5.0f + timestampSize.width)+(19.0f + 11.0f), textSize.height+headerSize.height+(8.0f+10.0f));
-    CGRect headerRect = CGRectMake(19.0f, 3.0f + 8.0f, headerSize.width, headerSize.height);
-    CGRect timestampRect = CGRectMake(imgRect.size.width - 11.0f - timestampSize.width, headerRect.origin.y, timestampSize.width, timestampSize.height);
-    CGRect textRect = CGRectMake(19.0f, 3.0f + 8.0f + headerSize.height, textSize.width, textSize.height);
+    CGRect imgRect = CGRectMake(0.0f, kBalloonTopPadding, MAX(textSize.width, headerSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headerSize.height+(kBalloonTopMargin + kBalloonBottomMargin));
+    CGRect headerRect = CGRectMake(kBalloonMarginTailSide, kBalloonTopPadding + kBalloonTopMargin, headerSize.width, headerSize.height);
+    CGRect timestampRect = CGRectMake(imgRect.size.width - kBalloonMarginNonTailSide - timestampSize.width, headerRect.origin.y, timestampSize.width, timestampSize.height);
+    CGRect textRect = CGRectMake(kBalloonMarginTailSide, kBalloonTopPadding + kBalloonTopMargin + headerSize.height, textSize.width, textSize.height);
     if (_rightSide) {
-        imgRect.origin.x = 320.0f - imgRect.size.width;
-        headerRect.origin.x = imgRect.origin.x + 11.0f;
-        timestampRect.origin.x = 320.0f - 19.0f - timestampRect.size.width;
-        textRect.origin.x = imgRect.origin.x + 11.0f;
+        imgRect.origin.x = kPhoneWidth - imgRect.size.width;
+        headerRect.origin.x = imgRect.origin.x + kBalloonMarginNonTailSide;
+        timestampRect.origin.x = kPhoneWidth - kBalloonMarginTailSide - timestampRect.size.width;
+        textRect.origin.x = imgRect.origin.x + kBalloonMarginNonTailSide;
     }
 
     [stretchableBalloon drawInRect:imgRect];
