@@ -160,7 +160,7 @@
 
 @end
 
-@interface MUMessagesViewController () <UITableViewDelegate, UITableViewDataSource, MKServerModelDelegate, UITextFieldDelegate> {
+@interface MUMessagesViewController () <UITableViewDelegate, UITableViewDataSource, MKServerModelDelegate, UITextFieldDelegate, MUMessageBubbleTableViewCellDelegate> {
     MKServerModel            *_model;
     UITableView              *_tableView;
     UIView                   *_textBarView;
@@ -272,6 +272,12 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView {
+    if ([[UIMenuController sharedMenuController] isMenuVisible]) {
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -294,25 +300,13 @@
     [cell setMessage:[txtMsg message]];
     [cell setDate:[txtMsg date]];
     [cell setRightSide:[txtMsg isSentBySelf]];
+    [cell setDelegate:self];
     return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
     return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg sender] message:[txtMsg message] date:[txtMsg date]];
-}
-
-- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_messages removeObjectAtIndex:[indexPath row]];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-    }
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 #pragma mark - UIKeyboard notifications, UIView gesture recognizer
@@ -392,6 +386,21 @@
      return YES;
 }
 
+#pragma mark - MUMessageBubbleTableViewCellDelegate
+
+- (void) messageBubbleTableViewCellRequestedCopy:(MUMessageBubbleTableViewCell *)cell {
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setValue:[txtMsg message] forPasteboardType:(NSString *) kUTTypeUTF8PlainText];
+}
+
+- (void) messageBubbleTableViewCellRequestedDeletion:(MUMessageBubbleTableViewCell *)cell {
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    [_messages removeObjectAtIndex:[indexPath row]];
+    [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 #pragma mark - MKServerModel delegate
 
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
@@ -427,8 +436,9 @@
     [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:[msg plainTextString] isSentBySelf:NO]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    if (![_tableView isDragging])
+    if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
         [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 @end

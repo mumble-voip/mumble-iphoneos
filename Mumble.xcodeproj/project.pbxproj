@@ -51,6 +51,11 @@
 		2879528114C2504C00567430 /* MUMessageBubbleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2879528014C2504C00567430 /* MUMessageBubbleTableViewCell.m */; };
 		2879528414C2687D00567430 /* Balloon_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528214C2687D00567430 /* Balloon_Blue.png */; };
 		2879528514C2687D00567430 /* Balloon_Blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528314C2687D00567430 /* Balloon_Blue@2x.png */; };
+		2879528A14C3874C00567430 /* LeftBalloonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528614C3874B00567430 /* LeftBalloonSelected.png */; };
+		2879528B14C3874C00567430 /* LeftBalloonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528714C3874B00567430 /* LeftBalloonSelected@2x.png */; };
+		2879528C14C3874C00567430 /* RightBalloonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528814C3874C00567430 /* RightBalloonSelected.png */; };
+		2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528914C3874C00567430 /* RightBalloonSelected@2x.png */; };
+		2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2879528E14C38FC200567430 /* MobileCoreServices.framework */; };
 		287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
@@ -239,6 +244,11 @@
 		2879528014C2504C00567430 /* MUMessageBubbleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageBubbleTableViewCell.m; sourceTree = "<group>"; };
 		2879528214C2687D00567430 /* Balloon_Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Balloon_Blue.png; path = Resources/Apple/Balloon_Blue.png; sourceTree = "<group>"; };
 		2879528314C2687D00567430 /* Balloon_Blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Balloon_Blue@2x.png"; path = "Resources/Apple/Balloon_Blue@2x.png"; sourceTree = "<group>"; };
+		2879528614C3874B00567430 /* LeftBalloonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LeftBalloonSelected.png; path = Resources/Apple/LeftBalloonSelected.png; sourceTree = "<group>"; };
+		2879528714C3874B00567430 /* LeftBalloonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LeftBalloonSelected@2x.png"; path = "Resources/Apple/LeftBalloonSelected@2x.png"; sourceTree = "<group>"; };
+		2879528814C3874C00567430 /* RightBalloonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = RightBalloonSelected.png; path = Resources/Apple/RightBalloonSelected.png; sourceTree = "<group>"; };
+		2879528914C3874C00567430 /* RightBalloonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "RightBalloonSelected@2x.png"; path = "Resources/Apple/RightBalloonSelected@2x.png"; sourceTree = "<group>"; };
+		2879528E14C38FC200567430 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		287A60551176201E00DD4FFB /* MUChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
@@ -386,6 +396,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */,
 				28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -547,6 +558,10 @@
 		2879527A14C248B700567430 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				2879528614C3874B00567430 /* LeftBalloonSelected.png */,
+				2879528714C3874B00567430 /* LeftBalloonSelected@2x.png */,
+				2879528814C3874C00567430 /* RightBalloonSelected.png */,
+				2879528914C3874C00567430 /* RightBalloonSelected@2x.png */,
 				2879527B14C248C500567430 /* Balloon_2.png */,
 				2879527C14C248C500567430 /* Balloon_2@2x.png */,
 				2879528214C2687D00567430 /* Balloon_Blue.png */,
@@ -701,6 +716,7 @@
 			children = (
 				28990AB0132FDA540034B406 /* libMumbleKit.a */,
 				28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */,
+				2879528E14C38FC200567430 /* MobileCoreServices.framework */,
 				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
 				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
 				2861C2B5116BE9BA002B8514 /* Security.framework */,
@@ -870,6 +886,10 @@
 				2879527E14C248C500567430 /* Balloon_2@2x.png in Resources */,
 				2879528414C2687D00567430 /* Balloon_Blue.png in Resources */,
 				2879528514C2687D00567430 /* Balloon_Blue@2x.png in Resources */,
+				2879528A14C3874C00567430 /* LeftBalloonSelected.png in Resources */,
+				2879528B14C3874C00567430 /* LeftBalloonSelected@2x.png in Resources */,
+				2879528C14C3874C00567430 /* RightBalloonSelected.png in Resources */,
+				2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

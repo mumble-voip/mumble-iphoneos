@@ -45,24 +45,29 @@
 #define kBalloonNoTailInset        16.0f
 
 @interface MUMessageBubbleView : UIView {
-    NSString *_message;
-    NSString *_heading;
-    NSDate   *_date;
-    BOOL     _rightSide;
+    NSString                                  *_message;
+    NSString                                  *_heading;
+    NSDate                                    *_date;
+    BOOL                                      _rightSide;
+    CGRect                                    _imageRect;
+    BOOL                                      _selected;
+    MUMessageBubbleTableViewCell              *_cell;
 }
 - (void) setHeading:(NSString *)heading;
 - (void) setMessage:(NSString *)msg;
 - (void) setDate:(NSDate *)date;
 - (void) setRightSide:(BOOL)rightSide;
+- (CGRect) selectionRect;
 + (CGSize) cellSizeForText:(NSString *)text andHeading:(NSString *)heading andDate:(NSDate *)date;
 @end
 
 @implementation MUMessageBubbleView
 
-- (id) initWithFrame:(CGRect)frame {
+- (id) initWithFrame:(CGRect)frame andTableViewCell:(MUMessageBubbleTableViewCell *)cell {
     if ((self = [super initWithFrame:frame])) {
         [self setOpaque:NO];
         _rightSide = YES;
+        _cell = cell;
     }
     return self;
 }
@@ -110,10 +115,18 @@
     UIImage *balloon = nil;
     UIImage *stretchableBalloon = nil;
     if (_rightSide) {
-        balloon = [UIImage imageNamed:@"Balloon_Blue"];
+        if (_selected) {
+            balloon = [UIImage imageNamed:@"RightBalloonSelected"];
+        } else {
+            balloon = [UIImage imageNamed:@"Balloon_Blue"];
+        }
         stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonNoTailInset, kBalloonBottomInset, kBalloonTailInset)];
     } else {
-        balloon = [UIImage imageNamed:@"Balloon_2"];
+        if (_selected) {
+            balloon = [UIImage imageNamed:@"LeftBalloonSelected"];
+        } else {
+            balloon = [UIImage imageNamed:@"Balloon_2"];
+        }
         stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonTailInset, kBalloonBottomInset, kBalloonNoTailInset)];
     }
 
@@ -137,10 +150,24 @@
     }
 
     [stretchableBalloon drawInRect:imgRect];
+    _imageRect = imgRect;
 
     [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeCharacterWrap];
     [dateStr drawInRect:timestampRect withFont:[UIFont systemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
     [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeCharacterWrap];
+}
+
+- (CGRect) selectionRect {    
+    if (_rightSide) {
+        return UIEdgeInsetsInsetRect(_imageRect, UIEdgeInsetsMake(kBalloonTopMargin, kBalloonMarginNonTailSide, kBalloonBottomMargin, kBalloonMarginTailSide));
+    } else {
+        return UIEdgeInsetsInsetRect(_imageRect, UIEdgeInsetsMake(kBalloonTopMargin, kBalloonMarginTailSide, kBalloonBottomMargin, kBalloonMarginNonTailSide));
+    }
+}
+
+- (void) setSelected:(BOOL)selected {
+    _selected = selected;
+    [self setNeedsDisplay];
 }
 
 - (void) setHeading:(NSString *)heading {
@@ -165,10 +192,41 @@
     _rightSide = rightSide;
 }
 
+- (BOOL) canBecomeFirstResponder {
+    return YES;
+}
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    if ([self isFirstResponder]) {
+        // A bit of a hack. Oh well.
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    }
+}
+
+- (BOOL) canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        return YES;
+    }
+    if (action == @selector(delete:)) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void) copy:(id)sender {
+    [[_cell delegate] messageBubbleTableViewCellRequestedCopy:_cell];
+}
+
+- (void) delete:(id)sender {
+    [[_cell delegate] messageBubbleTableViewCellRequestedDeletion:_cell];
+}
+
 @end
 
 @interface MUMessageBubbleTableViewCell () {
-    MUMessageBubbleView *_bubbleView;
+    MUMessageBubbleView                      *_bubbleView;
+    UILongPressGestureRecognizer             *_longPressRecognizer;
+    id<MUMessageBubbleTableViewCellDelegate>  _delegate;
 }
 @end
 
@@ -178,14 +236,51 @@
     return [MUMessageBubbleView cellSizeForText:msg andHeading:heading andDate:date].height;
 }
 
+- (void) dealloc {
+    [_bubbleView release];
+    [_longPressRecognizer release];
+    [super dealloc];
+}
+
+- (void) setDelegate:(id<MUMessageBubbleTableViewCellDelegate>)delegate {
+    _delegate = delegate;
+}
+
+- (id<MUMessageBubbleTableViewCellDelegate>) delegate {
+    return _delegate;
+}
+
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if ((self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier])) {
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-        _bubbleView = [[MUMessageBubbleView alloc] initWithFrame:self.contentView.frame];
+        _bubbleView = [[MUMessageBubbleView alloc] initWithFrame:self.contentView.frame andTableViewCell:self];
         [_bubbleView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        [_bubbleView setUserInteractionEnabled:YES];
         [[self contentView] addSubview:_bubbleView];
+        
+        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
+        [_bubbleView addGestureRecognizer:_longPressRecognizer];
     }
     return self;
+}
+
+- (void) showMenu:(id)sender {
+    if (_longPressRecognizer.state == UIGestureRecognizerStateBegan) {
+        if ([_bubbleView canBecomeFirstResponder]) {
+            [_bubbleView becomeFirstResponder];
+            [_bubbleView setSelected:YES];
+            UIMenuController *menuController = [UIMenuController sharedMenuController];
+            [menuController setTargetRect:[_bubbleView selectionRect] inView:_bubbleView];
+            [menuController setMenuVisible:YES animated:YES];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuWillHide:) name:UIMenuControllerWillHideMenuNotification object:nil];
+        }
+    }
+}
+
+- (void) menuWillHide:(NSNotification *)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_bubbleView resignFirstResponder];
+    [_bubbleView setSelected:NO];
 }
 
 - (void) setHeading:(NSString *)heading {
