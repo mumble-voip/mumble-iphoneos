@@ -30,8 +30,8 @@
 
 @interface MUMessageBubbleTableViewCell : UITableViewCell
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
-+ (CGFloat) heightForCellWithHeader:(NSString *)header message:(NSString *)msg date:(NSDate *)date;
-- (void) setHeader:(NSString *)header;
++ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg date:(NSDate *)date;
+- (void) setHeading:(NSString *)heading;
 - (void) setMessage:(NSString *)msg;
 - (void) setDate:(NSDate *)date;
 - (void) setRightSide:(BOOL)rightSide;
