@@ -53,10 +53,10 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
     [_message release];
     [_header release];
     [_date release];
+    [super dealloc];
 }
 
 + (CGSize) textSizeForText:(NSString *)text {
