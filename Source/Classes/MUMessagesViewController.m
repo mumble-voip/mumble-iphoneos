@@ -374,9 +374,14 @@
     if ([[textField text] length] == 0)
         return NO;
 
-    [_model sendTextMessage:[MKTextMessage messageWithPlainText:[textField text]] toChannel:[[_model connectedUser] channel]];
 
-    [_messages addObject:[MUTextMessage textMessageFromSender:[[_model connectedUser] userName] withMessage:[textField text] isSentBySelf:YES]];
+    NSString *originalStr = [textField text];
+    NSString *str = [originalStr stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];    
+    NSString *htmlText = [NSString stringWithFormat:@"<p>%@</p>", str];
+    [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:[[_model connectedUser] channel]];
+
+    [_messages addObject:[MUTextMessage textMessageFromSender:[[_model connectedUser] userName] withMessage:originalStr isSentBySelf:YES]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
