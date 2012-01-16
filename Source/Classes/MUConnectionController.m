@@ -94,6 +94,10 @@
     _parentViewController = [parentViewController retain];
 }
 
+- (BOOL) isConnected {
+    return _connection != nil;
+}
+
 - (void) disconnectFromServer {
     [_serverRoot dismissModalViewControllerAnimated:YES];
     [self teardownConnection];
@@ -153,7 +157,7 @@
     [_connection setDelegate:nil];
     [_connection disconnect];
     [_connection release]; 
-    _serverModel = nil;
+    _connection = nil;
     [_timer invalidate];
     [_serverRoot release];
     _serverRoot = nil;

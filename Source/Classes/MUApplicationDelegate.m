@@ -35,11 +35,12 @@
 #import "MUWelcomeScreenPad.h"
 #import "MUDatabase.h"
 #import "MUPublicServerList.h"
+#import "MUConnectionController.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
 
-@interface MUApplicationDelegate () {
+@interface MUApplicationDelegate () <UIApplicationDelegate> {
     UIWindow                  *window;
     UINavigationController    *navigationController;
     NSDate                    *_launchDate;
@@ -74,7 +75,7 @@
 }
 #endif
 
-- (void) applicationDidFinishLaunching:(UIApplication *)application {
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     _launchDate = [[NSDate alloc] init];
     
     // Try to fetch an updated public server list
@@ -113,19 +114,48 @@
     [window addSubview:[navigationController view]];
 
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
+    UIViewController *welcomeScreen = nil;
     if (idiom == UIUserInterfaceIdiomPad) {
-        MUWelcomeScreenPad *welcomeScreen = [[MUWelcomeScreenPad alloc] init];
+        welcomeScreen = [[MUWelcomeScreenPad alloc] init];
         [navigationController pushViewController:welcomeScreen animated:YES];
         [welcomeScreen release];
     } else {
-        MUWelcomeScreenPhone *welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
+        welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
         [navigationController pushViewController:welcomeScreen animated:YES];
         [welcomeScreen release];
     }
-
+    
 #ifdef MUMBLE_BETA_DIST
     [self notifyCrash];
 #endif
+
+    NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
+    if ([[url scheme] isEqualToString:@"mumble"]) {
+        MUConnectionController *connController = [MUConnectionController sharedController];
+        NSString *hostname = [url host];
+        NSNumber *port = [url port];
+        NSString *username = [url user];
+        NSString *password = [url password];
+        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:welcomeScreen];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    if ([[url scheme] isEqualToString:@"mumble"]) {
+        MUConnectionController *connController = [MUConnectionController sharedController];
+        if ([connController isConnected]) {
+            return NO;
+        }
+        NSString *hostname = [url host];
+        NSNumber *port = [url port];
+        NSString *username = [url user];
+        NSString *password = [url password];
+        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:self.navigationController.visibleViewController];
+        return YES;
+    }
+    return NO;
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application {

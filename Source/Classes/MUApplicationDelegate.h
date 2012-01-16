@@ -31,15 +31,8 @@
 #import "MUVersionChecker.h"
 
 @interface MUApplicationDelegate : NSObject <UIApplicationDelegate> 
-
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
-
-- (void) applicationDidFinishLaunching:(UIApplication *)application;
-- (void) applicationWillTerminate:(UIApplication *)application;
-
 - (void) reloadPreferences;
 - (NSTimeInterval) timeIntervalSinceLaunch;
-
 @end
-
