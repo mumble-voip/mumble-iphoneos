@@ -433,7 +433,13 @@
 }
 
 - (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
-    [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:[msg plainTextString] isSentBySelf:NO]];
+    NSString *plainMsg = [msg plainTextString];
+    if ([[msg embeddedImages] count] > 0) {
+        plainMsg = [NSString stringWithFormat:@"%@ (Message contained images that could not be shown)", [msg plainTextString]];
+    }
+    plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:plainMsg isSentBySelf:NO]];
+
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
