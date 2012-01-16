@@ -301,8 +301,13 @@
         [self reloadChannel:chan];
         [self reloadChannel:prevChan];
     }
-    NSInteger prevIdx = [self indexForUser:user];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    
+    // Check if the user is joining a channel for the first time.
+    if (prevChan != nil) {
+        NSInteger prevIdx = [self indexForUser:user];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+
     [self rebuildModelArrayFromChannel:[model rootChannel]];
     NSInteger newIdx = [self indexForUser:user];
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
