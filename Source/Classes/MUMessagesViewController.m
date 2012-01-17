@@ -33,17 +33,18 @@
 
 #import "MUMessagesViewController.h"
 #import "MUMessageBubbleTableViewCell.h"
+#import "MUMessageRecipientViewController.h"
 #import "MUColor.h"
 
 @interface MUTextMessage : NSObject {
-    NSString  *_sender;
+    NSString  *_heading;
     NSString  *_msg;
     NSDate    *_date;
     BOOL      _self;
 }
-- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf;
-+ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf;
-- (NSString *) sender;
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf;
++ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf;
+- (NSString *) heading;
 - (NSString *) message;
 - (NSDate *) date;
 - (BOOL) isSentBySelf;
@@ -51,9 +52,9 @@
 
 @implementation MUTextMessage
 
-- (id) initWithSender:(NSString *)sender andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf {
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf {
     if ((self = [super init])) {
-        _sender = [sender retain];
+        _heading = [heading retain];
         _msg = [msg retain];
         _date = [date retain];
         _self = sentBySelf;
@@ -63,14 +64,14 @@
 }
 
 - (void) dealloc {
-    [_sender release];
+    [_heading release];
     [_msg release];
     [_date release];
     [super dealloc];
 }
 
-- (NSString *) sender {
-    return _sender;
+- (NSString *) heading {
+    return _heading;
 }
 
 - (NSString *) message {
@@ -85,8 +86,8 @@
     return _self;
 }
 
-+ (MUTextMessage *) textMessageFromSender:(NSString *)sender withMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf {
-    return [[MUTextMessage alloc] initWithSender:sender andMessage:msg andDate:[NSDate date] andSentBySelf:sentBySelf];
++ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf {
+    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andSentBySelf:sentBySelf];
 }
             
 @end
@@ -160,7 +161,7 @@
 
 @end
 
-@interface MUMessagesViewController () <UITableViewDelegate, UITableViewDataSource, MKServerModelDelegate, UITextFieldDelegate, MUMessageBubbleTableViewCellDelegate> {
+@interface MUMessagesViewController () <UITableViewDelegate, UITableViewDataSource, MKServerModelDelegate, UITextFieldDelegate, MUMessageBubbleTableViewCellDelegate, MUMessageRecipientViewControllerDelegate> {
     MKServerModel            *_model;
     UITableView              *_tableView;
     UIView                   *_textBarView;
@@ -240,6 +241,7 @@
 
 - (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
     MUMessageReceiverButton *receiverView = [[[MUMessageReceiverButton alloc] initWithText:receiver] autorelease];
+    [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
     _textField.leftView = receiverView;
 
     UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
@@ -296,7 +298,7 @@
     }
 
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    [cell setHeading:[txtMsg sender]];
+    [cell setHeading:[txtMsg heading]];
     [cell setMessage:[txtMsg message]];
     [cell setDate:[txtMsg date]];
     [cell setRightSide:[txtMsg isSentBySelf]];
@@ -306,7 +308,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg sender] message:[txtMsg message] date:[txtMsg date]];
+    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] date:[txtMsg date]];
 }
 
 #pragma mark - UIKeyboard notifications, UIView gesture recognizer
@@ -379,9 +381,23 @@
     NSString *str = [originalStr stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
     str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];    
     NSString *htmlText = [NSString stringWithFormat:@"<p>%@</p>", str];
-    [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:[[_model connectedUser] channel]];
+    
+    NSString *destName = nil;
+    if (_tree == nil && _channel == nil && _user == nil) {
+        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:[[_model connectedUser] channel]];
+        destName = [[[_model connectedUser] channel] channelName];
+    } else if (_user != nil) {
+        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toUser:_user];
+        destName = [_user userName];
+    } else if (_channel != nil) {
+        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:_channel];
+        destName = [_channel channelName];
+    } else if (_tree != nil) {
+        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toTree:_tree];
+        destName = [_tree channelName];
+    }
 
-    [_messages addObject:[MUTextMessage textMessageFromSender:[[_model connectedUser] userName] withMessage:originalStr isSentBySelf:YES]];
+    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"To %@", destName] andMessage:originalStr isSentBySelf:YES]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -389,6 +405,18 @@
     [textField setText:nil];
 
      return YES;
+}
+
+#pragma mark - Actions
+
+- (void) showRecipientPicker:(id)sender {
+    MUMessageRecipientViewController *recipientViewController = [[MUMessageRecipientViewController alloc] initWithServerModel:_model];
+    [recipientViewController setDelegate:self];
+    UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:recipientViewController];
+    [recipientViewController release];
+
+    [self presentModalViewController:navCtrl animated:YES];
+    [navCtrl release];
 }
 
 #pragma mark - MUMessageBubbleTableViewCellDelegate
@@ -406,6 +434,32 @@
     [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
+#pragma mark - MUMessageRecipientTableViewControllerDelegate
+
+- (void) messageRecipientViewController:(MUMessageRecipientViewController *)viewCtrlr didSelectChannel:(MKChannel *)channel {
+    _tree = nil;
+    _channel = channel;
+    _user = nil;
+    
+    [self setReceiverName:[channel channelName] andImage:@"channelmsg"];
+}
+
+- (void) messageRecipientViewController:(MUMessageRecipientViewController *)viewCtrlr didSelectUser:(MKUser *)user {
+    _tree = nil;
+    _channel = nil;
+    _user = user;
+    
+    [self setReceiverName:[user userName] andImage:@"usermsg"];
+}
+
+- (void) messageRecipientViewControllerDidSelectCurrentChannel:(MUMessageRecipientViewController *)viewCtrlr {
+    _tree = nil;
+    _channel = nil;
+    _user = nil;
+
+    [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
+}
+
 #pragma mark - MKServerModel delegate
 
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
@@ -415,6 +469,14 @@
             [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
         }
     }
+}
+
+- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
+    if (user == _user) {
+        _user = nil;
+    }
+
+    [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
 }
 
 - (void) serverModel:(MKServerModel *)model channelRenamed:(MKChannel *)channel {
@@ -443,7 +505,7 @@
         plainMsg = [NSString stringWithFormat:@"%@ (Message contained images that could not be shown)", [msg plainTextString]];
     }
     plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    [_messages addObject:[MUTextMessage textMessageFromSender:[user userName] withMessage:plainMsg isSentBySelf:NO]];
+    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"From %@", [user userName]] andMessage:plainMsg isSentBySelf:NO]];
 
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];

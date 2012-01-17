@@ -86,33 +86,37 @@
 
 #pragma mark - View lifecycle
 
-- (void) viewDidUnload {
-    [super viewDidUnload];
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
+- (void) viewDidLoad {
+    [super viewDidLoad];
+    
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
     _channelView = [[MUChannelViewController alloc] initWithServerModel:_model];
     _connectionView = [[MUConnectionViewController alloc] initWithServerModel:_model];
     _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
     
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
-                            [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", @"Connection", nil]];
-
+                         [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", @"Connection", nil]];
+    
     _segmentIndex = 0;
-
+    
     _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     _segmentedControl.selectedSegmentIndex = _segmentIndex;
     [_segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-
+    
     _serverView.navigationItem.titleView = _segmentedControl;
-
+    
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
-
+    
     self.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.toolbar.barStyle = UIBarStyleBlackOpaque;
+}
+
+- (void) viewDidUnload {
+    [super viewDidUnload];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -56,6 +56,7 @@
 		2879528C14C3874C00567430 /* RightBalloonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528814C3874C00567430 /* RightBalloonSelected.png */; };
 		2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528914C3874C00567430 /* RightBalloonSelected@2x.png */; };
 		2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2879528E14C38FC200567430 /* MobileCoreServices.framework */; };
+		287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */; };
 		287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
@@ -249,6 +250,8 @@
 		2879528814C3874C00567430 /* RightBalloonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = RightBalloonSelected.png; path = Resources/Apple/RightBalloonSelected.png; sourceTree = "<group>"; };
 		2879528914C3874C00567430 /* RightBalloonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "RightBalloonSelected@2x.png"; path = "Resources/Apple/RightBalloonSelected@2x.png"; sourceTree = "<group>"; };
 		2879528E14C38FC200567430 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		287952AE14C4D67500567430 /* MUMessageRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageRecipientViewController.h; sourceTree = "<group>"; };
+		287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageRecipientViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* MUChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
@@ -484,6 +487,8 @@
 				2879523614BF519A00567430 /* MUMessagesViewController.m */,
 				2879527F14C2504B00567430 /* MUMessageBubbleTableViewCell.h */,
 				2879528014C2504C00567430 /* MUMessageBubbleTableViewCell.m */,
+				287952AE14C4D67500567430 /* MUMessageRecipientViewController.h */,
+				287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -966,6 +971,7 @@
 				28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */,
 				2879523714BF519A00567430 /* MUMessagesViewController.m in Sources */,
 				2879528114C2504C00567430 /* MUMessageBubbleTableViewCell.m in Sources */,
+				287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
