@@ -36,6 +36,7 @@
 #import "MUDatabase.h"
 #import "MUPublicServerList.h"
 #import "MUConnectionController.h"
+#import "MUNotificationController.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
@@ -50,6 +51,7 @@
 #endif
 }
 - (void) setupAudio;
+- (void) forceKeyboardLoad;
 #ifdef MUMBLE_BETA_DIST
 - (void) notifyCrash;
 #endif
@@ -78,6 +80,9 @@
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     _launchDate = [[NSDate alloc] init];
     
+    // Initialize the notification controller
+    [MUNotificationController sharedController];
+    
     // Try to fetch an updated public server list
     _publistFetcher = [[MUPublicServerListFetcher alloc] init];
     [_publistFetcher attemptUpdate];
@@ -103,6 +108,10 @@
 
     // Make our window the key window.
     [window makeKeyAndVisible];
+    
+    // Try to preload the keyboard to avoid
+    // infuriating lag when the keyboard is first shown.
+    [self forceKeyboardLoad];
     
     // Put a background view in here, to have prettier transitions.
     UIImageView *bgView =[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
@@ -236,6 +245,24 @@
 // Reload application preferences...
 - (void) reloadPreferences {
     [self setupAudio];
+}
+
+- (void) forceKeyboardLoad {
+    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectZero];
+    [window addSubview:textField];
+    [textField release];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [textField becomeFirstResponder];
+}
+
+- (void) keyboardWillShow:(NSNotification *)notification {
+    for (UIView *view in [window subviews]) {
+        if ([view isFirstResponder]) {
+            [view resignFirstResponder];
+            [view removeFromSuperview];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+        }
+    }
 }
 
 // Time since we launched
