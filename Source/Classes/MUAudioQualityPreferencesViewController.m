@@ -73,35 +73,35 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
     
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = @"Low";
             cell.detailTextLabel.text = @"Speex 16kbit/s, 60ms audio per packet";
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = @"Balanced";
             cell.detailTextLabel.text = @"CELT 40kbit/s, 20ms audio per packet";
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = @"High";
             cell.detailTextLabel.text = @"CELT 72kbit/s, 10ms audio per packet";
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 3) {
             cell.textLabel.text = @"Custom";
             cell.detailTextLabel.text = nil;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
@@ -136,11 +136,11 @@
     UITableViewCell *cell = nil;
     for (int i = 0; i < 4; i++) {
         cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.accessoryView = nil;
         cell.textLabel.textColor = [UIColor blackColor];
     }
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
     cell.textLabel.textColor = [MUColor selectedTextColor];
     NSString *val = nil;
     switch ([indexPath row]) {

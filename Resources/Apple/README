@@ -1,2 +1,7 @@
 This directory contains Apple artwork extracted using UIKit-Artwork-Extractor.
 The artwork in here is not free redistributable, and is (C) Apple Inc.
+
+Modifications:
+
+GrayCheckmark.png and GrayCheckmark@2x.png are modified versions of Apple's
+UIPreferencesBlueCheck.png and UIPreferencesBlueCheck@2x.png.

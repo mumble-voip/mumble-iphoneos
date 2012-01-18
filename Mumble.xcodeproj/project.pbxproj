@@ -59,6 +59,8 @@
 		287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */; };
 		287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
+		287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */; };
+		287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
@@ -254,6 +256,8 @@
 		287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageRecipientViewController.m; sourceTree = "<group>"; };
 		287A60551176201E00DD4FFB /* MUChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelViewController.h; sourceTree = "<group>"; };
 		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
+		287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GrayCheckmark.png; path = Resources/Apple/GrayCheckmark.png; sourceTree = "<group>"; };
+		287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GrayCheckmark@2x.png"; path = "Resources/Apple/GrayCheckmark@2x.png"; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
 		287BA28F11B96C960010E031 /* MUDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDatabase.m; sourceTree = "<group>"; };
 		287BA33911B97C470010E031 /* MUFavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServer.h; sourceTree = "<group>"; };
@@ -563,6 +567,8 @@
 		2879527A14C248B700567430 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */,
+				287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */,
 				2879528614C3874B00567430 /* LeftBalloonSelected.png */,
 				2879528714C3874B00567430 /* LeftBalloonSelected@2x.png */,
 				2879528814C3874C00567430 /* RightBalloonSelected.png */,
@@ -895,6 +901,8 @@
 				2879528B14C3874C00567430 /* LeftBalloonSelected@2x.png in Resources */,
 				2879528C14C3874C00567430 /* RightBalloonSelected.png in Resources */,
 				2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */,
+				287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */,
+				287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

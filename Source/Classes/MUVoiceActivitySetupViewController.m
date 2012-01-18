@@ -99,13 +99,13 @@
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Amplitude";
             if ([current isEqualToString:@"amplitude"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Signal to Noise";
             if ([current isEqualToString:@"snr"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
@@ -180,7 +180,7 @@
     if (section == 0) {
         for (int i = 0; i < 2; i++) {
             cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
             cell.textLabel.textColor = [UIColor blackColor];
         }
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -190,7 +190,7 @@
             [[NSUserDefaults standardUserDefaults] setObject:@"snr" forKey:@"AudioVADKind"];
         }
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
     }
 }

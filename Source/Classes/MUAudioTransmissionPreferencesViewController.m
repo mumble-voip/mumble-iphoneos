@@ -111,24 +111,25 @@
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Voice Activated";
             if ([current isEqualToString:@"vad"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"Push-to-Talk";
             if ([current isEqualToString:@"ptt"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 2) {
             cell.textLabel.text = @"Continuous";
             if ([current isEqualToString:@"continuous"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
+            cell.accessoryView = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.textLabel.text = @"Voice Activity Configuration";
         }
@@ -159,7 +160,7 @@
     if (indexPath.section == 0) {
         for (int i = 0; i < 3; i++) {
             cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
             cell.textLabel.textColor = [UIColor blackColor];
         }
         UITableViewCell *setupSection = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
@@ -181,7 +182,7 @@
             }
         }
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
