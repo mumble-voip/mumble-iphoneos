@@ -81,12 +81,12 @@
 
 + (CGSize) textSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeCharacterWrap];
+    return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
 }
 
 + (CGSize) headingSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeCharacterWrap];
+    return [text sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
 }
 
 + (CGSize) timestampSizeForText:(NSString *)text {
@@ -152,9 +152,9 @@
     [stretchableBalloon drawInRect:imgRect];
     _imageRect = imgRect;
 
-    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeCharacterWrap];
+    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
     [dateStr drawInRect:timestampRect withFont:[UIFont systemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
-    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeCharacterWrap];
+    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
 }
 
 - (CGRect) selectionRect {    
