@@ -192,6 +192,7 @@
     UITableView              *_tableView;
     UIView                   *_textBarView;
     UITextField              *_textField;
+    BOOL                     _autoCorrectGuard;
     NSMutableArray           *_messages;
 
     MKChannel                *_channel;
@@ -361,6 +362,8 @@
 
 - (void) keyboardWillShow:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
+    if (_autoCorrectGuard)
+        return;
     
     NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSTimeInterval t;
@@ -389,6 +392,8 @@
 
 - (void) keyboardWillHide:(NSNotification *)notification {
     NSDictionary *userInfo = [notification userInfo];
+    if (_autoCorrectGuard)
+        return;
     
     NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSTimeInterval t;
@@ -414,12 +419,17 @@
     if ([[textField text] length] == 0)
         return NO;
 
+    // Hack alert!
+    _autoCorrectGuard = YES;
+    [textField resignFirstResponder];
+    [textField becomeFirstResponder];
+    _autoCorrectGuard = NO;
 
     NSString *originalStr = [textField text];
     NSString *str = [originalStr stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
     str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];    
     NSString *htmlText = [NSString stringWithFormat:@"<p>%@</p>", str];
-    
+
     NSString *destName = nil;
     if (_tree == nil && _channel == nil && _user == nil) {
         [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:[[_model connectedUser] channel]];
@@ -435,14 +445,14 @@
         destName = [_tree channelName];
     }
 
+    [textField setText:nil];
+
     [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"To %@", destName] andMessage:originalStr andEmbeddedLinks:nil andEmbeddedImages:nil isSentBySelf:YES]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
-    [textField setText:nil];
-
-     return YES;
+     return NO;
 }
 
 #pragma mark - Actions
