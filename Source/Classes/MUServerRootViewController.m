@@ -129,8 +129,6 @@
 }
 
 - (void) segmentChanged:(id)sender {
-    UIViewController *oldTop = [self topViewController];
-    [oldTop viewWillDisappear:NO];
     if (_segmentedControl.selectedSegmentIndex == 0) {
         _serverView.navigationItem.titleView = _segmentedControl;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
@@ -144,7 +142,6 @@
         _connectionView.navigationItem.titleView = _segmentedControl;
         [self setViewControllers:[NSArray arrayWithObject:_connectionView] animated:NO];
     }
-    [oldTop viewDidDisappear:NO];
 }
 
 #pragma mark - MKConnection delegate
