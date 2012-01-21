@@ -32,91 +32,13 @@
 #import <MumbleKit/MKTextMessage.h>
 
 #import "MUMessagesViewController.h"
+#import "MUTextMessage.h"
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUMessageRecipientViewController.h"
 #import "MUMessageAttachmentViewController.h"
 #import "MUImageViewController.h"
 #import "MUDataURL.h"
 #import "MUColor.h"
-
-@interface MUTextMessage : NSObject {
-    NSString  *_heading;
-    NSString  *_msg;
-    NSDate    *_date;
-    NSArray   *_links;
-    NSArray   *_images;
-    BOOL      _self;
-}
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf;
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images isSentBySelf:(BOOL)sentBySelf;
-- (NSString *) heading;
-- (NSString *) message;
-- (NSDate *) date;
-- (NSArray *) embeddedLinks;
-- (NSArray *) embeddedImages;
-- (NSInteger) numberOfAttachments;
-- (BOOL) hasAttachments;
-- (BOOL) isSentBySelf;
-@end
-
-@implementation MUTextMessage
-
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf {
-    if ((self = [super init])) {
-        _heading = [heading retain];
-        _msg = [msg retain];
-        _date = [date retain];
-        _self = sentBySelf;
-        _links = [links retain];
-        _images = [images retain];
-    }
-    return self;
-}
-
-- (void) dealloc {
-    [_heading release];
-    [_msg release];
-    [_date release];
-    [super dealloc];
-}
-
-- (NSString *) heading {
-    return _heading;
-}
-
-- (NSString *) message {
-    return _msg;
-}
-
-- (NSDate *) date {
-    return _date;
-}
-
-- (NSInteger) numberOfAttachments {
-    return [_links count] + [_images count];
-}
-
-- (BOOL) hasAttachments {
-    return [self numberOfAttachments] > 0;
-}
-
-- (NSArray *) embeddedLinks {
-    return _links;
-}
-
-- (NSArray *) embeddedImages {
-    return _images;
-}
-
-- (BOOL) isSentBySelf {
-    return _self;
-}
-
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images isSentBySelf:(BOOL)sentBySelf {
-    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andEmbeddedLinks:links andEmbeddedImages:images andSentBySelf:sentBySelf];
-}
-
-@end
 
 @interface MUMessageReceiverButton : UIControl {
     NSString *_str;
