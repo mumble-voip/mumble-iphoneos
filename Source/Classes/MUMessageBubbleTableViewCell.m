@@ -278,14 +278,17 @@
 
 - (void) setRightSide:(BOOL)rightSide {
     _rightSide = rightSide;
+    [self setNeedsDisplay];
 }
 
 - (void) setNumberOfAttachments:(NSInteger)numAttachments {
     _numAttachments = numAttachments;
+    [self setNeedsDisplay];
 }
 
 - (void) setShownImages:(NSArray *)shownImages {
     _shownImages = [shownImages retain];
+    [self setNeedsDisplay];
 }
 
 - (BOOL) canBecomeFirstResponder {
