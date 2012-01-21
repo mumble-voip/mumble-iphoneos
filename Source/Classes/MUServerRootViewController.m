@@ -166,6 +166,8 @@
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Connection closed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
         [alertView release];
+
+        [[MUConnectionController sharedController] disconnectFromServer];
     }
 }
 
