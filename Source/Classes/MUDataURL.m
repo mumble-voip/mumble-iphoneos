@@ -28,25 +28,42 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@class MUMessageBubbleTableViewCell;
+#import "MUDataURL.h"
+#import "GTMStringEncoding.h"
 
-@protocol MUMessageBubbleTableViewCellDelegate
-- (void) messageBubbleTableViewCellRequestedAttachmentViewer:(MUMessageBubbleTableViewCell *)cell;
-- (void) messageBubbleTableViewCellRequestedDeletion:(MUMessageBubbleTableViewCell *)cell;
-- (void) messageBubbleTableViewCellRequestedCopy:(MUMessageBubbleTableViewCell *)cell;
-@end
+@implementation MUDataURL
 
-@interface MUMessageBubbleTableViewCell : UITableViewCell
-+ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg footer:(NSString *)footer date:(NSDate *)date;
+// todo(mkrautz): Redo this with our own internal scanning and base64 decoding
+// to get rid of the string copying.
++ (NSData *) dataFromDataURL:(NSString *)dataURL {
+    GTMStringEncoding *base64decoder = [GTMStringEncoding rfc4648Base64StringEncoding];
 
-- (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
-- (void) setHeading:(NSString *)heading;
-- (void) setMessage:(NSString *)msg;
-- (void) setFooter:(NSString *)footer;
-- (void) setDate:(NSDate *)date;
-- (void) setRightSide:(BOOL)rightSide;
-- (void) setSelected:(BOOL)selected;
+    // Read: data:<mimetype>;<encoding>,<data>
+    // Expect encoding = base64
 
-- (id<MUMessageBubbleTableViewCellDelegate>) delegate;
-- (void) setDelegate:(id<MUMessageBubbleTableViewCellDelegate>)delegate;
+    if (![dataURL hasPrefix:@"data:"])
+        return nil;
+    NSString *mimeStr = [dataURL substringFromIndex:5];
+    NSRange r = [mimeStr rangeOfString:@";"];
+    if (r.location == NSNotFound)
+        return nil;
+    NSString *mimeType = [mimeStr substringToIndex:r.location];
+    (void) mimeType;
+    r.location += 1;
+    r.length = 7;
+    if ([mimeStr length] < r.location+r.length)
+        return nil;
+    if (![[mimeStr substringWithRange:r] isEqualToString:@"base64,"])
+        return nil;
+
+    NSString *base64data = [mimeStr substringFromIndex:r.location+r.length];
+    base64data = [base64data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    base64data = [base64data stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return [base64decoder decode:base64data];
+}
+
++ (UIImage *) imageFromDataURL:(NSString *)dataURL {
+    return [UIImage imageWithData:[MUDataURL dataFromDataURL:dataURL]];
+}
+
 @end

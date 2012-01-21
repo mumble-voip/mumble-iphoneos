@@ -11,6 +11,9 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
+		2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802ABFF14C9E948000983A5 /* MUDataURL.m */; };
+		2802AC0314CB0131000983A5 /* MUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0214CB0131000983A5 /* MUImage.m */; };
+		2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0514CB024A000983A5 /* MUImageViewController.m */; };
 		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
 		280D9ADD13EB5ACB003B64A0 /* MUConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9ADC13EB5ACB003B64A0 /* MUConnectionViewController.m */; };
 		280EDE8912FE1E7C00774B3B /* MUServerRootViewControllerPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 280EDE8812FE1E7C00774B3B /* MUServerRootViewControllerPad.m */; };
@@ -61,6 +64,8 @@
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */; };
 		287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */; };
+		287A686F14C76E56008B1BE7 /* MUMessageAttachmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */; };
+		287A687414C777CC008B1BE7 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A687314C777CC008B1BE7 /* GTMStringEncoding.m */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
@@ -186,6 +191,12 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* MUPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUPreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUPreferencesViewController.m; sourceTree = "<group>"; };
+		2802ABFE14C9E948000983A5 /* MUDataURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDataURL.h; sourceTree = "<group>"; };
+		2802ABFF14C9E948000983A5 /* MUDataURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDataURL.m; sourceTree = "<group>"; };
+		2802AC0114CB0130000983A5 /* MUImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUImage.h; sourceTree = "<group>"; };
+		2802AC0214CB0131000983A5 /* MUImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUImage.m; sourceTree = "<group>"; };
+		2802AC0414CB024A000983A5 /* MUImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUImageViewController.h; sourceTree = "<group>"; };
+		2802AC0514CB024A000983A5 /* MUImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUImageViewController.m; sourceTree = "<group>"; };
 		280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewController.h; sourceTree = "<group>"; };
 		280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewController.m; sourceTree = "<group>"; };
 		280D9ADB13EB5ACB003B64A0 /* MUConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUConnectionViewController.h; sourceTree = "<group>"; };
@@ -258,6 +269,11 @@
 		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
 		287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GrayCheckmark.png; path = Resources/Apple/GrayCheckmark.png; sourceTree = "<group>"; };
 		287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GrayCheckmark@2x.png"; path = "Resources/Apple/GrayCheckmark@2x.png"; sourceTree = "<group>"; };
+		287A686D14C76E55008B1BE7 /* MUMessageAttachmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageAttachmentViewController.h; sourceTree = "<group>"; };
+		287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageAttachmentViewController.m; sourceTree = "<group>"; };
+		287A687114C777CC008B1BE7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		287A687214C777CC008B1BE7 /* GTMStringEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMStringEncoding.h; sourceTree = "<group>"; };
+		287A687314C777CC008B1BE7 /* GTMStringEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMStringEncoding.m; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
 		287BA28F11B96C960010E031 /* MUDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDatabase.m; sourceTree = "<group>"; };
 		287BA33911B97C470010E031 /* MUFavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServer.h; sourceTree = "<group>"; };
@@ -493,6 +509,14 @@
 				2879528014C2504C00567430 /* MUMessageBubbleTableViewCell.m */,
 				287952AE14C4D67500567430 /* MUMessageRecipientViewController.h */,
 				287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */,
+				287A686D14C76E55008B1BE7 /* MUMessageAttachmentViewController.h */,
+				287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */,
+				2802ABFE14C9E948000983A5 /* MUDataURL.h */,
+				2802ABFF14C9E948000983A5 /* MUDataURL.m */,
+				2802AC0114CB0130000983A5 /* MUImage.h */,
+				2802AC0214CB0131000983A5 /* MUImage.m */,
+				2802AC0414CB024A000983A5 /* MUImageViewController.h */,
+				2802AC0514CB024A000983A5 /* MUImageViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -528,6 +552,7 @@
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				287A687014C777CC008B1BE7 /* gtm */,
 				28F9173911B9460D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
@@ -579,6 +604,17 @@
 				2879528314C2687D00567430 /* Balloon_Blue@2x.png */,
 			);
 			name = Apple;
+			sourceTree = "<group>";
+		};
+		287A687014C777CC008B1BE7 /* gtm */ = {
+			isa = PBXGroup;
+			children = (
+				287A687114C777CC008B1BE7 /* GTMDefines.h */,
+				287A687214C777CC008B1BE7 /* GTMStringEncoding.h */,
+				287A687314C777CC008B1BE7 /* GTMStringEncoding.m */,
+			);
+			name = gtm;
+			path = Dependencies/gtm;
 			sourceTree = "<group>";
 		};
 		28BF8E1C11D93A1900B72770 /* Database */ = {
@@ -980,6 +1016,11 @@
 				2879523714BF519A00567430 /* MUMessagesViewController.m in Sources */,
 				2879528114C2504C00567430 /* MUMessageBubbleTableViewCell.m in Sources */,
 				287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */,
+				287A686F14C76E56008B1BE7 /* MUMessageAttachmentViewController.m in Sources */,
+				287A687414C777CC008B1BE7 /* GTMStringEncoding.m in Sources */,
+				2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */,
+				2802AC0314CB0131000983A5 /* MUImage.m in Sources */,
+				2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +1050,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/gtm/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1036,6 +1078,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/gtm/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1082,6 +1125,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/gtm/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1130,6 +1174,7 @@
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
+					"${PROJECT_DIR}/Dependencies/gtm/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;

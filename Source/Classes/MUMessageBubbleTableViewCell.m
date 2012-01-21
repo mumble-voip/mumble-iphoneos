@@ -29,6 +29,7 @@
 */
 
 #import "MUMessageBubbleTableViewCell.h"
+#import "MUColor.h"
 
 #define kBalloonWidth              190.0f
 #define kBalloonTopMargin          8.0f
@@ -43,22 +44,29 @@
 #define kBalloonBottomInset        17.0f
 #define kBalloonTailInset          23.0f
 #define kBalloonNoTailInset        16.0f
+#define kBalloonFooterTopMargin    2.0f
+#define kBalloonFooterBoxPadding   2.0f
 
 @interface MUMessageBubbleView : UIView {
     NSString                                  *_message;
     NSString                                  *_heading;
+    NSString                                  *_footer;
     NSDate                                    *_date;
     BOOL                                      _rightSide;
     CGRect                                    _imageRect;
     BOOL                                      _selected;
+    NSInteger                                 _numAttachments;
     MUMessageBubbleTableViewCell              *_cell;
 }
 - (void) setHeading:(NSString *)heading;
+- (void) setFooter:(NSString *)footer;
 - (void) setMessage:(NSString *)msg;
 - (void) setDate:(NSDate *)date;
 - (void) setRightSide:(BOOL)rightSide;
 - (CGRect) selectionRect;
-+ (CGSize) cellSizeForText:(NSString *)text andHeading:(NSString *)heading andDate:(NSDate *)date;
+- (void) setSelected:(BOOL)shouldBeSelected;
+- (BOOL) isSelected;
++ (CGSize) cellSizeForText:(NSString *)text andHeading:(NSString *)heading andFooter:(NSString *)footer andDate:(NSDate *)date;
 @end
 
 @implementation MUMessageBubbleView
@@ -91,7 +99,14 @@
 
 + (CGSize) timestampSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont systemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeHeadTruncation];
+    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeHeadTruncation];
+}
+
++ (CGSize) footerSizeForText:(NSString *)text {
+    if (text == nil)
+        return CGSizeZero;
+    CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
+    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
 }
 
 + (NSString *) stringForDate:(NSDate *)date {
@@ -100,13 +115,14 @@
     return [fmt stringFromDate:date];
 }
 
-+ (CGSize) cellSizeForText:(NSString *)text andHeading:(NSString *)heading andDate:(NSDate *)date {
++ (CGSize) cellSizeForText:(NSString *)text andHeading:(NSString *)heading andFooter:(NSString *)footer andDate:(NSDate *)date {
     CGSize textSize = [MUMessageBubbleView textSizeForText:text];
     CGSize headingSize = [MUMessageBubbleView headingSizeForText:heading];
+    CGSize footerSize = [MUMessageBubbleView footerSizeForText:footer];
     NSString *str = [MUMessageBubbleView stringForDate:date];
     CGSize timestampSize = [MUMessageBubbleView timestampSizeForText:str];
-    
-    return CGSizeMake(MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headingSize.height+(kBalloonTopMargin+kBalloonBottomMargin)+(kBalloonTopPadding+kBalloonBottomPadding));
+
+    return CGSizeMake(MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headingSize.height+footerSize.height+(kBalloonTopMargin+kBalloonBottomMargin)+(kBalloonTopPadding+kBalloonBottomPadding)+(footer?kBalloonFooterTopMargin:0));
 }
 
 - (void) drawRect:(CGRect)rect {
@@ -132,13 +148,15 @@
 
     NSString *text = _message;
     NSString *heading = _heading;
+    NSString *footer = _footer;
+    
     CGSize textSize = [MUMessageBubbleView textSizeForText:text];
     CGSize headingSize = [MUMessageBubbleView headingSizeForText:heading];
-
+    CGSize footerSize = [MUMessageBubbleView footerSizeForText:footer];
     NSString *dateStr = [MUMessageBubbleView stringForDate:_date];
     CGSize timestampSize = [MUMessageBubbleView timestampSizeForText:dateStr];
 
-    CGRect imgRect = CGRectMake(0.0f, kBalloonTopPadding, MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headingSize.height+(kBalloonTopMargin + kBalloonBottomMargin));
+    CGRect imgRect = CGRectMake(0.0f, kBalloonTopPadding, MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headingSize.height+footerSize.height+(kBalloonTopMargin + kBalloonBottomMargin)+(footer?kBalloonFooterTopMargin:0));
     CGRect headerRect = CGRectMake(kBalloonMarginTailSide, kBalloonTopPadding + kBalloonTopMargin, headingSize.width, headingSize.height);
     CGRect timestampRect = CGRectMake(imgRect.size.width - kBalloonMarginNonTailSide - timestampSize.width, headerRect.origin.y, timestampSize.width, timestampSize.height);
     CGRect textRect = CGRectMake(kBalloonMarginTailSide, kBalloonTopPadding + kBalloonTopMargin + headingSize.height, textSize.width, textSize.height);
@@ -152,8 +170,11 @@
     [stretchableBalloon drawInRect:imgRect];
     _imageRect = imgRect;
 
+    CGRect footerRect = CGRectMake(textRect.origin.x, textRect.origin.y+textRect.size.height+kBalloonFooterTopMargin, footerSize.width, footerSize.height);
+    [[UIColor blackColor] set];
+    [footer drawInRect:footerRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeWordWrap];
     [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
-    [dateStr drawInRect:timestampRect withFont:[UIFont systemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
+    [dateStr drawInRect:timestampRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
     [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
 }
 
@@ -165,6 +186,10 @@
     }
 }
 
+- (BOOL) isSelected {
+    return _selected;
+}
+
 - (void) setSelected:(BOOL)selected {
     _selected = selected;
     [self setNeedsDisplay];
@@ -173,6 +198,12 @@
 - (void) setHeading:(NSString *)heading {
     [_heading release];
     _heading = [heading copy];
+    [self setNeedsDisplay];
+}
+
+- (void) setFooter:(NSString *)footer {
+    [_footer release];
+    _footer = [footer copy];
     [self setNeedsDisplay];
 }
 
@@ -190,6 +221,10 @@
 
 - (void) setRightSide:(BOOL)rightSide {
     _rightSide = rightSide;
+}
+
+- (void) setNumberOfAttachments:(NSInteger)numAttachments {
+    _numAttachments = numAttachments;
 }
 
 - (BOOL) canBecomeFirstResponder {
@@ -224,16 +259,17 @@
 @end
 
 @interface MUMessageBubbleTableViewCell () {
-    MUMessageBubbleView                      *_bubbleView;
-    UILongPressGestureRecognizer             *_longPressRecognizer;
+    MUMessageBubbleView                       *_bubbleView;
+    UILongPressGestureRecognizer              *_longPressRecognizer;
+    UITapGestureRecognizer                    *_tapRecognizer;
     id<MUMessageBubbleTableViewCellDelegate>  _delegate;
 }
 @end
 
 @implementation MUMessageBubbleTableViewCell
 
-+ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg date:(NSDate *)date {
-    return [MUMessageBubbleView cellSizeForText:msg andHeading:heading andDate:date].height;
++ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg footer:(NSString *)footer date:(NSDate *)date {
+    return [MUMessageBubbleView cellSizeForText:msg andHeading:heading andFooter:footer andDate:date].height;
 }
 
 - (void) dealloc {
@@ -260,8 +296,18 @@
         
         _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
         [_bubbleView addGestureRecognizer:_longPressRecognizer];
+        [_longPressRecognizer release];
+
+        _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAttachments:)];
+        [_bubbleView addGestureRecognizer:_tapRecognizer];
+        [_tapRecognizer release];
     }
     return self;
+}
+
+- (void) showAttachments:(id)sender {
+    if (![_bubbleView isSelected])
+        [_delegate messageBubbleTableViewCellRequestedAttachmentViewer:self];
 }
 
 - (void) showMenu:(id)sender {
@@ -283,12 +329,24 @@
     [_bubbleView setSelected:NO];
 }
 
+- (void) setSelected:(BOOL)selected {
+    [_bubbleView setSelected:selected];
+}
+
+- (BOOL) isSelected {
+    return [_bubbleView isSelected];
+}
+
 - (void) setHeading:(NSString *)heading {
     [_bubbleView setHeading:heading];
 }
 
 - (void) setMessage:(NSString *)msg {
     [_bubbleView setMessage:msg];
+}
+
+- (void) setFooter:(NSString *)footer {
+    [_bubbleView setFooter:footer];
 }
 
 - (void) setDate:(NSDate *)date {

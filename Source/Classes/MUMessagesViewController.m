@@ -34,31 +34,41 @@
 #import "MUMessagesViewController.h"
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUMessageRecipientViewController.h"
+#import "MUMessageAttachmentViewController.h"
+#import "MUImageViewController.h"
+#import "MUDataURL.h"
 #import "MUColor.h"
 
 @interface MUTextMessage : NSObject {
     NSString  *_heading;
     NSString  *_msg;
     NSDate    *_date;
+    NSArray   *_links;
+    NSArray   *_images;
     BOOL      _self;
 }
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf;
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf;
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf;
++ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images isSentBySelf:(BOOL)sentBySelf;
 - (NSString *) heading;
 - (NSString *) message;
 - (NSDate *) date;
+- (NSArray *) embeddedLinks;
+- (NSArray *) embeddedImages;
+- (NSInteger) numberOfAttachments;
+- (BOOL) hasAttachments;
 - (BOOL) isSentBySelf;
 @end
 
 @implementation MUTextMessage
 
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf {
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf {
     if ((self = [super init])) {
         _heading = [heading retain];
         _msg = [msg retain];
         _date = [date retain];
         _self = sentBySelf;
-        // ...
+        _links = [links retain];
+        _images = [images retain];
     }
     return self;
 }
@@ -82,14 +92,30 @@
     return _date;
 }
 
+- (NSInteger) numberOfAttachments {
+    return [_links count] + [_images count];
+}
+
+- (BOOL) hasAttachments {
+    return [self numberOfAttachments] > 0;
+}
+
+- (NSArray *) embeddedLinks {
+    return _links;
+}
+
+- (NSArray *) embeddedImages {
+    return _images;
+}
+
 - (BOOL) isSentBySelf {
     return _self;
 }
 
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg isSentBySelf:(BOOL)sentBySelf {
-    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andSentBySelf:sentBySelf];
++ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images isSentBySelf:(BOOL)sentBySelf {
+    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andEmbeddedLinks:links andEmbeddedImages:images andSentBySelf:sentBySelf];
 }
-            
+
 @end
 
 @interface MUMessageReceiverButton : UIControl {
@@ -254,6 +280,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [_tableView reloadData];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -301,14 +329,24 @@
     [cell setHeading:[txtMsg heading]];
     [cell setMessage:[txtMsg message]];
     [cell setDate:[txtMsg date]];
+    if ([txtMsg hasAttachments]) {
+        [cell setFooter:[NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""]];
+    } else {
+        [cell setFooter:nil];
+    }
     [cell setRightSide:[txtMsg isSentBySelf]];
+    [cell setSelected:NO];
     [cell setDelegate:self];
     return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
-    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] date:[txtMsg date]];
+    NSString *footer = nil;
+    if ([txtMsg hasAttachments]) {
+        footer = [NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""];
+    }
+    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] footer:footer date:[txtMsg date]];
 }
 
 #pragma mark - UIKeyboard notifications, UIView gesture recognizer
@@ -397,7 +435,7 @@
         destName = [_tree channelName];
     }
 
-    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"To %@", destName] andMessage:originalStr isSentBySelf:YES]];
+    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"To %@", destName] andMessage:originalStr andEmbeddedLinks:nil andEmbeddedImages:nil isSentBySelf:YES]];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -432,6 +470,23 @@
     NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
     [_messages removeObjectAtIndex:[indexPath row]];
     [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void) messageBubbleTableViewCellRequestedAttachmentViewer:(MUMessageBubbleTableViewCell *)cell {
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    if ([txtMsg hasAttachments]) {
+        [cell setSelected:YES];
+        if ([[txtMsg embeddedLinks] count] > 0) {
+            MUMessageAttachmentViewController *attachmentViewController = [[MUMessageAttachmentViewController alloc] initWithImages:[txtMsg embeddedImages] andLinks:[txtMsg embeddedLinks]];
+            [self.navigationController pushViewController:attachmentViewController animated:YES];
+            [attachmentViewController release];
+        } else {
+            MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:[txtMsg embeddedImages]];
+            [self.navigationController pushViewController:imgViewController animated:YES];
+            [imgViewController release];
+        }
+    }
 }
 
 #pragma mark - MUMessageRecipientTableViewControllerDelegate
@@ -501,11 +556,19 @@
 
 - (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
     NSString *plainMsg = [msg plainTextString];
-    if ([[msg embeddedImages] count] > 0) {
-        plainMsg = [NSString stringWithFormat:@"%@ (Message contained images that could not be shown)", [msg plainTextString]];
-    }
     plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"From %@", [user userName]] andMessage:plainMsg isSentBySelf:NO]];
+    NSMutableArray *imageArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
+    for (NSString *dataUrl in [msg embeddedImages]) {
+        UIImage *img = [MUDataURL imageFromDataURL:dataUrl];
+        if (img != nil) {
+            [imageArray addObject:img];
+        }
+    }
+    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"From %@", [user userName]]
+                                                    andMessage:plainMsg
+                                              andEmbeddedLinks:[msg embeddedLinks]
+                                             andEmbeddedImages:imageArray
+                                                  isSentBySelf:NO]];
 
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
