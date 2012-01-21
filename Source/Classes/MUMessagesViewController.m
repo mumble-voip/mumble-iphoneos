@@ -251,6 +251,7 @@
     MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
     [cell setHeading:[txtMsg heading]];
     [cell setMessage:[txtMsg message]];
+    [cell setShownImages:[txtMsg embeddedImages]];
     [cell setDate:[txtMsg date]];
     if ([txtMsg hasAttachments]) {
         [cell setFooter:[NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""]];
@@ -269,7 +270,7 @@
     if ([txtMsg hasAttachments]) {
         footer = [NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""];
     }
-    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] footer:footer date:[txtMsg date]];
+    return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] images:[txtMsg embeddedImages] footer:footer date:[txtMsg date]];
 }
 
 #pragma mark - UIKeyboard notifications, UIView gesture recognizer
