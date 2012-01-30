@@ -41,7 +41,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     });
 }
 
-@interface MUCertificateDiskImportViewController () {
+@interface MUCertificateDiskImportViewController () <UIActionSheetDelegate> {
     BOOL             _showHelp;
     NSMutableArray   *_diskCertificates;
     NSIndexPath      *_attemptIndexPath;
@@ -50,6 +50,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) tryImportCertificateWithPassword:(NSString *)password;
 - (void) showPasswordDialog;
 - (void) removeAllDiskCertificates;
+- (void) showRemoveAlert;
 @end
 
 @implementation MUCertificateDiskImportViewController
@@ -109,10 +110,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [doneButton release];
 
     if (!_showHelp) {
-        UIBarButtonItem *removeAllButton = [[UIBarButtonItem alloc] initWithTitle:@"Remove All" style:UIBarButtonItemStyleDone target:self action:@selector(removeAllClicked:)];
-        [removeAllButton setTintColor:[UIColor redColor]];
-        [[self navigationItem] setRightBarButtonItem:removeAllButton];
-        [removeAllButton release];
+        UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
+        [[self navigationItem] setRightBarButtonItem:actionButton];
+        [actionButton release];
     }
 }
 
@@ -302,12 +302,24 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void) removeAllClicked:(id)sender {
+- (void) showRemoveAlert {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove All" message:@"This will remove all certificates that can be imported into Mumble.\n\n"
-                                                                                      @"Certificates already imported into Mumble will not be touched."
+                              @"Certificates already imported into Mumble will not be touched."
                                                        delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Remove 'Em", nil];
     [alertView show];
     [alertView release];
+}
+
+- (void) actionClicked:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Import Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove All" otherButtonTitles:nil];
+    [actionSheet showFromBarButtonItem:sender animated:YES];
+    [actionSheet release];
+}
+
+- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self showRemoveAlert];
+    }
 }
 
 @end
