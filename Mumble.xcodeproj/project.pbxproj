@@ -161,6 +161,7 @@
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
+		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -413,6 +414,8 @@
 		28F9174711B946250030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
 		28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SmallMumbleIcon.png; path = Resources/SmallMumbleIcon.png; sourceTree = "<group>"; };
 		28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SmallMumbleIcon@2x.png"; path = "Resources/SmallMumbleIcon@2x.png"; sourceTree = "<group>"; };
+		28FAA36214D7551600F6D711 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKNumberBadgeView.h; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.h; sourceTree = "<group>"; };
+		28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKNumberBadgeView.m; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
@@ -556,6 +559,7 @@
 		2861C28C116BE90B002B8514 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				28FAA36114D7550E00F6D711 /* MKNumberBadgeView */,
 				287A687014C777CC008B1BE7 /* gtm */,
 				28F9173911B9460D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
@@ -739,6 +743,15 @@
 				28F9174711B946250030D649 /* FMResultSet.m */,
 			);
 			name = fmdb;
+			sourceTree = "<group>";
+		};
+		28FAA36114D7550E00F6D711 /* MKNumberBadgeView */ = {
+			isa = PBXGroup;
+			children = (
+				28FAA36214D7551600F6D711 /* MKNumberBadgeView.h */,
+				28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */,
+			);
+			name = MKNumberBadgeView;
 			sourceTree = "<group>";
 		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
@@ -1029,6 +1042,7 @@
 				2802AC0314CB0131000983A5 /* MUImage.m in Sources */,
 				2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */,
 				2802AC0D14CB2E2B000983A5 /* MUTextMessage.m in Sources */,
+				28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1059,6 +1073,7 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/gtm/",
+					"${PROJECT_DIR}/Dependencies/MKNumberBadgeView/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1087,6 +1102,7 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/gtm/",
+					"${PROJECT_DIR}/Dependencies/MKNumberBadgeView/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1134,6 +1150,7 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/gtm/",
+					"${PROJECT_DIR}/Dependencies/MKNumberBadgeView/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
@@ -1183,6 +1200,7 @@
 					"${PROJECT_DIR}/MumbleKit/src/",
 					"${PROJECT_DIR}/Dependencies/fmdb/src/",
 					"${PROJECT_DIR}/Dependencies/gtm/",
+					"${PROJECT_DIR}/Dependencies/MKNumberBadgeView/",
 				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;

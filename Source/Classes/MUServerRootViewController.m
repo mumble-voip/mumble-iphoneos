@@ -43,6 +43,8 @@
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKCertificate.h>
 
+#import "MKNumberBadgeView.h"
+
 @interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate, UIActionSheetDelegate> {
     MKConnection                *_connection;
     MKServerModel               *_model;
@@ -51,10 +53,13 @@
     UISegmentedControl          *_segmentedControl;
     UIBarButtonItem             *_actionButton;
     UIBarButtonItem             *_smallIcon;
+    MKNumberBadgeView           *_numberBadgeView;
 
     MUServerViewController      *_serverView;
     MUChannelViewController     *_channelView;
     MUMessagesViewController    *_messagesView;
+    
+    NSInteger                   _unreadMessages;
 }
 @end
 
@@ -65,6 +70,7 @@
         _connection = [conn retain];
         _model = [model retain];
         [_model addDelegate:self];
+        _unreadMessages = 0;
     }
     return self;
 }
@@ -81,6 +87,7 @@
     [_actionButton release];
     [_segmentedControl release];
     [_smallIcon release];
+    [_numberBadgeView release];
 
     [super dealloc];
 }
@@ -116,6 +123,13 @@
     _smallIcon = [[UIBarButtonItem alloc] initWithCustomView:imgView];
     [imgView release];
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
+    
+    _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(_segmentedControl.frame.size.width-38, -8, 50, 30)];
+    [_segmentedControl addSubview:_numberBadgeView];
+    _numberBadgeView.value = 0;
+    _numberBadgeView.shadow = NO;
+    _numberBadgeView.font = [UIFont boldSystemFontOfSize:10.0f];
+    _numberBadgeView.hidden = YES;
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     
@@ -157,6 +171,16 @@
         _messagesView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
     }
+    
+    if (_segmentedControl.selectedSegmentIndex == 2) {
+        _unreadMessages = 0;
+        _numberBadgeView.value = 0;
+        _numberBadgeView.hidden = YES;
+    } else if (_numberBadgeView.value > 0) {
+        _numberBadgeView.hidden = NO;
+    }
+
+    [_segmentedControl performSelector:@selector(bringSubviewToFront:) withObject:_numberBadgeView afterDelay:0.0f];
 }
 
 #pragma mark - MKConnection delegate
@@ -254,6 +278,14 @@
         [[MUNotificationController sharedController] addNotification:@"Permission denied"];
     } else {
         [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Permission denied: %@", reason]];
+    }
+}
+
+- (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
+    if (_segmentedControl.selectedSegmentIndex != 2) {
+        _unreadMessages++;
+        _numberBadgeView.value = _unreadMessages;
+        _numberBadgeView.hidden = NO;
     }
 }
 
