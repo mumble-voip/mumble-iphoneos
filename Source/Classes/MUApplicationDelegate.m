@@ -111,7 +111,7 @@
 
     // Try to preload the keyboard to avoid
     // infuriating lag when the keyboard is first shown.
-    [self forceKeyboardLoad];
+    //[self forceKeyboardLoad];
     
     // Put a background view in here, to have prettier transitions.
     UIImageView *bgView =[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
