@@ -450,6 +450,29 @@
 
 #pragma mark - MKServerModel delegate
 
+- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user withWelcomeMessage:(MKTextMessage *)msg {
+    NSString *plainMsg = [msg plainTextString];
+    plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSMutableArray *imageArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
+    for (NSString *dataUrl in [msg embeddedImages]) {
+        UIImage *img = [MUDataURL imageFromDataURL:dataUrl];
+        if (img != nil) {
+            [imageArray addObject:img];
+        }
+    }
+    [_messages addObject:[MUTextMessage textMessageWithHeading:@"Welcome Message"
+                                                    andMessage:plainMsg
+                                              andEmbeddedLinks:[msg embeddedLinks]
+                                             andEmbeddedImages:imageArray
+                                                  isSentBySelf:NO]];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
+    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
+        [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
     if (user == [_model connectedUser]) {
         // Are we in 'send to default channel mode'?
