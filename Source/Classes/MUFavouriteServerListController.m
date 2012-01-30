@@ -37,12 +37,13 @@
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
 
-@interface MUFavouriteServerListController () {
+@interface MUFavouriteServerListController () <UIAlertViewDelegate> {
     NSMutableArray     *_favouriteServers;
     BOOL               _editMode;
     MUFavouriteServer  *_editedServer;
 }
 - (void) reloadFavourites;
+- (void) deleteFavouriteAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation MUFavouriteServerListController
@@ -120,15 +121,7 @@
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSUInteger row = [indexPath row];
-        
-        // Drop it from the database
-        MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:row];
-        [MUDatabase deleteFavourite:favServ];
-        
-        // And remove it from our locally sorted array
-        [_favouriteServers removeObjectAtIndex:[indexPath row]];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        [self deleteFavouriteAtIndexPath:indexPath];
     }
 }
 
@@ -155,6 +148,17 @@
     [sheet release];
 }
 
+- (void) deleteFavouriteAtIndexPath:(NSIndexPath *)indexPath {
+    // Drop it from the database
+    MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+    [MUDatabase deleteFavourite:favServ];
+    
+    // And remove it from our locally sorted array
+    [_favouriteServers removeObjectAtIndex:[indexPath row]];
+    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
     
@@ -162,15 +166,9 @@
     
     // Delete
     if (index == 0) {
-        // Drop it from the database
-        MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-        [MUDatabase deleteFavourite:favServ];
-        
-        // And remove it from our locally sorted array
-        [_favouriteServers removeObjectAtIndex:[indexPath row]];
-        [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Favourite" message:@"Are you sure you want to delete this favourite server?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [alertView show];
+        [alertView release];
     // Connect
     } else if (index == 2) {
         NSString *userName = [favServ userName];
@@ -192,6 +190,20 @@
     } else if (index == 3) {
         [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
+}
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate
+
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSIndexPath *selectedRow = [[self tableView] indexPathForSelectedRow];
+    if (buttonIndex == 0) {
+        // ...
+    } else if (buttonIndex == 1) {
+        [self deleteFavouriteAtIndexPath:selectedRow];
+    }
+
+    [[self tableView] deselectRowAtIndexPath:selectedRow animated:YES];
 }
 
 #pragma mark -
