@@ -108,7 +108,7 @@
 
     // Make our window the key window.
     [window makeKeyAndVisible];
-    
+
     // Try to preload the keyboard to avoid
     // infuriating lag when the keyboard is first shown.
     [self forceKeyboardLoad];
@@ -260,7 +260,8 @@
         if ([view isFirstResponder]) {
             [view resignFirstResponder];
             [view removeFromSuperview];
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
         }
     }
 }
