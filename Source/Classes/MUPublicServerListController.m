@@ -56,7 +56,9 @@
     [super viewWillAppear:YES];
 
     self.navigationItem.title = @"Public Servers";
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]
+    ;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     if (![_serverList isParsed]) {
         UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
