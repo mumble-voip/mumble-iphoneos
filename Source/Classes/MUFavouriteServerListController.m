@@ -143,8 +143,8 @@
     NSString *sheetTitle = pad ? nil : [favServ displayName];
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:sheetTitle delegate:self
                                               cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Connect", @"Edit", nil];
+                                         destructiveButtonTitle:@"Delete"
+                                              otherButtonTitles:@"Edit", @"Connect", nil];
     if (pad) {
         CGRect frame = cellView.frame;
         frame.origin.y = frame.origin.y - (frame.size.height/2);
@@ -157,12 +157,22 @@
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     
-    // Connect
+    // Delete
     if (index == 0) {
+        // Drop it from the database
+        MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+        [MUDatabase deleteFavourite:favServ];
+        
+        // And remove it from our locally sorted array
+        [_favouriteServers removeObjectAtIndex:[indexPath row]];
+        [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+
+    // Connect
+    } else if (index == 2) {
         NSString *userName = [favServ userName];
         if (userName == nil) {
             userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
@@ -179,7 +189,7 @@
     } else if (index == 1) {
         [self presentEditDialogForFavourite:favServ];
     // Cancel
-    } else if (index == 2) {
+    } else if (index == 3) {
         [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }
 }

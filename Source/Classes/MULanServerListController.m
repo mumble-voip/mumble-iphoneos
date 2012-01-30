@@ -154,7 +154,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[netService name] delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Connect", @"Add as favourite", nil];
+                                              otherButtonTitles:@"Add as favourite", @"Connect", nil];
     [sheet showInView:[self tableView]];
     [sheet release];
 }
@@ -164,7 +164,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
     
     // Connect
-    if (index == 0) {
+    if (index == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
                                                         message:@"Please enter the username you wish to use on this server"
                                                        delegate:self
@@ -176,7 +176,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         [alert release];
 
     // Add as favourite
-    } else if (index == 1) {
+    } else if (index == 0) {
         [self presentAddAsFavouriteDialogForServer:netService];
     // Cancel
     } else if (index == 2) {

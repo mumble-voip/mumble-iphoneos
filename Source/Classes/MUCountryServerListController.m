@@ -112,7 +112,7 @@
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"] delegate:self
                                             cancelButtonTitle:@"Cancel"
                                             destructiveButtonTitle:nil
-                                            otherButtonTitles:@"Connect", @"Add as favourite", nil];
+                                            otherButtonTitles:@"Add as favourite", @"Connect", nil];
     [sheet showInView:[self tableView]];
     [sheet release];
 }
@@ -122,7 +122,7 @@
     NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
     // Connect
-    if (index == 0) {
+    if (index == 1) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
                                                         message:@"Please enter the username you wish to use on this server"
                                                        delegate:self
@@ -134,7 +134,7 @@
         [alert release];
 
     // Add as favourite
-    } else if (index == 1) {
+    } else if (index == 0) {
         [self presentAddAsFavouriteDialogForServer:serverItem];
     // Cancel
     } else if (index == 2) {
