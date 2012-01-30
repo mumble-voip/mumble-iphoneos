@@ -66,9 +66,15 @@
 
     [[self navigationItem] setTitle:@"Access Tokens"];
 
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
     [addButton release];
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
+    [[self navigationItem] setLeftBarButtonItem:doneButton];
+    [doneButton release];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -182,6 +188,10 @@
     [_tokens addObject:@""];
     [self editItemAtIndex:insertRow];
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:insertRow inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+}
+
+- (void) doneButtonClicked:(id)sender {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -

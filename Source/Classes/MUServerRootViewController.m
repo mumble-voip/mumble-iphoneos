@@ -31,8 +31,9 @@
 #import "MUServerRootViewController.h"
 #import "MUServerViewController.h"
 #import "MUChannelViewController.h"
-#import "MUConnectionViewController.h"
 #import "MUServerCertificateTrustViewController.h"
+#import "MUAccessTokenViewController.h"
+#import "MUCertificateViewController.h"
 #import "MUNotificationController.h"
 #import "MUConnectionController.h"
 #import "MUMessagesViewController.h"
@@ -42,17 +43,18 @@
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate> {
+@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate, UIActionSheetDelegate> {
     MKConnection                *_connection;
     MKServerModel               *_model;
     
     NSInteger                   _segmentIndex;
     UISegmentedControl          *_segmentedControl;
+    UIBarButtonItem             *_actionButton;
+    UIBarButtonItem             *_smallIcon;
 
     MUServerViewController      *_serverView;
     MUChannelViewController     *_channelView;
     MUMessagesViewController    *_messagesView;
-    MUConnectionViewController  *_connectionView;
 }
 @end
 
@@ -70,13 +72,16 @@
 - (void) dealloc {
     [_serverView release];
     [_channelView release];
-    [_connectionView release];
    
     [_model removeDelegate:self];
     [_model release];
     [_connection setDelegate:nil];
     [_connection release];
     
+    [_actionButton release];
+    [_segmentedControl release];
+    [_smallIcon release];
+
     [super dealloc];
 }
 
@@ -91,11 +96,10 @@
     
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
     _channelView = [[MUChannelViewController alloc] initWithServerModel:_model];
-    _connectionView = [[MUConnectionViewController alloc] initWithServerModel:_model];
     _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
     
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
-                         [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", @"Connection", nil]];
+                         [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", nil]];
     
     _segmentIndex = 0;
     
@@ -104,6 +108,14 @@
     [_segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
     
     _serverView.navigationItem.titleView = _segmentedControl;
+    
+    _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+    _serverView.navigationItem.rightBarButtonItem = _actionButton;
+    
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SmallMumbleIcon"]];
+    _smallIcon = [[UIBarButtonItem alloc] initWithCustomView:imgView];
+    [imgView release];
+    _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     
@@ -131,16 +143,19 @@
 - (void) segmentChanged:(id)sender {
     if (_segmentedControl.selectedSegmentIndex == 0) {
         _serverView.navigationItem.titleView = _segmentedControl;
+        _serverView.navigationItem.leftBarButtonItem = _smallIcon;
+        _serverView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     } else if (_segmentedControl.selectedSegmentIndex == 1) {
         _channelView.navigationItem.titleView = _segmentedControl;
+        _channelView.navigationItem.leftBarButtonItem = _smallIcon;
+        _channelView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_channelView] animated:NO];
     } else if (_segmentedControl.selectedSegmentIndex == 2) {
         _messagesView.navigationItem.titleView = _segmentedControl;
+        _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
+        _messagesView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
-    } else if (_segmentedControl.selectedSegmentIndex == 3) {
-        _connectionView.navigationItem.titleView = _segmentedControl;
-        [self setViewControllers:[NSArray arrayWithObject:_connectionView] animated:NO];
     }
 }
 
@@ -239,6 +254,41 @@
         [[MUNotificationController sharedController] addNotification:@"Permission denied"];
     } else {
         [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Permission denied: %@", reason]];
+    }
+}
+
+#pragma mark - Actions
+
+- (void) actionButtonClicked:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Disconnect" otherButtonTitles:@"Access Tokens", @"Certificates", nil];
+    [actionSheet showFromBarButtonItem:_actionButton animated:YES];
+    [actionSheet release];
+}
+
+- (void) childDoneButton:(id)sender {
+    [[self modalViewController] dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) { // Disconnect
+        [[MUConnectionController sharedController] disconnectFromServer];
+    } else if (buttonIndex == 1) { // Access Tokens
+        MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];
+        [self presentModalViewController:navCtrl animated:YES];
+        [tokenViewController release];
+        [navCtrl release];
+    } else if (buttonIndex == 2) { // Certificates
+        MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[_model serverCertificates]];
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certView];
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(childDoneButton:)];
+        certView.navigationItem.leftBarButtonItem = doneButton;
+        [doneButton release];
+        [self presentModalViewController:navCtrl animated:YES];
+        [certView release];
+        [navCtrl release];
     }
 }
 
