@@ -49,6 +49,7 @@
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.scrollEnabled = NO;
     self.navigationItem.title = @"Voice Activity";
 }
 
@@ -73,7 +74,7 @@
     if (section == 1)
         return 1;
     if (section == 2)
-        return 2;
+        return 3;
     return 0;
 }
 
@@ -140,6 +141,9 @@
             cell.accessoryView = slider;
             [slider release];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        } else if (indexPath.row == 2) {
+            cell.accessoryView = nil;
+            cell.textLabel.text = @"Help";
         }
     }    
     return cell;
@@ -192,6 +196,15 @@
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
+    }
+    
+    if (section == 2 && [indexPath row] == 2) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Voice Activity Help" message:@"To calibrate the voice activity detection corretly, adjust the sliders so that:\n\n1. The first few utterances you make are inside the green area.\n2.While talking, the bar should stay inside the yellow area.\n3. When not speaking, the bar should stay in the red area."
+                                  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+        [alertView release];
     }
 }
 

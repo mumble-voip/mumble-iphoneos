@@ -50,6 +50,7 @@
     self.title = @"Advanced Audio";
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.scrollEnabled = NO;
 
     [self.tableView reloadData];
 }
@@ -60,7 +61,6 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
-    [[MumbleApp delegate] reloadPreferences];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
