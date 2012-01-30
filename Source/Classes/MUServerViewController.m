@@ -194,6 +194,7 @@
         if (chan == [connectedUser channel])
             cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
         cell.accessoryView = nil;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     } else if ([object class] == [MKUser class]) {
         MKUser *user = object;
 
@@ -214,10 +215,10 @@
         
         cell.imageView.image = [UIImage imageNamed:talkImageName];
         cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 
     cell.indentationLevel = [navItem indentLevel];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     return cell;
 }
