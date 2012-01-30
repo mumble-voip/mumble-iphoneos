@@ -345,6 +345,9 @@
 #pragma mark - PushToTalk
 
 - (void) repositionTalkButton {
+    // fixme(mkrautz): This should stay put if we're run on the iPhone.$
+    return;
+    
     UIDevice *device = [UIDevice currentDevice];
     UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
     CGRect windowRect = window.frame;
