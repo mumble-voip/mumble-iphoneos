@@ -40,6 +40,7 @@
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
+#import <MumbleKit/MKVersion.h>
 
 @interface MUApplicationDelegate () <UIApplicationDelegate> {
     UIWindow                  *window;
@@ -87,6 +88,10 @@
     _publistFetcher = [[MUPublicServerListFetcher alloc] init];
     [_publistFetcher attemptUpdate];
 
+    // Set MumbleKit release string
+    [[MKVersion sharedVersion] setOverrideReleaseString:
+        [NSString stringWithFormat:@"Mumble for iOS %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
+    
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
                                                                 // Audio
