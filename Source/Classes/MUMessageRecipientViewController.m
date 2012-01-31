@@ -328,6 +328,7 @@
 }
 
 - (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+    [self reloadUser:user];
 }
 
 // --

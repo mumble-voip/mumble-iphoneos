@@ -292,7 +292,36 @@
 #pragma mark - Actions
 
 - (void) actionButtonClicked:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Disconnect" otherButtonTitles:@"Access Tokens", @"Certificates", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    /*
+                                   ]WithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Disconnect" otherButtonTitles:@"Access Tokens", @"Certificates", nil];*/
+    
+    [actionSheet addButtonWithTitle:@"Disconnect"];
+    [actionSheet setDestructiveButtonIndex:0];
+    
+    [actionSheet addButtonWithTitle:@"Access Tokens"];
+    [actionSheet addButtonWithTitle:@"Certificates"];
+
+    MKUser *connUser = [_model connectedUser];
+    
+    if ([connUser isSelfMuted] && [connUser isSelfDeafened]) {
+        [actionSheet addButtonWithTitle:@"Unmute and undeafen"];
+    } else {
+        if (![connUser isSelfMuted])
+            [actionSheet addButtonWithTitle:@"Self-Mute"];
+        else
+            [actionSheet addButtonWithTitle:@"Unmute Self"];
+
+        if (![connUser isSelfDeafened])
+            [actionSheet addButtonWithTitle:@"Self-Deafen"];
+        else
+            [actionSheet addButtonWithTitle:@"Undeafen Self"];
+    }
+    
+    int cancelIndex = [actionSheet addButtonWithTitle:@"Cancel"];
+    [actionSheet setCancelButtonIndex:cancelIndex];
+
+    [actionSheet setDelegate:self];
     [actionSheet showFromBarButtonItem:_actionButton animated:YES];
     [actionSheet release];
 }
@@ -304,6 +333,11 @@
 #pragma mark - UIActionSheetDelegate
 
 - (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    MKUser *connUser = [_model connectedUser];
+    
+    if (buttonIndex == [actionSheet cancelButtonIndex])
+        return;
+
     if (buttonIndex == 0) { // Disconnect
         [[MUConnectionController sharedController] disconnectFromServer];
     } else if (buttonIndex == 1) { // Access Tokens
@@ -321,6 +355,13 @@
         [self presentModalViewController:navCtrl animated:YES];
         [certView release];
         [navCtrl release];
+    } else if (buttonIndex == 3) { // Toggle Self-Mute (or Unmute and undeafen if both muted and deafened)
+        if ([connUser isSelfMuted] && [connUser isSelfDeafened])
+            [_model setSelfMuted:NO andSelfDeafened:NO];
+        else
+            [_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
+    } else if (buttonIndex == 4) { // Toggle Self-Deafen
+        [_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
     }
 }
 
