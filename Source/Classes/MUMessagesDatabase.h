@@ -28,26 +28,12 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUTextMessage : NSObject {
-    NSString  *_heading;
-    NSString  *_msg;
-    NSDate    *_date;
-    NSArray   *_links;
-    NSArray   *_images;
-    BOOL      _self;
-}
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading
-                                andMessage:(NSString *)msg
-                          andEmbeddedLinks:(NSArray *)links
-                         andEmbeddedImages:(NSArray *)images
-                          andTimestampDate:(NSDate *)timestampDate
-                              isSentBySelf:(BOOL)sentBySelf;
-- (NSString *) heading;
-- (NSString *) message;
-- (NSDate *) date;
-- (NSArray *) embeddedLinks;
-- (NSArray *) embeddedImages;
-- (NSInteger) numberOfAttachments;
-- (BOOL) hasAttachments;
-- (BOOL) isSentBySelf;
+@class MKTextMessage;
+@class MUTextMessage;
+
+@interface MUMessagesDatabase : NSObject
+- (void) addMessage:(MKTextMessage *)msg withHeading:(NSString *)heading andSentBySelf:(BOOL)selfSent;
+- (MUTextMessage *) messageAtIndex:(NSInteger)row;
+- (void) clearMessageAtIndex:(NSInteger)row;
+- (NSInteger) count;
 @end

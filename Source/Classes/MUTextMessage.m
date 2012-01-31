@@ -32,12 +32,12 @@
 
 @interface MUTextMessage () {
 }
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf;
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)date andSentBySelf:(BOOL)sentBySelf;
 @end
 
 @implementation MUTextMessage
 
-- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andSentBySelf:(BOOL)sentBySelf {
+- (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)timestampDate andSentBySelf:(BOOL)sentBySelf {
     if ((self = [super init])) {
         _heading = [heading retain];
         _msg = [msg retain];
@@ -88,8 +88,8 @@
     return _self;
 }
 
-+ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images isSentBySelf:(BOOL)sentBySelf {
-    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andEmbeddedLinks:links andEmbeddedImages:images andSentBySelf:sentBySelf];
++ (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)timestampDate isSentBySelf:(BOOL)sentBySelf {
+    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andEmbeddedLinks:links andEmbeddedImages:images  andTimestampDate:timestampDate andSentBySelf:sentBySelf];
 }
 
 @end

@@ -142,6 +142,7 @@
 		28DC1CA213DE596B0037CDC2 /* talking_whisper@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C5913DE596B0037CDC2 /* talking_whisper@2x.png */; };
 		28DC1CA313DE596B0037CDC2 /* up.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C5A13DE596B0037CDC2 /* up.png */; };
 		28DC1CA413DE596B0037CDC2 /* up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C5B13DE596B0037CDC2 /* up@2x.png */; };
+		28EF155D14D8738C008A35A4 /* MUMessagesDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28EF155C14D8738C008A35A4 /* MUMessagesDatabase.m */; };
 		28F019911364585C00E402F6 /* MUServerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F019901364585B00E402F6 /* MUServerCell.m */; };
 		28F04B2214898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */; };
 		28F0835F147F102F00DC126F /* publist.xml in Resources */ = {isa = PBXBuildFile; fileRef = 28F0835E147F102F00DC126F /* publist.xml */; };
@@ -384,6 +385,8 @@
 		28DC1C5913DE596B0037CDC2 /* talking_whisper@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "talking_whisper@2x.png"; path = "Resources/talking_whisper@2x.png"; sourceTree = "<group>"; };
 		28DC1C5A13DE596B0037CDC2 /* up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = up.png; path = Resources/up.png; sourceTree = "<group>"; };
 		28DC1C5B13DE596B0037CDC2 /* up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "up@2x.png"; path = "Resources/up@2x.png"; sourceTree = "<group>"; };
+		28EF155B14D8738C008A35A4 /* MUMessagesDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessagesDatabase.h; sourceTree = "<group>"; };
+		28EF155C14D8738C008A35A4 /* MUMessagesDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessagesDatabase.m; sourceTree = "<group>"; };
 		28F0198F1364585B00E402F6 /* MUServerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerCell.h; sourceTree = "<group>"; };
 		28F019901364585B00E402F6 /* MUServerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCell.m; sourceTree = "<group>"; };
 		28F04B2014898A7100C90909 /* MUAdvancedAudioPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAdvancedAudioPreferencesViewController.h; sourceTree = "<group>"; };
@@ -524,6 +527,8 @@
 				2802AC0514CB024A000983A5 /* MUImageViewController.m */,
 				2802AC0B14CB2E2A000983A5 /* MUTextMessage.h */,
 				2802AC0C14CB2E2B000983A5 /* MUTextMessage.m */,
+				28EF155B14D8738C008A35A4 /* MUMessagesDatabase.h */,
+				28EF155C14D8738C008A35A4 /* MUMessagesDatabase.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1043,6 +1048,7 @@
 				2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */,
 				2802AC0D14CB2E2B000983A5 /* MUTextMessage.m in Sources */,
 				28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */,
+				28EF155D14D8738C008A35A4 /* MUMessagesDatabase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

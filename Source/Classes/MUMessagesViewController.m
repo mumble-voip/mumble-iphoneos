@@ -37,6 +37,7 @@
 #import "MUMessageRecipientViewController.h"
 #import "MUMessageAttachmentViewController.h"
 #import "MUImageViewController.h"
+#import "MUMessagesDatabase.h"
 #import "MUDataURL.h"
 #import "MUColor.h"
 
@@ -115,7 +116,7 @@
     UIView                   *_textBarView;
     UITextField              *_textField;
     BOOL                     _autoCorrectGuard;
-    NSMutableArray           *_messages;
+    MUMessagesDatabase       *_msgdb;
 
     MKChannel                *_channel;
     MKChannel                *_tree;
@@ -130,13 +131,13 @@
     if ((self = [super init])) {
         _model = [model retain];
         [_model addDelegate:self];
-        _messages = [[NSMutableArray alloc] init];
+        _msgdb = [[MUMessagesDatabase alloc] init];
     }
     return self;
 }
 
 - (void) dealloc {
-    [_messages release];
+    [_msgdb release];
     [_model removeDelegate:self];
     [_model release];
     [_textField release];
@@ -238,7 +239,7 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_messages count];
+    return [_msgdb count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -248,7 +249,7 @@
         cell = [[MUMessageBubbleTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
     }
 
-    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    MUTextMessage *txtMsg = [_msgdb messageAtIndex:[indexPath row]];
     [cell setHeading:[txtMsg heading]];
     [cell setMessage:[txtMsg message]];
     [cell setShownImages:[txtMsg embeddedImages]];
@@ -265,7 +266,9 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    MUTextMessage *txtMsg = [_msgdb messageAtIndex:[indexPath row]];
+    if (txtMsg == nil)
+        return 0.0f;
     NSString *footer = nil;
     if ([txtMsg hasAttachments]) {
         footer = [NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""];
@@ -309,8 +312,8 @@
     _textBarView.frame = CGRectMake(0, r.origin.y-44.0f, _tableView.frame.size.width, 44.0f);
     [UIView commitAnimations];
 
-    if ([_messages count] > 0)
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[_messages count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if ([_msgdb count] > 0)
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification {
@@ -334,8 +337,8 @@
     _textBarView.frame = CGRectMake(0, _tableView.frame.size.height, _tableView.frame.size.width, 44.0f);
     [UIView commitAnimations];
 
-    if ([_messages count] > 0)
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[_messages count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if ([_msgdb count] > 0)
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
@@ -353,25 +356,26 @@
     str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];    
     NSString *htmlText = [NSString stringWithFormat:@"<p>%@</p>", str];
 
+    MKTextMessage *txtMsg = [MKTextMessage messageWithHTML:htmlText];
     NSString *destName = nil;
     if (_tree == nil && _channel == nil && _user == nil) {
-        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:[[_model connectedUser] channel]];
+        [_model sendTextMessage:txtMsg toChannel:[[_model connectedUser] channel]];
         destName = [[[_model connectedUser] channel] channelName];
     } else if (_user != nil) {
-        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toUser:_user];
+        [_model sendTextMessage:txtMsg toUser:_user];
         destName = [_user userName];
     } else if (_channel != nil) {
-        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toChannel:_channel];
+        [_model sendTextMessage:txtMsg toChannel:_channel];
         destName = [_channel channelName];
     } else if (_tree != nil) {
-        [_model sendTextMessage:[MKTextMessage messageWithHTML:htmlText] toTree:_tree];
+        [_model sendTextMessage:txtMsg toTree:_tree];
         destName = [_tree channelName];
     }
 
     [textField setText:nil];
 
-    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"To %@", destName] andMessage:originalStr andEmbeddedLinks:nil andEmbeddedImages:nil isSentBySelf:YES]];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
+    [_msgdb addMessage:txtMsg withHeading:[NSString stringWithFormat:@"To %@", destName] andSentBySelf:YES];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
@@ -394,20 +398,20 @@
 
 - (void) messageBubbleTableViewCellRequestedCopy:(MUMessageBubbleTableViewCell *)cell {
     NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
-    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    MUTextMessage *txtMsg = [_msgdb messageAtIndex:[indexPath row]];
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setValue:[txtMsg message] forPasteboardType:(NSString *) kUTTypeUTF8PlainText];
 }
 
 - (void) messageBubbleTableViewCellRequestedDeletion:(MUMessageBubbleTableViewCell *)cell {
     NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
-    [_messages removeObjectAtIndex:[indexPath row]];
-    [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [_msgdb clearMessageAtIndex:[indexPath row]];
+    [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void) messageBubbleTableViewCellRequestedAttachmentViewer:(MUMessageBubbleTableViewCell *)cell {
     NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
-    MUTextMessage *txtMsg = [_messages objectAtIndex:[indexPath row]];
+    MUTextMessage *txtMsg = [_msgdb messageAtIndex:[indexPath row]];
     if ([txtMsg hasAttachments]) {
         [cell setSelected:YES];
         if ([[txtMsg embeddedLinks] count] > 0) {
@@ -451,22 +455,8 @@
 #pragma mark - MKServerModel delegate
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user withWelcomeMessage:(MKTextMessage *)msg {
-    NSString *plainMsg = [msg plainTextString];
-    plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSMutableArray *imageArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
-    for (NSString *dataUrl in [msg embeddedImages]) {
-        UIImage *img = [MUDataURL imageFromDataURL:dataUrl];
-        if (img != nil) {
-            [imageArray addObject:img];
-        }
-    }
-    [_messages addObject:[MUTextMessage textMessageWithHeading:@"Welcome Message"
-                                                    andMessage:plainMsg
-                                              andEmbeddedLinks:[msg embeddedLinks]
-                                             andEmbeddedImages:imageArray
-                                                  isSentBySelf:NO]];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
+   [_msgdb addMessage:msg withHeading:@"Welcome Message" andSentBySelf:NO];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
         [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -510,23 +500,9 @@
     }
 }
 
-- (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
-    NSString *plainMsg = [msg plainTextString];
-    plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSMutableArray *imageArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
-    for (NSString *dataUrl in [msg embeddedImages]) {
-        UIImage *img = [MUDataURL imageFromDataURL:dataUrl];
-        if (img != nil) {
-            [imageArray addObject:img];
-        }
-    }
-    [_messages addObject:[MUTextMessage textMessageWithHeading:[NSString stringWithFormat:@"From %@", [user userName]]
-                                                    andMessage:plainMsg
-                                              andEmbeddedLinks:[msg embeddedLinks]
-                                             andEmbeddedImages:imageArray
-                                                  isSentBySelf:NO]];
-
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_messages count]-1 inSection:0];
+- (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {    
+    [_msgdb addMessage:msg withHeading:[NSString stringWithFormat:@"From %@", [user userName]] andSentBySelf:NO];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
         [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
