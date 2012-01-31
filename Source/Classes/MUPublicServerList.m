@@ -77,7 +77,6 @@
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSLog(@"stored %u bytes.", [_buf length]);
     [_buf writeToFile:[MUPublicServerList filePath] atomically:YES];
 }
 
