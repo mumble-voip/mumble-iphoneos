@@ -62,6 +62,7 @@
                            @" `plist` BLOB)"];
         
         _msgCache = [[NSCache alloc] init];
+        [_msgCache setCountLimit:10];
     }
     return self;
 }
