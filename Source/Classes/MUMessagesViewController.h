@@ -30,4 +30,5 @@
 
 @interface MUMessagesViewController : UIViewController
 - (id) initWithServerModel:(MKServerModel *)model;
+- (void) clearAllMessages;
 @end

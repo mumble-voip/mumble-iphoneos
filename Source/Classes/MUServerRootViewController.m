@@ -301,6 +301,7 @@
     
     [actionSheet addButtonWithTitle:@"Access Tokens"];
     [actionSheet addButtonWithTitle:@"Certificates"];
+    [actionSheet addButtonWithTitle:@"Clear Messages"];
 
     MKUser *connUser = [_model connectedUser];
     
@@ -355,12 +356,14 @@
         [self presentModalViewController:navCtrl animated:YES];
         [certView release];
         [navCtrl release];
-    } else if (buttonIndex == 3) { // Toggle Self-Mute (or Unmute and undeafen if both muted and deafened)
+    } else if (buttonIndex == 3) { // Clear Messages
+        [_messagesView clearAllMessages];
+    } else if (buttonIndex == 4) { // Toggle Self-Mute (or Unmute and undeafen if both muted and deafened)
         if ([connUser isSelfMuted] && [connUser isSelfDeafened])
             [_model setSelfMuted:NO andSelfDeafened:NO];
         else
             [_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
-    } else if (buttonIndex == 4) { // Toggle Self-Deafen
+    } else if (buttonIndex == 5) { // Toggle Self-Deafen
         [_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
     }
 }

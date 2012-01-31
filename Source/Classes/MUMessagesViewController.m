@@ -145,6 +145,12 @@
     [super dealloc];
 }
 
+- (void) clearAllMessages {
+    [_msgdb release];
+    _msgdb = [[MUMessagesDatabase alloc] init];
+    [_tableView reloadData];
+}
+
 #pragma mark - View lifecycle
 
 - (void) viewDidLoad {
