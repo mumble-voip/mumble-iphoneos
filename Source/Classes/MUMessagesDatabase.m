@@ -37,6 +37,7 @@
 #import <FMDatabase.h>
 
 @interface MUMessagesDatabase () {
+    NSCache    *_msgCache;
     FMDatabase *_db;
     NSInteger  _count;
 }
@@ -59,11 +60,14 @@
                            @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
                            @" `rendered` BLOB,"
                            @" `plist` BLOB)"];
+        
+        _msgCache = [[NSCache alloc] init];
     }
     return self;
 }
 
 - (void) dealloc {
+    [_msgCache release];
     [_db release];
     [super dealloc];
 }
@@ -92,9 +96,14 @@
 
 - (void) clearMessageAtIndex:(NSInteger)row {
     [_db executeUpdate:@"UPDATE `msg` SET `plist`=NULL, `rendered`=NULL WHERE `id`=?", [NSNumber numberWithInteger:row+1]];
+    [_msgCache removeObjectForKey:[NSNumber numberWithInteger:row+1]];
 }
 
 - (MUTextMessage *) messageAtIndex:(NSInteger)row {
+    MUTextMessage *txtMsg = [_msgCache objectForKey:[NSNumber numberWithInteger:row+1]];
+    if (txtMsg != nil)
+        return txtMsg;
+    
     FMResultSet *result = [_db executeQuery:@"SELECT `plist` FROM `msg` WHERE `id` = ?", [NSNumber numberWithInteger:row+1]];
     if ([result next]) {
         NSData *plistData = [result dataForColumnIndex:0];
@@ -106,12 +115,14 @@
                 for (NSData *data in imgDataArray) {
                     [imagesArray addObject:[UIImage imageWithData:data]];
                 }
-                return [MUTextMessage textMessageWithHeading:[dict objectForKey:@"heading"]
-                                                  andMessage:[dict objectForKey:@"msg"]
-                                            andEmbeddedLinks:[dict objectForKey:@"links"]
-                                           andEmbeddedImages:imagesArray
-                                            andTimestampDate:[dict objectForKey:@"date"]
-                                                isSentBySelf:[[dict objectForKey:@"selfsent"] boolValue]];
+                txtMsg = [MUTextMessage textMessageWithHeading:[dict objectForKey:@"heading"]
+                                                    andMessage:[dict objectForKey:@"msg"]
+                                              andEmbeddedLinks:[dict objectForKey:@"links"]
+                                             andEmbeddedImages:imagesArray
+                                              andTimestampDate:[dict objectForKey:@"date"]
+                                                  isSentBySelf:[[dict objectForKey:@"selfsent"] boolValue]];
+                [_msgCache setObject:txtMsg forKey:[NSNumber numberWithInteger:row+1]];
+                return txtMsg;
             }
         }
     }
