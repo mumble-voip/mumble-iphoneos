@@ -42,6 +42,7 @@
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKCertificate.h>
+#import <MumbleKit/MKAudio.h>
 
 #import "MKNumberBadgeView.h"
 
@@ -181,6 +182,8 @@
     }
 
     [_segmentedControl performSelector:@selector(bringSubviewToFront:) withObject:_numberBadgeView afterDelay:0.0f];
+
+    [[MKAudio sharedAudio] setForceTransmit:NO];
 }
 
 #pragma mark - MKConnection delegate
@@ -293,8 +296,6 @@
 
 - (void) actionButtonClicked:(id)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
-    /*
-                                   ]WithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Disconnect" otherButtonTitles:@"Access Tokens", @"Certificates", nil];*/
     
     [actionSheet addButtonWithTitle:@"Disconnect"];
     [actionSheet setDestructiveButtonIndex:0];
