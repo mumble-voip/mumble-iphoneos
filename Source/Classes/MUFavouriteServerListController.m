@@ -263,6 +263,8 @@
     MUFavouriteServerEditViewController *editView = sender;
     MUFavouriteServer *newServer = [editView copyFavouriteFromContent];
     [MUDatabase storeFavourite:newServer];
+    [newServer release];
+
     [self reloadFavourites];
     [self.tableView reloadData];
 }

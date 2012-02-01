@@ -67,14 +67,14 @@
 @implementation MUServerRootViewController
 
 - (id) initWithConnection:(MKConnection *)conn andServerModel:(MKServerModel *)model {
-    if ([super init]) {
+    if ((self = [super init])) {
         _connection = [conn retain];
         _model = [model retain];
         [_model addDelegate:self];
         _unreadMessages = 0;
     }
     return self;
-}
+} q
 
 - (void) dealloc {
     [_serverView release];

@@ -294,6 +294,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         }
     }
     [self.tableView reloadData];
+    [diskCerts release];
 }
 
 #pragma mark - Actions
