@@ -56,4 +56,8 @@
     return [UIColor darkGrayColor];
 }
 
++ (UIColor *) verifiedCertificateChainColor {
+    return [UIColor colorWithRed:0xdf/255.0f green:1.0f blue:0xdf/255.0f alpha:1.0f];
+}
+
 @end

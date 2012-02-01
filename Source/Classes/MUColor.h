@@ -34,4 +34,5 @@
 + (UIColor *) mediumPingColor;
 + (UIColor *) badPingColor;
 + (UIColor *) userCountColor;
++ (UIColor *) verifiedCertificateChainColor;
 @end

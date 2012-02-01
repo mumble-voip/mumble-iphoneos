@@ -30,6 +30,7 @@
 
 #import "MUServerViewController.h"
 #import "MUUserStateAcessoryView.h"
+#import "MUColor.h"
 
 #pragma mark -
 #pragma mark MUChannelNavigationItem
@@ -174,6 +175,17 @@
     return [_modelItems count];
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
+    id object = [navItem object];
+    if ([object class] == [MKChannel class]) {
+        MKChannel *chan = object;
+        if (chan == [_serverModel rootChannel] && [_serverModel serverCertificatesTrusted]) {
+            cell.backgroundColor = [MUColor verifiedCertificateChainColor];
+        }
+    }
+}
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"ChannelNavigationCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -195,6 +207,7 @@
             cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        
     } else if ([object class] == [MKUser class]) {
         MKUser *user = object;
 

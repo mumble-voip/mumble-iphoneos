@@ -30,6 +30,7 @@
 
 #import "MUMessageRecipientViewController.h"
 #import "MUUserStateAcessoryView.h"
+#import "MUColor.h"
 
 @interface MUMessageRecipientViewController () {
     MKServerModel                                 *_serverModel;
@@ -152,6 +153,19 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1 + [_modelItems count];
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath row] == 0)
+        return;
+    NSDictionary *dict = [_modelItems objectAtIndex:[indexPath row]-1];
+    id object = [dict objectForKey:@"object"];
+    if ([object class] == [MKChannel class]) {
+        MKChannel *channel = (MKChannel *) object;
+        if (channel == [_serverModel rootChannel] && [_serverModel serverCertificatesTrusted]) {
+            cell.backgroundColor = [MUColor verifiedCertificateChainColor];
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
