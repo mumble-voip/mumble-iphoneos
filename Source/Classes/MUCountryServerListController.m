@@ -37,6 +37,7 @@
 #import "MUServerRootViewController.h"
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
+#import "MUColor.h"
 
 @interface MUCountryServerListController () <UIAlertViewDelegate> {
     NSArray   *_countryServers;
@@ -86,6 +87,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [_countryServers count];
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
+    if ([[serverItem objectForKey:@"ca"] integerValue] > 0) {
+        cell.backgroundColor = [MUColor verifiedCertificateChainColor];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
