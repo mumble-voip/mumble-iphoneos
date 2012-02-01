@@ -74,7 +74,7 @@
         _unreadMessages = 0;
     }
     return self;
-} q
+}
 
 - (void) dealloc {
     [_serverView release];
