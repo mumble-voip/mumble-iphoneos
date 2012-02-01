@@ -32,7 +32,6 @@
 
 #import "MUApplication.h"
 #import "MUWelcomeScreenPhone.h"
-#import "MUWelcomeScreenPad.h"
 #import "MUDatabase.h"
 #import "MUPublicServerList.h"
 #import "MUConnectionController.h"
@@ -130,9 +129,7 @@
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     UIViewController *welcomeScreen = nil;
     if (idiom == UIUserInterfaceIdiomPad) {
-        welcomeScreen = [[MUWelcomeScreenPad alloc] init];
-        [navigationController pushViewController:welcomeScreen animated:YES];
-        [welcomeScreen release];
+        // Not here in 1.0.
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
         [navigationController pushViewController:welcomeScreen animated:YES];
