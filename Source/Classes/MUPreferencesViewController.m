@@ -29,7 +29,6 @@
 */
 
 #import "MUPreferencesViewController.h"
-#import "MUApplication.h"
 #import "MUApplicationDelegate.h"
 #import "MUCertificatePreferencesViewController.h"
 #import "MUAudioTransmissionPreferencesViewController.h"
@@ -61,7 +60,8 @@
 
 - (void) dealloc {
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[MumbleApp delegate] reloadPreferences];
+    MUApplicationDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate reloadPreferences];
     [super dealloc];
 }
 

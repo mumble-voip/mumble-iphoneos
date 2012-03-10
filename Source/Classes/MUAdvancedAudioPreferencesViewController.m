@@ -30,7 +30,6 @@
 
 #import "MUAdvancedAudioPreferencesViewController.h"
 #import "MUTableViewHeaderLabel.h"
-#import "MUApplication.h"
 #import "MUApplicationDelegate.h"
 #import "MUAudioQualityPreferencesViewController.h"
 #import "MUColor.h"

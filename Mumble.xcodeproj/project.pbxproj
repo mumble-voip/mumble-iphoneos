@@ -24,7 +24,6 @@
 		282F6A2513620BD5008F555B /* MUCertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 282F6A2413620BD5008F555B /* MUCertificateController.m */; };
 		283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */; };
 		2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */; };
-		284BBBA512495C4400366F4C /* MUApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 284BBBA412495C4400366F4C /* MUApplication.m */; };
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
 		2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* MUCertificateCell.m */; };
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
@@ -205,8 +204,6 @@
 		283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioTransmissionPreferencesViewController.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* MUCertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificatePreferencesViewController.h; sourceTree = "<group>"; };
 		2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificatePreferencesViewController.m; sourceTree = "<group>"; };
-		284BBBA312495C4400366F4C /* MUApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUApplication.h; sourceTree = "<group>"; };
-		284BBBA412495C4400366F4C /* MUApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUApplication.m; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* MUCertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCell.xib; sourceTree = "<group>"; };
 		2858A5AB123BA08D00A82155 /* MUCertificateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateCell.h; sourceTree = "<group>"; };
 		2858A5AC123BA08D00A82155 /* MUCertificateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCell.m; sourceTree = "<group>"; };
@@ -411,8 +408,6 @@
 				28BF8E1C11D93A1900B72770 /* Database */,
 				2838EA0C1293165700035C5D /* Preferences */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
-				284BBBA312495C4400366F4C /* MUApplication.h */,
-				284BBBA412495C4400366F4C /* MUApplication.m */,
 				2861C25D116BE905002B8514 /* MUApplicationDelegate.h */,
 				2861C25E116BE905002B8514 /* MUApplicationDelegate.m */,
 				2861C25F116BE905002B8514 /* MUCountryServerListController.h */,
@@ -935,7 +930,6 @@
 				2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */,
 				288D6B60123D08EE00D37EDE /* MUCertificateViewController.m in Sources */,
 				28942D7C12456F9200C63A07 /* MUCertificateCreationView.m in Sources */,
-				284BBBA512495C4400366F4C /* MUApplication.m in Sources */,
 				288B55E01252903300563A28 /* MUServerCertificateTrustViewController.m in Sources */,
 				289CBA18125693040015E58E /* MUServerViewController.m in Sources */,
 				2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */,

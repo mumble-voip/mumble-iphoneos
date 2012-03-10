@@ -30,7 +30,6 @@
 
 #import "MUApplicationDelegate.h"
 
-#import "MUApplication.h"
 #import "MUWelcomeScreenPhone.h"
 #import "MUDatabase.h"
 #import "MUPublicServerList.h"
