@@ -220,7 +220,15 @@
         settings.codec = MKCodecFormatCELT;
         settings.quality = 72000;
         settings.audioPerPacket = 1;
-    } else if ([quality isEqualToString:@"custom"]) {
+    } else if ([quality isEqualToString:@"opus"]) {
+#ifdef OPUS_ENABLED
+        settings.codec = MKCodecFormatOpus;
+#else
+        settings.codec = MKCodecFormatCELT;
+#endif
+        settings.quality = 72000;
+        settings.audioPerPacket = 1;
+    } else {
         settings.codec = MKCodecFormatCELT;
         if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"celt"])
             settings.codec = MKCodecFormatCELT;
@@ -229,7 +237,11 @@
         settings.quality = [defaults integerForKey:@"AudioQualityBitrate"];
         settings.audioPerPacket = [defaults integerForKey:@"AudioQualityFrames"];
     }
-
+    
+    // Set MKVersion Opus state
+    BOOL enableOpus = [quality isEqualToString:@"opus"];
+    [[MKVersion sharedVersion] setOpusEnabled:enableOpus];
+    
     settings.noiseSuppression = -42; /* -42 dB */
     settings.amplification = 20.0f;
     settings.jitterBufferSize = 0; /* 10 ms */

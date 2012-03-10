@@ -124,11 +124,15 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
                 cell.detailTextLabel.text = @"Low";
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
+            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
                 cell.detailTextLabel.text = @"Balanced";
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
+            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
                 cell.detailTextLabel.text = @"High";
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"])
+#ifdef OPUS_ENABLED
+            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"opus"])
+                cell.detailTextLabel.text = @"Opus";
+#endif
+            else
                 cell.detailTextLabel.text = @"Custom";
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
