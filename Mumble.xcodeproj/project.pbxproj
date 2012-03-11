@@ -608,7 +608,7 @@
 			isa = PBXGroup;
 			children = (
 				28990A8E132FD9CC0034B406 /* libMumbleKit.a */,
-				28990A90132FD9CC0034B406 /* MumbleKit.framework */,
+				28990A90132FD9CC0034B406 /* MumbleKit */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -899,7 +899,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -934,10 +934,10 @@
 			remoteRef = 28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		28990A90132FD9CC0034B406 /* MumbleKit.framework */ = {
+		28990A90132FD9CC0034B406 /* MumbleKit */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = MumbleKit.framework;
+			path = MumbleKit;
 			remoteRef = 28990A8F132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
