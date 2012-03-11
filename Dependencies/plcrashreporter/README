@@ -1,0 +1,6 @@
+This directory contains a source dump of plcrashrepoter (http://code.google.com/p/plcrashreporter).
+The dump was generated from plcrashreporter SVN at r422.
+
+Re-sync with:
+
+ $ ./sync.bash ~/path-to/svn-repo
