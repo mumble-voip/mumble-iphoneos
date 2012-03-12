@@ -1,0 +1,13 @@
+// Copyright 2012 The Mumble for iOS Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+#include "Base.xcconfig"
+
+COPY_PHASE_STRIP = YES
+
+CODE_SIGN_IDENTITY = iPhone Distribution: Mikkel Krautz
+
+GCC_FAST_MATH = YES
+GCC_UNROLL_LOOPS = YES
+GCC_OPTIMIZATION_LEVEL = 3

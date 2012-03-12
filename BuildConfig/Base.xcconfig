@@ -1,0 +1,36 @@
+// Copyright 2012 The Mumble for iOS Developers. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+ARCHS = $(ARCHS_STANDARD_32_BIT)
+SDKROOT = iphoneos
+
+MACOSX_DEPLOYMENT_TARGET = 10.7
+IPHONEOS_DEPLOYMENT_TARGET = 5.0
+
+CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
+
+IPHONEOS_DEPLOYMENT_TARGET = 5.0
+
+TARGETED_DEVICE_FAMILY = 1 // iPhone
+
+ALWAYS_SEARCH_USER_PATHS = NO
+USER_HEADER_SEARCH_PATHS = 
+HEADER_SEARCH_PATHS = ${PROJECT_DIR}/MumbleKit/src/ ${PROJECT_DIR}/Dependencies/fmdb/src/ ${PROJECT_DIR}/Dependencies/gtm/ ${PROJECT_DIR}/Dependencies/MKNumberBadgeView/ ${PROJECT_DIR}/Dependencies/plcrashreporter
+FRAMEWORK_SEARCH_PATHS = 
+
+OTHER_CFLAGS = -DNS_BLOCK_ASSERTIONS=1
+
+GCC_WARN_ABOUT_RETURN_TYPE = YES
+GCC_WARN_UNUSED_VARIABLE = YES
+
+INFOPLIST_FILE = Source/Info.plist
+
+GCC_PRECOMPILE_PREFIX_HEADER = YES
+GCC_PREFIX_HEADER = Source/Mumble.pch
+
+VALIDATE_PRODUCT = YES
+
+OTHER_LDFLAGS = -all_load -ObjC
+
+PRODUCT_NAME = Mumble
