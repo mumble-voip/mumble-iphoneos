@@ -46,7 +46,7 @@
 
 #import "MKNumberBadgeView.h"
 
-@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate, UIActionSheetDelegate> {
+@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
     MKConnection                *_connection;
     MKServerModel               *_model;
     
@@ -61,6 +61,15 @@
     MUMessagesViewController    *_messagesView;
     
     NSInteger                   _unreadMessages;
+    
+    NSInteger                   _disconnectIndex;
+    NSInteger                   _accessTokensIndex;
+    NSInteger                   _certificatesIndex;
+    NSInteger                   _selfRegisterIndex;
+    NSInteger                   _clearMessagesIndex;
+    NSInteger                   _selfMuteIndex;
+    NSInteger                   _selfDeafenIndex;
+    NSInteger                   _selfUnmuteAndUndeafenIndex;
 }
 @end
 
@@ -295,29 +304,47 @@
 #pragma mark - Actions
 
 - (void) actionButtonClicked:(id)sender {
+    MKUser *connUser = [_model connectedUser];
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    BOOL inMessagesView = [[self viewControllers] objectAtIndex:0] == _messagesView;
     
-    [actionSheet addButtonWithTitle:@"Disconnect"];
+    _disconnectIndex = [actionSheet addButtonWithTitle:@"Disconnect"];
     [actionSheet setDestructiveButtonIndex:0];
     
-    [actionSheet addButtonWithTitle:@"Access Tokens"];
-    [actionSheet addButtonWithTitle:@"Certificates"];
-    [actionSheet addButtonWithTitle:@"Clear Messages"];
-
-    MKUser *connUser = [_model connectedUser];
+    _accessTokensIndex = [actionSheet addButtonWithTitle:@"Access Tokens"];
     
+    if (!inMessagesView)
+        _certificatesIndex = [actionSheet addButtonWithTitle:@"Certificates"];
+    else
+        _certificatesIndex = -1;
+
+    if (![connUser isAuthenticated]) {
+        _selfRegisterIndex = [actionSheet addButtonWithTitle:@"Self-Register"];
+    } else {
+        _selfRegisterIndex = -1;
+    }
+    
+    if (inMessagesView)
+        _clearMessagesIndex = [actionSheet addButtonWithTitle:@"Clear Messages"];
+    else
+        _clearMessagesIndex = -1;
+    
+    _selfMuteIndex = -1;
+    _selfDeafenIndex = -1;
+    _selfUnmuteAndUndeafenIndex = -1;
+
     if ([connUser isSelfMuted] && [connUser isSelfDeafened]) {
-        [actionSheet addButtonWithTitle:@"Unmute and undeafen"];
+        _selfUnmuteAndUndeafenIndex = [actionSheet addButtonWithTitle:@"Unmute and undeafen"];
     } else {
         if (![connUser isSelfMuted])
-            [actionSheet addButtonWithTitle:@"Self-Mute"];
+            _selfMuteIndex = [actionSheet addButtonWithTitle:@"Self-Mute"];
         else
-            [actionSheet addButtonWithTitle:@"Unmute Self"];
+            _selfMuteIndex = [actionSheet addButtonWithTitle:@"Unmute Self"];
 
         if (![connUser isSelfDeafened])
-            [actionSheet addButtonWithTitle:@"Self-Deafen"];
+            _selfDeafenIndex = [actionSheet addButtonWithTitle:@"Self-Deafen"];
         else
-            [actionSheet addButtonWithTitle:@"Undeafen Self"];
+            _selfDeafenIndex = [actionSheet addButtonWithTitle:@"Undeafen Self"];
     }
     
     int cancelIndex = [actionSheet addButtonWithTitle:@"Cancel"];
@@ -332,6 +359,14 @@
     [[self modalViewController] dismissModalViewControllerAnimated:YES];
 }
 
+#pragma mark - UIAlertViewDelegate
+
+- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) { // Self-Register
+        [_model registerConnectedUser];
+    }
+}
+
 #pragma mark - UIActionSheetDelegate
 
 - (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
@@ -340,15 +375,15 @@
     if (buttonIndex == [actionSheet cancelButtonIndex])
         return;
 
-    if (buttonIndex == 0) { // Disconnect
+    if (buttonIndex == _disconnectIndex) { // Disconnect
         [[MUConnectionController sharedController] disconnectFromServer];
-    } else if (buttonIndex == 1) { // Access Tokens
+    } else if (buttonIndex == _accessTokensIndex) {
         MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];
         [self presentModalViewController:navCtrl animated:YES];
         [tokenViewController release];
         [navCtrl release];
-    } else if (buttonIndex == 2) { // Certificates
+    } else if (buttonIndex == _certificatesIndex) { // Certificates
         MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[_model serverCertificates]];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certView];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(childDoneButton:)];
@@ -357,15 +392,26 @@
         [self presentModalViewController:navCtrl animated:YES];
         [certView release];
         [navCtrl release];
-    } else if (buttonIndex == 3) { // Clear Messages
+    } else if (buttonIndex == _selfRegisterIndex) { // Self-Register
+        NSString *title = @"User Registration";
+        NSString *msg = [NSString stringWithFormat:
+                            @"You are about to register yourself on this server. "
+                            @"This cannot be undone, and your username cannot be changed once this is done. "
+                            @"You will forever be known as '%@' on this server.\n\n"
+                            @"Are you sure you want to register yourself?", [connUser userName]];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:msg
+                                                           delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [alertView show];
+        [alertView release];
+    } else if (buttonIndex == _clearMessagesIndex) { // Clear Messages
         [_messagesView clearAllMessages];
-    } else if (buttonIndex == 4) { // Toggle Self-Mute (or Unmute and undeafen if both muted and deafened)
-        if ([connUser isSelfMuted] && [connUser isSelfDeafened])
-            [_model setSelfMuted:NO andSelfDeafened:NO];
-        else
-            [_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
-    } else if (buttonIndex == 5) { // Toggle Self-Deafen
+    } else if (buttonIndex == _selfMuteIndex) { // Self-Mute, Unmute Self
+        [_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
+    } else if (buttonIndex == _selfDeafenIndex) { // Self-Deafen, Undeafen Self
         [_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
+    } else if (buttonIndex == _selfUnmuteAndUndeafenIndex) { // Unmute and undeafen
+        [_model setSelfMuted:NO andSelfDeafened:NO];
     }
 }
 
