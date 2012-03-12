@@ -260,6 +260,13 @@
 
 // --
 
+- (void) serverModel:(MKServerModel *)model userAuthenticatedStateChanged:(MKUser *)user {
+    NSInteger userIndex = [_users indexOfObject:user];
+    if (userIndex != NSNotFound) {
+        [[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
 - (void) serverModel:(MKServerModel *)model userPrioritySpeakerChanged:(MKUser *)user {
     NSInteger userIndex = [_users indexOfObject:user];
     if (userIndex != NSNotFound) {

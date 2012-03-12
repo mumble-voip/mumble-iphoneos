@@ -382,5 +382,13 @@
    [self reloadUser:user];
 }
 
+- (void) serverModel:(MKServerModel *)model userAuthenticatedStateChanged:(MKUser *)user {
+    [self reloadUser:user];
+}
+
+- (void) serverModel:(MKServerModel *)model userPrioritySpeakerChanged:(MKUser *)user {
+    [self reloadUser:user];
+}
+
 @end
 
