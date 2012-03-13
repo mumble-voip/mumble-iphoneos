@@ -121,6 +121,7 @@
                                             cancelButtonTitle:@"Cancel"
                                             destructiveButtonTitle:nil
                                             otherButtonTitles:@"Add as favourite", @"Connect", nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];
     [sheet release];
 }

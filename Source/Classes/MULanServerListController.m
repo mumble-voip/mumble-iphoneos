@@ -155,6 +155,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:@"Add as favourite", @"Connect", nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];
     [sheet release];
 }

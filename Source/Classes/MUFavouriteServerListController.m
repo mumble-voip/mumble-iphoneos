@@ -138,6 +138,7 @@
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:@"Delete"
                                               otherButtonTitles:@"Edit", @"Connect", nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     if (pad) {
         CGRect frame = cellView.frame;
         frame.origin.y = frame.origin.y - (frame.size.height/2);

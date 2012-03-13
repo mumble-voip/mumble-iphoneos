@@ -313,6 +313,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:@"Delete"
                                               otherButtonTitles:@"Export to iTunes", nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:self.tableView];
     [sheet release];
 }

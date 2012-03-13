@@ -313,6 +313,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (void) actionClicked:(id)sender {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Import Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove All" otherButtonTitles:nil];
+    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [actionSheet showFromBarButtonItem:sender animated:YES];
     [actionSheet release];
 }

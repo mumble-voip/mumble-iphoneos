@@ -306,6 +306,7 @@
 - (void) actionButtonClicked:(id)sender {
     MKUser *connUser = [_model connectedUser];
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     BOOL inMessagesView = [[self viewControllers] objectAtIndex:0] == _messagesView;
     
     _disconnectIndex = [actionSheet addButtonWithTitle:@"Disconnect"];

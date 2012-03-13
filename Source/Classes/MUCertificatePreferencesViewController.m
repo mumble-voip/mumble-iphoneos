@@ -171,6 +171,7 @@
                                               otherButtonTitles:@"Generate New Certificate",
                                                                 @"Import From iTunes",
                             nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];
     [sheet release];
 }
