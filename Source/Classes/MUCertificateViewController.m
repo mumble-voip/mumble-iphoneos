@@ -289,8 +289,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         NSString *password = [[alertView textFieldAtIndex:1] text];
         NSData *data = [cert exportPKCS12WithPassword:password];
         if (data == nil) {
-            NSString *unknownExportErrorMsg = NSLocalizedString(@"Mumble could not export the certificate from the certificate store.",
-                                                             @"Error message shown for a failed export, cause unknown.");
+            NSString *unknownExportErrorMsg = NSLocalizedString(@"Mumble was unable to export the certificate.",
+                                                                @"Error message shown for a failed export, cause unknown.");
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:exportFailedTitle
                                                                 message:unknownExportErrorMsg
                                                                delegate:nil
