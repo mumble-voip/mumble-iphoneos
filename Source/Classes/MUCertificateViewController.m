@@ -345,8 +345,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (void) actionClicked:(id)sender {
     NSString *title = NSLocalizedString(@"Certificate Chain Actions", @"Title for action sheet shown when clicking the action button when viewing a certificate chain");
-    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button text for cancel button of certificate chain action sheet");
-    NSString *delete = NSLocalizedString(@"Delete", @"Destructive button text for certificate chain action sheet (deletes a certificate)");
+    NSString *cancel = NSLocalizedString(@"Cancel", nil);
+    NSString *delete = NSLocalizedString(@"Delete", nil);
     NSString *export = NSLocalizedString(@"Export to iTunes", @"iTunes export button text for certificate chain action sheet");
 
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title
@@ -362,8 +362,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 - (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) { // Export
         NSString *title = NSLocalizedString(@"Export Certificate Chain", @"Title for certificate export alert view (with username and password field)");
-        NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button text for certificate export alert view");
-        NSString *export = NSLocalizedString(@"Export", @"Export button text for certificate export alert view");
+        NSString *cancel = NSLocalizedString(@"Cancel", nil);
+        NSString *export = NSLocalizedString(@"Export", nil);
         NSString *filename = NSLocalizedString(@"Filename", @"Filename text field in certificate export alert view");
         NSString *password = NSLocalizedString(@"Password (for importing)", @"Password text field in certificate export alert view");
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
@@ -381,8 +381,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         NSString *msg = NSLocalizedString(@"Are you sure you want to delete this certificate chain?\n\n"
                                           @"This will permanently remove any rights associated with the certificate chain on any Mumble servers.",
                                                 @"Certificate deletion warning message");
-        NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button for certificate deletion warning alert view");
-        NSString *delete = NSLocalizedString(@"Delete", @"Delete button for certificate deletion warning alert view");
+        NSString *cancel = NSLocalizedString(@"Cancel", nil);
+        NSString *delete = NSLocalizedString(@"Delete", nil);
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                             message:msg
                                                            delegate:self cancelButtonTitle:cancel otherButtonTitles:delete, nil];

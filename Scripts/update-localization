@@ -1,0 +1,2 @@
+#!/bin/bash
+genstrings -o Resources/en.lproj Source/Classes/*.m

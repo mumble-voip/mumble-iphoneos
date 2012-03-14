@@ -11,6 +11,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
+		280256381510D70D00178B08 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 280256361510D70D00178B08 /* Localizable.strings */; };
 		2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802ABFF14C9E948000983A5 /* MUDataURL.m */; };
 		2802AC0314CB0131000983A5 /* MUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0214CB0131000983A5 /* MUImage.m */; };
 		2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0514CB024A000983A5 /* MUImageViewController.m */; };
@@ -214,6 +215,7 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2801C35911CA9F1A00E664E8 /* MUPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUPreferencesViewController.h; sourceTree = "<group>"; };
 		2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUPreferencesViewController.m; sourceTree = "<group>"; };
+		280256371510D70D00178B08 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		2802ABFE14C9E948000983A5 /* MUDataURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDataURL.h; sourceTree = "<group>"; };
 		2802ABFF14C9E948000983A5 /* MUDataURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDataURL.m; sourceTree = "<group>"; };
 		2802AC0114CB0130000983A5 /* MUImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUImage.h; sourceTree = "<group>"; };
@@ -583,6 +585,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		280256351510D70D00178B08 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				280256361510D70D00178B08 /* Localizable.strings */,
+			);
+			name = en.lproj;
+			path = Resources/en.lproj;
+			sourceTree = "<group>";
+		};
 		2838EA0C1293165700035C5D /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
@@ -698,6 +709,7 @@
 		28DC1C1213DE59120037CDC2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				280256351510D70D00178B08 /* en.lproj */,
 				2879527A14C248B700567430 /* Apple */,
 				28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */,
 				28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */,
@@ -933,6 +945,7 @@
 				Japanese,
 				French,
 				German,
+				en,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1055,6 +1068,7 @@
 				285E2A67150D729B008AE185 /* BetaDist.xcconfig in Resources */,
 				285E2A68150D729B008AE185 /* Debug.xcconfig in Resources */,
 				285E2A69150D729B008AE185 /* Release.xcconfig in Resources */,
+				280256381510D70D00178B08 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1175,6 +1189,17 @@
 			targetProxy = 28990AAE132FDA4B0034B406 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		280256361510D70D00178B08 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				280256371510D70D00178B08 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
