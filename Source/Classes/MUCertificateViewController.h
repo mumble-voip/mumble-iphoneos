@@ -28,8 +28,6 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <UIKit/UIKit.h>
-
 @class MKCertificate;
 
 @interface MUCertificateViewController : UITableViewController

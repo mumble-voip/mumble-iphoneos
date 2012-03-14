@@ -40,14 +40,14 @@ static const NSUInteger CertificateViewSectionIssuer             = 1;
 static const NSUInteger CertificateViewSectionTotal              = 2;
 
 @interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
-    NSInteger           _curIdx;
+    NSInteger            _curIdx;
     NSData              *_persistentRef;
     NSArray             *_certificates;
     NSArray             *_subjectItems;
     NSArray             *_issuerItems;
     NSString            *_certTitle;
     UISegmentedControl  *_arrows;
-    BOOL                _allowExportAndDelete;
+    BOOL                 _allowExportAndDelete;
 }
 @end
 
@@ -142,38 +142,50 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     NSMutableArray *issuer = [[NSMutableArray alloc] init];
     NSString *str = nil;
 
+    NSString *cn = NSLocalizedString(@"Common Name", @"Common Name (CN) of an X.509 certificate");
+    NSString *org = NSLocalizedString(@"Organization", @"Organization (O) of an X.509 certificate");
+    
     // Subject DN + additional
     str = [cert subjectItem:MKCertificateItemCommonName];
     if (str) {
-        [subject addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+        [subject addObject:[NSArray arrayWithObjects:cn, str, nil]];
         _certTitle = [str copy];
-    } else
-        _certTitle = @"Unknown Certificate";
+    } else {
+        _certTitle = NSLocalizedString(@"Unknown Certificate",
+                                       @"Title shown when viewing a certificate without a Subject Common Name (CN)");
+    }
 
     str = [cert subjectItem:MKCertificateItemOrganization];
-    if (str)
-        [subject addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+    if (str) {
+        [subject addObject:[NSArray arrayWithObjects:org, str, nil]];
+    }
 
     str = [[cert notBefore] description];
-    if (str)
-        [subject addObject:[NSArray arrayWithObjects:@"Not Before", str, nil]];
+    if (str) {
+        NSString *notBefore = NSLocalizedString(@"Not Before", @"Not Before date (validity period) of an X.509 certificate");
+        [subject addObject:[NSArray arrayWithObjects:notBefore, str, nil]];
+    }
 
     str = [[cert notAfter] description];
-    if (str)
-        [subject addObject:[NSArray arrayWithObjects:@"Not After", str, nil]];
+    if (str) {
+        NSString *notAfter = NSLocalizedString(@"Not After", @"Not After date (validity period) of an X.509 certificate");
+        [subject addObject:[NSArray arrayWithObjects:notAfter, str, nil]];
+    }
 
     str = [cert emailAddress];
-    if (str)
-        [subject addObject:[NSArray arrayWithObjects:@"Email", str, nil]];
+    if (str) {
+        NSString *emailAddr = NSLocalizedString(@"Email", @"Email address of an X.509 certificate");
+        [subject addObject:[NSArray arrayWithObjects:emailAddr, str, nil]];
+    }
 
     // Issuer DN
     str = [cert issuerItem:MKCertificateItemCommonName];
     if (str)
-        [issuer addObject:[NSArray arrayWithObjects:@"Common Name", str, nil]];
+        [issuer addObject:[NSArray arrayWithObjects:cn, str, nil]];
 
     str = [cert issuerItem:MKCertificateItemOrganization];
     if (str)
-        [issuer addObject:[NSArray arrayWithObjects:@"Organization", str, nil]];
+        [issuer addObject:[NSArray arrayWithObjects:org, str, nil]];
 
     [_subjectItems release];
     _subjectItems = subject;
@@ -187,7 +199,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 - (void) updateCertificateDisplay {
     [self showDataForCertificate:[_certificates objectAtIndex:_curIdx]];
 
-    self.navigationItem.title = [NSString stringWithFormat:@"%i of %i", _curIdx+1, [_certificates count]];
+    NSString *indexFmt = NSLocalizedString(@"%i of %i", @"Title for viewing a certificate chain (1 of 2, etc.)");
+    self.navigationItem.title = [NSString stringWithFormat:indexFmt, _curIdx+1, [_certificates count]];
     [_arrows setEnabled:(_curIdx != [_certificates count]-1) forSegmentAtIndex:0];
     [_arrows setEnabled:(_curIdx != 0) forSegmentAtIndex:1];
 }
@@ -209,10 +222,12 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *subject = NSLocalizedString(@"Subject", @"Subject of an X.509 certificate");
+    NSString *issuer = NSLocalizedString(@"Issuer", @"Issuer of an X.509 certificate");
     if (section == CertificateViewSectionSubject) {
-        return [MUTableViewHeaderLabel labelWithText:@"Subject"];
+        return [MUTableViewHeaderLabel labelWithText:subject];
     } else if (section == CertificateViewSectionIssuer) {
-        return [MUTableViewHeaderLabel labelWithText:@"Issuer"];
+        return [MUTableViewHeaderLabel labelWithText:issuer];
     }
     return nil;
 }
@@ -251,10 +266,20 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 #pragma mark Actions
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSString *exportFailedTitle = NSLocalizedString(@"Export Failed", @"Title for UIAlertView when a certificate export fails");
+    NSString *cancelButtonText = NSLocalizedString(@"OK", @"Default Cancel button text for UIAlertViews that are shown when certificate export fails.");
+    
     // Export certificate chain
     if (alertView.alertViewStyle == UIAlertViewStyleLoginAndPasswordInput && buttonIndex == 1) {
         if ([_certificates count] > 1) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:@"Mumble can only export self-signed certificates at present." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSString *onlySelfSignedExportSupported = NSLocalizedString(
+                    @"Mumble can only export self-signed certificates at present.",
+                    @"Error message shown for a failed export of a non-self-signed certificate");
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:exportFailedTitle
+                                                                message:onlySelfSignedExportSupported
+                                                               delegate:nil
+                                                      cancelButtonTitle:cancelButtonText
+                                                      otherButtonTitles:nil];
             [alertView show];
             [alertView release];
             return;
@@ -264,7 +289,13 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         NSString *password = [[alertView textFieldAtIndex:1] text];
         NSData *data = [cert exportPKCS12WithPassword:password];
         if (data == nil) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:@"Mumble could not export the certificate from the certificate store." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSString *unknownExportErrorMsg = NSLocalizedString(@"Mumble could not export the certificate from the certificate store.",
+                                                             @"Error message shown for a failed export, cause unknown.");
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:exportFailedTitle
+                                                                message:unknownExportErrorMsg
+                                                               delegate:nil
+                                                      cancelButtonTitle:cancelButtonText
+                                                      otherButtonTitles:nil];
             [alertView show];
             [alertView release];
             return;
@@ -279,7 +310,11 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         NSString *pkcs12File = [[documentDirs objectAtIndex:0] stringByAppendingPathComponent:fileName];        
         NSError *err = nil;
         if (![data writeToFile:pkcs12File options:NSDataWritingAtomic error:&err]) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Failed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:exportFailedTitle
+                                                                message:[err localizedDescription]
+                                                               delegate:nil
+                                                      cancelButtonTitle:cancelButtonText
+                                                      otherButtonTitles:nil];
             [alertView show];
             [alertView release];
             return;
@@ -309,10 +344,16 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 }
 
 - (void) actionClicked:(id)sender {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Certificate Chain Actions" delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:@"Delete"
-                                              otherButtonTitles:@"Export to iTunes", nil];
+    NSString *title = NSLocalizedString(@"Certificate Chain Actions", @"Title for action sheet shown when clicking the action button when viewing a certificate chain");
+    NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button text for cancel button of certificate chain action sheet");
+    NSString *delete = NSLocalizedString(@"Delete", @"Destructive button text for certificate chain action sheet (deletes a certificate)");
+    NSString *export = NSLocalizedString(@"Export to iTunes", @"iTunes export button text for certificate chain action sheet");
+
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title
+                                                       delegate:self
+                                              cancelButtonTitle:cancel
+                                         destructiveButtonTitle:delete
+                                              otherButtonTitles:export, nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:self.tableView];
     [sheet release];
@@ -320,19 +361,31 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) { // Export
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Export Certificate Chain"
+        NSString *title = NSLocalizedString(@"Export Certificate Chain", @"Title for certificate export alert view (with username and password field)");
+        NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button text for certificate export alert view");
+        NSString *export = NSLocalizedString(@"Export", @"Export button text for certificate export alert view");
+        NSString *filename = NSLocalizedString(@"Filename", @"Filename text field in certificate export alert view");
+        NSString *password = NSLocalizedString(@"Password (for importing)", @"Password text field in certificate export alert view");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                             message:nil
-                                                           delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Export", nil];
+                                                           delegate:self
+                                                  cancelButtonTitle:cancel
+                                                  otherButtonTitles:export, nil];
         [alertView setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
-        [[alertView textFieldAtIndex:0] setPlaceholder:@"Filename"];
-        [[alertView textFieldAtIndex:1] setPlaceholder:@"Password (for importing)"];
+        [[alertView textFieldAtIndex:0] setPlaceholder:filename];
+        [[alertView textFieldAtIndex:1] setPlaceholder:password];
         [alertView show];
         [alertView release];
     } else if (buttonIndex == 0) { // Delete
-        NSString *msg = @"Are you sure you want to delete this certificate chain?\n\nThis will permanently remove any rights associated with the certificate chain on any Mumble servers.";
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Certificate Chain"
+        NSString *title = NSLocalizedString(@"Delete Certificate Chain", @"Certificate deletion warning title");
+        NSString *msg = NSLocalizedString(@"Are you sure you want to delete this certificate chain?\n\n"
+                                          @"This will permanently remove any rights associated with the certificate chain on any Mumble servers.",
+                                                @"Certificate deletion warning message");
+        NSString *cancel = NSLocalizedString(@"Cancel", @"Cancel button for certificate deletion warning alert view");
+        NSString *delete = NSLocalizedString(@"Delete", @"Delete button for certificate deletion warning alert view");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                             message:msg
-                                                           delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+                                                           delegate:self cancelButtonTitle:cancel otherButtonTitles:delete, nil];
         [alertView show];
         [alertView release];
     }
