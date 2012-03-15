@@ -69,10 +69,15 @@
         if (autoReport) {
             [self sendPendingCrashReport];
         } else {
-            NSString *title = @"Crash Reporting";
-            NSString *msg = @"We're terribly sorry. It looks like Mumble has recently crashed. "
-                             "Do you want to send a crash report to the Mumble developers?";
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", @"Always", nil];
+            NSString *title = NSLocalizedString(@"Crash Reporting", nil);
+            NSString *msg = NSLocalizedString(@"We're terribly sorry. It looks like Mumble has recently crashed. "
+                                              @"Do you want to send a crash report to the Mumble developers?", nil);
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                message:msg
+                                                               delegate:self
+                                                      cancelButtonTitle:NSLocalizedString(@"No", nil)
+                                                      otherButtonTitles:NSLocalizedString(@"Yes", nil),
+                                                                        NSLocalizedString(@"Always", nil), nil];
             [alertView show];
             [alertView release];
         }
@@ -136,7 +141,8 @@
     
     // Set MumbleKit release string
     [[MKVersion sharedVersion] setOverrideReleaseString:
-        [NSString stringWithFormat:@"Mumble for iOS %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
+        [NSString stringWithFormat:NSLocalizedString(@"Mumble for iOS %@", nil),
+            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
 
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
