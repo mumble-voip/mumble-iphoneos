@@ -141,8 +141,7 @@
     
     // Set MumbleKit release string
     [[MKVersion sharedVersion] setOverrideReleaseString:
-        [NSString stringWithFormat:NSLocalizedString(@"Mumble for iOS %@", nil),
-            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
+        [NSString stringWithFormat:@"Mumble for iOS %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
 
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
