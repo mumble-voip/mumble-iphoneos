@@ -37,7 +37,8 @@
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *ok = NSLocalizedString(@"OK", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:ok otherButtonTitles:nil];
         [alert show];
         [alert release];
     });
@@ -64,9 +65,14 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
         
+        NSString *name = NSLocalizedString(@"Name", nil);
+        NSString *defaultName = NSLocalizedString(@"Mumble User", nil);
+        NSString *email = NSLocalizedString(@"Email", nil);
+        NSString *optional = NSLocalizedString(@"Optional", nil);
+        
         _nameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_nameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_nameCell textLabel] setText:@"Name"];
+        [[_nameCell textLabel] setText:name];
         _nameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_nameField setTextColor:[MUColor selectedTextColor]];
         [_nameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -76,7 +82,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_nameField setReturnKeyType:UIReturnKeyNext];
         [_nameField setAdjustsFontSizeToFitWidth:NO];
         [_nameField setTextAlignment:UITextAlignmentLeft];
-        [_nameField setPlaceholder:@"Mumble User"];
+        [_nameField setPlaceholder:defaultName];
         [_nameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_nameField setText:_fullName];
         [_nameField setClearButtonMode:UITextFieldViewModeWhileEditing];
@@ -84,7 +90,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
         _emailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_emailCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_emailCell textLabel] setText:@"Email"];
+        [[_emailCell textLabel] setText:email];
         _emailField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_emailField setTextColor:[MUColor selectedTextColor]];
         [_emailField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -94,7 +100,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_emailField setReturnKeyType:UIReturnKeyDefault];
         [_emailField setAdjustsFontSizeToFitWidth:NO];
         [_emailField setTextAlignment:UITextAlignmentLeft];
-        [_emailField setPlaceholder:@"(Optional)"];
+        [_emailField setPlaceholder:optional];
         [_emailField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_emailField setKeyboardType:UIKeyboardTypeEmailAddress];
         [_emailField setText:_fullName];
@@ -115,13 +121,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-    [self setTitle:@"New Certificate"];
+    NSString *newCert = NSLocalizedString(@"New Certificate",
+                                          @"Title of MUCertificateCreationView (shown when creating a self-signed certificate)");
+    NSString *create = NSLocalizedString(@"Create", @"'Create' text for certificate creation");
+    NSString *cancel = NSLocalizedString(@"Cancel", nil);
+    [self setTitle:newCert];
 
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:cancel style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
     [[self navigationItem] setLeftBarButtonItem:cancelButton];
     [cancelButton release];
 
-    UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Create" style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
+    UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:create style:UIBarButtonItemStyleDone target:self action:@selector(createClicked:)];
     [[self navigationItem] setRightBarButtonItem:createButton];
     [createButton release];
 
@@ -267,8 +277,10 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         MKCertificate *cert = [MKCertificate selfSignedCertificateWithName:name email:email];
         NSData *pkcs12 = [cert exportPKCS12WithPassword:@""];
         if (pkcs12 == nil) {
-            ShowAlertDialog(@"Unable to generate certificate",
-                            @"Mumble was unable to generate a certificate for the your identity.");
+            NSString *title = NSLocalizedString(@"Unable to generate certificate", @"Certificate generation error title");
+            NSString *msg = NSLocalizedString(@"Mumble was unable to generate a certificate for your identity.", 
+                                              @"Certificate generation error body text");
+            ShowAlertDialog(title, msg);
         } else {
             NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:@"", kSecImportExportPassphrase, nil];
             NSArray *items = nil;
@@ -291,13 +303,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
                 // This happens when a certificate with a duplicate subject name is added.
                 } else if (err == noErr && data == nil) {
-                    ShowAlertDialog(@"Unable to add identity",
-                                    @"The certificate of the just-added identity could not be added to the certificate store because it "
-                                    @"has the same name as a certificate already found in the store.");
+                    NSString *title = NSLocalizedString(@"Unable to add identity",
+                                                        @"Error title shown when adding a certificate fails because of a subject name clash.");
+                    NSString *msg = NSLocalizedString(@"A certificate with the same name already exist.",
+                                                      @"Error body when adding a certificate fails because of a subject name clash.");
+                    ShowAlertDialog(title, msg);
                 }
             } else {
-                ShowAlertDialog(@"Unable to import generated certificate",
-                                @"Mumble was unable to import the generated certificate into the certificate store.");
+                NSString *title = NSLocalizedString(@"Import Error", nil);
+                NSString *msg = NSLocalizedString(@"Mumble was unable to import the generated certificate.",
+                                                  @"Generic certificate import error message body.");
+                ShowAlertDialog(title, msg);
             }
         }
         

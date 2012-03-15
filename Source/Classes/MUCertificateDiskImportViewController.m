@@ -103,7 +103,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 
-    [[self navigationItem] setTitle:@"iTunes Import"];
+    NSString *iTunesImport = NSLocalizedString(@"iTunes Import", @"Import a certificate from iTunes action sheet button.");
+    [[self navigationItem] setTitle:iTunesImport];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
@@ -156,9 +157,11 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (_showHelp) {
-        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:@"To import your own certificates into\n"
-                                                                            @"Mumble, please transfer them to your\n"
-                                                                            @"device via iTunes File Transfer."];
+        NSString *help = NSLocalizedString(@"To import your own certificate into\n"
+                                           @"Mumble, please transfer them to your\n"
+                                           @"device using iTunes File Transfer.",
+                                           @"Help text for iTunes File Transfer (iTunes Import)");
+        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:help];
         lbl.font = [UIFont systemFontOfSize:16.0f];
         lbl.lineBreakMode = UILineBreakModeWordWrap;
         lbl.numberOfLines = 0;
@@ -191,7 +194,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     
     NSData *transformedPkcs12Data = [tmpCert exportPKCS12WithPassword:@""];
     if (transformedPkcs12Data == nil) {
-        ShowAlertDialog(@"Import Error", @"Mumble was unable to export the specified certificate for use in the iOS Keychain.");
+        ShowAlertDialog(NSLocalizedString(@"Import Error", nil),
+                        NSLocalizedString(@"Mumble was unable to export the specified certificate.",
+                                          @"Error shown when when the conversion from PKCS12 to DER-encoded X.509 fails."));
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
         return;
     }
@@ -219,7 +224,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             // Remove the file from disk
             NSError *errObj = nil;
             if ([[NSFileManager defaultManager] removeItemAtPath:pkcs12File error:&errObj] == NO) {
-                ShowAlertDialog(@"Import Error", [errObj localizedFailureReason]);
+                ShowAlertDialog(NSLocalizedString(@"Import Error", nil), [errObj localizedFailureReason]);
             }
 
             [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
@@ -227,11 +232,14 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
             [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:_attemptIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             return;
         } else if (err == errSecDuplicateItem || (err == noErr && data == nil)) {
-            ShowAlertDialog(@"Import Error",
-                            @"The certificate of the imported identity could not be added to the certificate store because it "
-                            @"has the same name as a certificate already found in the store.");
+            ShowAlertDialog(NSLocalizedString(@"Import Error", nil),
+                            // todo(mkrautz): Keep in sync with MUCertificateCreationView: refactor!
+                            NSLocalizedString(@"A certificate with the same name already exist.",
+                                              @"Error body when adding a certificate fails because of a subject name clash."));
         } else {
-            NSString *msg = [NSString stringWithFormat:@"Unable to import certificate.\nError Code: %li", err];
+            NSString *msg = [NSString stringWithFormat:
+                                NSLocalizedString(@"Mumble was unable to import the certificate.\nError Code: %li",
+                                                  @"Generic import error (with error code) for iTunes Import."), err];
             ShowAlertDialog(@"Import Error", msg);
         }
 
@@ -241,10 +249,13 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [self showPasswordDialog];
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     } else if (err == errSecDecode) {
-        ShowAlertDialog(@"Import Error", @"Unable to decode PKCS12 file");
+        ShowAlertDialog(NSLocalizedString(@"Import Error", nil), @"Unable to decode PKCS12 file");
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     } else {
-        ShowAlertDialog(@"Import Error", [NSString stringWithFormat:@"Unable to import certificate.\nError Code: %li", err]);
+        NSString *msg = [NSString stringWithFormat:
+                         NSLocalizedString(@"Mumble was unable to import the certificate.",
+                                           @"Generic import error for iTunes Import."), err];
+        ShowAlertDialog(NSLocalizedString(@"Import Error", nil), msg);
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     }
 }
@@ -252,10 +263,14 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) showPasswordDialog {
     UIAlertView *dialog = [[UIAlertView alloc] init];
     [dialog setDelegate:self];
-    [dialog setTitle:@"Enter Password"];
-    [dialog setMessage:@"The certificate is protected by a password. Please enter it below:"];
-    [dialog addButtonWithTitle:@"Cancel"];
-    [dialog addButtonWithTitle:@"OK"];
+    
+    NSString *title = NSLocalizedString(@"Enter Password", @"Title for certificate import password unlock UIAlertView.");
+    NSString *msg = NSLocalizedString(@"The certificate is protected by a password. Please enter it below:",
+                                      @"Body text for certificate import password unlock UIAlertView.");
+    [dialog setTitle:title];
+    [dialog setMessage:msg];
+    [dialog addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [dialog addButtonWithTitle:NSLocalizedString(@"OK", nil)];
     [dialog setAlertViewStyle:UIAlertViewStyleSecureTextInput];
     [dialog show];
     [dialog release];
@@ -286,7 +301,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         NSString *fn = [diskCerts objectAtIndex:i];
         [[NSFileManager defaultManager] removeItemAtPath:[directory stringByAppendingPathComponent:fn] error:&err];
         if (err != nil) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to remove file" message:[NSString stringWithFormat:@"File '%@' could not be deleted: %@", fn, [err localizedDescription]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            NSString *title = NSLocalizedString(@"Unable to remove file",
+                                                @"Certificate import file removal error title.");
+            NSString *msg = [NSString stringWithFormat:
+                                NSLocalizedString(@"File '%@' could not be deleted: %@",
+                                                  @"Certificate import file removal error body."),
+                                    fn, [err localizedDescription]];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                message:msg
+                                                               delegate:nil
+                                                      cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                      otherButtonTitles:nil];
             [alertView show];
             [alertView release];
         } else {
@@ -304,15 +329,28 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) showRemoveAlert {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Remove All" message:@"This will remove all certificates that can be imported into Mumble.\n\n"
-                              @"Certificates already imported into Mumble will not be touched."
-                                                       delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Remove 'Em", nil];
+    NSString *title = NSLocalizedString(@"Remove Importable Certificates",
+                                        @"Title for remove all importable certificates UIAlertView.");
+    NSString *msg = NSLocalizedString(@"Are you sure you want to delete all importable certificates?\n\n"
+                                      @"Certificates already imported into Mumble will not be touched.",
+                                      @"Body for remove all importable certificates UIAlertView");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"No", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
     [alertView show];
     [alertView release];
 }
 
 - (void) actionClicked:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Import Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Remove All" otherButtonTitles:nil];
+    NSString *title = NSLocalizedString(@"Import Actions", @"Title for UIActionSheet for iTunes Import.");
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title
+                                                             delegate:self
+                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                               destructiveButtonTitle:NSLocalizedString(@"Remove All",
+                                                                                        @"Remove all importable certificates action.")
+                                                    otherButtonTitles:nil];
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [actionSheet showFromBarButtonItem:sender animated:YES];
     [actionSheet release];
