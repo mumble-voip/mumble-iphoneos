@@ -69,7 +69,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.navigationItem.title = @"Certificates";
+    self.navigationItem.title = NSLocalizedString(@"Certificates", nil);
 
     [self fetchCertificates];
     [self.tableView reloadData];
@@ -164,12 +164,13 @@
 #pragma mark Target/actions
 
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Add Certificate"
+    NSString *title = NSLocalizedString(@"Add Certificate", @"Add certificate UIActionSheet");
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Generate New Certificate",
-                                                                @"Import From iTunes",
+                                              otherButtonTitles:NSLocalizedString(@"Generate New Certificate", nil),
+                                                                NSLocalizedString(@"Import From iTunes", nil),
                             nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];

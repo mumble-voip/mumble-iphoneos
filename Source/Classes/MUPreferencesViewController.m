@@ -82,7 +82,7 @@
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
 
-    self.title = @"Preferences";
+    self.title = NSLocalizedString(@"Preferences", nil);
     [self.tableView reloadData];
 }
 
@@ -129,7 +129,7 @@
             [volSlider setMaximumValue:1.0f];
             [volSlider setMinimumValue:0.0f];
             [volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
-            [[cell textLabel] setText:@"Volume"];
+            [[cell textLabel] setText:NSLocalizedString(@"Volume", nil)];
             [cell setAccessoryView:volSlider];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             [volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
@@ -140,21 +140,21 @@
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioTransmitCell"];
             if (cell == nil)
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioTransmitCell"] autorelease];
-            cell.textLabel.text = @"Transmission";
+            cell.textLabel.text = NSLocalizedString(@"Transmission", nil);
             NSString *xmit = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
             if ([xmit isEqualToString:@"vad"]) {
-                cell.detailTextLabel.text = @"Voice Activated";
+                cell.detailTextLabel.text = NSLocalizedString(@"Voice Activated", @"Voice activated transmission mode");
             } else if ([xmit isEqualToString:@"ptt"]) {
-                cell.detailTextLabel.text = @"Push-to-talk";
+                cell.detailTextLabel.text = NSLocalizedString(@"Push-to-talk", @"Push-to-talk transmission mode");
             } else if ([xmit isEqualToString:@"continuous"]) {
-                cell.detailTextLabel.text = @"Continuous";
+                cell.detailTextLabel.text = NSLocalizedString(@"Continuous", @"Continuous transmission mode");
             }
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
              cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
         } else if ([indexPath row] == 2) {
-            cell.textLabel.text = @"Advanced";
+            cell.textLabel.text = NSLocalizedString(@"Advanced", nil);
             cell.accessoryView = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -164,7 +164,7 @@
         if ([indexPath row] == 0) {
             UISwitch *tcpSwitch = [[UISwitch alloc] init];
             [tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
-            [[cell textLabel] setText:@"Force TCP"];
+            [[cell textLabel] setText:NSLocalizedString(@"Force TCP", nil)];
             [cell setAccessoryView:tcpSwitch];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             [tcpSwitch setOnTintColor:[UIColor blackColor]];
@@ -175,8 +175,8 @@
             if (cell == nil)
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
             MKCertificate *cert = [MUCertificateController defaultCertificate];
-            cell.textLabel.text = @"Certificate";
-            cell.detailTextLabel.text = cert ? [cert commonName] : @"None";
+            cell.textLabel.text = NSLocalizedString(@"Certificate", nil);
+            cell.detailTextLabel.text = cert ? [cert commonName] : NSLocalizedString(@"None", @"None (No certificate chosen)");
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -189,9 +189,9 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:@"Audio"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio", nil)];
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:@"Network"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Network", nil)];
     }
 
     return nil;

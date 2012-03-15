@@ -58,7 +58,7 @@
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
-    self.title = @"Transmission";
+    self.title = NSLocalizedString(@"Transmission", nil);
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -110,19 +110,19 @@
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Voice Activated";
+            cell.textLabel.text = NSLocalizedString(@"Voice Activated", nil);
             if ([current isEqualToString:@"vad"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Push-to-Talk";
+            cell.textLabel.text = NSLocalizedString(@"Push-to-talk", nil);
             if ([current isEqualToString:@"ptt"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"Continuous";
+            cell.textLabel.text = NSLocalizedString(@"Continuous", nil);
             if ([current isEqualToString:@"continuous"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
@@ -132,7 +132,7 @@
         if (indexPath.row == 0) {
             cell.accessoryView = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = @"Voice Activity Configuration";
+            cell.textLabel.text = NSLocalizedString(@"Voice Activity Configuration", nil);
         }
     }
 
@@ -141,7 +141,7 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:@"Method"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Method", nil)];
     }
     return nil;
 }

@@ -44,7 +44,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.title = @"Audio Quality";
+    self.title = NSLocalizedString(@"Audio Quality", nil);
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
@@ -82,22 +82,22 @@
     
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = @"Low";
-            cell.detailTextLabel.text = @"Speex 16kbit/s, 60ms audio per packet";
+            cell.textLabel.text = NSLocalizedString(@"Low", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"Speex 16kbit/s, 60ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 1) {
-            cell.textLabel.text = @"Balanced";
-            cell.detailTextLabel.text = @"CELT 40kbit/s, 20ms audio per packet";
+            cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"CELT 40kbit/s, 20ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 2) {
-            cell.textLabel.text = @"High";
-            cell.detailTextLabel.text = @"CELT 72kbit/s, 10ms audio per packet";
+            cell.textLabel.text = NSLocalizedString(@"High", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"CELT 72kbit/s, 10ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
@@ -105,13 +105,13 @@
 #ifdef OPUS_ENABLED
         } else if ([indexPath row] == 3) {
             cell.textLabel.text = @"Opus";
-            cell.detailTextLabel.text = @"Opus 72kbit/s, 10ms audio per packet";
+            cell.detailTextLabel.text = NSLocalizedString(@"Opus 72kbit/s, 10ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"opus"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 4) {
-            cell.textLabel.text = @"Custom";
+            cell.textLabel.text = NSLocalizedString(@"Custom", nil);
             cell.detailTextLabel.text = nil;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
@@ -120,7 +120,7 @@
         }
 #else
         } else if ([indexPath row] == 3) {
-            cell.textLabel.text = @"Custom";
+            cell.textLabel.text = NSLocalizedString(@"Custom", nil);
             cell.detailTextLabel.text = nil;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
@@ -135,9 +135,9 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) { // Input
-        return [MUTableViewHeaderLabel labelWithText:@"Quality Presets"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Quality Presets", nil)];
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:@"Custom Quality"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Custom Quality", nil)];
     } else {
         return nil;
     }

@@ -46,7 +46,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.title = @"Advanced Audio";
+    self.title = NSLocalizedString(@"Advanced Audio", nil);
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
@@ -93,7 +93,7 @@
 
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = @"Preprocessing";
+            cell.textLabel.text = NSLocalizedString(@"Preprocessing", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *preprocSwitch = [[[UISwitch alloc] init] autorelease];
             preprocSwitch.onTintColor = [UIColor blackColor];
@@ -101,7 +101,7 @@
             [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = preprocSwitch;
         } else if ([indexPath row] == 1) {
-            cell.textLabel.text = @"Mic Boost";
+            cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISlider *slider = [[[UISlider alloc] init] autorelease];
             [slider setMaximumValue:2.0f];
@@ -118,21 +118,21 @@
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = @"Quality";
+            cell.textLabel.text = NSLocalizedString(@"Quality", nil);
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
-                cell.detailTextLabel.text = @"Low";
+                cell.detailTextLabel.text = NSLocalizedString(@"Low", nil);
             else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
-                cell.detailTextLabel.text = @"Balanced";
+                cell.detailTextLabel.text = NSLocalizedString(@"Balanced", nil);
             else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
-                cell.detailTextLabel.text = @"High";
+                cell.detailTextLabel.text = NSLocalizedString(@"High", nil);
 #ifdef OPUS_ENABLED
             else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"opus"])
                 cell.detailTextLabel.text = @"Opus";
 #endif
             else
-                cell.detailTextLabel.text = @"Custom";
+                cell.detailTextLabel.text = NSLocalizedString(@"Custom", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     }
@@ -142,9 +142,9 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) { // Input
-        return [MUTableViewHeaderLabel labelWithText:@"Audio Input"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Input", nil)];
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:@"Transmission Quality"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Transmission Quality", nil)];
     } else {
         return nil;
     }

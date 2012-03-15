@@ -50,7 +50,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.scrollEnabled = NO;
-    self.navigationItem.title = @"Voice Activity";
+    self.navigationItem.title = NSLocalizedString(@"Voice Activity", nil);
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -98,13 +98,13 @@
     
     if (section == 0) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Amplitude";
+            cell.textLabel.text = NSLocalizedString(@"Amplitude", @"Amplitude voice-activity mode");
             if ([current isEqualToString:@"amplitude"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Signal to Noise";
+            cell.textLabel.text = NSLocalizedString(@"Signal to Noise", @"SNR voice-activity mode");
             if ([current isEqualToString:@"snr"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
@@ -118,7 +118,7 @@
         }
     } else if (section == 2) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Silence Below";
+            cell.textLabel.text = NSLocalizedString(@"Silence Below", @"Silence Below VAD configuration");
             UISlider *slider = [[UISlider alloc] init];
             [slider setMinimumValue:0.0f];
             [slider setMaximumValue:1.0f];
@@ -130,7 +130,7 @@
             [slider release];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Speech Above";
+            cell.textLabel.text = NSLocalizedString(@"Speech Above", @"Silence Above VAD configuration");
             UISlider *slider = [[UISlider alloc] init];
             [slider setMinimumValue:0.0f];
             [slider setMaximumValue:1.0f];
@@ -143,7 +143,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         } else if (indexPath.row == 2) {
             cell.accessoryView = nil;
-            cell.textLabel.text = @"Help";
+            cell.textLabel.text = NSLocalizedString(@"Help", nil);
         }
     }    
     return cell;
@@ -154,9 +154,9 @@
         ++section;
 
     if (section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:@"Method"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Method", nil)];
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:@"Configuration"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Configuration", nil)];
     }
     return nil;
 }
@@ -201,8 +201,18 @@
     if (section == 2 && [indexPath row] == 2) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Voice Activity Help" message:@"To calibrate the voice activity detection corretly, adjust the sliders so that:\n\n1. The first few utterances you make are inside the green area.\n2.While talking, the bar should stay inside the yellow area.\n3. When not speaking, the bar should stay in the red area."
-                                  delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *title = NSLocalizedString(@"Voice Activity Help", nil);
+        NSString *msg = NSLocalizedString(@"To calibrate the voice activity correctly, adjust the sliders so that:\n\n"
+                                          @"1. The first few utterances you make are inside the green area.\n"
+                                          @"2. While talking, the bar should stay inside the yellow area.\n"
+                                          @"3. When not speaking, the bar should stay inside the red area.",
+                                                @"Help text for Voice Activity");
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:msg
+                                                           delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                  otherButtonTitles:nil];
         [alertView show];
         [alertView release];
     }
