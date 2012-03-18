@@ -55,7 +55,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
 
-    self.navigationItem.title = @"Public Servers";
+    self.navigationItem.title = NSLocalizedString(@"Public Servers", nil);
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]
     ;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
