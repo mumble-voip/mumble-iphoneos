@@ -35,12 +35,6 @@
 #import "MUFavouriteServer.h"
 #import "MUTableViewHeaderLabel.h"
 
-// Placeholder text for the edit view fields.
-static NSString   *FavouriteServerPlaceholderDisplayName  = @"Mumble Server";
-static NSString   *FavouriteServerPlaceholderHostName     = @"Hostname or IP address";
-static NSString   *FavouriteServerPlaceholderPort         = @"64738";
-static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
-
 @interface MUFavouriteServerEditViewController () {
     BOOL               _editMode;
     MUFavouriteServer  *_favourite;
@@ -80,7 +74,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         
         _descriptionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_descriptionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_descriptionCell textLabel] setText:@"Description"];
+        [[_descriptionCell textLabel] setText:NSLocalizedString(@"Description", nil)];
         _descriptionField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_descriptionField setTextColor:[MUColor selectedTextColor]];
         [_descriptionField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -90,7 +84,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         [_descriptionField setReturnKeyType:UIReturnKeyNext];
         [_descriptionField setAdjustsFontSizeToFitWidth:NO];
         [_descriptionField setTextAlignment:UITextAlignmentLeft];
-        [_descriptionField setPlaceholder:FavouriteServerPlaceholderDisplayName];
+        [_descriptionField setPlaceholder:NSLocalizedString(@"Mumble Server", nil)];
         [_descriptionField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_descriptionField setText:[_favourite displayName]];
         [_descriptionField setClearButtonMode:UITextFieldViewModeWhileEditing];
@@ -98,7 +92,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
         _addressCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerAddress"];
         [_addressCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_addressCell textLabel] setText:@"Address"];
+        [[_addressCell textLabel] setText:NSLocalizedString(@"Address", nil)];
         _addressField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_addressField setTextColor:[MUColor selectedTextColor]];
         [_addressField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -108,7 +102,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         [_addressField setReturnKeyType:UIReturnKeyNext];
         [_addressField setAdjustsFontSizeToFitWidth:NO];
         [_addressField setTextAlignment:UITextAlignmentLeft];
-        [_addressField setPlaceholder:FavouriteServerPlaceholderHostName];
+        [_addressField setPlaceholder:NSLocalizedString(@"Hostname or IP address", nil)];
         [_addressField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [_addressField setKeyboardType:UIKeyboardTypeURL];
         [_addressField setText:[_favourite hostName]];
@@ -117,7 +111,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
         _portCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPort"];
         [_portCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_portCell textLabel] setText:@"Port"];
+        [[_portCell textLabel] setText:NSLocalizedString(@"Port", nil)];
         _portField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_portField setTextColor:[MUColor selectedTextColor]];
         [_portField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -128,7 +122,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         [_portField setAdjustsFontSizeToFitWidth:YES];
         [_portField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_portField setTextAlignment:UITextAlignmentLeft];
-        [_portField setPlaceholder:FavouriteServerPlaceholderPort];
+        [_portField setPlaceholder:@"64738"];
         [_portField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         if ([_favourite port] != 0)
             [_portField setText:[NSString stringWithFormat:@"%u", [_favourite port]]];
@@ -139,7 +133,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
         _usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerUsername"];
         [_usernameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_usernameCell textLabel] setText:@"Username"];
+        [[_usernameCell textLabel] setText:NSLocalizedString(@"Username", nil)];
         _usernameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_usernameField setTextColor:[MUColor selectedTextColor]];
         [_usernameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -158,7 +152,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         
         _passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPassword"];
         [_passwordCell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [[_passwordCell textLabel] setText:@"Password"];
+        [[_passwordCell textLabel] setText:NSLocalizedString(@"Password", nil)];
         _passwordField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
         [_passwordField setTextColor:[MUColor selectedTextColor]];
         [_passwordField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -168,7 +162,7 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
         [_passwordField setReturnKeyType:UIReturnKeyDefault];
         [_passwordField setAdjustsFontSizeToFitWidth:NO];
         [_passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        [_passwordField setPlaceholder:FavouriteServerPlaceholderPassword];
+        [_passwordField setPlaceholder:NSLocalizedString(@"Optional", nil)];
         [_passwordField setSecureTextEntry:YES];
         [_passwordField setTextAlignment:UITextAlignmentLeft];
         [_passwordField setText:[_favourite password]];
@@ -228,18 +222,24 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
 
     // View title
     if (!_editMode) {
-        [[self navigationItem] setTitle:@"New Favourite"];
+        [[self navigationItem] setTitle:NSLocalizedString(@"New Favourite", nil)];
     } else {
-        [[self navigationItem] setTitle:@"Edit Favourite"];
+        [[self navigationItem] setTitle:NSLocalizedString(@"Edit Favourite", nil)];
     }
 
     // Cancel button
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(cancelClicked:)];
     [[self navigationItem] setLeftBarButtonItem:cancelButton];
     [cancelButton release];
 
     // Done
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Done", nil)
+                                                                   style:UIBarButtonItemStyleDone
+                                                                  target:self
+                                                                  action:@selector(doneClicked:)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
     [doneButton release];
 }
@@ -291,10 +291,10 @@ static NSString   *FavouriteServerPlaceholderPassword     = @"Optional";
     // Perform some basic tidying up. For example, for the port field, we
     // want the default port number to be used if it wasn't filled out.
     if ([_favourite displayName] == nil) {
-        [_favourite setDisplayName:FavouriteServerPlaceholderDisplayName];
+        [_favourite setDisplayName:NSLocalizedString(@"Mumble Server", nil)];
     }
     if ([_favourite port] == 0) {
-        [_favourite setPort:[FavouriteServerPlaceholderPort intValue]];
+        [_favourite setPort:64738];
     }
 
     // Get rid of oureslves and call back to our target to tell it that

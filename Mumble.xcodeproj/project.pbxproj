@@ -87,8 +87,6 @@
 		28A2AEBB14786E6000F3B83F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28A2AEB714786E6000F3B83F /* Icon.png */; };
 		28A2AEBC14786E6000F3B83F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28A2AEB814786E6000F3B83F /* Icon@2x.png */; };
 		28A2AEC114788BE300F3B83F /* MUColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A2AEC014788BE300F3B83F /* MUColor.m */; };
-		28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCD2117E064B006EB479 /* MULogViewController.m */; };
-		28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A4CCF4117E1D4D006EB479 /* MULogEntry.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
@@ -328,10 +326,6 @@
 		28A2AEB814786E6000F3B83F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		28A2AEBF14788BE300F3B83F /* MUColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUColor.h; sourceTree = "<group>"; };
 		28A2AEC014788BE300F3B83F /* MUColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUColor.m; sourceTree = "<group>"; };
-		28A4CCD1117E064B006EB479 /* MULogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogViewController.h; sourceTree = "<group>"; };
-		28A4CCD2117E064B006EB479 /* MULogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULogViewController.m; sourceTree = "<group>"; };
-		28A4CCF3117E1D4D006EB479 /* MULogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULogEntry.h; sourceTree = "<group>"; };
-		28A4CCF4117E1D4D006EB479 /* MULogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULogEntry.m; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ../MainWindow.xib; sourceTree = "<group>"; };
 		28ADA301148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioQualityPreferencesViewController.h; sourceTree = "<group>"; };
 		28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioQualityPreferencesViewController.m; sourceTree = "<group>"; };
@@ -515,10 +509,6 @@
 				2861C269116BE905002B8514 /* MUPublicServerListController.m */,
 				2861C270116BE905002B8514 /* MUWelcomeScreenPhone.h */,
 				2861C271116BE905002B8514 /* MUWelcomeScreenPhone.m */,
-				28A4CCD1117E064B006EB479 /* MULogViewController.h */,
-				28A4CCD2117E064B006EB479 /* MULogViewController.m */,
-				28A4CCF3117E1D4D006EB479 /* MULogEntry.h */,
-				28A4CCF4117E1D4D006EB479 /* MULogEntry.m */,
 				287BA33E11B97EEE0010E031 /* MUFavouriteServerListController.h */,
 				287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */,
 				287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */,
@@ -1116,8 +1106,6 @@
 				2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */,
 				2861C281116BE905002B8514 /* MUWelcomeScreenPhone.m in Sources */,
-				28A4CCD3117E064B006EB479 /* MULogViewController.m in Sources */,
-				28A4CCF5117E1D4D006EB479 /* MULogEntry.m in Sources */,
 				28F9174811B946250030D649 /* FMDatabase.m in Sources */,
 				28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */,
 				28F9174B11B946250030D649 /* FMResultSet.m in Sources */,

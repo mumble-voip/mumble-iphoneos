@@ -261,7 +261,13 @@
     [cell setShownImages:[txtMsg embeddedImages]];
     [cell setDate:[txtMsg date]];
     if ([txtMsg hasAttachments]) {
-        [cell setFooter:[NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""]];
+        NSString *footer = nil;
+        if ([txtMsg numberOfAttachments] > 1) {
+            footer = [NSString stringWithFormat:NSLocalizedString(@"%i attachments", nil), [txtMsg numberOfAttachments]];
+        } else {
+            footer = NSLocalizedString(@"1 attachment", nil);
+        }
+        [cell setFooter:footer];
     } else {
         [cell setFooter:nil];
     }
@@ -277,7 +283,11 @@
         return 0.0f;
     NSString *footer = nil;
     if ([txtMsg hasAttachments]) {
-        footer = [NSString stringWithFormat:@"%i attachment%@", [txtMsg numberOfAttachments], [txtMsg numberOfAttachments] > 1 ? @"s" : @""];
+        if ([txtMsg numberOfAttachments] > 1) {
+            footer = [NSString stringWithFormat:NSLocalizedString(@"%i attachments", nil), [txtMsg numberOfAttachments]];
+        } else {
+            footer = NSLocalizedString(@"1 attachment", nil);
+        }
     }
     return [MUMessageBubbleTableViewCell heightForCellWithHeading:[txtMsg heading] message:[txtMsg message] images:[txtMsg embeddedImages] footer:footer date:[txtMsg date]];
 }
@@ -380,7 +390,7 @@
 
     [textField setText:nil];
 
-    [_msgdb addMessage:txtMsg withHeading:[NSString stringWithFormat:@"To %@", destName] andSentBySelf:YES];
+    [_msgdb addMessage:txtMsg withHeading:[NSString stringWithFormat:NSLocalizedString(@"To %@", @"Message recipient title"), destName] andSentBySelf:YES];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -461,7 +471,7 @@
 #pragma mark - MKServerModel delegate
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user withWelcomeMessage:(MKTextMessage *)msg {
-   [_msgdb addMessage:msg withHeading:@"Welcome Message" andSentBySelf:NO];
+   [_msgdb addMessage:msg withHeading:NSLocalizedString(@"Welcome Message", @"Title for welcome message") andSentBySelf:NO];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
@@ -507,7 +517,7 @@
 }
 
 - (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {    
-    [_msgdb addMessage:msg withHeading:[NSString stringWithFormat:@"From %@", [user userName]] andSentBySelf:NO];
+    [_msgdb addMessage:msg withHeading:[NSString stringWithFormat:NSLocalizedString(@"From %@", @"Message sender title"), [user userName]] andSentBySelf:NO];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {

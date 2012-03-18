@@ -121,7 +121,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.navigationItem.title = @"Message Recipient";
+    self.navigationItem.title = NSLocalizedString(@"Message Recipient", nil);
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)] autorelease];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 
@@ -180,7 +180,7 @@
 
     if ([indexPath row] == 0) {
         [[cell imageView] setImage:[UIImage imageNamed:@"channel"]];
-        [[cell textLabel] setText:@"Current Channel"];
+        [[cell textLabel] setText:NSLocalizedString(@"Current Channel", nil)];
         [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:18.0f]];
         [cell setIndentationLevel:0];
         [cell setAccessoryView:nil];

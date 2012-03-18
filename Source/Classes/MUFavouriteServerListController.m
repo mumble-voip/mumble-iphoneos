@@ -78,7 +78,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[self navigationItem] setTitle:@"Favourites"];
+    [[self navigationItem] setTitle:NSLocalizedString(@"Favourite Servers", nil)];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
@@ -135,9 +135,10 @@
     
     NSString *sheetTitle = pad ? nil : [favServ displayName];
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:sheetTitle delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:@"Delete"
-                                              otherButtonTitles:@"Edit", @"Connect", nil];
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                         destructiveButtonTitle:NSLocalizedString(@"Delete", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Edit", nil),
+                                                                NSLocalizedString(@"Connect", nil), nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     if (pad) {
         CGRect frame = cellView.frame;
@@ -167,7 +168,13 @@
     
     // Delete
     if (index == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Favourite" message:@"Are you sure you want to delete this favourite server?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        NSString *title = NSLocalizedString(@"Delete Favourite", nil);
+        NSString *msg = NSLocalizedString(@"Are you sure you want to delete this favourite server?", nil);
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:msg
+                                                           delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"No", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
         [alertView show];
         [alertView release];
     // Connect

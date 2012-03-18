@@ -64,7 +64,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [[self navigationItem] setTitle:@"Access Tokens"];
+    [[self navigationItem] setTitle:NSLocalizedString(@"Access Tokens", nil)];
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
@@ -125,7 +125,7 @@
         NSString *token = [_tokens objectAtIndex:[indexPath row]];
         if ([token length] == 0) {
             cell.textLabel.textColor = [UIColor lightGrayColor];
-            cell.textLabel.text = @"(Empty)";
+            cell.textLabel.text = NSLocalizedString(@"(Empty)", nil);
         } else {
             cell.textLabel.textColor = [UIColor blackColor];
             cell.textLabel.text = token;

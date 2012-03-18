@@ -66,7 +66,7 @@
 }
 
 - (void) connection:(NSURLConnection *)conn didFailWithError:(NSError *)error {
-    NSLog(@"Failed to fetch latest version info.");
+    NSLog(@"MUversionChecker: failed to fetch latest version info.");
 }
 
 - (void) connectionDidFinishLoading:(NSURLConnection *)conn {
@@ -90,9 +90,13 @@
 }
 
 - (void) newBuildAvailable {
-    NSString *title = @"New beta build available";
-    NSString *msg = @"Do you want to upgrade?";
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upgrade", nil];
+    NSString *title = NSLocalizedString(@"New beta build available", nil);
+    NSString *msg = NSLocalizedString(@"Do you want to upgrade?", nil);
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                     message:msg
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                          otherButtonTitles:NSLocalizedString(@"Upgrade", nil), nil];
     [alert show];
     [alert release];
 }

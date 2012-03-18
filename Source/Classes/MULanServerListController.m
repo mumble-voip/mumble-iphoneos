@@ -78,7 +78,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    [[self navigationItem] setTitle:@"LAN Servers"];
+    [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -151,10 +151,12 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         return;
     }
     
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[netService name] delegate:self
-                                              cancelButtonTitle:@"Cancel"
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[netService name]
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Add as favourite", @"Connect", nil];
+                                              otherButtonTitles:NSLocalizedString(@"Add as favourite", nil),
+                                                                NSLocalizedString(@"Connect", nil), nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];
     [sheet release];
@@ -166,11 +168,13 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     
     // Connect
     if (index == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
-                                                        message:@"Please enter the username you wish to use on this server"
+        NSString *title = NSLocalizedString(@"Username", nil);
+        NSString *msg = NSLocalizedString(@"Please enter the username you wish to use on this server", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Connect", nil];
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Connect", nil), nil];
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[netService hostName] port:[netService port]]];
         [alert show];

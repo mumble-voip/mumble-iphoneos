@@ -77,7 +77,7 @@
         _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
         [_pinger setDelegate:self];
     } else {
-        _hostname = @"(No Server)";
+        _hostname = NSLocalizedString(@"(No Server)", nil);
     }
 
     self.textLabel.text = _displayname;
@@ -108,11 +108,12 @@
         _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
         [_pinger setDelegate:self]; 
     } else {
-        _hostname = @"(No Server)";
+        _hostname = NSLocalizedString(@"(No Server)", nil);
     }
     
     self.textLabel.text = _displayname;
-    self.detailTextLabel.text = [NSString stringWithFormat:@"%@ on %@:%@", _username, _hostname, _port];
+    self.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ on %@:%@", @"username on hostname:port"),
+                                    _username, _hostname, _port];
     self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];
 }
 
@@ -158,7 +159,7 @@
 
     CGContextSetTextDrawingMode(ctx, kCGTextFill);
     CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    NSString *usersStr = [NSString stringWithFormat:@"%u\nppl", userCount];
+    NSString *usersStr = [NSString stringWithFormat:NSLocalizedString(@"%u\nppl", @"user count"), userCount];
     [usersStr drawInRect:CGRectMake(34.0, 0.0, 32.0, 32.0)
                 withFont:[UIFont boldSystemFontOfSize:12]
            lineBreakMode:UILineBreakModeTailTruncation

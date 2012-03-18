@@ -53,7 +53,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationItem.title = @"Attachments";
+    self.navigationItem.title = NSLocalizedString(@"Attachments", nil);
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -87,9 +87,9 @@
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     BOOL hasImages = [_images count] > 0;
     if (hasImages && section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:@"Images"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Images", nil)];
     } else {
-        return [MUTableViewHeaderLabel labelWithText:@"Links"];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Links", nil)];
     }
     return nil;
 }
@@ -112,8 +112,11 @@
         UIImage *img = [_images objectAtIndex:0];
         UIImage *round = [MUImage tableViewCellImageFromImage:img];
         [cell.imageView setImage:round];
-        cell.textLabel.text = @"Images";
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i image%@", [_images count], [_images count] > 1 ? @"s" : @""];
+        cell.textLabel.text = NSLocalizedString(@"Images", nil);
+        NSString *detailText = NSLocalizedString(@"1 image", nil);
+        if ([_images count] > 1)
+            detailText = [NSString stringWithFormat:NSLocalizedString(@"%i images", nil), [_images count]];
+        cell.detailTextLabel.text = detailText;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else {
         cell.imageView.image = nil;

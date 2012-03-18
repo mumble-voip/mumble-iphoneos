@@ -71,11 +71,17 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
     
-    UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:@"About" style:UIBarButtonItemStyleBordered target:self action:@selector(aboutClicked:)];
+    UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil)
+                                                              style:UIBarButtonItemStyleBordered
+                                                             target:self
+                                                             action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
     [about release];
     
-    UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:@"Preferences" style:UIBarButtonItemStyleBordered target:self action:@selector(prefsClicked:)];
+    UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil)
+                                                              style:UIBarButtonItemStyleBordered
+                                                             target:self
+                                                             action:@selector(prefsClicked:)];
     [self.navigationItem setLeftBarButtonItem:prefs];
     [prefs release];
 }
@@ -126,11 +132,11 @@
     /* Servers section. */
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Public";
+            cell.textLabel.text = NSLocalizedString(@"Public Servers", nil);
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Favourites";
+            cell.textLabel.text = NSLocalizedString(@"Favourite Servers", nil);
         } else if (indexPath.row == 2) {
-            cell.textLabel.text = @"LAN";
+            cell.textLabel.text = NSLocalizedString(@"LAN Servers", nil);
         }
     }
 
@@ -165,11 +171,13 @@
     NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@",
                             [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 #endif
-    NSString *aboutMessage = @"Low latency, high quality voice chat";
+    NSString *aboutMessage = NSLocalizedString(@"Low latency, high quality voice chat", nil);
     
     UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:@"Website", @"Legal", @"Support", nil];
+                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Website", nil),
+                                                                NSLocalizedString(@"Legal", nil),
+                                                                NSLocalizedString(@"Support", nil), nil];
     [aboutView show];
     [aboutView release];
 }

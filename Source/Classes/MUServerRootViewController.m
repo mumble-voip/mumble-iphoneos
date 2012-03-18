@@ -116,7 +116,11 @@
     _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
     
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
-                         [NSArray arrayWithObjects:@"Server", @"Channel", @"Messages", nil]];
+                         [NSArray arrayWithObjects:
+                            NSLocalizedString(@"Server", nil),
+                            NSLocalizedString(@"Channel", nil),
+                            NSLocalizedString(@"Messages", nil),
+                          nil]];
     
     _segmentIndex = 0;
     
@@ -211,7 +215,11 @@
 
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     if (err) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Connection closed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection closed", nil)
+                                                            message:[err localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                  otherButtonTitles:nil];
         [alertView show];
         [alertView release];
 
@@ -223,9 +231,16 @@
 
 - (void) serverModel:(MKServerModel *)model userKicked:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
     if (user == [model connectedUser]) {
-        NSString *reasonMsg = reason ? reason : @"(No reason)";
-        NSString *alertMsg = [NSString stringWithFormat:@"Kicked by %@ for reason: \"%@\"", [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were kicked" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *reasonMsg = reason ? reason : NSLocalizedString(@"(No reason)", nil);
+        NSString *title = NSLocalizedString(@"You were kicked", nil);
+        NSString *alertMsg = [NSString stringWithFormat:
+                                NSLocalizedString(@"Kicked by %@ for reason: \"%@\"", @"Kicked by user for reason"),
+                                    [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:alertMsg
+                                                           delegate:nil
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                  otherButtonTitles:nil];
         [alertView show];
         [alertView release];
         
@@ -235,9 +250,16 @@
 
 - (void) serverModel:(MKServerModel *)model userBanned:(MKUser *)user byUser:(MKUser *)actor forReason:(NSString *)reason {
     if (user == [model connectedUser]) {
-        NSString *reasonMsg = reason ? reason : @"(No reason)";
-        NSString *alertMsg = [NSString stringWithFormat:@"Banned by %@ for reason: \"%@\"", [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"You were banned" message:alertMsg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        NSString *reasonMsg = reason ? reason : NSLocalizedString(@"(No reason)", nil);
+        NSString *title = NSLocalizedString(@"You were banned", nil);
+        NSString *alertMsg = [NSString stringWithFormat:
+                                NSLocalizedString(@"Banned by %@ for reason: \"%@\"", nil),
+                                    [actor userName], reasonMsg];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:alertMsg
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                  otherButtonTitles:nil];
         [alertView show];
         [alertView release];
         
@@ -246,30 +268,30 @@
 }
 
 - (void) serverModel:(MKServerModel *)model permissionDenied:(MKPermission)perm forUser:(MKUser *)user inChannel:(MKChannel *)channel {
-    [[MUNotificationController sharedController] addNotification:@"Permission denied"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Permission denied", nil)];
 }
 
 - (void) serverModelInvalidChannelNameError:(MKServerModel *)model {
-    [[MUNotificationController sharedController] addNotification:@"Invalid channel name"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Invalid channel name", nil)];
 }
 
 - (void) serverModelModifySuperUserError:(MKServerModel *)model {
-    [[MUNotificationController sharedController] addNotification:@"Cannot modify SuperUser"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Cannot modify SuperUser", nil)];
 }
 
 - (void) serverModelTextMessageTooLongError:(MKServerModel *)model {
-    [[MUNotificationController sharedController] addNotification:@"Message too long"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Message too long", nil)];
 }
 
 - (void) serverModelTemporaryChannelError:(MKServerModel *)model {
-    [[MUNotificationController sharedController] addNotification:@"Not permitted in temporary channel"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Not permitted in temporary channel", nil)];
 }
 
 - (void) serverModel:(MKServerModel *)model missingCertificateErrorForUser:(MKUser *)user {
     if (user == nil) {
-        [[MUNotificationController sharedController] addNotification:@"Missing certificate"];
+        [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Missing certificate", nil)];
     } else {
-        [[MUNotificationController sharedController] addNotification:@"Missing certificate for user"];
+        [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Missing certificate for user", nil)];
     }
 }
 
@@ -282,14 +304,17 @@
 }
 
 - (void) serverModelChannelFullError:(MKServerModel *)model {
-    [[MUNotificationController sharedController] addNotification:@"Channel is full"];
+    [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Channel is full", nil)];
 }
 
 - (void) serverModel:(MKServerModel *)model permissionDeniedForReason:(NSString *)reason {
     if (reason == nil) {
-        [[MUNotificationController sharedController] addNotification:@"Permission denied"];
+        [[MUNotificationController sharedController] addNotification:NSLocalizedString(@"Permission denied", nil)];
     } else {
-        [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:@"Permission denied: %@", reason]];
+        [[MUNotificationController sharedController] addNotification:[NSString stringWithFormat:
+                                                                        NSLocalizedString(@"Permission denied: %@",
+                                                                                          @"Permission denied with reason"),
+                                                                        reason]];
     }
 }
 
@@ -309,24 +334,24 @@
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     BOOL inMessagesView = [[self viewControllers] objectAtIndex:0] == _messagesView;
     
-    _disconnectIndex = [actionSheet addButtonWithTitle:@"Disconnect"];
+    _disconnectIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Disconnect", nil)];
     [actionSheet setDestructiveButtonIndex:0];
     
-    _accessTokensIndex = [actionSheet addButtonWithTitle:@"Access Tokens"];
+    _accessTokensIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Access Tokens", nil)];
     
     if (!inMessagesView)
-        _certificatesIndex = [actionSheet addButtonWithTitle:@"Certificates"];
+        _certificatesIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Certificates", nil)];
     else
         _certificatesIndex = -1;
 
     if (![connUser isAuthenticated]) {
-        _selfRegisterIndex = [actionSheet addButtonWithTitle:@"Self-Register"];
+        _selfRegisterIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Register", nil)];
     } else {
         _selfRegisterIndex = -1;
     }
     
     if (inMessagesView)
-        _clearMessagesIndex = [actionSheet addButtonWithTitle:@"Clear Messages"];
+        _clearMessagesIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Clear Messages", nil)];
     else
         _clearMessagesIndex = -1;
     
@@ -335,20 +360,20 @@
     _selfUnmuteAndUndeafenIndex = -1;
 
     if ([connUser isSelfMuted] && [connUser isSelfDeafened]) {
-        _selfUnmuteAndUndeafenIndex = [actionSheet addButtonWithTitle:@"Unmute and undeafen"];
+        _selfUnmuteAndUndeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Unmute and undeafen", nil)];
     } else {
         if (![connUser isSelfMuted])
-            _selfMuteIndex = [actionSheet addButtonWithTitle:@"Self-Mute"];
+            _selfMuteIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Mute", nil)];
         else
-            _selfMuteIndex = [actionSheet addButtonWithTitle:@"Unmute Self"];
+            _selfMuteIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Unmute Self", nil)];
 
         if (![connUser isSelfDeafened])
-            _selfDeafenIndex = [actionSheet addButtonWithTitle:@"Self-Deafen"];
+            _selfDeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Deafen", nil)];
         else
-            _selfDeafenIndex = [actionSheet addButtonWithTitle:@"Undeafen Self"];
+            _selfDeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Undeafen Self", nil)];
     }
     
-    int cancelIndex = [actionSheet addButtonWithTitle:@"Cancel"];
+    int cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [actionSheet setCancelButtonIndex:cancelIndex];
 
     [actionSheet setDelegate:self];
@@ -394,15 +419,19 @@
         [certView release];
         [navCtrl release];
     } else if (buttonIndex == _selfRegisterIndex) { // Self-Register
-        NSString *title = @"User Registration";
+        NSString *title = NSLocalizedString(@"User Registration", nil);
         NSString *msg = [NSString stringWithFormat:
-                            @"You are about to register yourself on this server. "
-                            @"This cannot be undone, and your username cannot be changed once this is done. "
-                            @"You will forever be known as '%@' on this server.\n\n"
-                            @"Are you sure you want to register yourself?", [connUser userName]];
+                            NSLocalizedString(@"You are about to register yourself on this server. "
+                                              @"This cannot be undone, and your username cannot be changed once this is done. "
+                                              @"You will forever be known as '%@' on this server.\n\n"
+                                              @"Are you sure you want to register yourself?", 
+                                              @"Self-registration with given username"),
+                            [connUser userName]];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
                                                             message:msg
-                                                           delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+                                                           delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"No", nil)
+                                                  otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
         [alertView show];
         [alertView release];
     } else if (buttonIndex == _clearMessagesIndex) { // Clear Messages

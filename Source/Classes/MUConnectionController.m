@@ -104,10 +104,15 @@
 }
 
 - (void) showConnectingView {
-    _alertView = [[UIAlertView alloc] initWithTitle:@"Connecting..."
-                                            message:[NSString stringWithFormat:@"Connecting to %@:%u", _hostname, _port]
+    NSString *title = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Connecting", nil)];
+    NSString *msg = [NSString stringWithFormat:
+                        NSLocalizedString(@"Connecting to %@:%u", @"Connecting to hostname:port"),
+                            _hostname, _port];
+    
+    _alertView = [[UIAlertView alloc] initWithTitle:title
+                                            message:msg
                                            delegate:self
-                                  cancelButtonTitle:@"Cancel"
+                                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                   otherButtonTitles:nil];
     [_alertView show];
     _timer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateTitle) userInfo:nil repeats:YES];
@@ -173,7 +178,7 @@
     if (_numDots == 2) { dots = @".. "; }
     if (_numDots == 3) { dots = @"..."; }
     
-    [_alertView setTitle:[NSString stringWithFormat:@"%@%@", @"Connecting", dots]];
+    [_alertView setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Connecting", nil), dots]];
 }
 
 #pragma mark - MKConnectionDelegate
@@ -186,7 +191,11 @@
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     [self hideConnectingView];
     if (err) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Connection closed" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection closed", nil)
+                                                            message:[err localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                  otherButtonTitles:nil];
         [alertView show];
         [alertView release];
         [self teardownConnection];
@@ -195,7 +204,11 @@
 
 - (void) connection:(MKConnection*)conn unableToConnectWithError:(NSError *)err {
     [self hideConnectingView];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to connect" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unable to connect", nil)
+                                                        message:[err localizedDescription]
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                              otherButtonTitles:nil];
     [alertView show];
     [alertView release];
     [self teardownConnection];
@@ -208,36 +221,42 @@
     MKCertificate *cert = [[conn peerCertificates] objectAtIndex:0];
     NSString *serverDigest = [cert hexDigest];
     if (storedDigest) {
-        // Match?
         if ([storedDigest isEqualToString:serverDigest]) {
+            // Match
             [conn setIgnoreSSLVerification:YES];
             [conn reconnect];
             return;
-            
+        } else {
             // Mismatch.  The server is using a new certificate, different from the one it previously
             // presented to us.
-        } else {
             [self hideConnectingView];
-            NSString *title = @"Certificate Mismatch";
-            NSString *msg = @"The server presented a different certificate than the one stored for this server";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-            [alert addButtonWithTitle:@"Ignore"];
-            [alert addButtonWithTitle:@"Trust New Certificate"];
-            [alert addButtonWithTitle:@"Show Certificates"];
+            NSString *title = NSLocalizedString(@"Certificate Mismatch", nil);
+            NSString *msg = NSLocalizedString(@"The server presented a different certificate than the one stored for this server", nil);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                            message:msg
+                                                           delegate:self
+                                                  cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                                  otherButtonTitles:nil];
+            [alert addButtonWithTitle:NSLocalizedString(@"Ignore", nil)];
+            [alert addButtonWithTitle:NSLocalizedString(@"Trust New Certificate", nil)];
+            [alert addButtonWithTitle:NSLocalizedString(@"Show Certificates", nil)];
             [alert show];
             [alert release];
         }
-        
+    } else {
         // No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
         // what to do.
-    } else {
         [self hideConnectingView];
-        NSString *title = @"Unable to validate server certificate";
-        NSString *msg = @"Mumble was unable to validate the certificate chain of the server.";
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alert addButtonWithTitle:@"Ignore"];
-        [alert addButtonWithTitle:@"Trust Certificate"];
-        [alert addButtonWithTitle:@"Show Certificates"];
+        NSString *title = NSLocalizedString(@"Unable to validate server certificate", nil);
+        NSString *msg = NSLocalizedString(@"Mumble was unable to validate the certificate chain of the server.", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                              otherButtonTitles:nil];
+        [alert addButtonWithTitle:NSLocalizedString(@"Ignore", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Trust Certificate", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Show Certificates", nil)];
         [alert show];
         [alert release];
     }
@@ -245,7 +264,7 @@
 
 // The server rejected our connection.
 - (void) connection:(MKConnection *)conn rejectedWithReason:(MKRejectReason)reason explanation:(NSString *)explanation {
-    NSString *title = @"Connection Rejected";
+    NSString *title = NSLocalizedString(@"Connection Rejected", nil);
     NSString *msg = nil;
     UIAlertView *alert = nil;
     
@@ -254,11 +273,11 @@
     
     switch (reason) {
         case MKRejectReasonNone:
-            msg = @"No reason";
+            msg = NSLocalizedString(@"No reason", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:nil
-                                     cancelButtonTitle:@"OK"
+                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                      otherButtonTitles:nil];
             break;
         case MKRejectReasonWrongVersion:
@@ -266,64 +285,64 @@
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:nil
-                                     cancelButtonTitle:@"OK"
+                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                      otherButtonTitles:nil];
 
             break;
         case MKRejectReasonInvalidUsername:
-            msg = @"Invalid username";
+            msg = NSLocalizedString(@"Invalid username", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:self
-                                     cancelButtonTitle:@"Cancel"
-                                     otherButtonTitles:@"Reconnect", nil];
+                                     cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                     otherButtonTitles:NSLocalizedString(@"Reconnect", nil), nil];
             [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
             [[alert textFieldAtIndex:0] setText:_username];
             break;
         case MKRejectReasonWrongUserPassword:
-            msg = [NSString stringWithFormat:@"Wrong certificate or password for existing user"];
+            msg = NSLocalizedString(@"Wrong certificate or password for existing user", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:self
-                                     cancelButtonTitle:@"Cancel"
-                                     otherButtonTitles:@"Reconnect", nil];
+                                     cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                     otherButtonTitles:NSLocalizedString(@"Reconnect", nil), nil];
             [alert setAlertViewStyle:UIAlertViewStyleSecureTextInput];
             [[alert textFieldAtIndex:0] setText:_password];
             break;
         case MKRejectReasonWrongServerPassword:
-            msg = @"Wrong server password";
+            msg = NSLocalizedString(@"Wrong server password", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:self
-                                     cancelButtonTitle:@"Cancel"
-                                     otherButtonTitles:@"Reconnect", nil];
+                                     cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                     otherButtonTitles:NSLocalizedString(@"Reconnect", nil), nil];
             [alert setAlertViewStyle:UIAlertViewStyleSecureTextInput];
             [[alert textFieldAtIndex:0] setText:_password];
             break;
         case MKRejectReasonUsernameInUse:
-            msg = @"Username already in use";
+            msg = NSLocalizedString(@"Username already in use", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:self
-                                     cancelButtonTitle:@"Cancel"
-                                     otherButtonTitles:@"Reconnect", nil];
+                                     cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                     otherButtonTitles:NSLocalizedString(@"Reconnect", nil), nil];
             [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
             [[alert textFieldAtIndex:0] setText:_username];
             break;
         case MKRejectReasonServerIsFull:
-            msg = @"Server is full";
+            msg = NSLocalizedString(@"Server is full", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:nil
-                                     cancelButtonTitle:@"OK"
+                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                      otherButtonTitles:nil];
             break;
         case MKRejectReasonNoCertificate:
-            msg = @"A certificate is needed to connect to this server";
+            msg = NSLocalizedString(@"A certificate is needed to connect to this server", nil);
             alert = [[UIAlertView alloc] initWithTitle:title
                                                message:msg
                                               delegate:nil
-                                     cancelButtonTitle:@"OK"
+                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                      otherButtonTitles:nil];
             break;
     }

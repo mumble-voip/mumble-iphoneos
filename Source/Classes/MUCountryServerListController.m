@@ -117,10 +117,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *serverItem = [_countryServers objectAtIndex:[indexPath row]];
 
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"] delegate:self
-                                            cancelButtonTitle:@"Cancel"
-                                            destructiveButtonTitle:nil
-                                            otherButtonTitles:@"Add as favourite", @"Connect", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"]
+                                                       delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:NSLocalizedString(@"Add as favourite", nil),
+                                                                NSLocalizedString(@"Connect", nil), nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:[self tableView]];
     [sheet release];
@@ -132,11 +134,13 @@
 
     // Connect
     if (index == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Username"
-                                                        message:@"Please enter the username you wish to use on this server"
+        NSString *title = NSLocalizedString(@"Username", nil);
+        NSString *msg = NSLocalizedString(@"Please enter the username you wish to use on this server", nil);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:msg
                                                        delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                              otherButtonTitles:@"Connect", nil];
+                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Connect", nil), nil];
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[serverItem objectForKey:@"ip"] port:[[serverItem objectForKey:@"port"] intValue]]];
         [alert show];

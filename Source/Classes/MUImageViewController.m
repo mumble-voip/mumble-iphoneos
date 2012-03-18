@@ -103,7 +103,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationItem.title = [NSString stringWithFormat:@"%i of %i", 1, [_images count]];
+    self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%i of %i", nil), 1, [_images count]];
     
     UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
     self.navigationItem.rightBarButtonItem = actionButton;
@@ -122,7 +122,7 @@
         NSInteger pg = (NSInteger)(pt.x / self.view.frame.size.width);
         if (pg != _curPage) {
             _curPage = pg;
-            self.navigationItem.title = [NSString stringWithFormat:@"%i of %i", 1+_curPage, [_images count]];
+            self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%i of %i", nil), 1+_curPage, [_images count]];
         }
     }
 }
@@ -146,10 +146,10 @@
 
 - (void) image:(UIImage *)img didFinishSavingWithError:(NSError *)err contextInfo:(void *)userInfo {
     if (err != nil) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Unable to save image"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unable to save image", nil)
                                                             message:[err description]
                                                            delegate:nil 
-                                                   cancelButtonTitle:@"OK"
+                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                   otherButtonTitles:nil];
         [alertView show];
         [alertView release];
@@ -157,7 +157,11 @@
 }
 
 - (void) actionClicked:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Export Image" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Export to Photos", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Export Image", nil)
+                                                             delegate:self
+                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:NSLocalizedString(@"Export to Photos", nil), nil];
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [actionSheet showFromBarButtonItem:sender animated:YES];
     [actionSheet release];

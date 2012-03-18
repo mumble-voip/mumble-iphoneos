@@ -52,7 +52,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    self.navigationItem.title = @"Legal";
+    self.navigationItem.title = NSLocalizedString(@"Legal", nil);
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
