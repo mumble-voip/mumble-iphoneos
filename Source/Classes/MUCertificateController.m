@@ -77,8 +77,8 @@
                 if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&pkeyData) == noErr) {
                     cert = [MKCertificate certificateWithCertificate:certData privateKey:pkeyData];
                     [pkeyData release];
-                    [certData release];
                 }
+                [certData release];                
             }
         }
     }
