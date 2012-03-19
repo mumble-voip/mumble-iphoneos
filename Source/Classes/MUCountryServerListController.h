@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-@interface MUCountryServerListController : UITableViewController <UIActionSheetDelegate> 
+@interface MUCountryServerListController : UITableViewController <UIActionSheetDelegate, UISearchBarDelegate> 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers;
 - (void) dealloc;
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem;
