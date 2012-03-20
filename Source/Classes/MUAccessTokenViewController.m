@@ -210,7 +210,7 @@
 
 - (void) textFieldDidEndOnExit:(UITextField *)sender {
     [sender resignFirstResponder];
-    [_tokens replaceObjectAtIndex:_editingRow withObject:[_tokenValue copy]];
+    [_tokens replaceObjectAtIndex:_editingRow withObject:_tokenValue];
     [_tokenValue release];
     _tokenValue = nil;
     NSInteger row = _editingRow;
