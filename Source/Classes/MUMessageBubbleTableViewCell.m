@@ -159,7 +159,6 @@
 }
 
 - (void) drawRect:(CGRect)rect {
-    rect = self.bounds;
 
     UIImage *balloon = nil;
     UIImage *stretchableBalloon = nil;
