@@ -39,10 +39,11 @@
 #import "MUServerCell.h"
 #import "MUColor.h"
 
-@interface MUCountryServerListController () <UIAlertViewDelegate, UISearchBarDelegate> {
-    NSMutableArray   *_visibleCountryServers;
-    NSArray   *_countryServers;
-    NSString  *_countryName;
+@interface MUCountryServerListController () <UIAlertViewDelegate, UISearchBarDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
+    UITableView    *_tableView;
+    NSMutableArray *_visibleCountryServers;
+    NSArray        *_countryServers;
+    NSString       *_countryName;
 }
 @end
 
@@ -52,17 +53,10 @@
     self = [super init];
     if (self == nil)
         return nil;
-
+    
     _countryServers = [servers retain];
     _visibleCountryServers = [servers mutableCopy];
     _countryName = [[country copy] retain];
-
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
-    searchBar.delegate = self;
-    searchBar.barStyle = UIBarStyleBlackOpaque;
-    [searchBar sizeToFit];
-	[self.view addSubview:searchBar];
-	[searchBar release];
     
     return self;
 }
@@ -75,17 +69,40 @@
     [super dealloc];
 }
 
-- (void) viewDidLoad{
+- (UITableView *) tableView {
+    return _tableView;
+}
+
+- (void) viewDidLoad {    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+    [_tableView setDataSource:self];
+    [_tableView setDelegate:self];
+    [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [self.view addSubview:_tableView];
+    [_tableView release];
+    
     [self resetSearch];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [[self navigationItem] setTitle:_countryName];
+
+    self.navigationItem.titleView = nil;
+    self.navigationItem.title = [_countryName copy];
+    self.navigationItem.hidesBackButton = NO;
+    
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = searchButton;
+    [searchButton release];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -222,7 +239,7 @@
 #pragma mark -
 #pragma mark SearchBar methods
 
-- (void) resetSearch{
+- (void) resetSearch {
     NSMutableArray *array = [_countryServers mutableCopy];
     NSMutableArray *old = _visibleCountryServers;
     
@@ -248,6 +265,7 @@
 
 #pragma mark -
 #pragma mark Search Bar Delegate Methods
+
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSString *searchText = searchBar.text;
     [self handleSearchForTerm:searchText];
@@ -263,11 +281,83 @@
     [self handleSearchForTerm:searchText];
 }
 
-- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    searchBar.text = @"";
+#pragma mark -
+#pragma mark UIKeyboard notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    
+    NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval t;
+    [val getValue:&t];
+    
+    val = [userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
+    UIViewAnimationCurve c;
+    [val getValue:&c];
+    
+    val = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect r;
+    [val getValue:&r];
+    r = [self.view convertRect:r fromView:nil];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:t];
+    [UIView setAnimationCurve:c];
+    _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, r.size.height, 0.0f);
+    _tableView.scrollIndicatorInsets = _tableView.contentInset;
+    [UIView commitAnimations];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    
+    NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval t;
+    [val getValue:&t];
+    
+    val = [userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
+    UIViewAnimationCurve c;
+    [val getValue:&c];
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:t];
+    [UIView setAnimationCurve:c];
+    _tableView.contentInset = UIEdgeInsetsZero;
+    _tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    [UIView commitAnimations];
+}
+
+#pragma mark -
+#pragma mark Actions
+
+- (void) searchButtonClicked:(id)sender {
+    self.navigationItem.hidesBackButton = YES;
+    
+    UIBarButtonItem *cancelSearchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelSearchButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = cancelSearchButton;
+    [cancelSearchButton release];
+    
+    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    searchBar.delegate = self;
+    searchBar.barStyle = UIBarStyleBlack;
+    [searchBar sizeToFit];
+    self.navigationItem.titleView = searchBar;
+    [searchBar release];
+
+    [searchBar becomeFirstResponder];
+}
+
+- (void) cancelSearchButtonClicked:(id)sender {
     [self resetSearch];
     [self.tableView reloadData];
-    [searchBar resignFirstResponder];
+    
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = searchButton;
+    [searchButton release];
+    
+    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.titleView = nil;
+    [self.navigationItem setTitle:_countryName];
 }
 
 @end
