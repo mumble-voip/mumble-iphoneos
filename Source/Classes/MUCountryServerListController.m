@@ -88,7 +88,7 @@
     [super viewWillAppear:animated];
 
     self.navigationItem.titleView = nil;
-    self.navigationItem.title = [_countryName copy];
+    self.navigationItem.title = _countryName;
     self.navigationItem.hidesBackButton = NO;
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
