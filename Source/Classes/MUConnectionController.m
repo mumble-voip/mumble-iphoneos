@@ -147,7 +147,7 @@
                                kSecMatchLimitOne,        kSecMatchLimit,
                                nil];
         if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
-            [_connection setClientIdentity:secIdentity];
+            [_connection setCertificateChain:[NSArray arrayWithObject:(id)secIdentity]];
             CFRelease(secIdentity);
         }
     }

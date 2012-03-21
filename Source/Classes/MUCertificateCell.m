@@ -38,6 +38,7 @@
     IBOutlet UILabel      *_issuerLabel;
     IBOutlet UILabel      *_expiryLabel;
     BOOL                  _isCurrentCert;
+    BOOL                  _isIntermediate;
 }
 @end
 
@@ -64,6 +65,19 @@
     _expiryLabel.text = expiryText;
 }
 
+- (void) setIsIntermediate:(BOOL)isIntermediate {
+    _isIntermediate = isIntermediate;
+    if (_isIntermediate) {
+        [_certImage setImage:[UIImage imageNamed:@"certificatecell-intermediate"]];
+    } else {
+        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];   
+    }
+}
+
+- (BOOL) isIntermediate {
+    return _isIntermediate;
+}
+
 - (void) setIsCurrentCertificate:(BOOL)isCurrent {
     _isCurrentCert = isCurrent;
     if (isCurrent) {
@@ -71,7 +85,11 @@
         [_nameLabel setTextColor:[MUColor selectedTextColor]];
         [_emailLabel setTextColor:[MUColor selectedTextColor]];
     } else {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];
+        if (_isIntermediate) {
+            [_certImage setImage:[UIImage imageNamed:@"certificatecell-intermediate"]];
+        } else {
+            [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];   
+        }
         [_nameLabel setTextColor:[UIColor blackColor]];
         [_emailLabel setTextColor:[UIColor blackColor]];
     }

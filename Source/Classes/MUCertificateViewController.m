@@ -58,8 +58,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        [MUCertificateController certificateWithPersistentRef:persistentRef];
-        _certificates = [[NSArray arrayWithObject:[MUCertificateController certificateAndPrivateKeyWithPersistentRef:persistentRef]] retain];
+        _certificates = [[NSArray arrayWithObject:[MUCertificateController certificateWithPersistentRef:persistentRef]] retain];
         _allowExportAndDelete = YES;
         _persistentRef = [persistentRef retain];
         

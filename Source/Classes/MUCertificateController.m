@@ -40,14 +40,25 @@
                            kCFBooleanTrue,     kSecReturnRef,
                            kSecMatchLimitOne,  kSecMatchLimit,
                            nil];
-    SecIdentityRef identity = NULL;
+    CFTypeRef thing = NULL;
     MKCertificate *cert = nil;
-    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-        SecCertificateRef secCert;
-        if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+    if (SecItemCopyMatching((CFDictionaryRef)query, &thing) == noErr && thing != NULL) {
+        CFTypeID receivedType = CFGetTypeID(thing);
+        if (receivedType == SecIdentityGetTypeID()) {
+            SecIdentityRef identity = (SecIdentityRef) thing;
+            SecCertificateRef secCert = NULL;
+            if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+                NSData *secData = (NSData *)SecCertificateCopyData(secCert);
+                cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+                [secData release];
+            }
+        } else if (receivedType == SecCertificateGetTypeID()) {
+            SecCertificateRef secCert = (SecCertificateRef) thing;
             NSData *secData = (NSData *)SecCertificateCopyData(secCert);
             cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
             [secData release];
+        } else {
+            return nil;
         }
     }
     return cert;
@@ -60,13 +71,16 @@
                            kCFBooleanTrue,     kSecReturnRef,
                            kSecMatchLimitOne,  kSecMatchLimit,
                            nil];
-    SecIdentityRef identity = NULL;
+    CFTypeRef thing = NULL;
     MKCertificate *cert = nil;
-    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
+    if (SecItemCopyMatching((CFDictionaryRef)query, &thing) == noErr && thing != NULL) {
+        // Only identities can have private keys.
+        if (CFGetTypeID(thing) != SecIdentityGetTypeID())
+            return nil;
         SecCertificateRef secCert;
-        if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+        if (SecIdentityCopyCertificate((SecIdentityRef) thing, &secCert) == noErr) {
             SecKeyRef secKey;
-            if (SecIdentityCopyPrivateKey(identity, &secKey) == noErr) {
+            if (SecIdentityCopyPrivateKey((SecIdentityRef) thing, &secKey) == noErr) {
                 NSData *certData = (NSData *)SecCertificateCopyData(secCert);
                 NSData *pkeyData = nil;
                 query = [NSDictionary dictionaryWithObjectsAndKeys:
