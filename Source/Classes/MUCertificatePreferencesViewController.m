@@ -41,6 +41,7 @@
     NSMutableArray   *_certificateItems;
     BOOL             _picker;
     NSUInteger       _selectedIndex;
+    BOOL             _showAll;
 }
 - (void) fetchCertificates;
 - (void) deleteCertificateForRow:(NSUInteger)row;
@@ -54,6 +55,7 @@
 - (id) init {
     if ((self = [super init])) {
         [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        _showAll = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CertificatesShowIntermediates"] boolValue];
     }
     return self;
 }
@@ -97,7 +99,6 @@
         cell = [MUCertificateCell loadFromNib];
     
     // Configure the cell...
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     MKCertificate *cert = [dict objectForKey:@"cert"];
     [cell setSubjectName:[cert subjectName]];
@@ -108,13 +109,21 @@
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
 
+    if ([[dict objectForKey:@"isIdentity"] boolValue]) {
+        [cell setIsIntermediate:NO];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    } else {
+        [cell setIsIntermediate:YES];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
     if ([persistentRef isEqualToData:curPersistentRef]) {
         _selectedIndex = [indexPath row];
         [cell setIsCurrentCertificate:YES];
     } else {
         [cell setIsCurrentCertificate:NO];
     }
-    
+
     [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
     
     return (UITableViewCell *) cell;
@@ -129,6 +138,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
+    
+    // Don't allow selection of intermediates.
+    if (![[dict objectForKey:@"isIdentity"] boolValue]) {
+        return;
+    }
+        
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     [[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
 
@@ -164,12 +179,14 @@
 #pragma mark Target/actions
 
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
-    NSString *title = NSLocalizedString(@"Add Certificate", @"Add certificate UIActionSheet");
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title
+    NSString *showAllCerts = NSLocalizedString(@"Show All Certificates", nil);
+    NSString *showIdentities = NSLocalizedString(@"Show Identities Only", nil);
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:NSLocalizedString(@"Generate New Certificate", nil),
+                                                                _showAll ? showIdentities : showAllCerts,
                                                                 NSLocalizedString(@"Import From iTunes", nil),
                             nil];
     [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
@@ -189,7 +206,12 @@
         [certGen release];
         [[self navigationController] presentModalViewController:navCtrl animated:YES];
         [navCtrl release];
-    } else if (idx == 1) { // Import From Disk
+    } else if (idx == 1) { // Show All Certificates; Show Identities Only
+        _showAll = !_showAll;
+        [[NSUserDefaults standardUserDefaults] setBool:_showAll forKey:@"CertificatesShowIntermediates"];
+        [self fetchCertificates];
+        [self.tableView reloadData];
+    } else if (idx == 2) { // Import From Disk
         MUCertificateDiskImportViewController *diskImportViewController = [[MUCertificateDiskImportViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
         [[self navigationController] presentModalViewController:navController animated:YES];
@@ -213,7 +235,60 @@
             MKCertificate *cert = [MUCertificateController certificateWithPersistentRef:persistentRef];
             if (cert) {
                 [_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                                              cert, @"cert", persistentRef, @"persistentRef", nil]];
+                                              cert,                          @"cert",
+                                              persistentRef,                 @"persistentRef",
+                                              [NSNumber numberWithBool:YES], @"isIdentity",
+                                              nil]];
+            }
+        }
+    }
+
+    if (_showAll) {
+        // Extract hashes of identity certs
+        NSMutableArray *identityCertHashes = [[[NSMutableArray alloc] init] autorelease];
+        for (NSDictionary *item in _certificateItems) {
+            [identityCertHashes addObject:[[item objectForKey:@"cert"] digest]];
+        }
+
+        // Extract all intermediates
+        NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    kSecClassCertificate, kSecClass,
+                                    kCFBooleanTrue,       kSecReturnPersistentRef,
+                                    kSecMatchLimitAll,    kSecMatchLimit, nil];
+        NSArray *persistentRefs = nil;
+        SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&persistentRefs);
+        [persistentRefs autorelease];
+    
+        for (NSData *ref in persistentRefs) {
+            NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                                   ref,      kSecValuePersistentRef,
+                                   kCFBooleanTrue,     kSecReturnRef,
+                                   kSecMatchLimitOne,  kSecMatchLimit,
+                                   nil];
+            SecCertificateRef secCert;
+            if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secCert) == noErr && secCert != NULL) {
+                NSData *certData = (NSData *) SecCertificateCopyData(secCert);
+                CFRelease(secCert);
+                
+                MKCertificate *consideredCert = [MKCertificate certificateWithCertificate:certData privateKey:nil];
+                NSData *consideredDigest = [consideredCert digest];
+                [certData release];
+    
+                BOOL alreadyPresent = NO;
+                for (NSData *digest in identityCertHashes) {
+                    if ([consideredDigest isEqualToData:digest]) {
+                        alreadyPresent = YES;
+                        break;
+                    }
+                }
+
+                if (!alreadyPresent) {
+                    [_certificateItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                  consideredCert,                @"cert",
+                                                  ref,                           @"persistentRef",
+                                                  [NSNumber numberWithBool:NO],  @"isIdentity",
+                                                  nil]];
+                }
             }
         }
     }

@@ -205,9 +205,25 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSArray *items = nil;
     OSStatus err = SecPKCS12Import((CFDataRef)transformedPkcs12Data, (CFDictionaryRef)dict, (CFArrayRef *)&items);
 
-    if (err == errSecSuccess && [items count] > 0) {
+    if (err == errSecSuccess && [items count] > 0) {        
+        // Add all elements except the leaf certificate to the keychain
         NSDictionary *pkcsDict = [items objectAtIndex:0];
-        // Get the SecIdentityRef
+        NSArray *chain = [pkcsDict objectForKey:(NSString *)kSecImportItemCertChain];
+        for (int i = 1; i < [chain count]; i++) {
+            NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [chain objectAtIndex:i], kSecValueRef, nil];
+            err = SecItemAdd((CFDictionaryRef)op, NULL);
+            if (err != noErr) {
+                if (err == errSecDuplicateItem) {
+                    // Duplicates are OK in this case.
+                } else {
+                    ShowAlertDialog(NSLocalizedString(@"Import Error", nil),
+                                    NSLocalizedString(@"Mumble was unable to import one of the intermediate certificates in the certificate chain.", nil));
+                }
+            }
+        }
+        
+        // Get the SecIdentityRef, and add it to the keychain
         SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
         NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
                             (id)identity, kSecValueRef,

@@ -37,6 +37,9 @@
 - (void) setIssuerText:(NSString *)issuerText;
 - (void) setExpiryText:(NSString *)expiryText;
 
+- (BOOL) isIntermediate;
+- (void) setIsIntermediate:(BOOL)isIntermediate;
+
 - (BOOL) isCurrentCertificate;
 - (void) setIsCurrentCertificate:(BOOL)isSelected;
 

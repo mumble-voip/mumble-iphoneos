@@ -42,6 +42,8 @@
 		2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B1116BE9B7002B8514 /* CFNetwork.framework */; };
 		2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B5116BE9BA002B8514 /* Security.framework */; };
 		286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */; };
+		287172AB151A041A00153D74 /* certificatecell-intermediate.png in Resources */ = {isa = PBXBuildFile; fileRef = 287172A9151A041A00153D74 /* certificatecell-intermediate.png */; };
+		287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287172AA151A041A00153D74 /* certificatecell-intermediate@2x.png */; };
 		287639F911D29D99009DB8B6 /* MUCertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */; };
 		287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */; };
 		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
@@ -263,6 +265,8 @@
 		2861C2B5116BE9BA002B8514 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		286E925E148452A000B13593 /* MUVoiceActivitySetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUVoiceActivitySetupViewController.h; sourceTree = "<group>"; };
 		286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUVoiceActivitySetupViewController.m; sourceTree = "<group>"; };
+		287172A9151A041A00153D74 /* certificatecell-intermediate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell-intermediate.png"; path = "Resources/certificatecell-intermediate.png"; sourceTree = "<group>"; };
+		287172AA151A041A00153D74 /* certificatecell-intermediate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell-intermediate@2x.png"; path = "Resources/certificatecell-intermediate@2x.png"; sourceTree = "<group>"; };
 		287639F711D29D99009DB8B6 /* MUCertificateCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateCreationProgressView.h; sourceTree = "<group>"; };
 		287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCreationProgressView.m; sourceTree = "<group>"; };
 		287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCreationProgressView.xib; sourceTree = "<group>"; };
@@ -739,6 +743,8 @@
 				28DC1C1B13DE596B0037CDC2 /* certificate512.png */,
 				28DC1C1C13DE596B0037CDC2 /* certificatecell-selected.png */,
 				28DC1C1D13DE596B0037CDC2 /* certificatecell-selected@2x.png */,
+				287172A9151A041A00153D74 /* certificatecell-intermediate.png */,
+				287172AA151A041A00153D74 /* certificatecell-intermediate@2x.png */,
 				28DC1C1E13DE596B0037CDC2 /* certificatecell.png */,
 				28DC1C1F13DE596B0037CDC2 /* certificatecell@2x.png */,
 				28DC1C2013DE596B0037CDC2 /* channel.png */,
@@ -1073,6 +1079,8 @@
 				285E2A69150D729B008AE185 /* Release.xcconfig in Resources */,
 				280256381510D70D00178B08 /* Localizable.strings in Resources */,
 				2802563C1510DDCA00178B08 /* Localizable.strings in Resources */,
+				287172AB151A041A00153D74 /* certificatecell-intermediate.png in Resources */,
+				287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

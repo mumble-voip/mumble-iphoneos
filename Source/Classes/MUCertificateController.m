@@ -40,14 +40,25 @@
                            kCFBooleanTrue,     kSecReturnRef,
                            kSecMatchLimitOne,  kSecMatchLimit,
                            nil];
-    SecIdentityRef identity = NULL;
+    CFTypeRef thing = NULL;
     MKCertificate *cert = nil;
-    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
-        SecCertificateRef secCert;
-        if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+    if (SecItemCopyMatching((CFDictionaryRef)query, &thing) == noErr && thing != NULL) {
+        CFTypeID receivedType = CFGetTypeID(thing);
+        if (receivedType == SecIdentityGetTypeID()) {
+            SecIdentityRef identity = (SecIdentityRef) thing;
+            SecCertificateRef secCert = NULL;
+            if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+                NSData *secData = (NSData *)SecCertificateCopyData(secCert);
+                cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+                [secData release];
+            }
+        } else if (receivedType == SecCertificateGetTypeID()) {
+            SecCertificateRef secCert = (SecCertificateRef) thing;
             NSData *secData = (NSData *)SecCertificateCopyData(secCert);
             cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
             [secData release];
+        } else {
+            return nil;
         }
     }
     return cert;
@@ -60,13 +71,16 @@
                            kCFBooleanTrue,     kSecReturnRef,
                            kSecMatchLimitOne,  kSecMatchLimit,
                            nil];
-    SecIdentityRef identity = NULL;
+    CFTypeRef thing = NULL;
     MKCertificate *cert = nil;
-    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&identity) == noErr && identity != NULL) {
+    if (SecItemCopyMatching((CFDictionaryRef)query, &thing) == noErr && thing != NULL) {
+        // Only identities can have private keys.
+        if (CFGetTypeID(thing) != SecIdentityGetTypeID())
+            return nil;
         SecCertificateRef secCert;
-        if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
+        if (SecIdentityCopyCertificate((SecIdentityRef) thing, &secCert) == noErr) {
             SecKeyRef secKey;
-            if (SecIdentityCopyPrivateKey(identity, &secKey) == noErr) {
+            if (SecIdentityCopyPrivateKey((SecIdentityRef) thing, &secKey) == noErr) {
                 NSData *certData = (NSData *)SecCertificateCopyData(secCert);
                 NSData *pkeyData = nil;
                 query = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -133,6 +147,78 @@
     }
 
     return [array autorelease];
+}
+
+// Attempts to build a certificate chain from the SecIdentityRef identified by persistentRef.
+// If trust can be established for the chain, the whole trusted chain is returned. If not,
+// an array with only the leaf inside it is returned.
++ (NSArray *) buildChainFromPersistentRef:(NSData *)persistentRef {
+    CFTypeRef thing = NULL;
+    SecIdentityRef leafIdentity = NULL;
+    SecCertificateRef leaf = NULL;
+    OSStatus err;
+    
+    NSMutableArray *chain = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+    
+    // First, look up the SecCertificateRef for the leaf certificate's
+    // persistent reference.
+    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                           persistentRef,      kSecValuePersistentRef,
+                           kCFBooleanTrue,     kSecReturnRef,
+                           kSecMatchLimitOne,  kSecMatchLimit,
+                           nil];
+    err = SecItemCopyMatching((CFDictionaryRef)query, &thing);
+    if (err == noErr) {
+        if (thing == NULL || CFGetTypeID(thing) != SecIdentityGetTypeID()) {
+            if (thing != NULL)
+                CFRelease(thing);
+            return nil;
+        }
+        leafIdentity = (SecIdentityRef) thing;
+    }
+
+    // Add the leafIdentity to our chain array, and release it.
+    [chain addObject:(id)leafIdentity];
+    CFRelease(leafIdentity);
+
+    // Look up all other certificates in our keychain
+    NSArray *otherCerts = nil;
+    query = [NSDictionary dictionaryWithObjectsAndKeys:
+             kSecClassCertificate,   kSecClass,
+             kCFBooleanTrue,         kSecReturnRef,
+             kSecMatchLimitAll,      kSecMatchLimit,
+             nil];
+
+    err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&otherCerts);
+    if (err == noErr && otherCerts != nil) {
+        NSMutableArray *certificates = [[NSMutableArray alloc] initWithObjects:(id)leaf, nil];
+        [certificates addObjectsFromArray:otherCerts];
+        [certificates autorelease];
+        
+        SecPolicyRef policy = SecPolicyCreateBasicX509();
+        SecTrustRef trust = NULL;
+        if (SecTrustCreateWithCertificates(certificates, policy, &trust) == noErr && trust != NULL) {
+            SecTrustResultType result;
+            err = SecTrustEvaluate(trust, &result);
+            if (err == noErr) {
+                switch (result) {
+                    case kSecTrustResultProceed:
+                    case kSecTrustResultUnspecified: // System trusts it.
+                    {
+                        int ncerts = SecTrustGetCertificateCount(trust);
+                        for (int i = 0; i < ncerts; i++) {
+                            SecCertificateRef cert = SecTrustGetCertificateAtIndex(trust, i);
+                            [chain addObject:(id)cert];
+                        }
+                    }
+                }
+            }
+            CFRelease(trust);
+        }
+        [otherCerts release];
+    }
+
+    return chain;
 }
 
 @end
