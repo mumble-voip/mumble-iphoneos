@@ -31,6 +31,7 @@
 #import "MUConnectionController.h"
 #import "MUServerRootViewController.h"
 #import "MUServerCertificateTrustViewController.h"
+#import "MUCertificateController.h"
 #import "MUDatabase.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -138,18 +139,8 @@
     // Set the connection's client cert if one is set in the app's preferences...
     NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
     if (certPersistentId != nil) {
-        // Try to fetch our given identity's SecIdentityRef by its persistent reference.
-        // If we're able to fetch it, set it as the connection's client certificate.
-        SecIdentityRef secIdentity = NULL;
-        NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                               certPersistentId,        kSecValuePersistentRef,
-                               kCFBooleanTrue,            kSecReturnRef,
-                               kSecMatchLimitOne,        kSecMatchLimit,
-                               nil];
-        if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&secIdentity) == noErr && secIdentity != NULL) {
-            [_connection setCertificateChain:[NSArray arrayWithObject:(id)secIdentity]];
-            CFRelease(secIdentity);
-        }
+        NSArray *certChain = [MUCertificateController buildChainFromPersistentRef:certPersistentId];
+        [_connection setCertificateChain:certChain];
     }
     
     [_connection connectToHost:_hostname port:_port];

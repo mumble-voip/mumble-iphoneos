@@ -149,4 +149,76 @@
     return [array autorelease];
 }
 
+// Attempts to build a certificate chain from the SecIdentityRef identified by persistentRef.
+// If trust can be established for the chain, the whole trusted chain is returned. If not,
+// an array with only the leaf inside it is returned.
++ (NSArray *) buildChainFromPersistentRef:(NSData *)persistentRef {
+    CFTypeRef thing = NULL;
+    SecIdentityRef leafIdentity = NULL;
+    SecCertificateRef leaf = NULL;
+    OSStatus err;
+    
+    NSMutableArray *chain = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+    
+    // First, look up the SecCertificateRef for the leaf certificate's
+    // persistent reference.
+    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
+                           persistentRef,      kSecValuePersistentRef,
+                           kCFBooleanTrue,     kSecReturnRef,
+                           kSecMatchLimitOne,  kSecMatchLimit,
+                           nil];
+    err = SecItemCopyMatching((CFDictionaryRef)query, &thing);
+    if (err == noErr) {
+        if (thing == NULL || CFGetTypeID(thing) != SecIdentityGetTypeID()) {
+            if (thing != NULL)
+                CFRelease(thing);
+            return nil;
+        }
+        leafIdentity = (SecIdentityRef) thing;
+    }
+
+    // Add the leafIdentity to our chain array, and release it.
+    [chain addObject:(id)leafIdentity];
+    CFRelease(leafIdentity);
+
+    // Look up all other certificates in our keychain
+    NSArray *otherCerts = nil;
+    query = [NSDictionary dictionaryWithObjectsAndKeys:
+             kSecClassCertificate,   kSecClass,
+             kCFBooleanTrue,         kSecReturnRef,
+             kSecMatchLimitAll,      kSecMatchLimit,
+             nil];
+
+    err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&otherCerts);
+    if (err == noErr && otherCerts != nil) {
+        NSMutableArray *certificates = [[NSMutableArray alloc] initWithObjects:(id)leaf, nil];
+        [certificates addObjectsFromArray:otherCerts];
+        [certificates autorelease];
+        
+        SecPolicyRef policy = SecPolicyCreateBasicX509();
+        SecTrustRef trust = NULL;
+        if (SecTrustCreateWithCertificates(certificates, policy, &trust) == noErr && trust != NULL) {
+            SecTrustResultType result;
+            err = SecTrustEvaluate(trust, &result);
+            if (err == noErr) {
+                switch (result) {
+                    case kSecTrustResultProceed:
+                    case kSecTrustResultUnspecified: // System trusts it.
+                    {
+                        int ncerts = SecTrustGetCertificateCount(trust);
+                        for (int i = 0; i < ncerts; i++) {
+                            SecCertificateRef cert = SecTrustGetCertificateAtIndex(trust, i);
+                            [chain addObject:(id)cert];
+                        }
+                    }
+                }
+            }
+            CFRelease(trust);
+        }
+        [otherCerts release];
+    }
+
+    return chain;
+}
+
 @end

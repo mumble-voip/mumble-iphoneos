@@ -43,4 +43,6 @@
 + (NSArray *) rawCertificates;
 + (NSArray *) allPersistentRefs;
 
++ (NSArray *) buildChainFromPersistentRef:(NSData *)persistentRef;
+
 @end
