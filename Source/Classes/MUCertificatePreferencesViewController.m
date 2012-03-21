@@ -100,7 +100,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     MKCertificate *cert = [dict objectForKey:@"cert"];
-    [cell setSubjectName:[cert commonName]];
+    [cell setSubjectName:[cert subjectName]];
     [cell setEmail:[cert emailAddress]];
     [cell setIssuerText:[cert issuerName]];
     [cell setExpiryText:[[cert notAfter] description]];

@@ -176,7 +176,7 @@
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
             MKCertificate *cert = [MUCertificateController defaultCertificate];
             cell.textLabel.text = NSLocalizedString(@"Certificate", nil);
-            cell.detailTextLabel.text = cert ? [cert commonName] : NSLocalizedString(@"None", @"None (No certificate chosen)");
+            cell.detailTextLabel.text = cert ? [cert subjectName] : NSLocalizedString(@"None", @"None (No certificate chosen)");
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
