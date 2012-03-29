@@ -355,12 +355,11 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 }
 
 - (void) actionClicked:(id)sender {
-    NSString *title = NSLocalizedString(@"Certificate Chain Actions", @"Title for action sheet shown when clicking the action button when viewing a certificate chain");
     NSString *cancel = NSLocalizedString(@"Cancel", nil);
     NSString *delete = NSLocalizedString(@"Delete", nil);
     NSString *export = NSLocalizedString(@"Export to iTunes", @"iTunes export button text for certificate chain action sheet");
 
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:title
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:cancel
                                          destructiveButtonTitle:delete
