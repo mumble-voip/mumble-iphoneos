@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2012 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,17 +28,6 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Foundation/Foundation.h>
-#import <MumbleKit/MKCertificate.h>
-
-@interface MUCertificateController : NSObject
-+ (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
-+ (MKCertificate *) certificateAndPrivateKeyWithPersistentRef:(NSData *)persistentRef;
-+ (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
-
-+ (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
-+ (MKCertificate *) defaultCertificate;
-
-+ (NSArray *) rawCertificates;
-+ (NSArray *) allPersistentRefs;
+@interface MUCertificateChainBuilder : NSObject
++ (NSArray *) buildChainFromPersistentRef:(NSData *)persistentRef;
 @end

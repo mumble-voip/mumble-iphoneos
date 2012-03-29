@@ -25,6 +25,7 @@
 		28234D6213F09148006B830D /* talkbutton_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5E13F09148006B830D /* talkbutton_on@2x.png */; };
 		282F6A2513620BD5008F555B /* MUCertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 282F6A2413620BD5008F555B /* MUCertificateController.m */; };
 		283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */; };
+		2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2836767C1525053A0015958E /* MUCertificateChainBuilder.m */; };
 		2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */; };
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
 		2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* MUCertificateCell.m */; };
@@ -238,6 +239,8 @@
 		282F6A2413620BD5008F555B /* MUCertificateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateController.m; sourceTree = "<group>"; };
 		283363D913EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioTransmissionPreferencesViewController.h; sourceTree = "<group>"; };
 		283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioTransmissionPreferencesViewController.m; sourceTree = "<group>"; };
+		2836767B1525053A0015958E /* MUCertificateChainBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateChainBuilder.h; sourceTree = "<group>"; };
+		2836767C1525053A0015958E /* MUCertificateChainBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateChainBuilder.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* MUCertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificatePreferencesViewController.h; sourceTree = "<group>"; };
 		2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificatePreferencesViewController.m; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* MUCertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCell.xib; sourceTree = "<group>"; };
@@ -666,6 +669,8 @@
 				28942D7B12456F9200C63A07 /* MUCertificateCreationView.m */,
 				282F6A2313620BD5008F555B /* MUCertificateController.h */,
 				282F6A2413620BD5008F555B /* MUCertificateController.m */,
+				2836767B1525053A0015958E /* MUCertificateChainBuilder.h */,
+				2836767C1525053A0015958E /* MUCertificateChainBuilder.m */,
 				28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */,
 				28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */,
 			);
@@ -1187,6 +1192,7 @@
 				28FB39D0150C1BBF00E6E522 /* PLCrashAsyncImage.c in Sources */,
 				28FB39E1150C1E9200E6E522 /* crash_report.pb-c.c in Sources */,
 				28FB39E2150C1E9200E6E522 /* protobuf-c.c in Sources */,
+				2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

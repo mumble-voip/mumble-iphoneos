@@ -31,6 +31,7 @@
 #import "MUCertificateViewController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUCertificateController.h"
+#import "MUCertificateChainBuilder.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -58,8 +59,19 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        _certificates = [[NSArray arrayWithObject:[MUCertificateController certificateWithPersistentRef:persistentRef]] retain];
+        // Try to build a chain, if possible.
+        NSArray *chains = [MUCertificateChainBuilder buildChainFromPersistentRef:persistentRef];
+        NSMutableArray *certificates = [[NSMutableArray alloc] initWithCapacity:[chains count]];
+        [certificates addObject:[MUCertificateController certificateWithPersistentRef:persistentRef]];
+        for (int i = 1; i < [chains count]; i++) {
+            SecCertificateRef secCert = (SecCertificateRef) [chains objectAtIndex:i];
+            NSData *certData = (NSData *) SecCertificateCopyData(secCert);
+            [certificates addObject:[MKCertificate certificateWithCertificate:certData privateKey:nil]];
+            [certData release];
+        }
+        _certificates = certificates;
         _allowExportAndDelete = YES;
+        _curIdx = 0;
         _persistentRef = [persistentRef retain];
         
     }

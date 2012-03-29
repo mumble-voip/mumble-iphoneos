@@ -32,6 +32,7 @@
 #import "MUServerRootViewController.h"
 #import "MUServerCertificateTrustViewController.h"
 #import "MUCertificateController.h"
+#import "MUCertificateChainBuilder.h"
 #import "MUDatabase.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -139,7 +140,7 @@
     // Set the connection's client cert if one is set in the app's preferences...
     NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
     if (certPersistentId != nil) {
-        NSArray *certChain = [MUCertificateController buildChainFromPersistentRef:certPersistentId];
+        NSArray *certChain = [MUCertificateChainBuilder buildChainFromPersistentRef:certPersistentId];
         [_connection setCertificateChain:certChain];
     }
     
