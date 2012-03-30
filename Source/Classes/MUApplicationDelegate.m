@@ -152,6 +152,7 @@
                                                                 @"amplitude",                      @"AudioVADKind",
                                                                 @"vad",                            @"AudioTransmitMethod",
                                                                 [NSNumber numberWithBool:YES],     @"AudioPreprocessor",
+                                                                [NSNumber numberWithBool:YES],     @"AudioEchoCancel",
                                                                 [NSNumber numberWithFloat:1.0f],   @"AudioMicBoost",
                                                                 @"balanced",                       @"AudioQualityKind",
                                                                 // Network
@@ -298,6 +299,11 @@
     settings.outputDelay = 0; /* 10 ms */
     settings.micBoost = [defaults floatForKey:@"AudioMicBoost"];
     settings.enablePreprocessor = [defaults boolForKey:@"AudioPreprocessor"];
+    if (settings.enablePreprocessor) {
+        settings.enableEchoCancellation = [defaults boolForKey:@"AudioEchoCancel"];
+    } else {
+        settings.enableEchoCancellation = NO;
+    }
 
     MKAudio *audio = [MKAudio sharedAudio];
     [audio updateAudioSettings:&settings];

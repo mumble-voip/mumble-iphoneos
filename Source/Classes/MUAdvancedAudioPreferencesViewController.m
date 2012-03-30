@@ -73,9 +73,8 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (section == 0) {
-        return 1 + ([defaults boolForKey:@"AudioPreprocessor"] ? 0 : 1);
+        return 2;
     } else if (section == 1) {
         return 1;
     }
@@ -101,20 +100,30 @@
             [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = preprocSwitch;
         } else if ([indexPath row] == 1) {
-            cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            UISlider *slider = [[[UISlider alloc] init] autorelease];
-            [slider setMaximumValue:2.0f];
-            [slider setMinimumValue:0.0f];
-            float boost = [defaults floatForKey:@"AudioMicBoost"];
-            if (boost > 1.0f) {
-                [slider setMinimumTrackTintColor:[MUColor badPingColor]];
+            if ([defaults boolForKey:@"AudioPreprocessor"]) {
+                cell.textLabel.text = NSLocalizedString(@"Echo Cancellation", nil);
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISwitch *echoCancelSwitch = [[[UISwitch alloc] init] autorelease];
+                echoCancelSwitch.onTintColor = [UIColor blackColor];
+                echoCancelSwitch.on = [defaults boolForKey:@"AudioEchoCancel"];
+                [echoCancelSwitch addTarget:self action:@selector(echoCancelChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.accessoryView = echoCancelSwitch;
             } else {
-                [slider setMinimumTrackTintColor:[MUColor goodPingColor]];
+                cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                UISlider *slider = [[[UISlider alloc] init] autorelease];
+                [slider setMaximumValue:2.0f];
+                [slider setMinimumValue:0.0f];
+                float boost = [defaults floatForKey:@"AudioMicBoost"];
+                if (boost > 1.0f) {
+                    [slider setMinimumTrackTintColor:[MUColor badPingColor]];
+                } else {
+                    [slider setMinimumTrackTintColor:[MUColor goodPingColor]];
+                }
+                [slider setValue:boost];
+                [slider addTarget:self action:@selector(micBoostChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.accessoryView = slider;
             }
-            [slider setValue:boost];
-            [slider addTarget:self action:@selector(micBoostChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = slider;
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
@@ -173,11 +182,11 @@
 
 - (void) preprocessingChanged:(UISwitch *)sender {
     [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioPreprocessor"];
-    if (!sender.on) {
-        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    } else {
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    }
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) echoCancelChanged:(UISwitch *)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioEchoCancel"];
 }
 
 - (void) micBoostChanged:(UISlider *)sender {
