@@ -94,6 +94,8 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
     }
     
+    cell.detailTextLabel.text = nil;
+    
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if ([indexPath section] == 0) {
@@ -155,8 +157,6 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     }
-    
-    cell.detailTextLabel.text = nil;
     
     return cell;
 }
