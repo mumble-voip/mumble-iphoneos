@@ -107,11 +107,6 @@
             cell.accessoryView = preprocSwitch;
         } else if ([indexPath row] == 1) {
             if ([defaults boolForKey:@"AudioPreprocessor"]) {
-                static NSString *EchoCellIdentifier = @"MUAdvancedAudioPreferencesEchoCancelCell";
-                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EchoCellIdentifier];
-                if (cell == nil) {
-                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:EchoCellIdentifier] autorelease];
-                }
                 cell.textLabel.text = NSLocalizedString(@"Echo Cancellation", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *echoCancelSwitch = [[[UISwitch alloc] init] autorelease];
@@ -119,12 +114,10 @@
                 echoCancelSwitch.on = [defaults boolForKey:@"AudioEchoCancel"];
                 echoCancelSwitch.enabled = [[MKAudio sharedAudio] echoCancellationAvailable];
                 if (!echoCancelSwitch.enabled) {
-                    cell.detailTextLabel.text = @"Unavailable with current setup";
                     echoCancelSwitch.on = NO;
                 }
                 [echoCancelSwitch addTarget:self action:@selector(echoCancelChanged:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = echoCancelSwitch;
-                return cell;
             } else {
                 cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -187,6 +180,33 @@
     return 0.0f;
 }
 
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
+            if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
+                NSString *echoCancelNotAvail = NSLocalizedString(@"Echo Cancellation is not available when using the current audio peripheral.", nil);
+                MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:echoCancelNotAvail];
+                lbl.font = [UIFont systemFontOfSize:16.0f];
+                lbl.lineBreakMode = UILineBreakModeWordWrap;
+                lbl.numberOfLines = 0;
+                return lbl;
+            }
+        }
+    }
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
+            if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
+                return 44.0f;
+            }
+        }
+    }
+    return 0.0f;
+}
+
 #pragma mark - Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -219,7 +239,7 @@
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
