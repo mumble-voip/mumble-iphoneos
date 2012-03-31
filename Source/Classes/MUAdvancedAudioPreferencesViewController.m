@@ -34,6 +34,8 @@
 #import "MUAudioQualityPreferencesViewController.h"
 #import "MUColor.h"
 
+#import <MumbleKit/MKAudio.h>
+
 @implementation MUAdvancedAudioPreferencesViewController
 
 - (id) init {
@@ -51,6 +53,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSubsystemRestarted:) name:MKAudioDidRestartNotification object:nil];
+    
     [self.tableView reloadData];
 }
 
@@ -60,6 +64,8 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -101,13 +107,24 @@
             cell.accessoryView = preprocSwitch;
         } else if ([indexPath row] == 1) {
             if ([defaults boolForKey:@"AudioPreprocessor"]) {
+                static NSString *EchoCellIdentifier = @"MUAdvancedAudioPreferencesEchoCancelCell";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:EchoCellIdentifier];
+                if (cell == nil) {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:EchoCellIdentifier] autorelease];
+                }
                 cell.textLabel.text = NSLocalizedString(@"Echo Cancellation", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *echoCancelSwitch = [[[UISwitch alloc] init] autorelease];
                 echoCancelSwitch.onTintColor = [UIColor blackColor];
                 echoCancelSwitch.on = [defaults boolForKey:@"AudioEchoCancel"];
+                echoCancelSwitch.enabled = [[MKAudio sharedAudio] echoCancellationAvailable];
+                if (!echoCancelSwitch.enabled) {
+                    cell.detailTextLabel.text = @"Unavailable with current setup";
+                    echoCancelSwitch.on = NO;
+                }
                 [echoCancelSwitch addTarget:self action:@selector(echoCancelChanged:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = echoCancelSwitch;
+                return cell;
             } else {
                 cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -145,6 +162,8 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     }
+    
+    cell.detailTextLabel.text = nil;
     
     return cell;
 }
@@ -195,6 +214,12 @@
         [sender setMinimumTrackTintColor:[MUColor badPingColor]];
     } else {
         [sender setMinimumTrackTintColor:[MUColor goodPingColor]];
+    }
+}
+
+- (void) audioSubsystemRestarted:(NSNotification *)notification {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
