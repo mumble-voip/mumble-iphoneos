@@ -282,23 +282,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
     
     // Export certificate chain
     if (alertView.alertViewStyle == UIAlertViewStyleLoginAndPasswordInput && buttonIndex == 1) {
-        if ([_certificates count] > 1) {
-            NSString *onlySelfSignedExportSupported = NSLocalizedString(
-                    @"Mumble can only export self-signed certificates at present.",
-                    @"Error message shown for a failed export of a non-self-signed certificate");
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:exportFailedTitle
-                                                                message:onlySelfSignedExportSupported
-                                                               delegate:nil
-                                                      cancelButtonTitle:cancelButtonText
-                                                      otherButtonTitles:nil];
-            [alertView show];
-            [alertView release];
-            return;
-        }
-
-        MKCertificate *cert = [_certificates objectAtIndex:0];
         NSString *password = [[alertView textFieldAtIndex:1] text];
-        NSData *data = [cert exportPKCS12WithPassword:password];
+        NSData *data = [MKCertificate exportCertificateChainAsPKCS12:_certificates withPassword:password];
         if (data == nil) {
             NSString *unknownExportErrorMsg = NSLocalizedString(@"Mumble was unable to export the certificate.",
                                                                 @"Error message shown for a failed export, cause unknown.");

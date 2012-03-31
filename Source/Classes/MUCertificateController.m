@@ -34,6 +34,13 @@
 @implementation MUCertificateController
 
 // Retrieve a certificate by its persistent reference.
+//
+// If the value stored in the keychain is of type SecIdentityRef, the
+// returned MKCertificate will include both the certificate and the
+// private key of the returned identity.
+//
+// If the value stored in the keychain is of type SecCertificateRef,
+// the returned MKCertificate will not include a private key.
 + (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef {
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
                            persistentRef,      kSecValuePersistentRef,
@@ -49,7 +56,20 @@
             SecCertificateRef secCert = NULL;
             if (SecIdentityCopyCertificate(identity, &secCert) == noErr) {
                 NSData *secData = (NSData *)SecCertificateCopyData(secCert);
-                cert = [MKCertificate certificateWithCertificate:secData privateKey:nil];
+                SecKeyRef secKey = NULL;
+                if (SecIdentityCopyPrivateKey(identity, &secKey) == noErr) {
+                    NSData *pkeyData = nil;
+                    query = [NSDictionary dictionaryWithObjectsAndKeys:
+                             (CFTypeRef) secKey, kSecValueRef,
+                             kCFBooleanTrue,     kSecReturnData,
+                             kSecMatchLimitOne,  kSecMatchLimit,
+                             nil];
+                    if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&pkeyData) == noErr) {
+                        cert = [MKCertificate certificateWithCertificate:secData privateKey:pkeyData];
+                        [pkeyData release];
+                    }
+                    CFRelease(secKey);
+                }
                 [secData release];
             }
         } else if (receivedType == SecCertificateGetTypeID()) {
@@ -59,41 +79,6 @@
             [secData release];
         } else {
             return nil;
-        }
-    }
-    return cert;
-}
-
-// Retrieve a certificate by its persistent reference.
-+ (MKCertificate *) certificateAndPrivateKeyWithPersistentRef:(NSData *)persistentRef {
-    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                           persistentRef,      kSecValuePersistentRef,
-                           kCFBooleanTrue,     kSecReturnRef,
-                           kSecMatchLimitOne,  kSecMatchLimit,
-                           nil];
-    CFTypeRef thing = NULL;
-    MKCertificate *cert = nil;
-    if (SecItemCopyMatching((CFDictionaryRef)query, &thing) == noErr && thing != NULL) {
-        // Only identities can have private keys.
-        if (CFGetTypeID(thing) != SecIdentityGetTypeID())
-            return nil;
-        SecCertificateRef secCert;
-        if (SecIdentityCopyCertificate((SecIdentityRef) thing, &secCert) == noErr) {
-            SecKeyRef secKey;
-            if (SecIdentityCopyPrivateKey((SecIdentityRef) thing, &secKey) == noErr) {
-                NSData *certData = (NSData *)SecCertificateCopyData(secCert);
-                NSData *pkeyData = nil;
-                query = [NSDictionary dictionaryWithObjectsAndKeys:
-                         (CFTypeRef) secKey, kSecValueRef,
-                         kCFBooleanTrue,     kSecReturnData,
-                         kSecMatchLimitOne,  kSecMatchLimit,
-                         nil];
-                if (SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&pkeyData) == noErr) {
-                    cert = [MKCertificate certificateWithCertificate:certData privateKey:pkeyData];
-                    [pkeyData release];
-                }
-                [certData release];                
-            }
         }
     }
     return cert;
@@ -121,19 +106,9 @@
     [[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
 }
 
-// Returns an NSArray of SecIdentityRefs.
-+ (NSArray *) rawCertificates {
-    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                           kSecClassIdentity,    kSecClass,
-                           kCFBooleanTrue,       kSecReturnPersistentRef,
-                           kSecMatchLimitAll,    kSecMatchLimit,
-                           nil];
-    NSArray *certs = nil;
-    SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&certs);
-    return [certs autorelease];
-}
-
-+ (NSArray *) allPersistentRefs {
+// Returns an array of the persistent refs of all SecIdentityRefs
+// stored in the application's keychain.
++ (NSArray *) persistentRefsForIdentities {
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
                            kSecClassIdentity,    kSecClass,
                            kCFBooleanTrue,       kSecReturnPersistentRef,
@@ -141,7 +116,7 @@
                            nil];
     NSArray *array = nil;
     OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
-    if (err != noErr || array == nil) {
+    if (err != noErr) {
         [array release];
         return nil;
     }

@@ -33,12 +33,10 @@
 
 @interface MUCertificateController : NSObject
 + (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
-+ (MKCertificate *) certificateAndPrivateKeyWithPersistentRef:(NSData *)persistentRef;
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
 
 + (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
 + (MKCertificate *) defaultCertificate;
 
-+ (NSArray *) rawCertificates;
-+ (NSArray *) allPersistentRefs;
++ (NSArray *) persistentRefsForIdentities;
 @end

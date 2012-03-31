@@ -224,7 +224,7 @@
 #pragma mark Utils
 
 - (void) fetchCertificates {
-    NSArray *persistentRefs = [MUCertificateController allPersistentRefs];
+    NSArray *persistentRefs = [MUCertificateController persistentRefsForIdentities];
 
     [_certificateItems release];
     _certificateItems = nil;
