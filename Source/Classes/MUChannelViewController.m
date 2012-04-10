@@ -94,7 +94,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositionTalkButton) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
         [self repositionTalkButton];
     }
-    
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -352,7 +351,7 @@
 #pragma mark - PushToTalk
 
 - (void) repositionTalkButton {
-    // fixme(mkrautz): This should stay put if we're run on the iPhone.$
+    // fixme(mkrautz): This should stay put if we're run on the iPhone.
     return;
     
     UIDevice *device = [UIDevice currentDevice];

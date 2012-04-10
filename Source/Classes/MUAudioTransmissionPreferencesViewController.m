@@ -81,17 +81,18 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
-    if ([current isEqualToString:@"vad"])
-        return 2;
-    return 1;
+    return 2;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     if (section == 0) {
         return 3;
     } else if (section == 1) {
-        return 1;
+        if ([current isEqualToString:@"vad"])
+            return 1;
+        if ([current isEqualToString:@"ptt"])
+            return 2;
     }
     return 0;
 }
@@ -129,10 +130,30 @@
             }
         }
     } else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            cell.accessoryView = nil;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = NSLocalizedString(@"Voice Activity Configuration", nil);
+        if ([current isEqualToString:@"vad"]) {
+            if (indexPath.row == 0) {
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.textLabel.text = NSLocalizedString(@"Voice Activity Configuration", nil);
+            }
+        } else if ([current isEqualToString:@"ptt"]) {
+            if (indexPath.row == 0) {
+                cell.accessoryView = nil;
+                cell.textLabel.text = NSLocalizedString(@"Only in Channel View", nil);
+                cell.textLabel.textColor = [UIColor blackColor];
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PTTButtonOnlyInChannelView"]) {
+                    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                    cell.textLabel.textColor = [MUColor selectedTextColor];
+                }
+            } else if (indexPath.row == 1) {
+                cell.accessoryView = nil;
+                cell.textLabel.text = NSLocalizedString(@"Both in Server and Channel View", nil);
+                cell.textLabel.textColor = [UIColor blackColor];
+                if (![[NSUserDefaults standardUserDefaults] boolForKey:@"PTTButtonOnlyInChannelView"]) {
+                    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                    cell.textLabel.textColor = [MUColor selectedTextColor];
+                }
+            }
         }
     }
 
@@ -140,14 +161,19 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     if (section == 0) {
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Method", nil)];
+    }
+    if (section == 1 && [current isEqualToString:@"ptt"]) {
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Show Push-to-Talk Button", nil)];
     }
     return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 1) {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
+    if (section == 1 && [current isEqualToString:@"vad"]) {
         return 0.0f;
     }
 
@@ -164,32 +190,47 @@
             cell.accessoryView = nil;
             cell.textLabel.textColor = [UIColor blackColor];
         }
-        UITableViewCell *setupSection = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
         if (indexPath.row == 0) {
             [[NSUserDefaults standardUserDefaults] setObject:@"vad" forKey:@"AudioTransmitMethod"];
-            if (!setupSection) {
-                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-            }
         } else if (indexPath.row == 1) {
             [[NSUserDefaults standardUserDefaults] setObject:@"ptt" forKey:@"AudioTransmitMethod"];
-            if (setupSection) {
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-            }
         } else if (indexPath.row == 2) {
             [[NSUserDefaults standardUserDefaults] setObject:@"continuous" forKey:@"AudioTransmitMethod"];
-            if (setupSection) {
-                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
-            }
         }
+
+        [self.tableView reloadSectionIndexTitles];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
+
     } else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
-            MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
-            [self.navigationController pushViewController:vadSetup animated:YES];
-            [vadSetup release];
+        NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
+        if ([current isEqualToString:@"vad"]) {
+            if (indexPath.row == 0) {
+                MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
+                [self.navigationController pushViewController:vadSetup animated:YES];
+                [vadSetup release];
+            }
+        } else if ([current isEqualToString:@"ptt"]) {
+            for (int i = 0; i < 2; i++) {
+                cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
+                cell.accessoryView = nil;
+                cell.textLabel.textColor = [UIColor blackColor];
+            }
+            
+            cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            cell.textLabel.textColor = [MUColor selectedTextColor];
+            cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+            
+            BOOL onlyInChannelView = [indexPath row] == 0;
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:onlyInChannelView] forKey:@"PTTButtonOnlyInChannelView"];
+            
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
 }
