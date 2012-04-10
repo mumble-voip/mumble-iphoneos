@@ -89,12 +89,6 @@
 		28C6EF0A11BBF38100E426C8 /* MUCountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */; };
 		28DC1C5C13DE596B0037CDC2 /* authenticated.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1313DE596B0037CDC2 /* authenticated.png */; };
 		28DC1C5D13DE596B0037CDC2 /* authenticated@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1413DE596B0037CDC2 /* authenticated@2x.png */; };
-		28DC1C5F13DE596B0037CDC2 /* certificate16.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1613DE596B0037CDC2 /* certificate16.png */; };
-		28DC1C6013DE596B0037CDC2 /* certificate32.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1713DE596B0037CDC2 /* certificate32.png */; };
-		28DC1C6113DE596B0037CDC2 /* certificate64.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1813DE596B0037CDC2 /* certificate64.png */; };
-		28DC1C6213DE596B0037CDC2 /* certificate128.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1913DE596B0037CDC2 /* certificate128.png */; };
-		28DC1C6313DE596B0037CDC2 /* certificate256.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1A13DE596B0037CDC2 /* certificate256.png */; };
-		28DC1C6413DE596B0037CDC2 /* certificate512.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1B13DE596B0037CDC2 /* certificate512.png */; };
 		28DC1C6513DE596B0037CDC2 /* certificatecell-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1C13DE596B0037CDC2 /* certificatecell-selected.png */; };
 		28DC1C6613DE596B0037CDC2 /* certificatecell-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1D13DE596B0037CDC2 /* certificatecell-selected@2x.png */; };
 		28DC1C6713DE596B0037CDC2 /* certificatecell.png in Resources */ = {isa = PBXBuildFile; fileRef = 28DC1C1E13DE596B0037CDC2 /* certificatecell.png */; };
@@ -996,12 +990,6 @@
 				2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */,
 				28DC1C5C13DE596B0037CDC2 /* authenticated.png in Resources */,
 				28DC1C5D13DE596B0037CDC2 /* authenticated@2x.png in Resources */,
-				28DC1C5F13DE596B0037CDC2 /* certificate16.png in Resources */,
-				28DC1C6013DE596B0037CDC2 /* certificate32.png in Resources */,
-				28DC1C6113DE596B0037CDC2 /* certificate64.png in Resources */,
-				28DC1C6213DE596B0037CDC2 /* certificate128.png in Resources */,
-				28DC1C6313DE596B0037CDC2 /* certificate256.png in Resources */,
-				28DC1C6413DE596B0037CDC2 /* certificate512.png in Resources */,
 				28DC1C6513DE596B0037CDC2 /* certificatecell-selected.png in Resources */,
 				28DC1C6613DE596B0037CDC2 /* certificatecell-selected@2x.png in Resources */,
 				28DC1C6713DE596B0037CDC2 /* certificatecell.png in Resources */,
