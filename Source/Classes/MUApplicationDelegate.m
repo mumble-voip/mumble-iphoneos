@@ -52,9 +52,7 @@
 }
 - (void) setupAudio;
 - (void) forceKeyboardLoad;
-#ifdef MUMBLE_BETA_DIST
 - (void) notifyCrash;
-#endif
 @end
 
 @implementation MUApplicationDelegate
@@ -131,7 +129,11 @@
     if (err != nil) {
         NSLog(@"MUApplicationDelegate: Unable to enable PLCrashReporter: %@", err);
     }
-        
+
+#ifdef MUMBLE_BETA_DIST
+    _verCheck = [[MUVersionChecker alloc] init];
+#endif
+    
     // Initialize the notification controller
     [MUNotificationController sharedController];
     
