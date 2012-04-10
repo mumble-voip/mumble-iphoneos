@@ -12,7 +12,6 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
 		280256381510D70D00178B08 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 280256361510D70D00178B08 /* Localizable.strings */; };
-		2802563C1510DDCA00178B08 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2802563A1510DDCA00178B08 /* Localizable.strings */; };
 		2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802ABFF14C9E948000983A5 /* MUDataURL.m */; };
 		2802AC0314CB0131000983A5 /* MUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0214CB0131000983A5 /* MUImage.m */; };
 		2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0514CB024A000983A5 /* MUImageViewController.m */; };
@@ -30,11 +29,6 @@
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
 		2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* MUCertificateCell.m */; };
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
-		285E2A65150D729B008AE185 /* AppStore.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 285E2A60150D729B008AE185 /* AppStore.xcconfig */; };
-		285E2A66150D729B008AE185 /* Base.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 285E2A61150D729B008AE185 /* Base.xcconfig */; };
-		285E2A67150D729B008AE185 /* BetaDist.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 285E2A62150D729B008AE185 /* BetaDist.xcconfig */; };
-		285E2A68150D729B008AE185 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 285E2A63150D729B008AE185 /* Debug.xcconfig */; };
-		285E2A69150D729B008AE185 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 285E2A64150D729B008AE185 /* Release.xcconfig */; };
 		2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MUApplicationDelegate.m */; };
 		2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* MUPublicServerList.m */; };
 		2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* MUPublicServerListController.m */; };
@@ -66,7 +60,6 @@
 		2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528914C3874C00567430 /* RightBalloonSelected@2x.png */; };
 		2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2879528E14C38FC200567430 /* MobileCoreServices.framework */; };
 		287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */; };
-		287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */; };
 		287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */; };
@@ -999,7 +992,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
-				287A60581176201E00DD4FFB /* MUChannelViewController.m in Resources */,
 				287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */,
 				2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */,
 				28DC1C5C13DE596B0037CDC2 /* authenticated.png in Resources */,
@@ -1077,13 +1069,7 @@
 				287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */,
 				28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */,
 				28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */,
-				285E2A65150D729B008AE185 /* AppStore.xcconfig in Resources */,
-				285E2A66150D729B008AE185 /* Base.xcconfig in Resources */,
-				285E2A67150D729B008AE185 /* BetaDist.xcconfig in Resources */,
-				285E2A68150D729B008AE185 /* Debug.xcconfig in Resources */,
-				285E2A69150D729B008AE185 /* Release.xcconfig in Resources */,
 				280256381510D70D00178B08 /* Localizable.strings in Resources */,
-				2802563C1510DDCA00178B08 /* Localizable.strings in Resources */,
 				287172AB151A041A00153D74 /* certificatecell-intermediate.png in Resources */,
 				287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */,
 			);
