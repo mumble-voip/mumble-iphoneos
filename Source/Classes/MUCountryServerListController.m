@@ -41,7 +41,7 @@
 
 @interface MUCountryServerListController () <UIAlertViewDelegate, UISearchBarDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
     UITableView    *_tableView;
-    NSMutableArray *_visibleCountryServers;
+    NSArray        *_visibleServers;
     NSArray        *_countryServers;
     NSString       *_countryName;
 }
@@ -55,7 +55,7 @@
         return nil;
     
     _countryServers = [servers retain];
-    _visibleCountryServers = [servers mutableCopy];
+    _visibleServers = [servers mutableCopy];
     _countryName = [[country copy] retain];
     
     return self;
@@ -64,7 +64,7 @@
 - (void) dealloc {
     [_countryName release];
     [_countryServers release];
-    [_visibleCountryServers release];
+    [_visibleServers release];
     
     [super dealloc];
 }
@@ -117,11 +117,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_visibleCountryServers count];
+    return [_visibleServers count];
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *serverItem = [_visibleCountryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
     if ([[serverItem objectForKey:@"ca"] integerValue] > 0) {
         cell.backgroundColor = [MUColor verifiedCertificateChainColor];
     }
@@ -133,7 +133,7 @@
         cell = [[[MUServerCell alloc] init] autorelease];
     }
     
-    NSDictionary *serverItem = [_visibleCountryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
     [cell populateFromDisplayName:[serverItem objectForKey:@"name"]
                          hostName:[serverItem objectForKey:@"ip"]
                              port:[serverItem objectForKey:@"port"]];
@@ -146,7 +146,7 @@
 #pragma mark Selection
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *serverItem = [_visibleCountryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
 
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"]
                                                        delegate:self
@@ -161,7 +161,7 @@
 
 - (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSDictionary *serverItem = [_visibleCountryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
 
     // Connect
     if (index == 1) {
@@ -222,7 +222,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSDictionary *serverItem = [_visibleCountryServers objectAtIndex:[indexPath row]];
+    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
     
     if (buttonIndex == 1) {
         MUConnectionController *connCtrlr = [MUConnectionController sharedController];
@@ -240,27 +240,25 @@
 #pragma mark SearchBar methods
 
 - (void) resetSearch {
-    NSMutableArray *array = [_countryServers mutableCopy];
-    NSMutableArray *old = _visibleCountryServers;
-    
-    _visibleCountryServers = array;
-    [old release];
+    [_visibleServers release];
+    _visibleServers = [_countryServers retain];
 }
 
-- (void) handleSearchForTerm:(NSString *)searchTerm {
-    NSMutableArray *toRemove = [[NSMutableArray alloc] init];
-    [self resetSearch];
-    
-    for(NSDictionary *serverItem in _visibleCountryServers) {
-        if( [(NSString *)[serverItem objectForKey:@"name"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound
-           && [(NSString *)[serverItem objectForKey:@"ip"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location == NSNotFound)
-        {
-            [toRemove addObject:serverItem];
+- (void) performSearchForTerm:(NSString *)searchTerm {        
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[_countryServers count]];
+        for (NSDictionary *serverItem in _countryServers) {
+            if ([(NSString *)[serverItem objectForKey:@"name"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound ||
+                    [(NSString *)[serverItem objectForKey:@"ip"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                [results addObject:serverItem];
+            }
         }
-    }
-    [_visibleCountryServers removeObjectsInArray:toRemove];
-    [toRemove release];
-    [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_visibleServers release];
+            _visibleServers = results;
+            [self.tableView reloadData]; 
+        });
+    });
 }
 
 #pragma mark -
@@ -268,7 +266,7 @@
 
 - (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSString *searchText = searchBar.text;
-    [self handleSearchForTerm:searchText];
+    [self performSearchForTerm:searchText];
     [searchBar resignFirstResponder];
 }
 
@@ -278,7 +276,7 @@
         [self.tableView reloadData];
         return;
     }
-    [self handleSearchForTerm:searchText];
+    [self performSearchForTerm:searchText];
 }
 
 #pragma mark -
