@@ -61,14 +61,7 @@
     [super didReceiveMemoryWarning];
 }
 
-- (void) viewWillAppear:(BOOL)flag {
-    [_model addDelegate:self];
-
-    _channel = [[_model connectedUser] channel];
-    _users = [[_channel users] mutableCopy];
-
-    [self.tableView reloadData];
-
+- (void) viewDidAppear:(BOOL)animated {
     if ([[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
         UIImage *onImage = [UIImage imageNamed:@"talkbutton_on"];
         UIImage *offImage = [UIImage imageNamed:@"talkbutton_off"];
@@ -96,20 +89,30 @@
     }
 }
 
+- (void) viewWillAppear:(BOOL)flag {
+    [_model addDelegate:self];
+    
+    _channel = [[_model connectedUser] channel];
+    _users = [[_channel users] mutableCopy];
+    
+    [self.tableView reloadData];
+}
+
 - (void) viewWillDisappear:(BOOL)animated {
-    [_model removeDelegate:self];
-
-    _channel = nil;
-
-    [_users release];
-    _users = nil;
-
     if (_talkButton) {
         [_talkButton removeFromSuperview];
         _talkButton = nil;
-
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
+}
+
+- (void) viewDidDisappear:(BOOL)animated {
+    [_model removeDelegate:self];
+    
+    _channel = nil;
+    
+    [_users release];
+    _users = nil;
     
     [self.tableView reloadData];
 }
