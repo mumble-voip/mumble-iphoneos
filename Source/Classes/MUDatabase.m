@@ -34,33 +34,61 @@
 static FMDatabase *db = nil;
 
 @interface MUDatabase ()
++ (NSString *) filePath;
++ (void) moveOldDatabases;
 @end
 
 @implementation MUDatabase
 
-// Initialize the database.
-+ (void) initializeDatabase {
++ (NSString *) filePath {
+    NSArray *libraryDirectories = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
+                                                                      NSUserDomainMask,
+                                                                      YES);
+    NSString *library = [libraryDirectories objectAtIndex:0];
+    [[NSFileManager defaultManager] createDirectoryAtPath:library withIntermediateDirectories:YES attributes:nil error:nil];
+    return [library stringByAppendingPathComponent:@"mumble.sqlite"];
+}
 
-    NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
-
++ (void) moveOldDatabases {
     NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                                        NSUserDomainMask,
                                                                        YES);
-    NSString *directory = [documentDirectories objectAtIndex:0];
-
+    NSString *docs = [documentDirectories objectAtIndex:0];
+    
     NSError *err = nil;
     NSFileManager *manager = [NSFileManager defaultManager];
-
+    
     // Hide the SQLite database from the iTunes document inspector.
-    NSString *oldPath = [directory stringByAppendingPathComponent:@"mumble.sqlite"];
-    NSString *newPath = [directory stringByAppendingPathComponent:@".mumble.sqlite"];
+    NSString *oldPath = [docs stringByAppendingPathComponent:@"mumble.sqlite"];
+    NSString *newPath = [docs stringByAppendingPathComponent:@".mumble.sqlite"];
     if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
         if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
-            NSLog(@"Database: Unable to move file to new spot");
+            NSLog(@"Database: unable to move file to new spot");
         }
     }
 
-    NSString *dbPath = newPath;
+    // Attempt to move an old database to the new location.
+    NSString *correctPath = [MUDatabase filePath];
+    if (![manager fileExistsAtPath:correctPath]) {
+        oldPath = newPath;
+        newPath = correctPath;
+        if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
+            if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
+                NSLog(@"Database: Unable to move file to new spot");
+            }
+        }
+    }
+}
+
+// Initialize the database.
++ (void) initializeDatabase {
+    NSLog(@"Initializing database with SQLite version: %@", [FMDatabase sqliteLibVersion]);
+
+    // Attempt to move old databases if we find ones
+    // in our old locations.
+    [MUDatabase moveOldDatabases];
+    
+    NSString *dbPath = [MUDatabase filePath];
     db = [[FMDatabase alloc] initWithPath:dbPath];
     if (!db)
         return;
