@@ -91,6 +91,7 @@
                                                                        NSUserDomainMask,
                                                                        YES);
     NSString *directory = [documentDirectories objectAtIndex:0];
+    [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     return [directory stringByAppendingPathComponent:@"publist.xml"];
 }
 
