@@ -45,3 +45,5 @@
 # import <MobileCoreServices/MobileCoreServices.h>
 #endif
 
+#undef NSLocalizedString
+#define NSLocalizedString(str, comment) str
