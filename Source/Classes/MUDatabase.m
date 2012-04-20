@@ -63,7 +63,7 @@ static FMDatabase *db = nil;
     NSString *newPath = [docs stringByAppendingPathComponent:@".mumble.sqlite"];
     if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
         if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
-            NSLog(@"Database: unable to move file to new spot");
+            NSLog(@"MUDatabase: unable to move file to new spot (mumble.sqlite -> .mumble.sqlite)");
         }
     }
 
@@ -74,7 +74,7 @@ static FMDatabase *db = nil;
         newPath = correctPath;
         if (![manager fileExistsAtPath:newPath] && [manager fileExistsAtPath:oldPath]) {
             if (![manager moveItemAtPath:oldPath toPath:newPath error:&err]) {
-                NSLog(@"Database: Unable to move file to new spot");
+                NSLog(@"MUDatabase: Unable to move file to new spot (~/Documents -> ~/Library)");
             }
         }
     }
@@ -94,9 +94,9 @@ static FMDatabase *db = nil;
         return;
 
     if ([db open]) {
-        NSLog(@"Database: Initialized database at %@", dbPath);
+        NSLog(@"MUDatabase: Initialized database at %@", dbPath);
     } else {
-        NSLog(@"Database: Could not open database at %@", dbPath);
+        NSLog(@"MUDatabase: Could not open database at %@", dbPath);
         [db release];
         db = nil;
         return;
@@ -134,7 +134,7 @@ static FMDatabase *db = nil;
     [db executeUpdate:@"VACUUM"];
 
     if ([db hadError]) {
-        NSLog(@"Database: Error: %@ (Code: %i)", [db lastErrorMessage], [db lastErrorCode]);
+        NSLog(@"MUDatabase: Error: %@ (Code: %i)", [db lastErrorMessage], [db lastErrorCode]);
     }
 }
 
