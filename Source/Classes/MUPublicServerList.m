@@ -87,11 +87,11 @@
 @implementation MUPublicServerList
 
 + (NSString *) filePath {
-    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
                                                                        NSUserDomainMask,
                                                                        YES);
     NSString *directory = [documentDirectories objectAtIndex:0];
-    return [directory stringByAppendingPathComponent:@".publist.xml"];
+    return [directory stringByAppendingPathComponent:@"publist.xml"];
 }
 
 - (id) init {
