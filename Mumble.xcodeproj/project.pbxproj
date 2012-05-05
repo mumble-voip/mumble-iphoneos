@@ -980,7 +980,7 @@
 		28990A90132FD9CC0034B406 /* MumbleKit */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = MumbleKit;
+			path = MumbleKit.framework;
 			remoteRef = 28990A8F132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
