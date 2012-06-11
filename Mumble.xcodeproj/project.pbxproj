@@ -640,7 +640,7 @@
 			isa = PBXGroup;
 			children = (
 				28990A8E132FD9CC0034B406 /* libMumbleKit.a */,
-				28990A90132FD9CC0034B406 /* MumbleKit */,
+				28990A90132FD9CC0034B406 /* MumbleKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -977,7 +977,7 @@
 			remoteRef = 28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		28990A90132FD9CC0034B406 /* MumbleKit */ = {
+		28990A90132FD9CC0034B406 /* MumbleKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = MumbleKit.framework;

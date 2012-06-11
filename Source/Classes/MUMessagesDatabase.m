@@ -79,7 +79,10 @@
     plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSMutableArray *imageDataArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
     for (NSString *dataUrl in [msg embeddedImages]) {
-        [imageDataArray addObject:[MUDataURL dataFromDataURL:dataUrl]];
+        NSData *imgData = [MUDataURL dataFromDataURL:dataUrl];
+        if (imgData) {
+            [imageDataArray addObject:imgData];
+        }
     }
     
     NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:
