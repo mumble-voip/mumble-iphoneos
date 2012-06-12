@@ -61,11 +61,7 @@
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#ifdef OPUS_ENABLED
-    return 4;
-#else
     return 3;
-#endif
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,35 +86,18 @@
             }
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"CELT 40kbit/s, 20ms audio per packet", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"Opus 40kbit/s, 20ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = NSLocalizedString(@"High", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"CELT 72kbit/s, 10ms audio per packet", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"Opus 72kbit/s, 10ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
-#ifdef OPUS_ENABLED
-        } else if ([indexPath row] == 3) {
-            cell.textLabel.text = @"Opus";
-            cell.detailTextLabel.text = NSLocalizedString(@"Opus 72kbit/s, 10ms audio per packet", nil);
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"opus"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        } else if ([indexPath row] == 4) {
-            cell.textLabel.text = NSLocalizedString(@"Custom", nil);
-            cell.detailTextLabel.text = nil;
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        }
-#else
         } else if ([indexPath row] == 3) {
             cell.textLabel.text = NSLocalizedString(@"Custom", nil);
             cell.detailTextLabel.text = nil;
@@ -127,7 +106,6 @@
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
-#endif
     }
     
     return cell;
@@ -158,9 +136,6 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     UITableViewCell *cell = nil;
     int nsects = 3;
-#ifdef OPUS_ENABLED
-        ++nsects;
-#endif
     for (int i = 0; i <= nsects; i++) {
         cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.accessoryView = nil;
@@ -174,12 +149,7 @@
         case 0: val = @"low"; break;
         case 1: val = @"balanced"; break;
         case 2: val = @"high"; break;
-#ifdef OPUS_ENABLED
-        case 3: val = @"opus"; break;
-        case 4: val = @"custom"; break;
-#else
         case 3: val = @"custom"; break;
-#endif
     }
     if (val != nil)
         [[NSUserDefaults standardUserDefaults] setObject:val forKey:@"AudioQualityKind"];

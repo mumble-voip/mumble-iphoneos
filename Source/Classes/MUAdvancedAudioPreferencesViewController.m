@@ -148,10 +148,6 @@
                 cell.detailTextLabel.text = NSLocalizedString(@"Balanced", nil);
             else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
                 cell.detailTextLabel.text = NSLocalizedString(@"High", nil);
-#ifdef OPUS_ENABLED
-            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"opus"])
-                cell.detailTextLabel.text = @"Opus";
-#endif
             else
                 cell.detailTextLabel.text = NSLocalizedString(@"Custom", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
