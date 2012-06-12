@@ -144,6 +144,9 @@
     // Set MumbleKit release string
     [[MKVersion sharedVersion] setOverrideReleaseString:
         [NSString stringWithFormat:@"Mumble for iOS %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]]];
+    
+    // Enable Opus unconditionally
+    [[MKVersion sharedVersion] setOpusEnabled:YES];
 
     // Register default settings
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -267,23 +270,21 @@
         settings.quality = 16000;
         settings.audioPerPacket = 6;
     } else if ([quality isEqualToString:@"balanced"]) {
-        settings.codec = MKCodecFormatCELT;
+        // Will fall back to CELT if the 
+        // server requires it for inter-op.
+        settings.codec = MKCodecFormatOpus;
         settings.quality = 40000;
         settings.audioPerPacket = 2;
-    } else if ([quality isEqualToString:@"high"]) {
-        settings.codec = MKCodecFormatCELT;
-        settings.quality = 72000;
-        settings.audioPerPacket = 1;
-    } else if ([quality isEqualToString:@"opus"]) {
-#ifdef OPUS_ENABLED
+    } else if ([quality isEqualToString:@"high"] || [quality isEqualToString:@"opus"]) {
+        // Will fall back to CELT if the 
+        // server requires it for inter-op.
         settings.codec = MKCodecFormatOpus;
-#else
-        settings.codec = MKCodecFormatCELT;
-#endif
         settings.quality = 72000;
         settings.audioPerPacket = 1;
     } else {
         settings.codec = MKCodecFormatCELT;
+        if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"opus"])
+            settings.codec = MKCodecFormatOpus;
         if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"celt"])
             settings.codec = MKCodecFormatCELT;
         if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"speex"])
@@ -291,10 +292,6 @@
         settings.quality = [defaults integerForKey:@"AudioQualityBitrate"];
         settings.audioPerPacket = [defaults integerForKey:@"AudioQualityFrames"];
     }
-    
-    // Set MKVersion Opus state
-    BOOL enableOpus = [quality isEqualToString:@"opus"];
-    [[MKVersion sharedVersion] setOpusEnabled:enableOpus];
     
     settings.noiseSuppression = -42; /* -42 dB */
     settings.amplification = 20.0f;
