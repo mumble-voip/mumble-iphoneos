@@ -38,6 +38,7 @@
 		2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B1116BE9B7002B8514 /* CFNetwork.framework */; };
 		2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B5116BE9BA002B8514 /* Security.framework */; };
+		286A3CA0158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */; };
 		286E9260148452A000B13593 /* MUVoiceActivitySetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */; };
 		287172AB151A041A00153D74 /* certificatecell-intermediate.png in Resources */ = {isa = PBXBuildFile; fileRef = 287172A9151A041A00153D74 /* certificatecell-intermediate.png */; };
 		287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287172AA151A041A00153D74 /* certificatecell-intermediate@2x.png */; };
@@ -257,6 +258,8 @@
 		2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2861C2B1116BE9B7002B8514 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		2861C2B5116BE9BA002B8514 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		286A3C9E158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioSidetonePreferencesViewController.h; sourceTree = "<group>"; };
+		286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioSidetonePreferencesViewController.m; sourceTree = "<group>"; };
 		286E925E148452A000B13593 /* MUVoiceActivitySetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUVoiceActivitySetupViewController.h; sourceTree = "<group>"; };
 		286E925F148452A000B13593 /* MUVoiceActivitySetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUVoiceActivitySetupViewController.m; sourceTree = "<group>"; };
 		287172A9151A041A00153D74 /* certificatecell-intermediate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecell-intermediate.png"; path = "Resources/certificatecell-intermediate.png"; sourceTree = "<group>"; };
@@ -608,6 +611,8 @@
 				28F04B2114898A7100C90909 /* MUAdvancedAudioPreferencesViewController.m */,
 				28ADA301148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.h */,
 				28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */,
+				286A3C9E158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.h */,
+				286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1175,6 +1180,7 @@
 				28FB39E1150C1E9200E6E522 /* crash_report.pb-c.c in Sources */,
 				28FB39E2150C1E9200E6E522 /* protobuf-c.c in Sources */,
 				2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */,
+				286A3CA0158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

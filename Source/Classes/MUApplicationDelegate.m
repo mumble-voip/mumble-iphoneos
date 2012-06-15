@@ -160,6 +160,8 @@
                                                                 [NSNumber numberWithBool:YES],     @"AudioEchoCancel",
                                                                 [NSNumber numberWithFloat:1.0f],   @"AudioMicBoost",
                                                                 @"balanced",                       @"AudioQualityKind",
+                                                                [NSNumber numberWithBool:NO],      @"AudioSidetone",
+                                                                [NSNumber numberWithFloat:0.2f],   @"AudioSidetoneVolume",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
@@ -306,6 +308,9 @@
         settings.enableEchoCancellation = NO;
     }
 
+    settings.enableSideTone = [defaults boolForKey:@"AudioSidetone"];
+    settings.sidetoneVolume = [defaults floatForKey:@"AudioSidetoneVolume"];
+    
     MKAudio *audio = [MKAudio sharedAudio];
     [audio updateAudioSettings:&settings];
     [audio restart];

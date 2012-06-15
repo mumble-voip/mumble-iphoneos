@@ -32,6 +32,7 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUApplicationDelegate.h"
 #import "MUAudioQualityPreferencesViewController.h"
+#import "MUAudioSidetonePreferencesViewController.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKAudio.h>
@@ -75,13 +76,15 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 1;
     } else if (section == 1) {
+        return 2;
+    } else if (section == 2) {
         return 1;
     }
     return 0;
@@ -99,6 +102,21 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if ([indexPath section] == 0) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = NSLocalizedString(@"Quality", nil);
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
+                cell.detailTextLabel.text = NSLocalizedString(@"Low", nil);
+            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
+                cell.detailTextLabel.text = NSLocalizedString(@"Balanced", nil);
+            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
+                cell.detailTextLabel.text = NSLocalizedString(@"High", nil);
+            else
+                cell.detailTextLabel.text = NSLocalizedString(@"Custom", nil);
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        }
+    } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = NSLocalizedString(@"Preprocessing", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -137,19 +155,16 @@
                 cell.accessoryView = slider;
             }
         }
-    } else if ([indexPath section] == 1) {
+    } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Quality", nil);
+            cell.textLabel.text = NSLocalizedString(@"Sidetone", nil);
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
-                cell.detailTextLabel.text = NSLocalizedString(@"Low", nil);
-            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"])
-                cell.detailTextLabel.text = NSLocalizedString(@"Balanced", nil);
-            else if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"])
-                cell.detailTextLabel.text = NSLocalizedString(@"High", nil);
-            else
-                cell.detailTextLabel.text = NSLocalizedString(@"Custom", nil);
+            if ([defaults boolForKey:@"AudioSidetone"]) {
+                cell.detailTextLabel.text = NSLocalizedString(@"On", nil);
+            } else {
+                cell.detailTextLabel.text = NSLocalizedString(@"Off", nil);
+            }
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     }
@@ -158,10 +173,12 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) { // Input
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Input", nil)];
-    } else if (section == 1) {
+    if (section == 0) { // Xmit
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Transmission Quality", nil)];
+    } else if (section == 1) { // Audio Input
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Input", nil)];
+    } else if (section == 2) { // Audio Output
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Output", nil)];
     } else {
         return nil;
     }
@@ -172,12 +189,14 @@
         return [MUTableViewHeaderLabel defaultHeaderHeight];
     } else if (section == 1) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
+    } else if (section == 2) {
+        return [MUTableViewHeaderLabel defaultHeaderHeight];
     }
     return 0.0f;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 0) {
+    if (section == 1) {
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
             if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
                 NSString *echoCancelNotAvail = NSLocalizedString(@"Echo Cancellation is not available when using the current audio peripheral.", nil);
@@ -193,7 +212,7 @@
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 0) {
+    if (section == 1) {
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
             if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
                 return 44.0f;
@@ -206,10 +225,14 @@
 #pragma mark - Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 1 && [indexPath row] == 0) {
+    if ([indexPath section] == 0 && [indexPath row] == 0) {
         MUAudioQualityPreferencesViewController *audioQual = [[MUAudioQualityPreferencesViewController alloc] init];
         [self.navigationController pushViewController:audioQual animated:YES];
         [audioQual release];
+    } else if ([indexPath section] == 2 && [indexPath row] == 0) {
+        MUAudioSidetonePreferencesViewController *sidetonePrefs = [[MUAudioSidetonePreferencesViewController alloc] init];
+        [self.navigationController pushViewController:sidetonePrefs animated:YES];
+        [sidetonePrefs release];
     }
 }
 
@@ -235,7 +258,7 @@
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
