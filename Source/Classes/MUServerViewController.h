@@ -30,6 +30,12 @@
 
 #import <MumbleKit/MKServerModel.h>
 
+typedef enum {
+    MUServerViewControllerViewModeServer = 0,
+    MUServerViewControllerViewModeChannel = 1,
+} MUServerViewControllerViewMode;
+
 @interface MUServerViewController : UITableViewController
 - (id) initWithServerModel:(MKServerModel *)serverModel;
+- (void) toggleMode;
 @end

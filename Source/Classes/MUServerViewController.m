@@ -81,12 +81,13 @@
 #pragma mark MUChannelNavigationViewController
 
 @interface MUServerViewController () {
-    MKServerModel        *_serverModel;
-    NSMutableArray       *_modelItems;
-    NSMutableDictionary  *_userIndexMap;
-    NSMutableDictionary  *_channelIndexMap;
-    BOOL                 _pttState;
-    UIButton             *_talkButton;
+    MUServerViewControllerViewMode   _viewMode;
+    MKServerModel                    *_serverModel;
+    NSMutableArray                   *_modelItems;
+    NSMutableDictionary              *_userIndexMap;
+    NSMutableDictionary              *_channelIndexMap;
+    BOOL                             _pttState;
+    UIButton                         *_talkButton;
 }
 - (NSInteger) indexForUser:(MKUser *)user;
 - (void) reloadUser:(MKUser *)user;
@@ -104,6 +105,7 @@
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
         _serverModel = [serverModel retain];
         [_serverModel addDelegate:self];
+        _viewMode = MUServerViewControllerViewModeServer;
     }
     return self;
 }
@@ -115,8 +117,13 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
-    [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
-    [self.tableView reloadData];
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
+        [self.tableView reloadData];
+    } else if (_viewMode == MUServerViewControllerViewModeChannel) {
+        [self switchToChannelMode];
+        [self.tableView reloadData];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -161,13 +168,19 @@
 }
 
 - (NSInteger) indexForUser:(MKUser *)user {
-    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
-    return userIndex;
+    NSNumber *number = [_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]];
+    if (number) {
+        return [number integerValue];
+    }
+    return NSNotFound;
 }
 
 - (NSInteger) indexForChannel:(MKChannel *)channel {
-    NSInteger channelIndex = [[_channelIndexMap objectForKey:[NSNumber numberWithInt:[channel channelId]]] integerValue];
-    return channelIndex;
+    NSNumber *number = [_channelIndexMap objectForKey:[NSNumber numberWithInt:[channel channelId]]];
+    if (number) {
+        return [number integerValue];
+    }
+    return NSNotFound;
 }
 
 - (void) reloadUser:(MKUser *)user {
@@ -195,6 +208,30 @@
     _channelIndexMap = [[NSMutableDictionary alloc] init];
 
     [self addChannelTreeToModel:channel indentLevel:0];
+}
+
+- (void) switchToServerMode {
+    _viewMode = MUServerViewControllerViewModeServer;
+    [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
+}
+
+- (void) switchToChannelMode {
+    _viewMode = MUServerViewControllerViewModeChannel;
+    
+    [_modelItems release];
+    _modelItems = [[NSMutableArray alloc] init];
+    
+    [_userIndexMap release];
+    _userIndexMap = [[NSMutableDictionary alloc] init];
+    
+    [_channelIndexMap release];
+    _channelIndexMap = [[NSMutableDictionary alloc] init];
+    
+    MKChannel *channel = [[_serverModel connectedUser] channel];
+    for (MKUser *user in [channel users]) {
+        [_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
+        [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:user indentLevel:0]];
+    }
 }
 
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
@@ -312,12 +349,22 @@
 
 - (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
     NSInteger idx = [self indexForUser:user];
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    if (idx != NSNotFound) {
+        if (_viewMode == MUServerViewControllerViewModeServer) {
+            [self rebuildModelArrayFromChannel:[model rootChannel]];
+        } else if (_viewMode) {
+            [self switchToChannelMode];
+        }
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
-    NSInteger userIndex = [[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    NSInteger userIndex = [self indexForUser:user];
+    if (userIndex == NSNotFound) {
+        return;
+    }
+
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
 
     MKTalkState talkState = [user talkState];
@@ -335,42 +382,79 @@
 }
 
 - (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    NSInteger idx = [self indexForChannel:channel];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self rebuildModelArrayFromChannel:[model rootChannel]];
+        NSInteger idx = [self indexForChannel:channel];
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model channelRemoved:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView reloadData];
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self rebuildModelArrayFromChannel:[model rootChannel]];
+        [self.tableView reloadData];
+    } else if (_viewMode == MUServerViewControllerViewModeChannel) {
+        [self switchToChannelMode];
+        [self.tableView reloadData];
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model channelMoved:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView reloadData];
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self rebuildModelArrayFromChannel:[model rootChannel]];
+        [self.tableView reloadData];
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model channelRenamed:(MKChannel *)channel {
-    [self reloadChannel:channel];
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self reloadChannel:channel];
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
-    [self.tableView beginUpdates]; 
-    if (user == [model connectedUser]) {
-        [self reloadChannel:chan];
-        [self reloadChannel:prevChan];
-    }
     
-    // Check if the user is joining a channel for the first time.
-    if (prevChan != nil) {
-        NSInteger prevIdx = [self indexForUser:user];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self.tableView beginUpdates];
+        if (user == [model connectedUser]) {
+            [self reloadChannel:chan];
+            [self reloadChannel:prevChan];
+        }
+    
+        // Check if the user is joining a channel for the first time.
+        if (prevChan != nil) {
+            NSInteger prevIdx = [self indexForUser:user];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
 
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    NSInteger newIdx = [self indexForUser:user];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
+        [self rebuildModelArrayFromChannel:[model rootChannel]];
+        NSInteger newIdx = [self indexForUser:user];
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+    } else if (_viewMode == MUServerViewControllerViewModeChannel) {
+        NSInteger userIdx = [self indexForUser:user];
+        MKChannel *curChan = [[_serverModel connectedUser] channel];
+        
+        if (user == [model connectedUser]) {
+            [self switchToChannelMode];
+            [self.tableView reloadData];
+        } else {
+            // User is leaving
+            [self.tableView beginUpdates];
+            if (prevChan == curChan && userIdx != NSNotFound) {
+                [self switchToChannelMode];
+                [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                // User is joining
+            } else if (chan == curChan && userIdx == NSNotFound) {
+                [self switchToChannelMode];
+                userIdx = [self indexForUser:user];
+                if (userIdx != NSNotFound) {
+                    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                }
+            }
+            [self.tableView endUpdates];
+        }
+    }
 }
 
 - (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
@@ -491,6 +575,24 @@
 - (void) talkOff:(UIButton *)button {
     [button setAlpha:0.80f];
     [[MKAudio sharedAudio] setForceTransmit:NO];
+}
+
+#pragma mark - Mode switch
+
+- (void) toggleMode {
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        [self switchToChannelMode];
+    } else if (_viewMode == MUServerViewControllerViewModeChannel) {
+        [self switchToServerMode];
+    }
+
+    [self.tableView reloadData];
+    
+    if (_viewMode == MUServerViewControllerViewModeServer) {
+        MKChannel *cur = [[_serverModel connectedUser] channel];
+        NSInteger idx = [self indexForChannel:cur];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
 }
 
 @end

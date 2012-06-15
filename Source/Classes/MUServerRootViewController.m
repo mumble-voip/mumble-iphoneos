@@ -53,6 +53,7 @@
     UISegmentedControl          *_segmentedControl;
     UIBarButtonItem             *_actionButton;
     UIBarButtonItem             *_smallIcon;
+    UIButton                    *_modeSwitchButton;
     MKNumberBadgeView           *_numberBadgeView;
 
     MUServerViewController      *_serverView;
@@ -128,9 +129,15 @@
     _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
     _serverView.navigationItem.rightBarButtonItem = _actionButton;
     
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SmallMumbleIcon"]];
-    _smallIcon = [[UIBarButtonItem alloc] initWithCustomView:imgView];
-    [imgView release];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 35, 30)];
+    [button setBackgroundImage:[UIImage imageNamed:@"SmallMumbleIcon"] forState:UIControlStateNormal];
+    [button setAdjustsImageWhenDisabled:NO];
+    [button setEnabled:YES];
+    [button addTarget:self action:@selector(modeSwitchButtonReleased:) forControlEvents:UIControlEventTouchUpInside];
+    _smallIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
+    [button release];
+    _modeSwitchButton = button;
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
     _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(_segmentedControl.frame.size.width-38, -8, 50, 30)];
@@ -169,11 +176,13 @@
         _serverView.navigationItem.leftBarButtonItem = _smallIcon;
         _serverView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
+        [_modeSwitchButton setEnabled:YES];
     } else if (_segmentedControl.selectedSegmentIndex == 1) {
         _messagesView.navigationItem.titleView = _segmentedControl;
         _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
         _messagesView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
+        [_modeSwitchButton setEnabled:NO];
     }
     
     if (_segmentedControl.selectedSegmentIndex == 1) {
@@ -373,6 +382,10 @@
 
 - (void) childDoneButton:(id)sender {
     [[self modalViewController] dismissModalViewControllerAnimated:YES];
+}
+
+- (void) modeSwitchButtonReleased:(id)sender {
+    [_serverView toggleMode];
 }
 
 #pragma mark - UIAlertViewDelegate
