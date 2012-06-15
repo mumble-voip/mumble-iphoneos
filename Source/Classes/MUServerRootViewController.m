@@ -140,7 +140,7 @@
     _modeSwitchButton = button;
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
-    _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(_segmentedControl.frame.size.width-38, -8, 50, 30)];
+    _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(_segmentedControl.frame.size.width-24, -10, 50, 30)];
     [_segmentedControl addSubview:_numberBadgeView];
     _numberBadgeView.value = 0;
     _numberBadgeView.shadow = NO;
