@@ -165,8 +165,6 @@
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
-                                                                // Push-to-talk
-                                                                [NSNumber numberWithBool:YES],     @"PTTButtonOnlyInChannelView",
                                                              nil]];
     
     [self reloadPreferences];

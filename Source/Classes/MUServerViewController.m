@@ -121,9 +121,8 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    BOOL onlyInChannelView = [[NSUserDefaults standardUserDefaults] boolForKey:@"PTTButtonOnlyInChannelView"];
-    if (!onlyInChannelView && [[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
+
+    if ([[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
         UIImage *onImage = [UIImage imageNamed:@"talkbutton_on"];
         UIImage *offImage = [UIImage imageNamed:@"talkbutton_off"];
         
