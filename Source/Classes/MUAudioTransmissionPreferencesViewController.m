@@ -91,8 +91,6 @@
     } else if (section == 1) {
         if ([current isEqualToString:@"vad"])
             return 1;
-        if ([current isEqualToString:@"ptt"])
-            return 2;
     }
     return 0;
 }
@@ -136,24 +134,6 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = NSLocalizedString(@"Voice Activity Configuration", nil);
             }
-        } else if ([current isEqualToString:@"ptt"]) {
-            if (indexPath.row == 0) {
-                cell.accessoryView = nil;
-                cell.textLabel.text = NSLocalizedString(@"Only in Channel View", nil);
-                cell.textLabel.textColor = [UIColor blackColor];
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PTTButtonOnlyInChannelView"]) {
-                    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
-                    cell.textLabel.textColor = [MUColor selectedTextColor];
-                }
-            } else if (indexPath.row == 1) {
-                cell.accessoryView = nil;
-                cell.textLabel.text = NSLocalizedString(@"Both in Server and Channel View", nil);
-                cell.textLabel.textColor = [UIColor blackColor];
-                if (![[NSUserDefaults standardUserDefaults] boolForKey:@"PTTButtonOnlyInChannelView"]) {
-                    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
-                    cell.textLabel.textColor = [MUColor selectedTextColor];
-                }
-            }
         }
     }
 
@@ -161,19 +141,14 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     if (section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Method", nil)];
-    }
-    if (section == 1 && [current isEqualToString:@"ptt"]) {
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Show Push-to-Talk Button", nil)];
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Transmission Method", nil)];
     }
     return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
-    if (section == 1 && [current isEqualToString:@"vad"]) {
+    if (section == 1) {
         return 0.0f;
     }
 
@@ -207,31 +182,6 @@
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
-
-    } else if (indexPath.section == 1) {
-        NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
-        if ([current isEqualToString:@"vad"]) {
-            if (indexPath.row == 0) {
-                MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
-                [self.navigationController pushViewController:vadSetup animated:YES];
-                [vadSetup release];
-            }
-        } else if ([current isEqualToString:@"ptt"]) {
-            for (int i = 0; i < 2; i++) {
-                cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:1]];
-                cell.accessoryView = nil;
-                cell.textLabel.textColor = [UIColor blackColor];
-            }
-            
-            cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            cell.textLabel.textColor = [MUColor selectedTextColor];
-            cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
-            
-            BOOL onlyInChannelView = [indexPath row] == 0;
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:onlyInChannelView] forKey:@"PTTButtonOnlyInChannelView"];
-            
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        }
     }
 }
 
