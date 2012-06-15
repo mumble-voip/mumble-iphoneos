@@ -30,7 +30,6 @@
 
 #import "MUServerRootViewController.h"
 #import "MUServerViewController.h"
-#import "MUChannelViewController.h"
 #import "MUServerCertificateTrustViewController.h"
 #import "MUAccessTokenViewController.h"
 #import "MUCertificateViewController.h"
@@ -57,7 +56,6 @@
     MKNumberBadgeView           *_numberBadgeView;
 
     MUServerViewController      *_serverView;
-    MUChannelViewController     *_channelView;
     MUMessagesViewController    *_messagesView;
     
     NSInteger                   _unreadMessages;
@@ -87,7 +85,6 @@
 
 - (void) dealloc {
     [_serverView release];
-    [_channelView release];
    
     [_model removeDelegate:self];
     [_model release];
@@ -112,13 +109,11 @@
     [super viewDidLoad];
     
     _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
-    _channelView = [[MUChannelViewController alloc] initWithServerModel:_model];
     _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
     
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
                          [NSArray arrayWithObjects:
                             NSLocalizedString(@"Server", nil),
-                            NSLocalizedString(@"Channel", nil),
                             NSLocalizedString(@"Messages", nil),
                           nil]];
     
@@ -175,18 +170,13 @@
         _serverView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     } else if (_segmentedControl.selectedSegmentIndex == 1) {
-        _channelView.navigationItem.titleView = _segmentedControl;
-        _channelView.navigationItem.leftBarButtonItem = _smallIcon;
-        _channelView.navigationItem.rightBarButtonItem = _actionButton;
-        [self setViewControllers:[NSArray arrayWithObject:_channelView] animated:NO];
-    } else if (_segmentedControl.selectedSegmentIndex == 2) {
         _messagesView.navigationItem.titleView = _segmentedControl;
         _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
         _messagesView.navigationItem.rightBarButtonItem = _actionButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
     }
     
-    if (_segmentedControl.selectedSegmentIndex == 2) {
+    if (_segmentedControl.selectedSegmentIndex == 1) {
         _unreadMessages = 0;
         _numberBadgeView.value = 0;
         _numberBadgeView.hidden = YES;

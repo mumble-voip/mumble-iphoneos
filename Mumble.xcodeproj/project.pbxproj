@@ -63,7 +63,6 @@
 		2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879528914C3874C00567430 /* RightBalloonSelected@2x.png */; };
 		2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2879528E14C38FC200567430 /* MobileCoreServices.framework */; };
 		287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */; };
-		287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A60561176201E00DD4FFB /* MUChannelViewController.m */; };
 		287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */; };
 		287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */; };
 		287A686F14C76E56008B1BE7 /* MUMessageAttachmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */; };
@@ -289,8 +288,6 @@
 		2879528E14C38FC200567430 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		287952AE14C4D67500567430 /* MUMessageRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageRecipientViewController.h; sourceTree = "<group>"; };
 		287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageRecipientViewController.m; sourceTree = "<group>"; };
-		287A60551176201E00DD4FFB /* MUChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUChannelViewController.h; sourceTree = "<group>"; };
-		287A60561176201E00DD4FFB /* MUChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUChannelViewController.m; sourceTree = "<group>"; };
 		287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GrayCheckmark.png; path = Resources/Apple/GrayCheckmark.png; sourceTree = "<group>"; };
 		287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GrayCheckmark@2x.png"; path = "Resources/Apple/GrayCheckmark@2x.png"; sourceTree = "<group>"; };
 		287A686D14C76E55008B1BE7 /* MUMessageAttachmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageAttachmentViewController.h; sourceTree = "<group>"; };
@@ -526,8 +523,6 @@
 				280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */,
 				289CBA16125693040015E58E /* MUServerViewController.h */,
 				289CBA17125693040015E58E /* MUServerViewController.m */,
-				287A60551176201E00DD4FFB /* MUChannelViewController.h */,
-				287A60561176201E00DD4FFB /* MUChannelViewController.m */,
 				28A2AEBF14788BE300F3B83F /* MUColor.h */,
 				28A2AEC014788BE300F3B83F /* MUColor.m */,
 				28F79C6E147973D40003B8BA /* MUUserStateAcessoryView.h */,
@@ -1100,7 +1095,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				287A60AA117628FE00DD4FFB /* MUChannelViewController.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */,
 				2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */,
