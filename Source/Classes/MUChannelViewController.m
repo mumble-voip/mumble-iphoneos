@@ -78,7 +78,7 @@
         [_talkButton setBackgroundImage:onImage forState:UIControlStateHighlighted];
         [_talkButton setBackgroundImage:offImage forState:UIControlStateNormal];
         [_talkButton setOpaque:NO];
-        [_talkButton setAlpha:0.25f];
+        [_talkButton setAlpha:0.80f];
         [window addSubview:_talkButton];
 
         [_talkButton addTarget:self action:@selector(talkOn:) forControlEvents:UIControlEventTouchDown];
@@ -405,7 +405,7 @@
 }
 
 - (void) talkOff:(UIButton *)button {
-    [button setAlpha:0.25f];
+    [button setAlpha:0.80f];
     [[MKAudio sharedAudio] setForceTransmit:NO];
 }
 
