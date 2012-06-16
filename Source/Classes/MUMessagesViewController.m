@@ -530,6 +530,7 @@
         notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], [msg plainTextString]];
         [notification.userInfo setValue:indexPath forKey:@"indexPath"];
         [app presentLocalNotificationNow:notification];
+        [app setApplicationIconBadgeNumber:[app applicationIconBadgeNumber]+1];
     }
 }
 

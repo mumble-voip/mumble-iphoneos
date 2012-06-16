@@ -134,6 +134,9 @@
     _verCheck = [[MUVersionChecker alloc] init];
 #endif
     
+    // Reset application badge, in case something brought it into an inconsistent state.
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     // Initialize the notification controller
     [MUNotificationController sharedController];
     

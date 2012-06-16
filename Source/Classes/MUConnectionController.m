@@ -158,6 +158,9 @@
     [_timer invalidate];
     [_serverRoot release];
     _serverRoot = nil;
+    
+    // Reset app badge. The connection is no more.
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
             
 - (void) updateTitle {

@@ -189,6 +189,7 @@
         _unreadMessages = 0;
         _numberBadgeView.value = 0;
         _numberBadgeView.hidden = YES;
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     } else if (_numberBadgeView.value > 0) {
         _numberBadgeView.hidden = NO;
     }
