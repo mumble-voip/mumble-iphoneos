@@ -527,7 +527,27 @@
     UIApplication *app = [UIApplication sharedApplication];
     if ([app applicationState] == UIApplicationStateBackground) {
         UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], [msg plainTextString]];
+        
+        NSMutableCharacterSet *trimSet = [[NSMutableCharacterSet alloc] init];
+        [trimSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+        [trimSet formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
+        [trimSet autorelease];
+    
+        NSString *msgText = [[msg plainTextString] stringByTrimmingCharactersInSet:trimSet];
+        NSUInteger numImages = [[msg embeddedImages] count];
+        if ([msgText length] == 0) {
+            if (numImages == 0) {
+                msgText = NSLocalizedString(@"(Empty body)", nil);
+            } else if (numImages == 1) {
+                msgText = NSLocalizedString(@"(Message with image attachment)", nil);
+            } else if (numImages > 1) {
+                msgText = NSLocalizedString(@"(Message with image attachments)", nil);
+            }
+        } else {
+            msgText = [msg plainTextString];
+        }
+        
+        notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], msgText];
         [notification.userInfo setValue:indexPath forKey:@"indexPath"];
         [app presentLocalNotificationNow:notification];
         [app setApplicationIconBadgeNumber:[app applicationIconBadgeNumber]+1];
