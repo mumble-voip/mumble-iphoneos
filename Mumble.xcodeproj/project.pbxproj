@@ -1211,12 +1211,16 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1230,6 +1234,8 @@
 		2887C88A1454C4C2009B3576 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = AppStore;
 		};
@@ -1243,6 +1249,8 @@
 		28BC1E7B1227155500C03FCF /* BetaDist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = BetaDist;
 		};

@@ -192,7 +192,9 @@
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     UIViewController *welcomeScreen = nil;
     if (idiom == UIUserInterfaceIdiomPad) {
-        // Not here in 1.0.
+        welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
+        [navigationController pushViewController:welcomeScreen animated:YES];
+        [welcomeScreen release];
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
         [navigationController pushViewController:welcomeScreen animated:YES];
