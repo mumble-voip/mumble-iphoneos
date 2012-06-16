@@ -182,6 +182,12 @@
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
         cell.textLabel.textColor = [MUColor selectedTextColor];
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
+            [self.navigationController pushViewController:vadSetup animated:YES];
+            [vadSetup release];
+        }	
     }
 }
 
