@@ -523,6 +523,14 @@
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {
         [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
+   
+    UIApplication *app = [UIApplication sharedApplication];
+    if ([app applicationState] == UIApplicationStateBackground) {
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], [msg plainTextString]];
+        [notification.userInfo setValue:indexPath forKey:@"indexPath"];
+        [app presentLocalNotificationNow:notification];
+    }
 }
 
 @end
