@@ -32,9 +32,13 @@
 #import "MUPreferencesViewController.h"
 #import "MULegalViewController.h"
 #import "MUPopoverBackgroundView.h"
+#import "MUPublicServerListController.h"
+#import "MUFavouriteServerListController.h"
+#import "MULanServerListController.h"
 
 @interface MUWelcomeScreenPad () <UIPopoverControllerDelegate> {
-    UIPopoverController *_prefsPopover;
+    UIPopoverController   *_prefsPopover;
+    IBOutlet UITableView  *_tableView;
 }
 @end
 
@@ -50,6 +54,12 @@
 	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
+- (void) viewDidLoad {
+    _tableView.backgroundColor = [UIColor clearColor];
+    _tableView.opaque = NO;
+    _tableView.backgroundView = nil;
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Mumble";
     
@@ -60,6 +70,70 @@
     UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(prefsButtonClicked:)];
     self.navigationItem.leftBarButtonItem = prefsBtn;
     [prefsBtn release];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
+}
+
+#pragma mark -
+#pragma mark TableView
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+// Customize the number of rows in the table view.
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0)
+        return 3;
+    return 0;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44.0;
+}
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
+    if (!cell) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"] autorelease];
+    }
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
+    /* Servers section. */
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = NSLocalizedString(@"Public Servers", nil);
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = NSLocalizedString(@"Favourite Servers", nil);
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = NSLocalizedString(@"LAN Servers", nil);
+        }
+    }
+    
+    [[cell textLabel] setHidden: NO];
+    
+    return cell;
+}
+
+// Override to support row selection in the table view.
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    /* Servers section. */
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            MUPublicServerListController *serverList = [[[MUPublicServerListController alloc] init] autorelease];
+            [self.navigationController pushViewController:serverList animated:YES];
+        } else if (indexPath.row == 1) {
+            MUFavouriteServerListController *favList = [[[MUFavouriteServerListController alloc] init] autorelease];
+            [self.navigationController pushViewController:favList animated:YES];
+        } else if (indexPath.row == 2) {
+            MULanServerListController *lanList = [[[MULanServerListController alloc] init] autorelease];
+            [self.navigationController pushViewController:lanList animated:YES];
+        }
+    }
 }
 
 #pragma mark -
