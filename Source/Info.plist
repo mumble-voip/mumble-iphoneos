@@ -61,6 +61,8 @@
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>NSMainNibFile~ipad</key>
+	<string>MainWindow~iPad</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
