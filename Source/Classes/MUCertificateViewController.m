@@ -59,6 +59,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        
         // Try to build a chain, if possible.
         NSArray *chains = [MUCertificateChainBuilder buildChainFromPersistentRef:persistentRef];
         NSMutableArray *certificates = [[NSMutableArray alloc] initWithCapacity:[chains count]];

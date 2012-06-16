@@ -29,8 +29,13 @@
 */
 
 #import "MUWelcomeScreenPad.h"
+#import "MUPreferencesViewController.h"
+#import "MULegalViewController.h"
+#import "MUPopoverBackgroundView.h"
 
-@interface MUWelcomeScreenPad ()
+@interface MUWelcomeScreenPad () <UIPopoverControllerDelegate> {
+    UIPopoverController *_prefsPopover;
+}
 @end
 
 @implementation MUWelcomeScreenPad
@@ -43,6 +48,82 @@
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    self.navigationItem.title = @"Mumble";
+    
+    UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(aboutButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = aboutBtn;
+    [aboutBtn release];
+    
+    UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(prefsButtonClicked:)];
+    self.navigationItem.leftBarButtonItem = prefsBtn;
+    [prefsBtn release];
+}
+
+#pragma mark -
+#pragma mark About Dialog
+
+- (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumbleapp.com/"]];
+    } else if (buttonIndex == 2) {
+        MULegalViewController *legalView = [[MULegalViewController alloc] init];
+        UINavigationController *navController = [[UINavigationController alloc] init];
+        [navController pushViewController:legalView animated:NO];
+        [legalView release];
+        [[self navigationController] presentModalViewController:navController animated:YES];
+        [navController release];
+    } else if (buttonIndex == 3) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
+    }
+}
+
+#pragma mark - Actions
+
+- (void) aboutButtonClicked:(id)sender {
+#ifdef MUMBLE_BETA_DIST
+    NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@ (%@)",
+                            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
+                            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+#else
+    NSString *aboutTitle = [NSString stringWithFormat:@"Mumble %@",
+                            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
+#endif
+    NSString *aboutMessage = NSLocalizedString(@"Low latency, high quality voice chat", nil);
+    
+    UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
+                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                              otherButtonTitles:NSLocalizedString(@"Website", nil),
+                              NSLocalizedString(@"Legal", nil),
+                              NSLocalizedString(@"Support", nil), nil];
+    [aboutView show];
+    [aboutView release];
+}
+
+- (void) prefsButtonClicked:(id)sender {
+    if (_prefsPopover != nil) {
+        return;
+    }
+    
+    MUPreferencesViewController *prefs = [[[MUPreferencesViewController alloc] init] autorelease];
+    UINavigationController *navCtrl = [[[UINavigationController alloc] initWithRootViewController:prefs] autorelease];
+    UIPopoverController *popOver = [[UIPopoverController alloc] initWithContentViewController:navCtrl];
+    popOver.popoverBackgroundViewClass = [MUPopoverBackgroundView class];
+    [popOver setDelegate:self];
+    [popOver presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    
+    _prefsPopover = popOver;
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    if (popoverController == _prefsPopover) {
+        [_prefsPopover release];
+        _prefsPopover = nil;
+    }
 }
 
 @end

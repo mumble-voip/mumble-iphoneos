@@ -173,7 +173,7 @@
     
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
-
+    
     // Make our window the key window.
     [window makeKeyAndVisible];
 
