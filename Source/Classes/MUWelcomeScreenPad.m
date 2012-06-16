@@ -58,6 +58,9 @@
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.opaque = NO;
     _tableView.backgroundView = nil;
+    _tableView.scrollEnabled = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone; // doesn't work?
+
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -70,9 +73,7 @@
     UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(prefsButtonClicked:)];
     self.navigationItem.leftBarButtonItem = prefsBtn;
     [prefsBtn release];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
+    
     [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
 }
 
