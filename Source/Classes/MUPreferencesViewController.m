@@ -70,9 +70,11 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    self.navigationController.navigationBar.translucent = YES;
+
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+        self.navigationController.navigationBar.translucent = YES;
+    }
     
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
