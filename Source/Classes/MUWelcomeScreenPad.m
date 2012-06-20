@@ -60,7 +60,6 @@
     _tableView.backgroundView = nil;
     _tableView.scrollEnabled = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone; // doesn't work?
-
 }
 
 - (void) viewWillAppear:(BOOL)animated {
