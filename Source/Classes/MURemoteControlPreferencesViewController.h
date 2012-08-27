@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2010 Mikkel Krautz <mikkel@krautz.dk>
+/* Copyright (C) 2012 Mikkel Krautz <mikkel@krautz.dk>
 
    All rights reserved.
 
@@ -28,24 +28,5 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#import <Availability.h>
-
-#define MUMBLE_UNUSED __attribute__((unused))
-
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
-
-#include <TargetConditionals.h>
-
-#ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <UIKit/UIPopoverBackgroundView.h>
-# import <QuartzCore/QuartzCore.h>
-# import <MobileCoreServices/MobileCoreServices.h>
-# import <CFNetwork/CFNetwork.h>
-#endif
-
-#undef NSLocalizedString
-#define NSLocalizedString(str, comment) str
+@interface MURemoteControlPreferencesViewController : UITableViewController
+@end

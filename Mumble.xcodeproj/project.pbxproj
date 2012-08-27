@@ -17,6 +17,7 @@
 		2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0514CB024A000983A5 /* MUImageViewController.m */; };
 		2802AC0D14CB2E2B000983A5 /* MUTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0C14CB2E2B000983A5 /* MUTextMessage.m */; };
 		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
+		2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2813B1D015EBFDA90049A59A /* MURemoteControlPreferencesViewController.m */; };
 		2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2822AC0514878AC500E9DB17 /* MUConnectionController.m */; };
 		28234D5F13F09148006B830D /* talkbutton_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5B13F09148006B830D /* talkbutton_off.png */; };
 		28234D6013F09148006B830D /* talkbutton_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28234D5C13F09148006B830D /* talkbutton_off@2x.png */; };
@@ -154,6 +155,7 @@
 		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
 		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
 		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
+		28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */; };
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
 		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
@@ -228,6 +230,8 @@
 		2802AC0C14CB2E2B000983A5 /* MUTextMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTextMessage.m; sourceTree = "<group>"; };
 		280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewController.h; sourceTree = "<group>"; };
 		280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewController.m; sourceTree = "<group>"; };
+		2813B1CF15EBFDA90049A59A /* MURemoteControlPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MURemoteControlPreferencesViewController.h; sourceTree = "<group>"; };
+		2813B1D015EBFDA90049A59A /* MURemoteControlPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MURemoteControlPreferencesViewController.m; sourceTree = "<group>"; };
 		2822AC0414878AC500E9DB17 /* MUConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUConnectionController.h; sourceTree = "<group>"; };
 		2822AC0514878AC500E9DB17 /* MUConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUConnectionController.m; sourceTree = "<group>"; };
 		28234D5B13F09148006B830D /* talkbutton_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = talkbutton_off.png; path = Resources/talkbutton_off.png; sourceTree = "<group>"; };
@@ -426,6 +430,8 @@
 		28F9174411B946250030D649 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = Dependencies/fmdb/src/FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		28F9174611B946250030D649 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = Dependencies/fmdb/src/FMResultSet.h; sourceTree = "<group>"; };
 		28F9174711B946250030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/FMResultSet.m; sourceTree = "<group>"; };
+		28F9E1BD15EBDF2400D52001 /* MURemoteControlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MURemoteControlServer.h; sourceTree = "<group>"; };
+		28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MURemoteControlServer.m; sourceTree = "<group>"; };
 		28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SmallMumbleIcon.png; path = Resources/SmallMumbleIcon.png; sourceTree = "<group>"; };
 		28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SmallMumbleIcon@2x.png"; path = "Resources/SmallMumbleIcon@2x.png"; sourceTree = "<group>"; };
 		28FAA36214D7551600F6D711 /* MKNumberBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MKNumberBadgeView.h; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.h; sourceTree = "<group>"; };
@@ -588,6 +594,8 @@
 				28EF155C14D8738C008A35A4 /* MUMessagesDatabase.m */,
 				286A3CBC158CFDF000C817D1 /* MUPopoverBackgroundView.h */,
 				286A3CBD158CFDF200C817D1 /* MUPopoverBackgroundView.m */,
+				28F9E1BD15EBDF2400D52001 /* MURemoteControlServer.h */,
+				28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -636,6 +644,8 @@
 				28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */,
 				286A3C9E158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.h */,
 				286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */,
+				2813B1CF15EBFDA90049A59A /* MURemoteControlPreferencesViewController.h */,
+				2813B1D015EBFDA90049A59A /* MURemoteControlPreferencesViewController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1219,6 +1229,8 @@
 				286A3CA0158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m in Sources */,
 				286A3CA4158CCF9F00C817D1 /* MUWelcomeScreenPad.m in Sources */,
 				286A3CBE158CFDF300C817D1 /* MUPopoverBackgroundView.m in Sources */,
+				28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */,
+				2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,6 +36,7 @@
 #import "MUPublicServerList.h"
 #import "MUConnectionController.h"
 #import "MUNotificationController.h"
+#import "MURemoteControlServer.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
@@ -180,6 +181,10 @@
     // Try to preload the keyboard to avoid
     // infuriating lag when the keyboard is first shown.
     //[self forceKeyboardLoad];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"RemoteControlServerEnabled"]) {
+        [[MURemoteControlServer sharedRemoteControlServer] start];
+    }
     
     // Put a background view in here, to have prettier transitions.
     UIImageView *bgView =[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
@@ -354,6 +359,9 @@
     if ([connections count] == 0) {
         NSLog(@"MumbleApplicationDelegate: Not connected to a server. Stopping MKAudio.");
         [[MKAudio sharedAudio] stop];
+        
+        // Also terminate the remote control server.
+        [[MURemoteControlServer sharedRemoteControlServer] stop];
     }
 }
 
@@ -368,6 +376,10 @@
     if (![[MKAudio sharedAudio] isRunning]) {
         NSLog(@"MumbleApplicationDelegate: MKAudio not running. Starting it.");
         [[MKAudio sharedAudio] start];
+        
+        // Re-start the remote control server.
+        [[MURemoteControlServer sharedRemoteControlServer] stop];
+        [[MURemoteControlServer sharedRemoteControlServer] start];
     }
 }
 

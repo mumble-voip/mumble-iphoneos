@@ -33,8 +33,10 @@
 #import "MUCertificatePreferencesViewController.h"
 #import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUAdvancedAudioPreferencesViewController.h"
+#import "MURemoteControlPreferencesViewController.h"
 #import "MUCertificateController.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MURemoteControlServer.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -109,7 +111,7 @@
         return 3;
     // Network
     } else if (section == 1) {
-        return 2;
+        return 3;
     }
 
     return 0;
@@ -186,6 +188,21 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
+        } else if ([indexPath row] == 2) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RemoteControlCell"];
+            if (cell == nil)
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RemoteControlCell"] autorelease];
+            cell.textLabel.text = NSLocalizedString(@"Remote Control", nil);
+            BOOL isOn = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
+            if (isOn) {
+                cell.detailTextLabel.text = NSLocalizedString(@"On", nil);
+            } else {
+                cell.detailTextLabel.text = NSLocalizedString(@"Off", nil);
+            }
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            return cell;
         }
     }
 
@@ -225,6 +242,11 @@
             MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
             [self.navigationController pushViewController:certPref animated:YES];
             [certPref release];
+        }
+        if ([indexPath row] == 2) {
+            MURemoteControlPreferencesViewController *remoteControlPref = [[MURemoteControlPreferencesViewController alloc] init];
+            [self.navigationController pushViewController:remoteControlPref animated:YES];
+            [remoteControlPref release];
         }
     }
 }
