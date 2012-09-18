@@ -41,6 +41,28 @@
 #import "MUDataURL.h"
 #import "MUColor.h"
 
+@interface MUConsistentTextField : UITextField
+@end
+
+@implementation MUConsistentTextField
+- (CGRect) editingRectForBounds:(CGRect)bounds {
+    NSInteger padding = 13;
+    
+    CGRect leftRect = [super leftViewRectForBounds:bounds];
+    CGRect rect = [super editingRectForBounds:bounds];
+    
+    NSInteger minx = leftRect.size.width + padding; // 'at least'
+    
+    if (rect.origin.x < minx) {
+        NSInteger delta = minx - rect.origin.x;
+        rect.origin.x += delta;
+        rect.size.width -= delta;
+    }
+
+    return rect;
+}
+@end
+
 @interface MUMessageReceiverButton : UIControl {
     NSString *_str;
 }
@@ -114,7 +136,7 @@
     MKServerModel            *_model;
     UITableView              *_tableView;
     UIView                   *_textBarView;
-    UITextField              *_textField;
+    MUConsistentTextField    *_textField;
     BOOL                     _autoCorrectGuard;
     MUMessagesDatabase       *_msgdb;
 
@@ -180,7 +202,7 @@
     [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
     _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
 
-    _textField = [[[UITextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)] autorelease];
+    _textField = [[[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)] autorelease];
     _textField.leftViewMode = UITextFieldViewModeAlways;
     _textField.rightViewMode = UITextFieldViewModeAlways;
     _textField.borderStyle = UITextBorderStyleRoundedRect;
