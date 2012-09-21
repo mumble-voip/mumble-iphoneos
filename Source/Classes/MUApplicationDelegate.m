@@ -175,25 +175,17 @@
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
     
-    // Make our window the key window.
-    [window makeKeyAndVisible];
-
-    // Try to preload the keyboard to avoid
-    // infuriating lag when the keyboard is first shown.
-    //[self forceKeyboardLoad];
-    
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"RemoteControlServerEnabled"]) {
         [[MURemoteControlServer sharedRemoteControlServer] start];
     }
     
     // Put a background view in here, to have prettier transitions.
-    UIImageView *bgView =[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    UIImageView *bgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     [bgView setFrame:[[UIScreen mainScreen] bounds]];
     [window addSubview:bgView];
 
     // Add our default navigation controller
     self.navigationController.toolbarHidden = YES;
-    [window addSubview:[navigationController view]];
 
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     UIViewController *welcomeScreen = nil;
@@ -206,6 +198,9 @@
         [navigationController pushViewController:welcomeScreen animated:YES];
         [welcomeScreen release];
     }
+    
+    [window setRootViewController:navigationController];
+    [window makeKeyAndVisible];
     
     [self notifyCrash];
 
