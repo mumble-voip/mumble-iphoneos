@@ -66,4 +66,19 @@
     return scaledImage;
 }
 
++ (UIImage *) imageNamed:(NSString *)imageName {
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    // For now, we require all -568h images to also be @2x.
+    if (height == 568 && scale == 2) {
+        NSString *expectedFn = [NSString stringWithFormat:@"%@-568h", imageName];
+        UIImage *attemptedImage = [UIImage imageNamed:expectedFn];
+        if (attemptedImage != nil) {
+            return attemptedImage;
+        }
+        // fallthrough
+    }
+    return [UIImage imageNamed:imageName];
+}
+
 @end

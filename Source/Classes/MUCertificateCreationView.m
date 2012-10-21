@@ -32,6 +32,7 @@
 #import "MUCertificateCreationProgressView.h"
 #import "MUCertificateController.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -117,7 +118,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 

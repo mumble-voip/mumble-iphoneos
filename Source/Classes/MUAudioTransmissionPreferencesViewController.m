@@ -33,6 +33,7 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUAudioBarViewCell.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
 }
@@ -55,7 +56,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
     self.title = NSLocalizedString(@"Transmission", nil);

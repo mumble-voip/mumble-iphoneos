@@ -32,6 +32,7 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
+#import "MUImage.h"
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -100,7 +101,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [super viewWillAppear:animated];
 
     if (self.tableView.style == UITableViewStyleGrouped) {
-        self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+        self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     }
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;

@@ -31,6 +31,7 @@
 #import "MUAudioSidetonePreferencesViewController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 @implementation MUAudioSidetonePreferencesViewController
 
@@ -45,7 +46,7 @@
     [super viewWillAppear:animated];
     
     self.title = NSLocalizedString(@"Sidetone", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
 }

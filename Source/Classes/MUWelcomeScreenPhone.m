@@ -37,6 +37,7 @@
 #import "MUServerRootViewController.h"
 #import "MUNotificationController.h"
 #import "MULegalViewController.h"
+#import "MUImage.h"
 
 @interface MUWelcomeScreenPhone () {
     UIAlertView  *_aboutView;
@@ -46,6 +47,7 @@
 }
 @end
 
+#define MUMBLE_LAUNCH_IMAGE_CREATION 0
 
 @implementation MUWelcomeScreenPhone
 
@@ -67,10 +69,11 @@
     self.navigationController.toolbarHidden = YES;
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
     
+#if MUMBLE_LAUNCH_IMAGE_CREATION != 1
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil)
                                                               style:UIBarButtonItemStyleBordered
                                                              target:self
@@ -84,6 +87,7 @@
                                                              action:@selector(prefsClicked:)];
     [self.navigationItem setLeftBarButtonItem:prefs];
     [prefs release];
+#endif
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -99,20 +103,28 @@
 
 // Customize the number of rows in the table view.
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+#if MUMBLE_LAUNCH_IMAGE_CREATION == 1
+    return 1;
+#endif
     if (section == 0)
         return 3;
     return 0;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIImage *img = [UIImage imageNamed:@"WelcomeScreenIcon"];
+    UIImage *img = [MUImage imageNamed:@"WelcomeScreenIcon"];
     UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
+    [imgView setContentMode:UIViewContentModeCenter];
     [imgView setFrame:CGRectMake(0, 0, img.size.width, img.size.height)];
     return imgView;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    UIImage *img = [UIImage imageNamed:@"WelcomeScreenIcon"];
+#if MUMBLE_LAUNCH_IMAGE_CREATION == 1
+    CGFloat statusBarAndTitleBarHeight = 64;
+    return [UIScreen mainScreen].bounds.size.height - statusBarAndTitleBarHeight;
+#endif
+    UIImage *img = [MUImage imageNamed:@"WelcomeScreenIcon"];
     return img.size.height;
 }
 

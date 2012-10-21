@@ -37,6 +37,7 @@
 #import "MUConnectionController.h"
 #import "MUNotificationController.h"
 #import "MURemoteControlServer.h"
+#import "MUImage.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKConnectionController.h>
@@ -45,8 +46,8 @@
 #import "PLCrashReporter.h"
 
 @interface MUApplicationDelegate () <UIApplicationDelegate, UIAlertViewDelegate> {
-    UIWindow                  *window;
-    UINavigationController    *navigationController;
+    UIWindow                  *_window;
+    UINavigationController    *_navigationController;
     MUPublicServerListFetcher *_publistFetcher;
 #ifdef MUMBLE_BETA_DIST
     MUVersionChecker          *_verCheck;
@@ -58,9 +59,6 @@
 @end
 
 @implementation MUApplicationDelegate
-
-@synthesize window;
-@synthesize navigationController;
 
 - (void) notifyCrash {
     PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
@@ -179,28 +177,31 @@
         [[MURemoteControlServer sharedRemoteControlServer] start];
     }
     
+    _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     // Put a background view in here, to have prettier transitions.
-    UIImageView *bgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    UIImageView *bgView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     [bgView setFrame:[[UIScreen mainScreen] bounds]];
-    [window addSubview:bgView];
+    [_window addSubview:bgView];
 
     // Add our default navigation controller
-    self.navigationController.toolbarHidden = YES;
+    _navigationController = [[UINavigationController alloc] init];
+    _navigationController.toolbarHidden = YES;
 
     UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     UIViewController *welcomeScreen = nil;
     if (idiom == UIUserInterfaceIdiomPad) {
         welcomeScreen = [[MUWelcomeScreenPad alloc] init];
-        [navigationController pushViewController:welcomeScreen animated:YES];
+        [_navigationController pushViewController:welcomeScreen animated:YES];
         [welcomeScreen release];
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
-        [navigationController pushViewController:welcomeScreen animated:YES];
+        [_navigationController pushViewController:welcomeScreen animated:YES];
         [welcomeScreen release];
     }
     
-    [window setRootViewController:navigationController];
-    [window makeKeyAndVisible];
+    [_window setRootViewController:_navigationController];
+    [_window makeKeyAndVisible];
     
     [self notifyCrash];
 
@@ -227,7 +228,7 @@
         NSNumber *port = [url port];
         NSString *username = [url user];
         NSString *password = [url password];
-        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:self.navigationController.visibleViewController];
+        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:_navigationController.visibleViewController];
         return YES;
     }
     return NO;
@@ -241,8 +242,8 @@
 #ifdef MUMBLE_BETA_DIST
     [_verCheck release];
 #endif
-    [navigationController release];
-    [window release];
+    [_navigationController release];
+    [_window release];
     [super dealloc];
 }
 
@@ -327,14 +328,14 @@
 
 - (void) forceKeyboardLoad {
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectZero];
-    [window addSubview:textField];
+    [_window addSubview:textField];
     [textField release];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [textField becomeFirstResponder];
 }
 
 - (void) keyboardWillShow:(NSNotification *)notification {
-    for (UIView *view in [window subviews]) {
+    for (UIView *view in [_window subviews]) {
         if ([view isFirstResponder]) {
             [view resignFirstResponder];
             [view removeFromSuperview];

@@ -30,6 +30,7 @@
 
 #import "MURemoteControlPreferencesViewController.h"
 #import "MURemoteControlServer.h"
+#import "MUImage.h"
 
 @interface MURemoteControlPreferencesViewController () {
 }
@@ -47,7 +48,7 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = NSLocalizedString(@"Remote Control", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
 }

@@ -34,6 +34,7 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServer.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MUImage.h"
 
 @interface MUFavouriteServerEditViewController () {
     BOOL               _editMode;
@@ -209,7 +210,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 

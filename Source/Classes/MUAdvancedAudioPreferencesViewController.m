@@ -34,6 +34,7 @@
 #import "MUAudioQualityPreferencesViewController.h"
 #import "MUAudioSidetonePreferencesViewController.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -50,7 +51,7 @@
     [super viewWillAppear:animated];
 
     self.title = NSLocalizedString(@"Advanced Audio", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
 

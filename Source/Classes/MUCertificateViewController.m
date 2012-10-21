@@ -33,6 +33,7 @@
 #import "MUCertificateController.h"
 #import "MUCertificateChainBuilder.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -124,7 +125,7 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     
     UIBarButtonItem *actions = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
     [actions setStyle:UIBarButtonItemStyleBordered];

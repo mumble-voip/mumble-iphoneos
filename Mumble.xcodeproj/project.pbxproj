@@ -27,6 +27,9 @@
 		283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */; };
 		2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2836767C1525053A0015958E /* MUCertificateChainBuilder.m */; };
 		2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */; };
+		28451944163463C90027FAB3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28451943163463C90027FAB3 /* Default-568h@2x.png */; };
+		2845194816346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */; };
+		2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */; };
 		28529B3B1541C043003DD813 /* certificatecreation.png in Resources */ = {isa = PBXBuildFile; fileRef = 28529B391541C042003DD813 /* certificatecreation.png */; };
 		28529B3C1541C043003DD813 /* certificatecreation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28529B3A1541C042003DD813 /* certificatecreation@2x.png */; };
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
@@ -246,6 +249,9 @@
 		2836767C1525053A0015958E /* MUCertificateChainBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateChainBuilder.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* MUCertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificatePreferencesViewController.h; sourceTree = "<group>"; };
 		2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificatePreferencesViewController.m; sourceTree = "<group>"; };
+		28451943163463C90027FAB3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon-568h@2x.png"; path = "Resources/WelcomeScreenIcon-568h@2x.png"; sourceTree = "<group>"; };
+		284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackgroundTextureBlackGradient-568h@2x.png"; path = "Resources/BackgroundTextureBlackGradient-568h@2x.png"; sourceTree = "<group>"; };
 		28529B391541C042003DD813 /* certificatecreation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificatecreation.png; path = Resources/certificatecreation.png; sourceTree = "<group>"; };
 		28529B3A1541C042003DD813 /* certificatecreation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecreation@2x.png"; path = "Resources/certificatecreation@2x.png"; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* MUCertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCell.xib; sourceTree = "<group>"; };
@@ -759,12 +765,15 @@
 				2879525D14C0AFAC00567430 /* BlackToolbarPattern@2x.png */,
 				28F79C68147966840003B8BA /* WelcomeScreenIcon.png */,
 				28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */,
+				2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */,
 				28A2AEB514786E6000F3B83F /* Default.png */,
 				28A2AEB614786E6000F3B83F /* Default@2x.png */,
+				28451943163463C90027FAB3 /* Default-568h@2x.png */,
 				28A2AEB714786E6000F3B83F /* Icon.png */,
 				28A2AEB814786E6000F3B83F /* Icon@2x.png */,
 				28F79CA21479C23F0003B8BA /* BackgroundTextureBlackGradient.png */,
 				28F79CA01479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png */,
+				284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */,
 				286A3CAC158CD5F400C817D1 /* BackgroundTextureBlackGradientPad.png */,
 				286A3CA6158CD05A00C817D1 /* BackgroundTextureBlackGradientPad@2x.png */,
 				28234D5B13F09148006B830D /* talkbutton_off.png */,
@@ -1120,6 +1129,9 @@
 				286A3CAF158CEB5B00C817D1 /* MainWindow~iPad.xib in Resources */,
 				286A3CC1158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp.png in Resources */,
 				286A3CC2158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png in Resources */,
+				28451944163463C90027FAB3 /* Default-568h@2x.png in Resources */,
+				2845194816346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png in Resources */,
+				2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

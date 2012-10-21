@@ -30,8 +30,6 @@
 
 #import "MUVersionChecker.h"
 
-@interface MUApplicationDelegate : NSObject <UIApplicationDelegate> 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
+@interface MUApplicationDelegate : NSObject <UIApplicationDelegate>
 - (void) reloadPreferences;
 @end

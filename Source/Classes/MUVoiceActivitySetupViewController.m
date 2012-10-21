@@ -32,6 +32,7 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUAudioBarViewCell.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 @implementation MUVoiceActivitySetupViewController
 
@@ -48,7 +49,7 @@
     [super viewWillAppear:animated];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.scrollEnabled = NO;
     self.navigationItem.title = NSLocalizedString(@"Voice Activity", nil);
 }

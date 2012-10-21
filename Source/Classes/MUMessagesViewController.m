@@ -40,6 +40,7 @@
 #import "MUMessagesDatabase.h"
 #import "MUDataURL.h"
 #import "MUColor.h"
+#import "MUImage.h"
 
 @interface MUConsistentTextField : UITextField
 @end
@@ -180,7 +181,7 @@
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
     _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-    [_tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]];
+    [_tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     [_tableView setDelegate:self];

@@ -32,6 +32,7 @@
 #import "MUPublicServerListController.h"
 #import "MUCountryServerListController.h"
 #import "MUTableViewHeaderLabel.h"
+#import "MUImage.h"
 
 @interface MUPublicServerListController () {
     MUPublicServerList        *_serverList;
@@ -56,7 +57,7 @@
     [super viewWillAppear:YES];
 
     self.navigationItem.title = NSLocalizedString(@"Public Servers", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]
+    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]
     ;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
