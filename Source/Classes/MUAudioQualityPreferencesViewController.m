@@ -79,21 +79,21 @@
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = NSLocalizedString(@"Low", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"Speex 16kbit/s, 60ms audio per packet", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"16 kbit/s, 60 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"Opus 40kbit/s, 20ms audio per packet", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"40 kbit/s, 20 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = NSLocalizedString(@"High", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"Opus 72kbit/s, 10ms audio per packet", nil);
+            cell.detailTextLabel.text = NSLocalizedString(@"72 kbit/s, 10 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
                 cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
