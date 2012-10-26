@@ -35,6 +35,8 @@
 + (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
 
++ (NSString *) fingerprintFromHexString:(NSString *)hexDigest;
+
 + (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
 + (MKCertificate *) defaultCertificate;
 

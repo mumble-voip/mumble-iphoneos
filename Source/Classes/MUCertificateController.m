@@ -84,6 +84,18 @@
     return cert;
 }
 
+// Converts a hex string into a user-readable fingerprint.
++ (NSString *) fingerprintFromHexString:(NSString *)hexDigest {
+    NSMutableString *fingerprint = [NSMutableString string];
+    for (int i = 0; i < [hexDigest length]; i++) {
+        if ((i % 2) == 0 && i > 0 && i < hexDigest.length-1) {
+            [fingerprint appendString:@":"];
+        }
+        [fingerprint appendFormat:@"%C", [hexDigest characterAtIndex:i]];
+    }
+    return fingerprint;
+}
+
 // Delete the certificate referenced by the persistent reference persistentRef.
 // todo(mkrautz): Don't leak OSStatus.
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef {

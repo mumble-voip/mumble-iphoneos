@@ -39,7 +39,8 @@
 
 static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
-static const NSUInteger CertificateViewSectionTotal              = 2;
+static const NSUInteger CertificateViewSectionFingerprint        = 2;
+static const NSUInteger CertificateViewSectionTotal              = 3;
 
 @interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
     NSInteger            _curIdx;
@@ -231,6 +232,8 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
         return [_subjectItems count];
     } else if (section == CertificateViewSectionIssuer) {
         return [_issuerItems count];
+    } else if (section == CertificateViewSectionFingerprint) {
+        return 2;
     }
     return 0;
 }
@@ -238,10 +241,13 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *subject = NSLocalizedString(@"Subject", @"Subject of an X.509 certificate");
     NSString *issuer = NSLocalizedString(@"Issuer", @"Issuer of an X.509 certificate");
+    NSString *fingerprint = NSLocalizedString(@"Fingerprint", @"Fingerprint of an X.509 certificate");
     if (section == CertificateViewSectionSubject) {
         return [MUTableViewHeaderLabel labelWithText:subject];
     } else if (section == CertificateViewSectionIssuer) {
         return [MUTableViewHeaderLabel labelWithText:issuer];
+    } else if (section == CertificateViewSectionFingerprint) {
+        return [MUTableViewHeaderLabel labelWithText:fingerprint];
     }
     return nil;
 }
@@ -264,15 +270,28 @@ static const NSUInteger CertificateViewSectionTotal              = 2;
 
     NSUInteger section = [indexPath section];
     NSUInteger row = [indexPath row];
-    NSArray *item = nil;
-    if (section == CertificateViewSectionSubject)
-        item = [_subjectItems objectAtIndex:row];
-    else if (section == CertificateViewSectionIssuer)
-        item = [_issuerItems objectAtIndex:row];
-
-    cell.textLabel.text = [item objectAtIndex:0];
-    cell.detailTextLabel.text = [item objectAtIndex:1];
-    cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+    if (section == CertificateViewSectionFingerprint) {
+        MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
+        NSString *hexDigest = [cert hexDigest];
+        if (hexDigest.length == 40) {
+            if (row == 0) {
+                cell.textLabel.text = [MUCertificateController fingerprintFromHexString:[hexDigest substringToIndex:20]];
+            } else if (row == 1) {
+                cell.textLabel.text = [MUCertificateController fingerprintFromHexString:[hexDigest substringFromIndex:20]];
+            }
+            cell.textLabel.textColor = [MUColor selectedTextColor];
+            cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
+        }
+    } else {
+        NSArray *item = nil;
+        if (section == CertificateViewSectionSubject)
+            item = [_subjectItems objectAtIndex:row];
+        else if (section == CertificateViewSectionIssuer)
+            item = [_issuerItems objectAtIndex:row];
+        cell.textLabel.text = [item objectAtIndex:0];
+        cell.detailTextLabel.text = [item objectAtIndex:1];
+        cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+    }
     return cell;
 }
 
