@@ -539,8 +539,13 @@
     }
 }
 
-- (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {    
-    [_msgdb addMessage:msg withHeading:[NSString stringWithFormat:NSLocalizedString(@"From %@", @"Message sender title"), [user userName]] andSentBySelf:NO];
+- (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
+    NSString *heading = NSLocalizedString(@"Server Message", @"A message sent from the server itself");
+    if (user != nil) {
+        heading = [NSString stringWithFormat:NSLocalizedString(@"From %@", @"Message sender title"), [user userName]];
+    }
+    [_msgdb addMessage:msg withHeading:heading andSentBySelf:NO];
+    
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
     [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     if (![_tableView isDragging] && ![[UIMenuController sharedMenuController] isMenuVisible]) {

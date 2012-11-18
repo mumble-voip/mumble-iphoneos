@@ -79,13 +79,23 @@
         _connection = [conn retain];
         _model = [model retain];
         [_model addDelegate:self];
+        
         _unreadMessages = 0;
+        
+        _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
+        _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
+        
+        _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectZero];
+        _numberBadgeView.shadow = NO;
+        _numberBadgeView.font = [UIFont boldSystemFontOfSize:10.0f];
+        _numberBadgeView.hidden = YES;
     }
     return self;
 }
 
 - (void) dealloc {
     [_serverView release];
+    [_messagesView release];
    
     [_model removeDelegate:self];
     [_model release];
@@ -108,10 +118,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    
-    _serverView = [[MUServerViewController alloc] initWithServerModel:_model];
-    _messagesView = [[MUMessagesViewController alloc] initWithServerModel:_model];
-    
+
     _segmentedControl = [[UISegmentedControl alloc] initWithItems:
                          [NSArray arrayWithObjects:
                             NSLocalizedString(@"Server", nil),
@@ -140,12 +147,10 @@
     _modeSwitchButton = button;
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
-    _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectMake(_segmentedControl.frame.size.width-24, -10, 50, 30)];
     [_segmentedControl addSubview:_numberBadgeView];
-    _numberBadgeView.value = 0;
-    _numberBadgeView.shadow = NO;
-    _numberBadgeView.font = [UIFont boldSystemFontOfSize:10.0f];
-    _numberBadgeView.hidden = YES;
+    _numberBadgeView.frame = CGRectMake(_segmentedControl.frame.size.width-24, -10, 50, 30);
+    _numberBadgeView.value = _unreadMessages;
+    _numberBadgeView.hidden = _unreadMessages == 0;
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     
