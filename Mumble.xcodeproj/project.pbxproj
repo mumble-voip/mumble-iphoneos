@@ -1158,7 +1158,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PLIST=\"${TARGET_BUILD_DIR}/Mumble.app/Info\"\n\nexport PATH=\"$PATH:$HOME/.local/bin\"\ncd \"${PROJECT_DIR}\"\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write ${PLIST} MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%dT%H:%M:%SZ\")')\ndefaults write ${PLIST} MumbleBuildDate -date \"${builddate}\"";
+			shellScript = "PLIST=\"${TARGET_BUILD_DIR}/Mumble.app/Info\"\n\nexport PATH=\"$PATH:$HOME/.local/bin\"\ncd \"${PROJECT_DIR}\"\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write \"${PLIST}\" MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%dT%H:%M:%SZ\")')\ndefaults write \"${PLIST}\" MumbleBuildDate -date \"${builddate}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
