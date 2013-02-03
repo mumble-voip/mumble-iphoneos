@@ -33,6 +33,7 @@
 
 #import "MUMessagesViewController.h"
 #import "MUTextMessage.h"
+#import "MUTextMessageProcessor.h"
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUMessageRecipientViewController.h"
 #import "MUMessageAttachmentViewController.h"
@@ -391,34 +392,40 @@
     _autoCorrectGuard = NO;
 
     NSString *originalStr = [textField text];
-    NSString *str = [originalStr stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
-    str = [str stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];    
-    NSString *htmlText = [NSString stringWithFormat:@"<p>%@</p>", str];
-
-    MKTextMessage *txtMsg = [MKTextMessage messageWithHTML:htmlText];
-    NSString *destName = nil;
-    if (_tree == nil && _channel == nil && _user == nil) {
-        [_model sendTextMessage:txtMsg toChannel:[[_model connectedUser] channel]];
-        destName = [[[_model connectedUser] channel] channelName];
-    } else if (_user != nil) {
-        [_model sendTextMessage:txtMsg toUser:_user];
-        destName = [_user userName];
-    } else if (_channel != nil) {
-        [_model sendTextMessage:txtMsg toChannel:_channel];
-        destName = [_channel channelName];
-    } else if (_tree != nil) {
-        [_model sendTextMessage:txtMsg toTree:_tree];
-        destName = [_tree channelName];
+    if ([originalStr length] > 0) {
+        NSString *htmlText = [MUTextMessageProcessor processedHTMLFromPlainTextMessage:originalStr];
+        if (htmlText != nil) {
+            MKTextMessage *txtMsg = [MKTextMessage messageWithHTML:htmlText];
+            NSString *destName = nil;
+            if (txtMsg != nil) {
+                if (_tree == nil && _channel == nil && _user == nil) {
+                    [_model sendTextMessage:txtMsg toChannel:[[_model connectedUser] channel]];
+                    destName = [[[_model connectedUser] channel] channelName];
+                } else if (_user != nil) {
+                    [_model sendTextMessage:txtMsg toUser:_user];
+                    destName = [_user userName];
+                } else if (_channel != nil) {
+                    [_model sendTextMessage:txtMsg toChannel:_channel];
+                    destName = [_channel channelName];
+                } else if (_tree != nil) {
+                    [_model sendTextMessage:txtMsg toTree:_tree];
+                    destName = [_tree channelName];
+                }
+            
+                if (destName != nil) {
+                    [_msgdb addMessage:txtMsg withHeading:[NSString stringWithFormat:NSLocalizedString(@"To %@", @"Message recipient title"), destName] andSentBySelf:YES];
+                
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
+                    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                }
+            }
+        }
     }
 
     [textField setText:nil];
 
-    [_msgdb addMessage:txtMsg withHeading:[NSString stringWithFormat:NSLocalizedString(@"To %@", @"Message recipient title"), destName] andSentBySelf:YES];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_msgdb count]-1 inSection:0];
-    [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-
-     return NO;
+    return NO;
 }
 
 #pragma mark - Actions

@@ -35,6 +35,13 @@
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
 		2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* MUCertificateCell.m */; };
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
+		285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */; };
+		285D6B7E16BF02E900F239EB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285D6B7D16BF02E900F239EB /* SenTestingKit.framework */; };
+		285D6B7F16BF02E900F239EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		285D6B8016BF02E900F239EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		285D6B9016BF03D700F239EB /* MUTextMessageProcessorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */; };
+		285D6BD316BF067400F239EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 285D6B8416BF02E900F239EB /* InfoPlist.strings */; };
+		285D6BD416BF078E00F239EB /* MUTextMessageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */; };
 		2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MUApplicationDelegate.m */; };
 		2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* MUPublicServerList.m */; };
 		2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* MUPublicServerListController.m */; };
@@ -261,6 +268,15 @@
 		2858A5AC123BA08D00A82155 /* MUCertificateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCell.m; sourceTree = "<group>"; };
 		2858DBA11233E31B000D6F75 /* MUVersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUVersionChecker.h; sourceTree = "<group>"; };
 		2858DBA21233E31B000D6F75 /* MUVersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUVersionChecker.m; sourceTree = "<group>"; };
+		285D6B6F16BEEFA700F239EB /* MUTextMessageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUTextMessageProcessor.h; sourceTree = "<group>"; };
+		285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTextMessageProcessor.m; sourceTree = "<group>"; };
+		285D6B7316BF027A00F239EB /* MUTextMessageProcessorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MUTextMessageProcessorTest.h; path = Tests/MUTextMessageProcessorTest.h; sourceTree = "<group>"; };
+		285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MUTextMessageProcessorTest.m; path = Tests/MUTextMessageProcessorTest.m; sourceTree = "<group>"; };
+		285D6B7C16BF02E900F239EB /* MumbleTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MumbleTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		285D6B7D16BF02E900F239EB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		285D6B8316BF02E900F239EB /* MumbleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MumbleTests-Info.plist"; path = "Tests/MumbleTests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		285D6B8516BF02E900F239EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		285D6B8A16BF02E900F239EB /* MumbleTests.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MumbleTests.pch; path = Tests/MumbleTests.pch; sourceTree = SOURCE_ROOT; };
 		285E2A60150D729B008AE185 /* AppStore.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = AppStore.xcconfig; path = BuildConfig/AppStore.xcconfig; sourceTree = "<group>"; };
 		285E2A61150D729B008AE185 /* Base.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Base.xcconfig; path = BuildConfig/Base.xcconfig; sourceTree = "<group>"; };
 		285E2A62150D729B008AE185 /* BetaDist.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = BetaDist.xcconfig; path = BuildConfig/BetaDist.xcconfig; sourceTree = "<group>"; };
@@ -525,6 +541,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		285D6B7816BF02E900F239EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				285D6B7E16BF02E900F239EB /* SenTestingKit.framework in Frameworks */,
+				285D6B7F16BF02E900F239EB /* UIKit.framework in Frameworks */,
+				285D6B8016BF02E900F239EB /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -606,6 +632,8 @@
 				286A3CBD158CFDF200C817D1 /* MUPopoverBackgroundView.m */,
 				28F9E1BD15EBDF2400D52001 /* MURemoteControlServer.h */,
 				28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */,
+				285D6B6F16BEEFA700F239EB /* MUTextMessageProcessor.h */,
+				285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -615,6 +643,7 @@
 			isa = PBXGroup;
 			children = (
 				1D6058910D05DD3D006BFB54 /* Mumble.app */,
+				285D6B7C16BF02E900F239EB /* MumbleTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -658,6 +687,27 @@
 				2813B1D015EBFDA90049A59A /* MURemoteControlPreferencesViewController.m */,
 			);
 			name = Preferences;
+			sourceTree = "<group>";
+		};
+		285D6B7616BF028700F239EB /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				285D6B7316BF027A00F239EB /* MUTextMessageProcessorTest.h */,
+				285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */,
+				285D6B8216BF02E900F239EB /* Supporting Files */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		285D6B8216BF02E900F239EB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				285D6B8316BF02E900F239EB /* MumbleTests-Info.plist */,
+				285D6B8416BF02E900F239EB /* InfoPlist.strings */,
+				285D6B8A16BF02E900F239EB /* MumbleTests.pch */,
+			);
+			name = "Supporting Files";
+			path = MumbleTests;
 			sourceTree = "<group>";
 		};
 		285E2A5F150D7287008AE185 /* Build Configuration */ = {
@@ -935,6 +985,7 @@
 			children = (
 				2861C28C116BE90B002B8514 /* Dependencies */,
 				080E96DDFE201D6D7F000001 /* Classes */,
+				285D6B7616BF028700F239EB /* Tests */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				28DC1C1213DE59120037CDC2 /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -967,6 +1018,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+				285D6B7D16BF02E900F239EB /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -992,6 +1044,24 @@
 			productName = Mumble;
 			productReference = 1D6058910D05DD3D006BFB54 /* Mumble.app */;
 			productType = "com.apple.product-type.application";
+		};
+		285D6B7B16BF02E900F239EB /* MumbleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 285D6B8B16BF02E900F239EB /* Build configuration list for PBXNativeTarget "MumbleTests" */;
+			buildPhases = (
+				285D6B7716BF02E900F239EB /* Sources */,
+				285D6B7816BF02E900F239EB /* Frameworks */,
+				285D6B7916BF02E900F239EB /* Resources */,
+				285D6B7A16BF02E900F239EB /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MumbleTests;
+			productName = MumbleTests;
+			productReference = 285D6B7C16BF02E900F239EB /* MumbleTests.octest */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -1024,6 +1094,7 @@
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* Mumble */,
+				285D6B7B16BF02E900F239EB /* MumbleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1143,6 +1214,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		285D6B7916BF02E900F239EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				285D6BD316BF067400F239EB /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1159,6 +1238,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "PLIST=\"${TARGET_BUILD_DIR}/Mumble.app/Info\"\n\nexport PATH=\"$PATH:$HOME/.local/bin\"\ncd \"${PROJECT_DIR}\"\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write \"${PLIST}\" MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%dT%H:%M:%SZ\")')\ndefaults write \"${PLIST}\" MumbleBuildDate -date \"${builddate}\"";
+		};
+		285D6B7A16BF02E900F239EB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1251,6 +1343,16 @@
 				286A3CBE158CFDF300C817D1 /* MUPopoverBackgroundView.m in Sources */,
 				28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */,
 				2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */,
+				285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		285D6B7716BF02E900F239EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				285D6BD416BF078E00F239EB /* MUTextMessageProcessor.m in Sources */,
+				285D6B9016BF03D700F239EB /* MUTextMessageProcessorTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,6 +1383,15 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
+		285D6B8416BF02E900F239EB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				285D6B8516BF02E900F239EB /* en */,
+			);
+			name = InfoPlist.strings;
+			path = Tests;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1299,6 +1410,137 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
+		};
+		285D6B8C16BF02E900F239EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Tests/MumbleTests.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/MumbleTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		285D6B8D16BF02E900F239EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Tests/MumbleTests.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/MumbleTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		285D6B8E16BF02E900F239EB /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Tests/MumbleTests.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/MumbleTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = AppStore;
+		};
+		285D6B8F16BF02E900F239EB /* BetaDist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Tests/MumbleTests.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "Tests/MumbleTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = BetaDist;
 		};
 		2887C8891454C4C2009B3576 /* AppStore */ = {
 			isa = XCBuildConfiguration;
@@ -1357,6 +1599,16 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		285D6B8B16BF02E900F239EB /* Build configuration list for PBXNativeTarget "MumbleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				285D6B8C16BF02E900F239EB /* Debug */,
+				285D6B8D16BF02E900F239EB /* Release */,
+				285D6B8E16BF02E900F239EB /* AppStore */,
+				285D6B8F16BF02E900F239EB /* BetaDist */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */ = {
 			isa = XCConfigurationList;
