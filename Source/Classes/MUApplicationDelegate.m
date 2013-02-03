@@ -173,9 +173,11 @@
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
     
+#ifdef ENABLE_REMOTE_CONTROL
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"RemoteControlServerEnabled"]) {
         [[MURemoteControlServer sharedRemoteControlServer] start];
     }
+#endif
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -356,8 +358,10 @@
         NSLog(@"MumbleApplicationDelegate: Not connected to a server. Stopping MKAudio.");
         [[MKAudio sharedAudio] stop];
         
+#ifdef ENABLE_REMOTE_CONTROL
         // Also terminate the remote control server.
         [[MURemoteControlServer sharedRemoteControlServer] stop];
+#endif
     }
 }
 
@@ -373,9 +377,11 @@
         NSLog(@"MumbleApplicationDelegate: MKAudio not running. Starting it.");
         [[MKAudio sharedAudio] start];
         
+#if ENABLE_REMOTE_CONTROL
         // Re-start the remote control server.
         [[MURemoteControlServer sharedRemoteControlServer] stop];
         [[MURemoteControlServer sharedRemoteControlServer] start];
+#endif
     }
 }
 

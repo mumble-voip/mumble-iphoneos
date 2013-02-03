@@ -112,7 +112,11 @@
         return 3;
     // Network
     } else if (section == 1) {
+#ifdef ENABLE_REMOTE_CONTROL
         return 3;
+#else
+        return 2;
+#endif
     }
 
     return 0;
@@ -244,7 +248,7 @@
             [self.navigationController pushViewController:certPref animated:YES];
             [certPref release];
         }
-        if ([indexPath row] == 2) {
+        if ([indexPath row] == 2) { // Remote Control
             MURemoteControlPreferencesViewController *remoteControlPref = [[MURemoteControlPreferencesViewController alloc] init];
             [self.navigationController pushViewController:remoteControlPref animated:YES];
             [remoteControlPref release];
