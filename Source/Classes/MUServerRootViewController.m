@@ -51,7 +51,7 @@
     
     NSInteger                   _segmentIndex;
     UISegmentedControl          *_segmentedControl;
-    UIBarButtonItem             *_actionButton;
+    UIBarButtonItem             *_menuButton;
     UIBarButtonItem             *_smallIcon;
     UIButton                    *_modeSwitchButton;
     MKNumberBadgeView           *_numberBadgeView;
@@ -102,7 +102,7 @@
     [_connection setDelegate:nil];
     [_connection release];
     
-    [_actionButton release];
+    [_menuButton release];
     [_segmentedControl release];
     [_smallIcon release];
     [_numberBadgeView release];
@@ -133,8 +133,8 @@
     
     _serverView.navigationItem.titleView = _segmentedControl;
     
-    _actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
-    _serverView.navigationItem.rightBarButtonItem = _actionButton;
+    _menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MumbleMenuButton"] style:UIBarButtonItemStyleBordered target:self action:@selector(actionButtonClicked:)];
+    _serverView.navigationItem.rightBarButtonItem = _menuButton;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setFrame:CGRectMake(0, 0, 35, 30)];
@@ -179,13 +179,13 @@
     if (_segmentedControl.selectedSegmentIndex == 0) {
         _serverView.navigationItem.titleView = _segmentedControl;
         _serverView.navigationItem.leftBarButtonItem = _smallIcon;
-        _serverView.navigationItem.rightBarButtonItem = _actionButton;
+        _serverView.navigationItem.rightBarButtonItem = _menuButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
         [_modeSwitchButton setEnabled:YES];
     } else if (_segmentedControl.selectedSegmentIndex == 1) {
         _messagesView.navigationItem.titleView = _segmentedControl;
         _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
-        _messagesView.navigationItem.rightBarButtonItem = _actionButton;
+        _messagesView.navigationItem.rightBarButtonItem = _menuButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
         [_modeSwitchButton setEnabled:NO];
     }
@@ -382,7 +382,7 @@
     [actionSheet setCancelButtonIndex:cancelIndex];
 
     [actionSheet setDelegate:self];
-    [actionSheet showFromBarButtonItem:_actionButton animated:YES];
+    [actionSheet showFromBarButtonItem:_menuButton animated:YES];
     [actionSheet release];
 }
 

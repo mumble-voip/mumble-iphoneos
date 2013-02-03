@@ -27,6 +27,8 @@
 		283363DB13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 283363DA13EF154C00A04F04 /* MUAudioTransmissionPreferencesViewController.m */; };
 		2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2836767C1525053A0015958E /* MUCertificateChainBuilder.m */; };
 		2838EA0F129316C200035C5D /* MUCertificatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */; };
+		2843040A16BF25590025A783 /* MumbleMenuButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2843040816BF25590025A783 /* MumbleMenuButton.png */; };
+		2843040B16BF25590025A783 /* MumbleMenuButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2843040916BF25590025A783 /* MumbleMenuButton@2x.png */; };
 		28451944163463C90027FAB3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28451943163463C90027FAB3 /* Default-568h@2x.png */; };
 		2845194816346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */; };
 		2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */; };
@@ -258,6 +260,8 @@
 		2836767C1525053A0015958E /* MUCertificateChainBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateChainBuilder.m; sourceTree = "<group>"; };
 		2838EA0D129316C200035C5D /* MUCertificatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificatePreferencesViewController.h; sourceTree = "<group>"; };
 		2838EA0E129316C200035C5D /* MUCertificatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificatePreferencesViewController.m; sourceTree = "<group>"; };
+		2843040816BF25590025A783 /* MumbleMenuButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MumbleMenuButton.png; path = Resources/MumbleMenuButton.png; sourceTree = "<group>"; };
+		2843040916BF25590025A783 /* MumbleMenuButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MumbleMenuButton@2x.png"; path = "Resources/MumbleMenuButton@2x.png"; sourceTree = "<group>"; };
 		28451943163463C90027FAB3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon-568h@2x.png"; path = "Resources/WelcomeScreenIcon-568h@2x.png"; sourceTree = "<group>"; };
 		284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackgroundTextureBlackGradient-568h@2x.png"; path = "Resources/BackgroundTextureBlackGradient-568h@2x.png"; sourceTree = "<group>"; };
@@ -891,6 +895,8 @@
 				28DC1C5B13DE596B0037CDC2 /* up@2x.png */,
 				286A3CBF158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp.png */,
 				286A3CC0158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png */,
+				2843040816BF25590025A783 /* MumbleMenuButton.png */,
+				2843040916BF25590025A783 /* MumbleMenuButton@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1211,6 +1217,8 @@
 				2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */,
 				28D963961639B9E4002A9E73 /* IconPad.png in Resources */,
 				28D963981639B9E8002A9E73 /* IconPad@2x.png in Resources */,
+				2843040A16BF25590025A783 /* MumbleMenuButton.png in Resources */,
+				2843040B16BF25590025A783 /* MumbleMenuButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1609,6 +1617,7 @@
 				285D6B8F16BF02E900F239EB /* BetaDist */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */ = {
 			isa = XCConfigurationList;
