@@ -90,8 +90,9 @@
     if (section == 0) {
         return 3;
     } else if (section == 1) {
-        if ([current isEqualToString:@"vad"])
+        if ([current isEqualToString:@"ptt"] || [current isEqualToString:@"vad"]) {
             return 1;
+        }
     }
     return 0;
 }
@@ -129,11 +130,25 @@
             }
         }
     } else if (indexPath.section == 1) {
-        if ([current isEqualToString:@"vad"]) {
-            if (indexPath.row == 0) {
+        if (indexPath.row == 0) {
+            if ([current isEqualToString:@"ptt"]) {
+                UITableViewCell *pttCell = [tableView dequeueReusableCellWithIdentifier:@"AudioXmitPTTCell"];
+                if (pttCell == nil) {
+                    pttCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AudioXmitPTTCell"] autorelease];
+                }
+                UIImageView *mouthView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"talkbutton_off"]] autorelease];
+                [mouthView setContentMode:UIViewContentModeCenter];
+                [pttCell setBackgroundView:mouthView];
+                pttCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                pttCell.textLabel.text = nil;
+                pttCell.accessoryView = nil;
+                pttCell.accessoryType = UITableViewCellAccessoryNone;
+                return pttCell;
+            } else if ([current isEqualToString:@"vad"]) {
                 cell.accessoryView = nil;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = NSLocalizedString(@"Voice Activity Configuration", nil);
+                cell.selectionStyle = UITableViewCellSelectionStyleGray;
             }
         }
     }
@@ -142,21 +157,74 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     if (section == 0) {
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Transmission Method", nil)];
+    } else if (section == 1) {
+        UIView *parentView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+        MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:nil];
+        lbl.font = [UIFont systemFontOfSize:16.0f];
+        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.numberOfLines = 0;
+        lbl.contentMode = UIViewContentModeTop;
+        if ([current isEqualToString:@"vad"]) {
+            lbl.text = NSLocalizedString(@"In Voice Activity mode, Mumble transmits\n"
+                                          @"your voice when it senses you talking.\n"
+                                          @"Fine-tune it below:\n", nil);
+            lbl.frame = CGRectMake(0, 0, tableView.bounds.size.width, 70.0f);
+            parentView.frame = CGRectMake(0, 0, tableView.bounds.size.width, 80.0f);
+        } else if ([current isEqualToString:@"ptt"]) {
+            lbl.text = NSLocalizedString(@"In Push-to-Talk mode, touch the mouth\n"
+                                          @"icon to speak to other people when\n"
+                                          @"connected to a server.\n", nil);
+            lbl.frame = CGRectMake(0, 0, tableView.bounds.size.width, 70.0f);
+            parentView.frame = CGRectMake(0, 0, tableView.bounds.size.width, 70.0f);
+        } else if ([current isEqualToString:@"continuous"]) {
+            lbl.text = NSLocalizedString(@"In Continuous mode, Mumble will\n"
+                                          "continuously transmit all recorded audio.\n", nil);
+            lbl.frame = CGRectMake(0, 0, tableView.bounds.size.width, 50.0f);
+            parentView.frame = CGRectMake(0, 0, tableView.bounds.size.width, 50.0f);
+        }
+        [parentView addSubview:lbl];
+        return parentView;
     }
     return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     if (section == 1) {
-        return 0.0f;
+        if ([current isEqualToString:@"vad"]) {
+            return 80.0f;
+        } else if ([current isEqualToString:@"ptt"]) {
+            return 70.0f;
+        } else if ([current isEqualToString:@"continuous"]) {
+            return 50.0f;
+        }
     }
 
     return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    if (section == 1) {
+        MUTableViewHeaderLabel *label = (MUTableViewHeaderLabel *)view;
+        [label sizeToFit];
+    }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
+    if ([indexPath section] == 1 && [indexPath row] == 0) {
+        if ([current isEqualToString:@"ptt"]) {
+            return 100.0f;
+        }
+    }
+    return 44.0f;
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
     UITableViewCell *cell = nil;
 
     // Transmission setting change
@@ -185,9 +253,11 @@
         cell.textLabel.textColor = [MUColor selectedTextColor];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
-            [self.navigationController pushViewController:vadSetup animated:YES];
-            [vadSetup release];
+            if ([current isEqualToString:@"vad"]) {
+                MUVoiceActivitySetupViewController *vadSetup = [[MUVoiceActivitySetupViewController alloc] init];
+                [self.navigationController pushViewController:vadSetup animated:YES];
+                [vadSetup release];
+            }
         }	
     }
 }
