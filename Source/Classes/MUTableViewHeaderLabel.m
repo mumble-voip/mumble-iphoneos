@@ -37,7 +37,7 @@
         self.font = [UIFont boldSystemFontOfSize:18.0f];
         self.textColor = [UIColor whiteColor];
         self.shadowColor = [UIColor darkGrayColor];
-        self.shadowOffset = CGSizeMake(2.0f, 2.0f);
+        self.shadowOffset = CGSizeMake(1.5f, 1.5f);
         self.backgroundColor = [UIColor clearColor];
         self.textAlignment = UITextAlignmentCenter;
     }
