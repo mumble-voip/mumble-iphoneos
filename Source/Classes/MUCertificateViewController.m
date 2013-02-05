@@ -255,7 +255,7 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *subject = NSLocalizedString(@"Subject", @"Subject of an X.509 certificate");
     NSString *issuer = NSLocalizedString(@"Issuer", @"Issuer of an X.509 certificate");
-    NSString *fingerprint = NSLocalizedString(@"Fingerprint", @"Fingerprint of an X.509 certificate");
+    NSString *fingerprint = NSLocalizedString(@"SHA1 Fingerprint", @"SHA1 fingerprint of an X.509 certificate");
     if (section == CertificateViewSectionSubject) {
         return [MUTableViewHeaderLabel labelWithText:subject];
     } else if (section == CertificateViewSectionIssuer) {
