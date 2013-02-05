@@ -175,13 +175,27 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
         [subject addObject:[NSArray arrayWithObjects:org, str, nil]];
     }
 
-    str = [[cert notBefore] description];
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = nil;
+
+    date = [cert notBefore];
+    if (date) {
+        str = [dateFormatter stringFromDate:date];
+    } else {
+        str = nil;
+    }
     if (str) {
         NSString *notBefore = NSLocalizedString(@"Not Before", @"Not Before date (validity period) of an X.509 certificate");
         [subject addObject:[NSArray arrayWithObjects:notBefore, str, nil]];
     }
 
-    str = [[cert notAfter] description];
+    date = [cert notAfter];
+    if (date) {
+        str = [dateFormatter stringFromDate:date];
+    } else {
+        str = nil;
+    }
     if (str) {
         NSString *notAfter = NSLocalizedString(@"Not After", @"Not After date (validity period) of an X.509 certificate");
         [subject addObject:[NSArray arrayWithObjects:notAfter, str, nil]];
