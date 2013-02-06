@@ -39,8 +39,9 @@
 
 static const NSUInteger CertificateViewSectionSubject            = 0;
 static const NSUInteger CertificateViewSectionIssuer             = 1;
-static const NSUInteger CertificateViewSectionFingerprint        = 2;
-static const NSUInteger CertificateViewSectionTotal              = 3;
+static const NSUInteger CertificateViewSectionSHA1Fingerprint    = 2;
+static const NSUInteger CertificateViewSectionSHA256Fingerprint  = 3;
+static const NSUInteger CertificateViewSectionTotal              = 4;
 
 @interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
     NSInteger            _curIdx;
@@ -246,8 +247,10 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
         return [_subjectItems count];
     } else if (section == CertificateViewSectionIssuer) {
         return [_issuerItems count];
-    } else if (section == CertificateViewSectionFingerprint) {
-        return 2;
+    } else if (section == CertificateViewSectionSHA1Fingerprint) {
+        return 1;
+    } else if (section == CertificateViewSectionSHA256Fingerprint) {
+        return 1;
     }
     return 0;
 }
@@ -255,13 +258,16 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSString *subject = NSLocalizedString(@"Subject", @"Subject of an X.509 certificate");
     NSString *issuer = NSLocalizedString(@"Issuer", @"Issuer of an X.509 certificate");
-    NSString *fingerprint = NSLocalizedString(@"SHA1 Fingerprint", @"SHA1 fingerprint of an X.509 certificate");
+    NSString *sha1fp = NSLocalizedString(@"SHA1 Fingerprint", @"SHA1 fingerprint of an X.509 certificate");
+    NSString *sha256fp = NSLocalizedString(@"SHA256 Fingerprint", @"SHA256 fingerprint of an X.509 certificate");
     if (section == CertificateViewSectionSubject) {
         return [MUTableViewHeaderLabel labelWithText:subject];
     } else if (section == CertificateViewSectionIssuer) {
         return [MUTableViewHeaderLabel labelWithText:issuer];
-    } else if (section == CertificateViewSectionFingerprint) {
-        return [MUTableViewHeaderLabel labelWithText:fingerprint];
+    } else if (section == CertificateViewSectionSHA1Fingerprint) {
+        return [MUTableViewHeaderLabel labelWithText:sha1fp];
+    } else if (section == CertificateViewSectionSHA256Fingerprint) {
+        return [MUTableViewHeaderLabel labelWithText:sha256fp];
     }
     return nil;
 }
@@ -284,17 +290,31 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
 
     NSUInteger section = [indexPath section];
     NSUInteger row = [indexPath row];
-    if (section == CertificateViewSectionFingerprint) {
+    if (section == CertificateViewSectionSHA1Fingerprint) {
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
-        NSString *hexDigest = [cert hexDigest];
-        if (hexDigest.length == 40) {
-            if (row == 0) {
-                cell.textLabel.text = [MUCertificateController fingerprintFromHexString:[hexDigest substringToIndex:20]];
-            } else if (row == 1) {
-                cell.textLabel.text = [MUCertificateController fingerprintFromHexString:[hexDigest substringFromIndex:20]];
-            }
+        NSString *hexDigest = [cert hexDigestOfKind:@"sha1"];
+        if ([indexPath row] == 0 && hexDigest.length == 40) {
+            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@",
+                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringToIndex:20]],
+                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringFromIndex:20]]];
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+        }
+    } else if (section == CertificateViewSectionSHA256Fingerprint) {
+        MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
+        NSString *hexDigest = [cert hexDigestOfKind:@"sha256"];
+        if ([indexPath row] == 0 && hexDigest.length == 64) {
+            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",
+                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(0, 20)]],
+                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(20, 20)]],
+                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(40, 20)]],
+                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(60, 4)]]];
+            cell.textLabel.textColor = [MUColor selectedTextColor];
+            cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
         }
     } else {
         NSArray *item = nil;
@@ -303,10 +323,23 @@ static const NSUInteger CertificateViewSectionTotal              = 3;
         else if (section == CertificateViewSectionIssuer)
             item = [_issuerItems objectAtIndex:row];
         cell.textLabel.text = [item objectAtIndex:0];
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
+        cell.textLabel.numberOfLines = 1;
+        cell.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
         cell.detailTextLabel.text = [item objectAtIndex:1];
         cell.detailTextLabel.textColor = [MUColor selectedTextColor];
     }
     return cell;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == CertificateViewSectionSHA1Fingerprint) {
+        return 55.0f;
+    } else if ([indexPath section] == CertificateViewSectionSHA256Fingerprint) {
+        return 88.0f;
+    }
+    return 44.0f;
 }
 
 #pragma mark -
