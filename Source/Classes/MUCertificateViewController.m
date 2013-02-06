@@ -343,6 +343,47 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 }
 
 #pragma mark -
+#pragma mark Table view delegate
+
+- (void) tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
+        NSString *str = nil;
+        switch (indexPath.section) {
+            case CertificateViewSectionSHA1Fingerprint:
+                str = [cert hexDigestOfKind:@"sha1"];
+                break;
+            case CertificateViewSectionSHA256Fingerprint:
+                str = [cert hexDigestOfKind:@"sha256"];
+                break;
+        }
+        if (str != nil) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            [pasteboard setValue:str forPasteboardType:(NSString *)kUTTypeUTF8PlainText];
+        }
+    }
+}
+- (BOOL) tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
+    if (action == @selector(copy:)) {
+        switch (indexPath.section) {
+            case CertificateViewSectionSHA1Fingerprint:
+            case CertificateViewSectionSHA256Fingerprint:
+                return true;
+        }
+    }
+    return false;
+}
+
+- (BOOL) tableView:(UITableView*)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath*)indexPath {
+    switch (indexPath.section) {
+        case CertificateViewSectionSHA1Fingerprint:
+        case CertificateViewSectionSHA256Fingerprint:
+            return true;
+    }
+    return false;
+}
+
+#pragma mark -
 #pragma mark Actions
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
