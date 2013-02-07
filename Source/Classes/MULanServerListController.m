@@ -135,7 +135,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     if (cell == nil) {
         cell = [[[MUServerCell alloc] init] autorelease];
     }
-    [cell populateFromDisplayName:[netService name] hostName:[netService hostName] port:[NSString stringWithFormat:@"%li", [netService port]]];
+    [cell populateFromDisplayName:[netService name] hostName:[netService hostName] port:[NSString stringWithFormat:@"%li", (long)[netService port]]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     return (UITableViewCell *) cell;
 }
