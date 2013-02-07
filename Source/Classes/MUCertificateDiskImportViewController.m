@@ -271,9 +271,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         ShowAlertDialog(NSLocalizedString(@"Import Error", nil), @"Unable to decode PKCS12 file");
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     } else {
-        NSString *msg = [NSString stringWithFormat:
-                         NSLocalizedString(@"Mumble was unable to import the certificate.",
-                                           @"Generic import error for iTunes Import."), err];
+        NSString *msg = NSLocalizedString(@"Mumble was unable to import the certificate.",
+                                          @"Generic import error for iTunes Import.");
         ShowAlertDialog(NSLocalizedString(@"Import Error", nil), msg);
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
     }
