@@ -484,7 +484,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     } else if (buttonIndex == 0) { // Delete
         NSString *title = NSLocalizedString(@"Delete Certificate Chain", @"Certificate deletion warning title");
         NSString *msg = NSLocalizedString(@"Are you sure you want to delete this certificate chain?\n\n"
-                                          @"This will permanently remove any rights associated with the certificate chain on any Mumble servers.",
+                                          @"If you don't have a backup, this will permanently remove any rights associated with the certificate chain on any Mumble servers.",
                                                 @"Certificate deletion warning message");
         NSString *cancel = NSLocalizedString(@"Cancel", nil);
         NSString *delete = NSLocalizedString(@"Delete", nil);
