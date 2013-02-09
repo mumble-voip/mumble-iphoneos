@@ -40,6 +40,9 @@
 - (BOOL) isIntermediate;
 - (void) setIsIntermediate:(BOOL)isIntermediate;
 
+- (BOOL) isExpired;
+- (void) setIsExpired:(BOOL)isExpired;
+
 - (BOOL) isCurrentCertificate;
 - (void) setIsCurrentCertificate:(BOOL)isSelected;
 

@@ -104,7 +104,17 @@
     [cell setSubjectName:[cert subjectName]];
     [cell setEmail:[cert emailAddress]];
     [cell setIssuerText:[cert issuerName]];
-    [cell setExpiryText:[[cert notAfter] description]];
+    
+    if ([cert isValidOnDate:[NSDate date]]) {
+        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSString *formattedDate = [dateFormatter stringFromDate:[cert notAfter]];
+        NSString *fmt = NSLocalizedString(@"Expires on %@", @"Certificate expiry explanation");
+        [cell setExpiryText:[NSString stringWithFormat:fmt, formattedDate]];
+    } else {
+        [cell setExpiryText:NSLocalizedString(@"Expired", @"Date is past the certificate's notAfter date")];
+        [cell setIsExpired:YES];
+    }
 
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     NSData *curPersistentRef = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];

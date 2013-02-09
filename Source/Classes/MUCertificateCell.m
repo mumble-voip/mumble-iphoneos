@@ -38,6 +38,7 @@
     IBOutlet UILabel      *_issuerLabel;
     IBOutlet UILabel      *_expiryLabel;
     BOOL                  _isCurrentCert;
+    BOOL                  _isExpired;
     BOOL                  _isIntermediate;
 }
 @end
@@ -76,6 +77,15 @@
 
 - (BOOL) isIntermediate {
     return _isIntermediate;
+}
+
+- (void) setIsExpired:(BOOL)isExpired {
+    _isExpired = isExpired;
+    _expiryLabel.textColor = [UIColor redColor];
+}
+
+- (BOOL) isExpired {
+    return _isExpired;
 }
 
 - (void) setIsCurrentCertificate:(BOOL)isCurrent {
