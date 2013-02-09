@@ -105,6 +105,7 @@
         [_addressField setTextAlignment:UITextAlignmentLeft];
         [_addressField setPlaceholder:NSLocalizedString(@"Hostname or IP address", nil)];
         [_addressField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [_addressField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_addressField setKeyboardType:UIKeyboardTypeURL];
         [_addressField setText:[_favourite hostName]];
         [_addressField setClearButtonMode:UITextFieldViewModeWhileEditing];
@@ -121,7 +122,8 @@
         [_portField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_portField setReturnKeyType:UIReturnKeyNext];
         [_portField setAdjustsFontSizeToFitWidth:YES];
-        [_portField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [_portField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [_portField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_portField setTextAlignment:UITextAlignmentLeft];
         [_portField setPlaceholder:@"64738"];
         [_portField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
@@ -143,7 +145,8 @@
         [_usernameField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_usernameField setReturnKeyType:UIReturnKeyNext];
         [_usernameField setAdjustsFontSizeToFitWidth:NO];
-        [_usernameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [_usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [_usernameField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_usernameField setTextAlignment:UITextAlignmentLeft];
         [_usernameField setPlaceholder:[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"]];
         [_usernameField setSecureTextEntry:NO];
@@ -163,6 +166,7 @@
         [_passwordField setReturnKeyType:UIReturnKeyDefault];
         [_passwordField setAdjustsFontSizeToFitWidth:NO];
         [_passwordField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [_passwordField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_passwordField setPlaceholder:NSLocalizedString(@"Optional", nil)];
         [_passwordField setSecureTextEntry:YES];
         [_passwordField setTextAlignment:UITextAlignmentLeft];
