@@ -301,6 +301,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
             cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else if (section == CertificateViewSectionSHA256Fingerprint) {
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
@@ -315,6 +316,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
             cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else {
         NSArray *item = nil;
@@ -329,6 +331,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         cell.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
         cell.detailTextLabel.text = [item objectAtIndex:1];
         cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     return cell;
 }
@@ -350,6 +353,16 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
         NSString *str = nil;
         switch (indexPath.section) {
+            case CertificateViewSectionSubject:
+            case CertificateViewSectionIssuer: {
+                NSArray *item = nil;
+                if (indexPath.section == CertificateViewSectionSubject)
+                    item = [_subjectItems objectAtIndex:indexPath.row];
+                else if (indexPath.section == CertificateViewSectionIssuer)
+                    item = [_issuerItems objectAtIndex:indexPath.row];
+                str = [item objectAtIndex:1];
+                break;
+            }
             case CertificateViewSectionSHA1Fingerprint:
                 str = [cert hexDigestOfKind:@"sha1"];
                 break;
@@ -366,6 +379,8 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 - (BOOL) tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
     if (action == @selector(copy:)) {
         switch (indexPath.section) {
+            case CertificateViewSectionSubject:
+            case CertificateViewSectionIssuer:
             case CertificateViewSectionSHA1Fingerprint:
             case CertificateViewSectionSHA256Fingerprint:
                 return true;
@@ -376,11 +391,17 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
 - (BOOL) tableView:(UITableView*)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath*)indexPath {
     switch (indexPath.section) {
+        case CertificateViewSectionSubject:
+        case CertificateViewSectionIssuer:
         case CertificateViewSectionSHA1Fingerprint:
         case CertificateViewSectionSHA256Fingerprint:
             return true;
     }
     return false;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark -
