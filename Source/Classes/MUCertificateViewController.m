@@ -285,7 +285,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     }
 
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [[cell detailTextLabel] setAdjustsFontSizeToFitWidth:YES];
+    [[cell detailTextLabel] setAdjustsFontSizeToFitWidth:NO];
     [cell setBackgroundColor:[UIColor whiteColor]];
 
     NSUInteger section = [indexPath section];
