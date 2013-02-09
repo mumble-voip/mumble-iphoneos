@@ -28,6 +28,9 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+extern NSString *MUConnectionOpenedNotification;
+extern NSString *MUConnectionClosedNotification;
+
 @interface MUConnectionController : UIView
 + (MUConnectionController *) sharedController;
 - (void) connetToHostname:(NSString *)hostName port:(NSUInteger)port withUsername:(NSString *)userName andPassword:(NSString *)password withParentViewController:(UIViewController *)parentViewController;

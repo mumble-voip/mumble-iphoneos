@@ -40,7 +40,6 @@
 #import "MUImage.h"
 
 #import <MumbleKit/MKAudio.h>
-#import <MumbleKit/MKConnectionController.h>
 #import <MumbleKit/MKVersion.h>
 
 #import "PLCrashReporter.h"
@@ -49,6 +48,7 @@
     UIWindow                  *_window;
     UINavigationController    *_navigationController;
     MUPublicServerListFetcher *_publistFetcher;
+    BOOL                      _connectionActive;
 #ifdef MUMBLE_BETA_DIST
     MUVersionChecker          *_verCheck;
 #endif
@@ -133,6 +133,9 @@
 #ifdef MUMBLE_BETA_DIST
     _verCheck = [[MUVersionChecker alloc] init];
 #endif
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionOpened:) name:MUConnectionOpenedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionClosed:) name:MUConnectionClosedNotification object:nil];
     
     // Reset application badge, in case something brought it into an inconsistent state.
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -347,14 +350,21 @@
     }
 }
 
+- (void) connectionOpened:(NSNotification *)notification {
+    _connectionActive = YES;
+}
+
+- (void) connectionClosed:(NSNotification *)notification {
+    _connectionActive = NO;
+}
+
 - (void) applicationWillResignActive:(UIApplication *)application {
     // If we have any active connections, don't stop MKAudio. This is
     // for 'clicking-the-home-button' invocations of this method.
     //
     // In case we've been backgrounded by a phone call, MKAudio will
     // already have shut itself down.
-    NSArray *connections = [[MKConnectionController sharedController] allConnections];
-    if ([connections count] == 0) {
+    if (!_connectionActive) {
         NSLog(@"MumbleApplicationDelegate: Not connected to a server. Stopping MKAudio.");
         [[MKAudio sharedAudio] stop];
         

@@ -39,6 +39,9 @@
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKCertificate.h>
 
+NSString *MUConnectionOpenedNotification = @"MUConnectionOpenedNotification";
+NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
+
 @interface MUConnectionController () <MKConnectionDelegate, MKServerModelDelegate, MUServerCertificateTrustViewControllerProtocol> {
     MKConnection               *_connection;
     MKServerModel              *_serverModel;
@@ -145,6 +148,10 @@
     }
     
     [_connection connectToHost:_hostname port:_port];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MUConnectionOpenedNotification object:nil];
+    });
 }
 
 - (void) teardownConnection {
@@ -161,6 +168,10 @@
     
     // Reset app badge. The connection is no more.
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:MUConnectionClosedNotification object:nil];
+    });
 }
             
 - (void) updateTitle {
