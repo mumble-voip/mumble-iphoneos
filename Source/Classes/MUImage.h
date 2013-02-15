@@ -5,4 +5,5 @@
 @interface MUImage : NSObject
 + (UIImage *) tableViewCellImageFromImage:(UIImage *)srcImage;
 + (UIImage *) imageNamed:(NSString *)imageName;
++ (UIImage *) clearColorImage;
 @end

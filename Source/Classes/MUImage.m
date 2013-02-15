@@ -55,4 +55,18 @@
     return [UIImage imageNamed:imageName];
 }
 
+// clearColorImage returns a 1x1 clearColor image
+// that can be used as a transparent background image
+// for UIKit APIs that force you to provide UIImages.
++ (UIImage *) clearColorImage {
+	CGRect fillRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
+	UIGraphicsBeginImageContext(fillRect.size);
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextSetFillColorWithColor(ctx, [UIColor clearColor].CGColor);
+	CGContextFillRect(ctx, fillRect);
+	UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	return img;
+}
+
 @end

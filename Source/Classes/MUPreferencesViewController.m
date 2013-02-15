@@ -49,10 +49,11 @@
     [super viewWillAppear:animated];
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+        self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+        [self.navigationController.navigationBar setBackgroundImage:[MUImage clearColorImage] forBarMetrics:UIBarMetricsDefault];
         self.navigationController.navigationBar.translucent = YES;
     }
-    
+ 
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.scrollEnabled = NO;
