@@ -8,10 +8,11 @@
 #import "MUCertificateViewController.h"
 #import "MUCertificateController.h"
 #import "MUCertificateDiskImportViewController.h"
+#import "MUActionSheet.h"
 
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUCertificatePreferencesViewController () {
+@interface MUCertificatePreferencesViewController () <MUActionSheetDelegate> {
     NSMutableArray   *_certificateItems;
     BOOL             _picker;
     NSUInteger       _selectedIndex;
@@ -165,23 +166,23 @@
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
     NSString *showAllCerts = NSLocalizedString(@"Show All Certificates", nil);
     NSString *showIdentities = NSLocalizedString(@"Show Identities Only", nil);
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
+    MUActionSheet *sheet = [[MUActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                          destructiveButtonTitle:nil
+                                        constructiveButtonTitle:nil
                                               otherButtonTitles:NSLocalizedString(@"Generate New Certificate", nil),
                                                                 _showAll ? showIdentities : showAllCerts,
                                                                 NSLocalizedString(@"Import From iTunes", nil),
                             nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [sheet showInView:[self tableView]];
+    [sheet showInViewController:self];
     [sheet release];
 }
 
 #pragma mark -
-#pragma mark UIActionSheet delegate
+#pragma mark MUActionSheet delegate
 
-- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)idx {
+- (void) actionSheet:(MUActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)idx {
     if (idx == 0) { // Generate New Certificate
         UINavigationController *navCtrl = [[UINavigationController alloc] init];
         navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -195,7 +196,7 @@
         [[NSUserDefaults standardUserDefaults] setBool:_showAll forKey:@"CertificatesShowIntermediates"];
         [self fetchCertificates];
         [self.tableView reloadData];
-    } else if (idx == 2) { // Import From Disk
+    } else if (idx == 2) { // Import From iTunes
         MUCertificateDiskImportViewController *diskImportViewController = [[MUCertificateDiskImportViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
         [[self navigationController] presentModalViewController:navController animated:YES];

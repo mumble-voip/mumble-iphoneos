@@ -39,6 +39,8 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = @"Mumble";
     
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    
     UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(aboutButtonClicked:)];
     self.navigationItem.rightBarButtonItem = aboutBtn;
     [aboutBtn release];

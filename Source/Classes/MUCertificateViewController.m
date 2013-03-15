@@ -8,6 +8,7 @@
 #import "MUCertificateChainBuilder.h"
 #import "MUColor.h"
 #import "MUImage.h"
+#import "MUActionSheet.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -17,7 +18,7 @@ static const NSUInteger CertificateViewSectionSHA1Fingerprint    = 2;
 static const NSUInteger CertificateViewSectionSHA256Fingerprint  = 3;
 static const NSUInteger CertificateViewSectionTotal              = 4;
 
-@interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
+@interface MUCertificateViewController () <UIAlertViewDelegate, MUActionSheetDelegate> {
     NSInteger            _curIdx;
     NSData              *_persistentRef;
     NSArray             *_certificates;
@@ -448,18 +449,18 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     NSString *delete = NSLocalizedString(@"Delete", nil);
     NSString *export = NSLocalizedString(@"Export to iTunes", @"iTunes export button text for certificate chain action sheet");
 
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
+    MUActionSheet *sheet = [[MUActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:cancel
                                          destructiveButtonTitle:delete
+                                        constructiveButtonTitle:nil
                                               otherButtonTitles:export, nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [sheet showInView:self.tableView];
+    [sheet showInViewController:self];
     [sheet release];
 }
 
-- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) { // Export
+- (void) actionSheet:(MUActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) { // Export
         NSString *title = NSLocalizedString(@"Export Certificate Chain", @"Title for certificate export alert view (with username and password field)");
         NSString *cancel = NSLocalizedString(@"Cancel", nil);
         NSString *export = NSLocalizedString(@"Export", nil);
@@ -475,7 +476,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         [[alertView textFieldAtIndex:1] setPlaceholder:password];
         [alertView show];
         [alertView release];
-    } else if (buttonIndex == 0) { // Delete
+    } else if (buttonIndex == [actionSheet destructiveButtonIndex]) { // Delete
         NSString *title = NSLocalizedString(@"Delete Certificate Chain", @"Certificate deletion warning title");
         NSString *msg = NSLocalizedString(@"Are you sure you want to delete this certificate chain?\n\n"
                                           @"If you don't have a backup, this will permanently remove any rights associated with the certificate chain on any Mumble servers.",
