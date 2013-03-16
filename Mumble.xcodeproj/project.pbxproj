@@ -32,6 +32,7 @@
 		28451944163463C90027FAB3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28451943163463C90027FAB3 /* Default-568h@2x.png */; };
 		2845194816346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */; };
 		2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */; };
+		2846C7D616F4A09000739FD8 /* MUServerButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2846C7D516F4A08F00739FD8 /* MUServerButton.m */; };
 		28529B3B1541C043003DD813 /* certificatecreation.png in Resources */ = {isa = PBXBuildFile; fileRef = 28529B391541C042003DD813 /* certificatecreation.png */; };
 		28529B3C1541C043003DD813 /* certificatecreation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28529B3A1541C042003DD813 /* certificatecreation@2x.png */; };
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
@@ -267,6 +268,8 @@
 		28451943163463C90027FAB3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon-568h@2x.png"; path = "Resources/WelcomeScreenIcon-568h@2x.png"; sourceTree = "<group>"; };
 		284519491634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BackgroundTextureBlackGradient-568h@2x.png"; path = "Resources/BackgroundTextureBlackGradient-568h@2x.png"; sourceTree = "<group>"; };
+		2846C7D416F4A08F00739FD8 /* MUServerButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerButton.h; sourceTree = "<group>"; };
+		2846C7D516F4A08F00739FD8 /* MUServerButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerButton.m; sourceTree = "<group>"; };
 		28529B391541C042003DD813 /* certificatecreation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = certificatecreation.png; path = Resources/certificatecreation.png; sourceTree = "<group>"; };
 		28529B3A1541C042003DD813 /* certificatecreation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "certificatecreation@2x.png"; path = "Resources/certificatecreation@2x.png"; sourceTree = "<group>"; };
 		2858A57F123B9E5700A82155 /* MUCertificateCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCell.xib; sourceTree = "<group>"; };
@@ -598,6 +601,8 @@
 				288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */,
 				28F0198F1364585B00E402F6 /* MUServerCell.h */,
 				28F019901364585B00E402F6 /* MUServerCell.m */,
+				2846C7D416F4A08F00739FD8 /* MUServerButton.h */,
+				2846C7D516F4A08F00739FD8 /* MUServerButton.m */,
 				280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */,
 				280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */,
 				289CBA16125693040015E58E /* MUServerViewController.h */,
@@ -1374,6 +1379,7 @@
 				28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */,
 				28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */,
 				28C1034916EFB1C100DECE08 /* MUActionSheetButton.m in Sources */,
+				2846C7D616F4A09000739FD8 /* MUServerButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
