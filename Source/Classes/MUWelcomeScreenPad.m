@@ -10,9 +10,12 @@
 #import "MUFavouriteServerListController.h"
 #import "MULanServerListController.h"
 
-@interface MUWelcomeScreenPad () <UIPopoverControllerDelegate> {
+@interface MUWelcomeScreenPad () <UIPopoverControllerDelegate, UITableViewDataSource, UITableViewDelegate> {
     UIPopoverController   *_prefsPopover;
-    IBOutlet UITableView  *_tableView;
+    UIView                *_view;
+    UIImageView           *_backgroundView;
+    UITableView           *_tableView;
+    UIImageView           *_logoView;
 }
 @end
 
@@ -24,16 +27,58 @@
     return self;
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
-}
+- (void) loadView {
+    _view = [[UIView alloc] initWithFrame:CGRectZero];
+    _view.frame = CGRectMake(0, 0, 768, 1024);
+    self.view = _view;
+    [_view release];
+    
+    _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradientPad"]];
+    [_backgroundView setFrame:_view.frame];
+    [_view addSubview:_backgroundView];
+    [_backgroundView release];
 
-- (void) viewDidLoad {
+    _logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoBigShadow"]];
+    [_view addSubview:_logoView];
+    [_logoView release];
+
+    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.opaque = NO;
     _tableView.backgroundView = nil;
     _tableView.scrollEnabled = NO;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone; // doesn't work?
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [_view addSubview:_tableView];
+    [_tableView release];
+}
+
+- (void) setViewPositions {
+    CGRect pr = self.view.frame;
+    CGFloat pw = pr.size.width;
+    
+    CGFloat lw = 259;
+    CGFloat lh = 259;
+    
+    CGFloat tw = 320;
+    CGFloat th = 210;
+    
+    [_backgroundView setFrame:_view.frame];
+    [_logoView setFrame:CGRectMake(pw/2 - lw/2, 50, lw, lh)];
+    [_tableView setFrame:CGRectMake(pw/2 - tw/2, 2*50 + lh, tw, th)];
+}
+
+- (void) viewWillLayoutSubviews {
+    [self setViewPositions];
+}
+
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self setViewPositions];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -161,7 +206,7 @@
     UINavigationController *navCtrl = [[[UINavigationController alloc] initWithRootViewController:prefs] autorelease];
     UIPopoverController *popOver = [[UIPopoverController alloc] initWithContentViewController:navCtrl];
     popOver.popoverBackgroundViewClass = [MUPopoverBackgroundView class];
-    [popOver setDelegate:self];
+    popOver.delegate = self;
     [popOver presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     
     _prefsPopover = popOver;
