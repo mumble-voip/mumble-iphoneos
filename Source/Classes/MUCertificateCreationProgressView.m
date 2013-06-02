@@ -3,8 +3,10 @@
 // license that can be found in the LICENSE file.
 
 #import "MUCertificateCreationProgressView.h"
+#import "MUImage.h"
 
 @interface MUCertificateCreationProgressView () {
+    IBOutlet UIImageView              *_backgroundImage;
     IBOutlet UIActivityIndicatorView  *_activityIndicator;
     IBOutlet UILabel                  *_nameLabel;
     IBOutlet UILabel                  *_emailLabel;
@@ -33,6 +35,10 @@
     [_identityName release];
     [_emailAddress release];
     [super dealloc];
+}
+
+- (void) viewDidLoad {
+    _backgroundImage.image = [MUImage imageNamed:@"BackgroundTextureBlackGradient"];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
