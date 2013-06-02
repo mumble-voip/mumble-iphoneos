@@ -110,14 +110,13 @@
     _menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MumbleMenuButton"] style:UIBarButtonItemStyleBordered target:self action:@selector(actionButtonClicked:)];
     _serverView.navigationItem.rightBarButtonItem = _menuButton;
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
     [button setFrame:CGRectMake(0, 0, 35, 30)];
     [button setBackgroundImage:[UIImage imageNamed:@"SmallMumbleIcon"] forState:UIControlStateNormal];
     [button setAdjustsImageWhenDisabled:NO];
     [button setEnabled:YES];
     [button addTarget:self action:@selector(modeSwitchButtonReleased:) forControlEvents:UIControlEventTouchUpInside];
     _smallIcon = [[UIBarButtonItem alloc] initWithCustomView:button];
-    [button release];
     _modeSwitchButton = button;
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
