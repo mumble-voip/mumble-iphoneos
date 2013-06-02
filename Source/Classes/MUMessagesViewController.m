@@ -535,7 +535,7 @@
    
     UIApplication *app = [UIApplication sharedApplication];
     if ([app applicationState] == UIApplicationStateBackground) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        UILocalNotification *notification = [[[UILocalNotification alloc] init] autorelease];
         
         NSMutableCharacterSet *trimSet = [[NSMutableCharacterSet alloc] init];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -556,7 +556,12 @@
             msgText = [msg plainTextString];
         }
         
-        notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], msgText];
+        if (user == nil) {
+            notification.alertBody = msgText;
+        } else {
+           notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], msgText]; 
+        }
+
         [notification.userInfo setValue:indexPath forKey:@"indexPath"];
         [app presentLocalNotificationNow:notification];
         [app setApplicationIconBadgeNumber:[app applicationIconBadgeNumber]+1];
