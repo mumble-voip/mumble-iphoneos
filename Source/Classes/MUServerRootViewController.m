@@ -149,13 +149,13 @@
 }
 
 - (void) segmentChanged:(id)sender {
-    if (_segmentedControl.selectedSegmentIndex == 0) {
+    if (_segmentedControl.selectedSegmentIndex == 0) { // Server view
         _serverView.navigationItem.titleView = _segmentedControl;
         _serverView.navigationItem.leftBarButtonItem = _smallIcon;
         _serverView.navigationItem.rightBarButtonItem = _menuButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
         [_modeSwitchButton setEnabled:YES];
-    } else if (_segmentedControl.selectedSegmentIndex == 1) {
+    } else if (_segmentedControl.selectedSegmentIndex == 1) { // Messages view
         _messagesView.navigationItem.titleView = _segmentedControl;
         _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
         _messagesView.navigationItem.rightBarButtonItem = _menuButton;
@@ -163,7 +163,7 @@
         [_modeSwitchButton setEnabled:NO];
     }
     
-    if (_segmentedControl.selectedSegmentIndex == 1) {
+    if (_segmentedControl.selectedSegmentIndex == 1) { // Messages view
         _unreadMessages = 0;
         _numberBadgeView.value = 0;
         _numberBadgeView.hidden = YES;
@@ -297,7 +297,7 @@
 }
 
 - (void) serverModel:(MKServerModel *)model textMessageReceived:(MKTextMessage *)msg fromUser:(MKUser *)user {
-    if (_segmentedControl.selectedSegmentIndex != 2) {
+    if (_segmentedControl.selectedSegmentIndex != 1) { // When not in messages view
         _unreadMessages++;
         _numberBadgeView.value = _unreadMessages;
         _numberBadgeView.hidden = NO;
