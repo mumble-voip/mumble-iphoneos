@@ -112,6 +112,8 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         if (_allowExportAndDelete) {
             UIToolbar *toolbar = [[[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 125, 45)] autorelease];
             [toolbar setBarStyle:UIBarStyleBlackOpaque];
+            [toolbar setBackgroundImage:[[[UIImage alloc] init] autorelease] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
+            [toolbar setBackgroundColor:[UIColor clearColor]];
             [toolbar setItems:[NSArray arrayWithObjects:actions, segmentedContainer, nil]];
     
             UIBarButtonItem *toolbarContainer = [[[UIBarButtonItem alloc] initWithCustomView:toolbar] autorelease];        
