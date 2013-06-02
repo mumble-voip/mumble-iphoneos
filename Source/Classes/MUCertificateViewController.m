@@ -455,12 +455,13 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
                                               cancelButtonTitle:cancel
                                          destructiveButtonTitle:delete
                                               otherButtonTitles:export, nil];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [sheet showInView:self.view];
     [sheet release];
 }
 
 - (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) { // Export
+    if (buttonIndex == [actionSheet firstOtherButtonIndex]) { // Export
         NSString *title = NSLocalizedString(@"Export Certificate Chain", @"Title for certificate export alert view (with username and password field)");
         NSString *cancel = NSLocalizedString(@"Cancel", nil);
         NSString *export = NSLocalizedString(@"Export", nil);
