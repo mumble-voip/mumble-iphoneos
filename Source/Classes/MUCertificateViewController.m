@@ -98,6 +98,8 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         _arrows.momentary = YES;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
+    
+    [[[self navigationController] navigationBar] setBarStyle:UIBarStyleBlackOpaque];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
