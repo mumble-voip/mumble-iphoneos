@@ -4,6 +4,7 @@
 
 #import "MUServerViewController.h"
 #import "MUUserStateAcessoryView.h"
+#import "MUNotificationController.h"
 #import "MUColor.h"
 
 #import <MumbleKit/MKAudio.h>
@@ -555,8 +556,12 @@
 
 - (void) toggleMode {
     if (_viewMode == MUServerViewControllerViewModeServer) {
+        NSString *msg = NSLocalizedString(@"Switched to channel view mode.", nil);
+        [[MUNotificationController sharedController] addNotification:msg];
         [self switchToChannelMode];
     } else if (_viewMode == MUServerViewControllerViewModeChannel) {
+        NSString *msg = NSLocalizedString(@"Switched to server view mode.", nil);
+        [[MUNotificationController sharedController] addNotification:msg];
         [self switchToServerMode];
     }
 
