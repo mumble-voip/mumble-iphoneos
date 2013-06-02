@@ -11,7 +11,7 @@ static BOOL CertIsSelfSignedAndValid(SecCertificateRef cert);
 static NSArray *BuildCertChainFromCert(SecCertificateRef cert);
 static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isFullChain);
 
-// Finds any certificates in the valid parents of the `cert' certficiate.
+// Finds any certificates in the valid parents of the `cert' certificate.
 // A valid parent is a parent that:
 // 
 //  1. Has signed the `cert' certificate's signature.
@@ -34,28 +34,29 @@ static NSArray *FindValidParentsForCert(SecCertificateRef cert) {
     if (err != noErr) {
         return nil;
     }
+    [allAttrs autorelease];
 
-    NSMutableArray *validParents = [[NSMutableArray alloc] init];
+    NSMutableArray *validParents = [[[NSMutableArray alloc] init] autorelease];
     for (NSDictionary *parentAttr in allAttrs) {
         SecCertificateRef parentCertRef = (SecCertificateRef) [parentAttr objectForKey:(id)kSecValueRef];
+
         NSData *parentData = (NSData *) SecCertificateCopyData(parentCertRef);
         MKCertificate *parent = [MKCertificate certificateWithCertificate:parentData privateKey:nil];
         [parentData release];
         
         NSData *childData = (NSData *) SecCertificateCopyData(cert);
         MKCertificate *child = [MKCertificate certificateWithCertificate:childData privateKey:nil];
+        [childData release];
     
         if ([parent isValidOnDate:[NSDate date]] && [child isSignedBy:parent]) {
             [validParents addObject:(id)parentCertRef];
         }
-    
-        CFRelease(parentCertRef);
     }
     if ([validParents count] == 0) {
         return nil;
     }
 
-    return [validParents autorelease];
+    return validParents;
 }
 
 // Extracts attributes from the `cert' certificate, along with a
