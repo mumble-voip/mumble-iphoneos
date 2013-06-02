@@ -8,7 +8,6 @@
 #import "MUCertificateChainBuilder.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUActionSheet.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -18,7 +17,7 @@ static const NSUInteger CertificateViewSectionSHA1Fingerprint    = 2;
 static const NSUInteger CertificateViewSectionSHA256Fingerprint  = 3;
 static const NSUInteger CertificateViewSectionTotal              = 4;
 
-@interface MUCertificateViewController () <UIAlertViewDelegate, MUActionSheetDelegate> {
+@interface MUCertificateViewController () <UIAlertViewDelegate, UIActionSheetDelegate> {
     NSInteger            _curIdx;
     NSData              *_persistentRef;
     NSArray             *_certificates;
@@ -449,17 +448,16 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     NSString *delete = NSLocalizedString(@"Delete", nil);
     NSString *export = NSLocalizedString(@"Export to iTunes", @"iTunes export button text for certificate chain action sheet");
 
-    MUActionSheet *sheet = [[MUActionSheet alloc] initWithTitle:nil
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:cancel
                                          destructiveButtonTitle:delete
-                                        constructiveButtonTitle:nil
                                               otherButtonTitles:export, nil];
-    [sheet showInViewController:self];
+    [sheet showInView:self.view];
     [sheet release];
 }
 
-- (void) actionSheet:(MUActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
+- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 0) { // Export
         NSString *title = NSLocalizedString(@"Export Certificate Chain", @"Title for certificate export alert view (with username and password field)");
         NSString *cancel = NSLocalizedString(@"Cancel", nil);
