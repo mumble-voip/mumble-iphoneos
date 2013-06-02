@@ -184,8 +184,26 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 
 - (void) connection:(MKConnection*)conn unableToConnectWithError:(NSError *)err {
     [self hideConnectingView];
+
+    NSString *msg = [err localizedDescription];
+
+    // errSSLClosedAbort: "connection closed via error".
+    //
+    // This is the error we get when users hit a global ban on the server.
+    // Ideally, we'd provide better descriptions for more of these errors,
+    // but when using NSStream's TLS support, the NSErrors we get are simply
+    // OSStatus codes in an NSError wrapper without a useful description.
+    //
+    // In the future, MumbleKit should probably wrap the SecureTransport range of
+    // OSStatus codes to improve this situation, but this will do for now.
+    if ([[err domain] isEqualToString:NSOSStatusErrorDomain] && [err code] == -9806) {
+        msg = NSLocalizedString(@"The TLS connection was closed due to an error.\n\n"
+                                @"The server might be temporarily rejecting your connection because you have "
+                                @"attempted to connect too many times in a row.", nil);
+    }
+    
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unable to connect", nil)
-                                                        message:[err localizedDescription]
+                                                        message:msg
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                               otherButtonTitles:nil];
