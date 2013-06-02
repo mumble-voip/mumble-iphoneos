@@ -8,11 +8,10 @@
 #import "MUCertificateViewController.h"
 #import "MUCertificateController.h"
 #import "MUCertificateDiskImportViewController.h"
-#import "MUActionSheet.h"
 
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUCertificatePreferencesViewController () <MUActionSheetDelegate> {
+@interface MUCertificatePreferencesViewController () <UIActionSheetDelegate> {
     NSMutableArray   *_certificateItems;
     BOOL             _picker;
     NSUInteger       _selectedIndex;
@@ -166,23 +165,23 @@
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
     NSString *showAllCerts = NSLocalizedString(@"Show All Certificates", nil);
     NSString *showIdentities = NSLocalizedString(@"Show Identities Only", nil);
-    MUActionSheet *sheet = [[MUActionSheet alloc] initWithTitle:nil
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                          destructiveButtonTitle:nil
-                                        constructiveButtonTitle:nil
                                               otherButtonTitles:NSLocalizedString(@"Generate New Certificate", nil),
                                                                 _showAll ? showIdentities : showAllCerts,
                                                                 NSLocalizedString(@"Import From iTunes", nil),
                             nil];
-    [sheet showInViewController:self];
+    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
+    [sheet showInView:self.view];
     [sheet release];
 }
 
 #pragma mark -
-#pragma mark MUActionSheet delegate
+#pragma mark UIActionSheet delegate
 
-- (void) actionSheet:(MUActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)idx {
+- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)idx {
     if (idx == 0) { // Generate New Certificate
         UINavigationController *navCtrl = [[UINavigationController alloc] init];
         navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
