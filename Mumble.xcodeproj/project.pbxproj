@@ -58,7 +58,6 @@
 		286A3CA9158CD12E00C817D1 /* LogoBigShadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CA8158CD12E00C817D1 /* LogoBigShadow@2x.png */; };
 		286A3CAB158CD55700C817D1 /* LogoBigShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CAA158CD55700C817D1 /* LogoBigShadow.png */; };
 		286A3CAD158CD5F400C817D1 /* BackgroundTextureBlackGradientPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CAC158CD5F400C817D1 /* BackgroundTextureBlackGradientPad.png */; };
-		286A3CAF158CEB5B00C817D1 /* MainWindow~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CAE158CEB5A00C817D1 /* MainWindow~iPad.xib */; };
 		286A3CBE158CFDF300C817D1 /* MUPopoverBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 286A3CBD158CFDF200C817D1 /* MUPopoverBackgroundView.m */; };
 		286A3CC1158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CBF158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp.png */; };
 		286A3CC2158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CC0158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png */; };
@@ -1233,7 +1232,6 @@
 				286A3CA9158CD12E00C817D1 /* LogoBigShadow@2x.png in Resources */,
 				286A3CAB158CD55700C817D1 /* LogoBigShadow.png in Resources */,
 				286A3CAD158CD5F400C817D1 /* BackgroundTextureBlackGradientPad.png in Resources */,
-				286A3CAF158CEB5B00C817D1 /* MainWindow~iPad.xib in Resources */,
 				286A3CC1158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp.png in Resources */,
 				286A3CC2158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png in Resources */,
 				28451944163463C90027FAB3 /* Default-568h@2x.png in Resources */,
