@@ -63,7 +63,7 @@
 }
 
 + (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)timestampDate isSentBySelf:(BOOL)sentBySelf {
-    return [[[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:[NSDate date] andEmbeddedLinks:links andEmbeddedImages:images  andTimestampDate:timestampDate andSentBySelf:sentBySelf] autorelease];
+    return [[[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:timestampDate andEmbeddedLinks:links andEmbeddedImages:images  andTimestampDate:timestampDate andSentBySelf:sentBySelf] autorelease];
 }
 
 @end
