@@ -1,5 +1,5 @@
 [main]
-host = https://www.transifex.net
+host = https://www.transifex.com
 
 [mumble-iphoneos.app-strings]
 file_filter = Resources/<lang>.lproj/Localizable.strings
