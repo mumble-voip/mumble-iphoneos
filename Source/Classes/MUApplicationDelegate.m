@@ -254,7 +254,9 @@
     
     NSString *quality = [defaults stringForKey:@"AudioQualityKind"];
     if ([quality isEqualToString:@"low"]) {
-        settings.codec = MKCodecFormatSpeex;
+        // Will fall back to CELT if the
+        // server requires it for inter-op.
+        settings.codec = MKCodecFormatOpus;
         settings.quality = 16000;
         settings.audioPerPacket = 6;
     } else if ([quality isEqualToString:@"balanced"]) {
