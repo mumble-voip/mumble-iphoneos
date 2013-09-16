@@ -144,6 +144,7 @@
                                                                 @"balanced",                       @"AudioQualityKind",
                                                                 [NSNumber numberWithBool:NO],      @"AudioSidetone",
                                                                 [NSNumber numberWithFloat:0.2f],   @"AudioSidetoneVolume",
+                                                                [NSNumber numberWithBool:YES],     @"AudioSpeakerPhoneMode",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
@@ -298,6 +299,12 @@
 
     settings.enableSideTone = [defaults boolForKey:@"AudioSidetone"];
     settings.sidetoneVolume = [defaults floatForKey:@"AudioSidetoneVolume"];
+    
+    if ([defaults boolForKey:@"AudioSpeakerPhoneMode"]) {
+        settings.preferReceiverOverSpeaker = NO;
+    } else {
+        settings.preferReceiverOverSpeaker = YES;
+    }
     
     MKAudio *audio = [MKAudio sharedAudio];
     [audio updateAudioSettings:&settings];

@@ -60,7 +60,7 @@
     } else if (section == 1) {
         return 2;
     } else if (section == 2) {
-        return 1;
+        return 2;
     }
     return 0;
 }
@@ -141,6 +141,15 @@
                 cell.detailTextLabel.text = NSLocalizedString(@"Off", nil);
             }
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = NSLocalizedString(@"Speakerphone Mode", nil);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *speakerPhoneSwitch = [[[UISwitch alloc] init] autorelease];
+            speakerPhoneSwitch.onTintColor = [UIColor blackColor];
+            speakerPhoneSwitch.on = [defaults boolForKey:@"AudioSpeakerPhoneMode"];
+            speakerPhoneSwitch.enabled = YES;
+            [speakerPhoneSwitch addTarget:self action:@selector(speakerPhoneModeChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = speakerPhoneSwitch;
         }
     }
     
@@ -229,6 +238,10 @@
     } else {
         [sender setMinimumTrackTintColor:[MUColor goodPingColor]];
     }
+}
+
+- (void) speakerPhoneModeChanged:(UISwitch *)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioSpeakerPhoneMode"];
 }
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {
