@@ -12,10 +12,10 @@
 	<string>icon.png</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon.png</string>
-		<string>Icon@2x.png</string>
-		<string>IconPad.png</string>
-		<string>IconPad@2x.png</string>
+		<string>icon.png</string>
+		<string>icon@2x.png</string>
+		<string>iconpad.png</string>
+		<string>iconpad@2x.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -23,10 +23,10 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>Icon.png</string>
-				<string>Icon@2x.png</string>
-				<string>IconPad.png</string>
-				<string>IconPad@2x.png</string>
+				<string>icon.png</string>
+				<string>icon@2x.png</string>
+				<string>iconpad.png</string>
+				<string>iconpad@2x.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
