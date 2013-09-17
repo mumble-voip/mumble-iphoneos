@@ -27,7 +27,7 @@
     self.title = NSLocalizedString(@"Advanced Audio", nil);
     self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSubsystemRestarted:) name:MKAudioDidRestartNotification object:nil];
     
@@ -51,7 +51,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -61,6 +61,8 @@
         return 2;
     } else if (section == 2) {
         return 2;
+    } else if (section == 3) {
+        return 1;
     }
     return 0;
 }
@@ -151,6 +153,17 @@
             [speakerPhoneSwitch addTarget:self action:@selector(speakerPhoneModeChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = speakerPhoneSwitch;
         }
+    } else if ([indexPath section] == 3) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = NSLocalizedString(@"Force CELT Mode", nil);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *celtSwitch = [[[UISwitch alloc] init] autorelease];
+            celtSwitch.onTintColor = [UIColor blackColor];
+            celtSwitch.on = [defaults boolForKey:@"AudioOpusCodecForceCELTMode"];
+            celtSwitch.enabled = YES;
+            [celtSwitch addTarget:self action:@selector(opusCodecForceCELTModeChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = celtSwitch;
+        }
     }
     
     return cell;
@@ -163,6 +176,8 @@
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Input", nil)];
     } else if (section == 2) { // Audio Output
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Output", nil)];
+    } else if (section == 3) { // Opus Codec
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Opus Codec", nil)];
     } else {
         return nil;
     }
@@ -174,6 +189,8 @@
     } else if (section == 1) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
     } else if (section == 2) {
+        return [MUTableViewHeaderLabel defaultHeaderHeight];
+    } else if (section == 3) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
     }
     return 0.0f;
@@ -242,6 +259,10 @@
 
 - (void) speakerPhoneModeChanged:(UISwitch *)sender {
     [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioSpeakerPhoneMode"];
+}
+
+- (void) opusCodecForceCELTModeChanged:(UISwitch *)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioOpusCodecForceCELTMode"];
 }
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {

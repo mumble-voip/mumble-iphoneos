@@ -145,6 +145,7 @@
                                                                 [NSNumber numberWithBool:NO],      @"AudioSidetone",
                                                                 [NSNumber numberWithFloat:0.2f],   @"AudioSidetoneVolume",
                                                                 [NSNumber numberWithBool:YES],     @"AudioSpeakerPhoneMode",
+                                                                [NSNumber numberWithBool:YES],     @"AudioOpusCodecForceCELTMode",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
@@ -305,6 +306,8 @@
     } else {
         settings.preferReceiverOverSpeaker = YES;
     }
+    
+    settings.opusForceCELTMode = [defaults boolForKey:@"AudioOpusCodecForceCELTMode"];
     
     MKAudio *audio = [MKAudio sharedAudio];
     [audio updateAudioSettings:&settings];
