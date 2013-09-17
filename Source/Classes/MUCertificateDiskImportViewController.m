@@ -162,14 +162,15 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSString *pkcs12File = [[documentDirs objectAtIndex:0] stringByAppendingFormat:@"/%@", fileName];
     NSData *pkcs12Data = [NSData dataWithContentsOfFile:pkcs12File];
 
-    MKCertificate *tmpCert = [MKCertificate certificateWithPKCS12:pkcs12Data password:password];
-    if (tmpCert == nil) {
+    NSArray *chain = [MKCertificate certificatesWithPKCS12:pkcs12Data password:password];
+    if ([chain count] == 0) {
         [self showPasswordDialog];
         [[self tableView] deselectRowAtIndexPath:_attemptIndexPath animated:YES];
         return;
     }
     
-    NSData *transformedPkcs12Data = [tmpCert exportPKCS12WithPassword:@""];
+    MKCertificate *leaf = [chain objectAtIndex:0];
+    NSData *transformedPkcs12Data = [leaf exportPKCS12WithPassword:@""];
     if (transformedPkcs12Data == nil) {
         ShowAlertDialog(NSLocalizedString(@"Import Error", nil),
                         NSLocalizedString(@"Mumble was unable to export the specified certificate.",
@@ -182,13 +183,19 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSArray *items = nil;
     OSStatus err = SecPKCS12Import((CFDataRef)transformedPkcs12Data, (CFDictionaryRef)dict, (CFArrayRef *)&items);
 
-    if (err == errSecSuccess && [items count] > 0) {        
+    if (err == errSecSuccess && [items count] > 0) {
         // Add all elements except the leaf certificate to the keychain
-        NSDictionary *pkcsDict = [items objectAtIndex:0];
-        NSArray *chain = [pkcsDict objectForKey:(NSString *)kSecImportItemCertChain];
         for (int i = 1; i < [chain count]; i++) {
+            MKCertificate *cert = [chain objectAtIndex:i];
+            SecCertificateRef secCert = SecCertificateCreateWithData(NULL, (CFDataRef)[cert certificate]);
+            if (secCert == NULL) {
+                ShowAlertDialog(NSLocalizedString(@"Import Error", nil),
+                                NSLocalizedString(@"Mumble was unable to import one of the intermediate certificates in the certificate chain.", nil));
+                continue;
+            }
+
             NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [chain objectAtIndex:i], kSecValueRef, nil];
+                                (id)secCert, kSecValueRef, nil];
             err = SecItemAdd((CFDictionaryRef)op, NULL);
             if (err != noErr) {
                 if (err == errSecDuplicateItem) {
@@ -198,9 +205,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                     NSLocalizedString(@"Mumble was unable to import one of the intermediate certificates in the certificate chain.", nil));
                 }
             }
+            
+            CFRelease(secCert);
         }
         
         // Get the SecIdentityRef, and add it to the keychain
+        NSDictionary *pkcsDict = [items objectAtIndex:0];
         SecIdentityRef identity = (SecIdentityRef)[pkcsDict objectForKey:(id)kSecImportItemIdentity];
         NSDictionary *op = [NSDictionary dictionaryWithObjectsAndKeys:
                             (id)identity, kSecValueRef,
