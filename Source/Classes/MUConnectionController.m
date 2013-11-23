@@ -98,13 +98,17 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) hideConnectingView {
-    [_alertView dismissWithClickedButtonIndex:1 animated:NO];
+    [_alertView dismissWithClickedButtonIndex:1 animated:YES];
     [_alertView release];
     _alertView = nil;
     [_timer invalidate];
     _timer = nil;
+
+    // This runloop wait works around a new behavior in iOS 7 where our UIAlertViews would suddenly
+    // disappear if shown too soon after hiding the previous alert view.
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeInterval:0.350f sinceDate:[NSDate date]]];
 }
-    
+
 - (void) establishConnection {
     _connection = [[MKConnection alloc] init];
     [_connection setDelegate:self];
