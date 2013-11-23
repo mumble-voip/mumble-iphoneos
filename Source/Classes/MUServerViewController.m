@@ -128,6 +128,8 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositionTalkButton) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
         [self repositionTalkButton];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     }
 }
 
@@ -137,9 +139,9 @@
     if (_talkButton) {
         [_talkButton removeFromSuperview];
         _talkButton = nil;
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSInteger) indexForUser:(MKUser *)user {
@@ -282,6 +284,39 @@
             talkImageName = @"talking_whisper";
         else if (talkState == MKTalkStateShouting)
             talkImageName = @"talking_alt";
+        
+        // This check is here to correctly remove a user's talk state when backgrounding the app.
+        //
+        // For example, if the user of the app is holding his finger on the Push-to-Talk button
+        // and decides to background Mumble while he is transmitting (via either the home- or
+        // sleep button).
+        //
+        // This scenario brings two issues along with it:
+        //
+        //  1. We have to cut off Push-to-Talk when the app gets backgrounded - we get no TouchUpInside event
+        //     from the UIButton, so we wouldn't regularly stop Push-to-Talk in this scenario.
+        //
+        //  2. Even if we set MKAudio's forceTransmit to NO, there exists a delay in the audio subsystem
+        //     between setting the forceTransmit flag to NO before that change is propagated to MKServerModel
+        //     delegates.
+        //
+        // The first problem is solved by registering a notification observer for when the app enters the
+        // background. This is handled by the appDidEnterBackground: method of this class.
+        //
+        // This notification observer will set the forceTransmit flag to NO, but will also force-reload
+        // the view controller's table view, causing us to enter this method soon before we're really backgrounded.
+        //
+        // That's fine, but because of problem #2, the user's talk state will most likely not be updated by the time
+        // tableView:cellForRowAtIndexPath: is called by the table view.
+        //
+        // To solve this, we query the audio subsystem directly for the answer to whether the current user
+        // should be treated as holding down Push-to-Talk, and therefore be listed with an active talk state
+        // in the table view.
+        if (user == connectedUser && [[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
+            if (![[MKAudio sharedAudio] forceTransmit]) {
+                talkImageName = @"talking_off";
+            }
+        }
         
         cell.imageView.image = [UIImage imageNamed:talkImageName];
         cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
@@ -572,6 +607,18 @@
         NSInteger idx = [self indexForChannel:cur];
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
+}
+
+#pragma mark - Background notification
+
+- (void) appDidEnterBackground:(NSNotification *)notification {
+    // Force Push-to-Talk to stop when the app is backgrounded.
+    [[MKAudio sharedAudio] setForceTransmit:NO];
+    
+    // Reload the table view to re-render the talk state for the user
+    // as not talking if they were holding down their Push-to-Talk buttons
+    // at the moment the app was sent to the background.
+    [[self tableView] reloadData];
 }
 
 @end
