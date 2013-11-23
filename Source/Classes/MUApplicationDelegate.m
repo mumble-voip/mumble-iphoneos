@@ -149,7 +149,11 @@
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
-                                                             nil]];
+                                                        nil]];
+#if MUMBLE_APP_STORE != 1
+    // Enable mixer debugging for all builds that aren't explicitly for App Store distribution.
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"AudioMixerDebug"];
+#endif
     
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
@@ -308,6 +312,7 @@
     }
     
     settings.opusForceCELTMode = [defaults boolForKey:@"AudioOpusCodecForceCELTMode"];
+    settings.audioMixerDebug = [defaults boolForKey:@"AudioMixerDebug"];
     
     MKAudio *audio = [MKAudio sharedAudio];
     [audio updateAudioSettings:&settings];

@@ -11,6 +11,7 @@
 #import "MUConnectionController.h"
 #import "MUMessagesViewController.h"
 #import "MUDatabase.h"
+#import "MUAudioMixerDebugViewController.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -36,6 +37,7 @@
     NSInteger                   _unreadMessages;
     
     NSInteger                   _disconnectIndex;
+    NSInteger                   _mixerDebugIndex;
     NSInteger                   _accessTokensIndex;
     NSInteger                   _certificatesIndex;
     NSInteger                   _selfRegisterIndex;
@@ -315,6 +317,12 @@
     _disconnectIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Disconnect", nil)];
     [actionSheet setDestructiveButtonIndex:0];
     
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioMixerDebug"] boolValue]) {
+        _mixerDebugIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Mixer Debug", nil)];
+    } else {
+        _mixerDebugIndex = -1;
+    }
+    
     _accessTokensIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Access Tokens", nil)];
     
     if (!inMessagesView)
@@ -385,6 +393,12 @@
 
     if (buttonIndex == _disconnectIndex) { // Disconnect
         [[MUConnectionController sharedController] disconnectFromServer];
+    } else if (buttonIndex == _mixerDebugIndex) {
+        MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
+        [self presentModalViewController:navCtrl animated:YES];
+        [audioMixerDebugViewController release];
+        [navCtrl release];
     } else if (buttonIndex == _accessTokensIndex) {
         MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];

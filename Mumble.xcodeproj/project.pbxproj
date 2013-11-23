@@ -38,6 +38,7 @@
 		2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2858A57F123B9E5700A82155 /* MUCertificateCell.xib */; };
 		2858A5AD123BA08D00A82155 /* MUCertificateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858A5AC123BA08D00A82155 /* MUCertificateCell.m */; };
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
+		285AF26B1840DEE20065E339 /* MUAudioMixerDebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285AF26A1840DEE20065E339 /* MUAudioMixerDebugViewController.m */; };
 		285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */; };
 		285D6B7E16BF02E900F239EB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285D6B7D16BF02E900F239EB /* SenTestingKit.framework */; };
 		285D6B7F16BF02E900F239EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -276,6 +277,8 @@
 		2858A5AC123BA08D00A82155 /* MUCertificateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCell.m; sourceTree = "<group>"; };
 		2858DBA11233E31B000D6F75 /* MUVersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUVersionChecker.h; sourceTree = "<group>"; };
 		2858DBA21233E31B000D6F75 /* MUVersionChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUVersionChecker.m; sourceTree = "<group>"; };
+		285AF2691840DEE20065E339 /* MUAudioMixerDebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioMixerDebugViewController.h; sourceTree = "<group>"; };
+		285AF26A1840DEE20065E339 /* MUAudioMixerDebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioMixerDebugViewController.m; sourceTree = "<group>"; };
 		285D6B6F16BEEFA700F239EB /* MUTextMessageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUTextMessageProcessor.h; sourceTree = "<group>"; };
 		285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTextMessageProcessor.m; sourceTree = "<group>"; };
 		285D6B7316BF027A00F239EB /* MUTextMessageProcessorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MUTextMessageProcessorTest.h; path = Tests/MUTextMessageProcessorTest.h; sourceTree = "<group>"; };
@@ -649,6 +652,8 @@
 				28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */,
 				285D6B6F16BEEFA700F239EB /* MUTextMessageProcessor.h */,
 				285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */,
+				285AF2691840DEE20065E339 /* MUAudioMixerDebugViewController.h */,
+				285AF26A1840DEE20065E339 /* MUAudioMixerDebugViewController.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1338,6 +1343,7 @@
 				2802AC0314CB0131000983A5 /* MUImage.m in Sources */,
 				2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */,
 				2802AC0D14CB2E2B000983A5 /* MUTextMessage.m in Sources */,
+				285AF26B1840DEE20065E339 /* MUAudioMixerDebugViewController.m in Sources */,
 				28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */,
 				28EF155D14D8738C008A35A4 /* MUMessagesDatabase.m in Sources */,
 				28FB39AF150C1A1100E6E522 /* CrashReporter.m in Sources */,
