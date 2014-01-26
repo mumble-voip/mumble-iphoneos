@@ -149,10 +149,9 @@
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
                                                         nil]];
-#if MUMBLE_APP_STORE != 1
-    // Enable mixer debugging for all builds that aren't explicitly for App Store distribution.
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"AudioMixerDebug"];
-#endif
+
+    // Disable mixer debugging for all builds.
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"AudioMixerDebug"];
     
     [self reloadPreferences];
     [MUDatabase initializeDatabase];
