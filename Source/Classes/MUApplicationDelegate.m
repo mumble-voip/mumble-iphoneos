@@ -19,8 +19,7 @@
 #import "PLCrashReporter.h"
 
 @interface MUApplicationDelegate () <UIApplicationDelegate,
-                                     UIAlertViewDelegate,
-                                     MKAudioDelegate> {
+                                     UIAlertViewDelegate> {
     UIWindow                  *_window;
     UINavigationController    *_navigationController;
     MUPublicServerListFetcher *_publistFetcher;
@@ -349,23 +348,6 @@
 
 - (void) connectionClosed:(NSNotification *)notification {
     _connectionActive = NO;
-}
-
-// Implement MKAudioDelegate.
-- (BOOL) audioShouldBeRunning:(MKAudio *)audio {
-    UIApplication *app = [[UIApplication sharedApplication] applicationState];
-    UIApplicationState state = [app applicationState];
-    switch (state) {
-        case UIApplicationStateActive:
-            // When in the foreground, we always keep MKAudio running.
-            return YES;
-        case UIApplicationStateBackground:
-        case UIApplicationStateInactive:
-            // When backgrounded, only turn on MKAudio if we're connected
-            // to a server.
-            return _connectionActive;
-    }
-    return NO;
 }
 
 - (void) applicationWillResignActive:(UIApplication *)application {
