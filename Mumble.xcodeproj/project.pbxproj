@@ -94,6 +94,7 @@
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
 		287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */; };
+		2882857D18CE39B40034F319 /* MUOperatingSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2882857C18CE39B40034F319 /* MUOperatingSystem.m */; };
 		28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28851B92147DC97D00088C4F /* MULegalViewController.m */; };
 		28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28851B93147DC97D00088C4F /* MULegalViewController.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -363,6 +364,8 @@
 		287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerListController.m; sourceTree = "<group>"; };
 		287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServerEditViewController.h; sourceTree = "<group>"; };
 		287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerEditViewController.m; sourceTree = "<group>"; };
+		2882857B18CE39B40034F319 /* MUOperatingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUOperatingSystem.h; sourceTree = "<group>"; };
+		2882857C18CE39B40034F319 /* MUOperatingSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUOperatingSystem.m; sourceTree = "<group>"; };
 		28851B91147DC97D00088C4F /* MULegalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULegalViewController.h; sourceTree = "<group>"; };
 		28851B92147DC97D00088C4F /* MULegalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULegalViewController.m; sourceTree = "<group>"; };
 		28851B93147DC97D00088C4F /* MULegalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MULegalViewController.xib; sourceTree = "<group>"; };
@@ -579,6 +582,8 @@
 				28C1033F16EFB1B500DECE08 /* MUActionSheet */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				286A3CAE158CEB5A00C817D1 /* MainWindow~iPad.xib */,
+				2882857B18CE39B40034F319 /* MUOperatingSystem.h */,
+				2882857C18CE39B40034F319 /* MUOperatingSystem.m */,
 				2861C25D116BE905002B8514 /* MUApplicationDelegate.h */,
 				2861C25E116BE905002B8514 /* MUApplicationDelegate.m */,
 				2861C25F116BE905002B8514 /* MUCountryServerListController.h */,
@@ -1362,6 +1367,7 @@
 				28FB39BC150C1A1100E6E522 /* PLCrashReportExceptionInfo.m in Sources */,
 				28FB39BD150C1A1100E6E522 /* PLCrashReportMachineInfo.m in Sources */,
 				28FB39BE150C1A1100E6E522 /* PLCrashReportProcessInfo.m in Sources */,
+				2882857D18CE39B40034F319 /* MUOperatingSystem.m in Sources */,
 				28FB39BF150C1A1100E6E522 /* PLCrashReportSignalInfo.m in Sources */,
 				28FB39C0150C1A1100E6E522 /* PLCrashReportSystemInfo.m in Sources */,
 				28FB39C1150C1A1100E6E522 /* PLCrashReportThreadInfo.m in Sources */,
