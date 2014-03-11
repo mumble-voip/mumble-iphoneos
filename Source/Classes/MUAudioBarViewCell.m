@@ -4,6 +4,7 @@
 
 #import "MUAudioBarView.h"
 #import "MUAudioBarViewCell.h"
+#import "MUOperatingSystem.h"
 
 @interface MUAudioBarViewCell () {
     MUAudioBarView *_audioBarView;
@@ -18,8 +19,15 @@
         [audioBarView setBelow:0.4f];
         [audioBarView setAbove:0.6f];
         [self setBackgroundView:audioBarView];
-        self.backgroundView.layer.masksToBounds = YES;
-        self.backgroundView.layer.cornerRadius = 8.0f;
+        // Round the corners on anything but iOS 7 and greater.
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            self.backgroundView.layer.masksToBounds = NO;
+            self.backgroundView.layer.cornerRadius = 0.0f;
+        } else {
+            self.backgroundView.layer.masksToBounds = YES;
+            self.backgroundView.layer.cornerRadius = 8.0f;
+        }
+        self.backgroundColor = [UIColor clearColor];
         [audioBarView release];
     }
     return self;

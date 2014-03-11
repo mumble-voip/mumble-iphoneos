@@ -9,7 +9,7 @@ MUOperatingSystemVersion MUGetOperatingSystemVersion() {
     if (iOSVersion) {
         NSArray *iOSVersionComponents = [iOSVersion componentsSeparatedByString:@"."];
         if ([iOSVersionComponents count] > 0) {
-            NSInteger majorVersion;
+            NSInteger majorVersion = [[iOSVersionComponents objectAtIndex:0] integerValue];
             
             switch (majorVersion) {
                 case 5:  return MUMBLE_OS_IOS_5;

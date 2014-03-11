@@ -8,6 +8,8 @@
 #import "MUAudioBarViewCell.h"
 #import "MUColor.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
 }
@@ -30,10 +32,30 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.scrollEnabled = NO;
+
     self.title = NSLocalizedString(@"Transmission", nil);
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        // fixme(mkrautz): usually we want a single line separator on iOS 7, but
+        // in this case, we embed an image in a table view cell, and want the separators
+        // to not appear when the image is shown. This was the easiest way to achieve that.
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    } else {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    
+    self.tableView.scrollEnabled = NO;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -112,11 +134,13 @@
                 }
                 UIImageView *mouthView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"talkbutton_off"]] autorelease];
                 [mouthView setContentMode:UIViewContentModeCenter];
+                [mouthView setOpaque:NO];
                 [pttCell setBackgroundView:mouthView];
                 pttCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 pttCell.textLabel.text = nil;
                 pttCell.accessoryView = nil;
                 pttCell.accessoryType = UITableViewCellAccessoryNone;
+                pttCell.backgroundColor = [UIColor clearColor];
                 return pttCell;
             } else if ([current isEqualToString:@"vad"]) {
                 cell.accessoryView = nil;

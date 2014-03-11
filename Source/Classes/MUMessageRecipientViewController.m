@@ -5,6 +5,8 @@
 #import "MUMessageRecipientViewController.h"
 #import "MUUserStateAcessoryView.h"
 #import "MUColor.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUMessageRecipientViewController () {
     MKServerModel                                 *_serverModel;
@@ -96,9 +98,22 @@
     [super viewWillAppear:animated];
 
     self.navigationItem.title = NSLocalizedString(@"Message Recipient", nil);
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)] autorelease];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    }
 
+    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)] autorelease];
+    
     [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
     [self.tableView reloadData];
 }

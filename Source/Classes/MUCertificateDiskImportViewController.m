@@ -7,6 +7,8 @@
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -74,11 +76,22 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if (self.tableView.style == UITableViewStyleGrouped) {
-        self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
     }
+    navBar.barStyle = UIBarStyleBlackOpaque;
 
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    if (self.tableView.style == UITableViewStyleGrouped) {
+        self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    } else {
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+            self.tableView.separatorInset = UIEdgeInsetsZero;
+        }
+    }
 
     NSString *iTunesImport = NSLocalizedString(@"iTunes Import", @"Import a certificate from iTunes action sheet button.");
     [[self navigationItem] setTitle:iTunesImport];

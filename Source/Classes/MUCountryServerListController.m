@@ -12,6 +12,7 @@
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
 #import "MUColor.h"
+#import "MUOperatingSystem.h"
 
 @interface MUCountryServerListController () <UIAlertViewDelegate, UISearchBarDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
     UITableView    *_tableView;
@@ -64,6 +65,14 @@
     self.navigationItem.titleView = nil;
     self.navigationItem.title = _countryName;
     self.navigationItem.hidesBackButton = NO;
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
     self.navigationItem.rightBarButtonItem = searchButton;

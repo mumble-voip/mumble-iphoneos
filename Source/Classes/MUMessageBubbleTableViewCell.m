@@ -163,7 +163,18 @@
     NSString *dateStr = [MUMessageBubbleView stringForDate:_date];
     CGSize timestampSize = [MUMessageBubbleView timestampSizeForText:dateStr];
 
-    CGRect imgRect = CGRectMake(0.0f, kBalloonTopPadding, MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide), textSize.height+headingSize.height+footerSize.height+(kBalloonTopMargin + kBalloonBottomMargin)+(footer?kBalloonFooterTopMargin:0));
+    CGRect imgRect = CGRectMake(
+        0.0f,
+        kBalloonTopPadding,
+        MAX(textSize.width, headingSize.width + kBalloonTimestampSpacing + timestampSize.width)+(kBalloonMarginTailSide + kBalloonMarginNonTailSide) + 10,
+        textSize.height+headingSize.height+footerSize.height+(kBalloonTopMargin + kBalloonBottomMargin)+(footer?kBalloonFooterTopMargin:0)
+    );
+    imgRect = CGRectMake(
+        (int) CGRectGetMinX(imgRect),
+        (int) CGRectGetMinY(imgRect),
+        (int) CGRectGetWidth(imgRect),
+        (int) CGRectGetHeight(imgRect)
+    );
     
     NSArray *newImageSizes = nil;
     CGSize imagesSize = [MUMessageBubbleView imageSizeForImages:images resizedToFitWithinSize:imgRect.size andNewImageSizes:&newImageSizes];
@@ -181,6 +192,7 @@
     }
 
     [stretchableBalloon drawInRect:imgRect];
+
     _imageRect = imgRect;
 
     int i = 0;
@@ -197,6 +209,7 @@
         shownImgRect.size.height += kBalloonImageBottomPadding;
         ++i;
     }
+
     CGRect footerRect = CGRectMake(textRect.origin.x,
                                    textRect.origin.y + textRect.size.height+imagesSize.height + kBalloonFooterTopMargin,
                                    footerSize.width,

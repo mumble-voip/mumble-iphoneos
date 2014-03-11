@@ -10,6 +10,8 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServerListController.h"
 #import "MUConnectionController.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     if (reverse) {
@@ -53,6 +55,19 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {

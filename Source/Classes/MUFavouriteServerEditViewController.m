@@ -9,6 +9,8 @@
 #import "MUFavouriteServer.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUFavouriteServerEditViewController () {
     BOOL               _editMode;
@@ -188,9 +190,22 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    } else {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)

@@ -9,4 +9,5 @@
 + (UIColor *) badPingColor;
 + (UIColor *) userCountColor;
 + (UIColor *) verifiedCertificateChainColor;
++ (UIColor *) backgroundViewiOS7Color;
 @end

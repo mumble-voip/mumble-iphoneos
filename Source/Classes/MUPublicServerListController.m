@@ -7,6 +7,8 @@
 #import "MUCountryServerListController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUPublicServerListController () {
     MUPublicServerList        *_serverList;
@@ -31,9 +33,23 @@
     [super viewWillAppear:YES];
 
     self.navigationItem.title = NSLocalizedString(@"Public Servers", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]
-    ;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    } else {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
 
     if (![_serverList isParsed]) {
         UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];

@@ -6,6 +6,8 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @implementation MUAudioSidetonePreferencesViewController
 
@@ -20,8 +22,24 @@
     [super viewWillAppear:animated];
     
     self.title = NSLocalizedString(@"Sidetone", nil);
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    } else {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+
     self.tableView.scrollEnabled = NO;
 }
 

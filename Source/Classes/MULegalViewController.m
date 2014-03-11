@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "MULegalViewController.h"
+#import "MUOperatingSystem.h"
 
 @interface MULegalViewController () <UIWebViewDelegate> {
     IBOutlet UIWebView *_webView;
@@ -27,8 +28,15 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = NSLocalizedString(@"Legal", nil);
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
 
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     self.navigationItem.rightBarButtonItem = done;
     [done release];

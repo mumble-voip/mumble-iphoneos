@@ -16,19 +16,25 @@
 #import "MUDataURL.h"
 #import "MUColor.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUConsistentTextField : UITextField
 @end
 
 @implementation MUConsistentTextField
 - (CGRect) editingRectForBounds:(CGRect)bounds {
-    NSInteger padding = 13;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        return [super editingRectForBounds:bounds];
+    }
     
+    NSInteger padding = 13;
+
     CGRect leftRect = [super leftViewRectForBounds:bounds];
     CGRect rect = [super editingRectForBounds:bounds];
-    
+
     NSInteger minx = leftRect.size.width + padding; // 'at least'
-    
+
     if (rect.origin.x < minx) {
         NSInteger delta = minx - rect.origin.x;
         rect.origin.x += delta;
@@ -156,7 +162,7 @@
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
     _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-    [_tableView setBackgroundView:[[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease]];
+    [_tableView setBackgroundView:[MUBackgroundView backgroundView]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     [_tableView setDelegate:self];
@@ -176,7 +182,16 @@
     CGRect textBarFrame = CGRectMake(0, frame.size.height, frame.size.width, 44);
     _textBarView = [[UIView alloc] initWithFrame:textBarFrame];
     [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-    _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
+    _textBarView.backgroundColor = [UIColor yellowColor];
+
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        UIImage *img = [UIImage imageNamed:@"AccessoryViewBackground4iOS7"];
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+        [imgView setFrame:[_textBarView bounds]];
+        [_textBarView addSubview:imgView];
+    } else {
+        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
+    }
 
     _textField = [[[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)] autorelease];
     _textField.leftViewMode = UITextFieldViewModeAlways;
@@ -205,6 +220,14 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -272,6 +295,9 @@
     [cell setRightSide:[txtMsg isSentBySelf]];
     [cell setSelected:NO];
     [cell setDelegate:self];
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        [cell setBackgroundColor:[UIColor clearColor]];
+    }
     return cell;
 }
 

@@ -6,6 +6,8 @@
 #import "MUUserStateAcessoryView.h"
 #import "MUNotificationController.h"
 #import "MUColor.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -92,6 +94,19 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    }
+    
     if (_viewMode == MUServerViewControllerViewModeServer) {
         [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
         [self.tableView reloadData];

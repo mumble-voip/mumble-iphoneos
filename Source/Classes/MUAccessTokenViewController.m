@@ -4,6 +4,8 @@
 
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
+#import "MUOperatingSystem.h"
+#import "MUBAckgroundView.h"
 
 @interface MUAccessTokenViewController () {
     MKServerModel    *_model;
@@ -40,8 +42,19 @@
 
     [[self navigationItem] setTitle:NSLocalizedString(@"Access Tokens", nil)];
 
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
     
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    }
+
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
     [addButton release];
@@ -140,8 +153,14 @@
     _tokenValue = [[_tokens objectAtIndex:row] copy];
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
-    UITextField *editingField = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 10.0, _editingCell.frame.size.width-10, _editingCell.frame.size.height-10)];
-    [editingField setFont:[UIFont boldSystemFontOfSize:20.0f]];
+    UITextField *editingField;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        editingField = [[UITextField alloc] initWithFrame:CGRectMake(14.0, 0.0, _editingCell.frame.size.width-14.0, _editingCell.frame.size.height)];
+        [editingField setFont:[UIFont boldSystemFontOfSize:18.0f]];
+    } else {
+        editingField = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 10.0, _editingCell.frame.size.width-10, _editingCell.frame.size.height-10)];
+        [editingField setFont:[UIFont boldSystemFontOfSize:20.0f]];
+    }
     [editingField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [editingField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
     [editingField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];

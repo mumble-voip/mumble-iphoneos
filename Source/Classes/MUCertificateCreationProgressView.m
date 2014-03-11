@@ -4,6 +4,9 @@
 
 #import "MUCertificateCreationProgressView.h"
 #import "MUImage.h"
+#import "MUColor.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 @interface MUCertificateCreationProgressView () {
     IBOutlet UIImageView              *_backgroundImage;
@@ -23,7 +26,8 @@
 - (id) initWithName:(NSString *)name email:(NSString *)email {
     if (self = [super initWithNibName:@"MUCertificateCreationProgressView" bundle:nil]) {
         _identityName = [name retain];
-        _emailAddress = [email retain];        
+        _emailAddress = [email retain];
+        
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
             [self.view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
         }
@@ -38,7 +42,19 @@
 }
 
 - (void) viewDidLoad {
-    _backgroundImage.image = [MUImage imageNamed:@"BackgroundTextureBlackGradient"];
+    // fixme(mkrautz): This is esentially what a MUBackgroundView does.
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        _backgroundImage.backgroundColor = [MUColor backgroundViewiOS7Color];
+    } else {
+        _backgroundImage.image = [MUImage imageNamed:@"BackgroundTextureBlackGradient"];
+    }
+    
+    // Unset text shadows for iOS 7.
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        _nameLabel.shadowOffset = CGSizeZero;
+        _emailLabel.shadowOffset = CGSizeZero;
+        _pleaseWaitLabel.shadowOffset = CGSizeZero;
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {

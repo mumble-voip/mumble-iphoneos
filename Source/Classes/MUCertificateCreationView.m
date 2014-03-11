@@ -7,6 +7,8 @@
 #import "MUCertificateController.h"
 #import "MUColor.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 #import <MumbleKit/MKCertificate.h>
 
@@ -92,15 +94,29 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.tableView.backgroundView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
     NSString *newCert = NSLocalizedString(@"New Certificate",
                                           @"Title of MUCertificateCreationView (shown when creating a self-signed certificate)");
+    [self setTitle:newCert];
+    
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        navBar.tintColor = [UIColor whiteColor];
+        navBar.translucent = NO;
+        navBar.backgroundColor = [UIColor blackColor];
+    }
+    navBar.barStyle = UIBarStyleBlackOpaque;
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.tableView.separatorInset = UIEdgeInsetsZero;
+    } else {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    
     NSString *create = NSLocalizedString(@"Create", @"'Create' text for certificate creation");
     NSString *cancel = NSLocalizedString(@"Cancel", nil);
-    [self setTitle:newCert];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:cancel style:UIBarButtonItemStylePlain target:self action:@selector(cancelClicked:)];
     [[self navigationItem] setLeftBarButtonItem:cancelButton];

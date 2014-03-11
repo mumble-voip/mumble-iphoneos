@@ -12,6 +12,8 @@
 #import "MUNotificationController.h"
 #import "MURemoteControlServer.h"
 #import "MUImage.h"
+#import "MUOperatingSystem.h"
+#import "MUBackgroundView.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKVersion.h>
@@ -162,12 +164,19 @@
     }
 #endif
     
+    // Try to use a dark keyboard throughout the app's text fields.
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
+    }
+    
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    // XXX: don't do it system-wide just yet
+    //    _window.tintColor = [UIColor whiteColor];
+    }
     
     // Put a background view in here, to have prettier transitions.
-    UIImageView *bgView = [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
-    [bgView setFrame:[[UIScreen mainScreen] bounds]];
-    [_window addSubview:bgView];
+    [_window addSubview:[MUBackgroundView backgroundView]];
 
     // Add our default navigation controller
     _navigationController = [[UINavigationController alloc] init];
