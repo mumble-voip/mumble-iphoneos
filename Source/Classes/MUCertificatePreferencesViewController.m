@@ -29,7 +29,7 @@
 #pragma mark Initialization
 
 - (id) init {
-    if ((self = [super init])) {
+    if ((self = [super initWithStyle:UITableViewStylePlain])) {
         [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
         _showAll = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CertificatesShowIntermediates"] boolValue];
     }
@@ -128,7 +128,11 @@
         [cell setIsCurrentCertificate:NO];
     }
 
-    [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
+    } else {
+        [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];
+    }
 
     return (UITableViewCell *) cell;
 }
