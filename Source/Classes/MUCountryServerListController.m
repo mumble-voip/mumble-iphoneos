@@ -73,7 +73,12 @@
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
-    
+
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _tableView.separatorInset = UIEdgeInsetsZero;
+    }
+
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
     self.navigationItem.rightBarButtonItem = searchButton;
     [searchButton release];
