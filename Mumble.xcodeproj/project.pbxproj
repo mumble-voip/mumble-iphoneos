@@ -114,6 +114,7 @@
 		28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */; };
 		28BE998018CFA83800910551 /* BlackToolbarPatterniOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE997F18CFA83800910551 /* BlackToolbarPatterniOS7@2x.png */; };
 		28BE998218CFA8B900910551 /* BlackToolbarPatterniOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */; };
+		28BE998518CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE998418CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
 		28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034216EFB1C100DECE08 /* MUActionSheet.m */; };
 		28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */; };
@@ -397,6 +398,8 @@
 		28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioQualityPreferencesViewController.m; sourceTree = "<group>"; };
 		28BE997F18CFA83800910551 /* BlackToolbarPatterniOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BlackToolbarPatterniOS7@2x.png"; path = "Resources/BlackToolbarPatterniOS7@2x.png"; sourceTree = "<group>"; };
 		28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BlackToolbarPatterniOS7.png; path = Resources/BlackToolbarPatterniOS7.png; sourceTree = "<group>"; };
+		28BE998318CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUHorizontalFlipTransitionDelegate.h; sourceTree = "<group>"; };
+		28BE998418CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUHorizontalFlipTransitionDelegate.m; sourceTree = "<group>"; };
 		28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateDiskImportViewController.h; sourceTree = "<group>"; };
 		28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateDiskImportViewController.m; sourceTree = "<group>"; };
 		28C1034116EFB1C100DECE08 /* MUActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheet.h; sourceTree = "<group>"; };
@@ -668,6 +671,8 @@
 				285AF26A1840DEE20065E339 /* MUAudioMixerDebugViewController.m */,
 				2882857F18CE40C80034F319 /* MUBackgroundView.h */,
 				2882858018CE40C80034F319 /* MUBackgroundView.m */,
+				28BE998318CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.h */,
+				28BE998418CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m */,
 			);
 			name = Classes;
 			path = Source/Classes;
@@ -1375,6 +1380,7 @@
 				28FB39B0150C1A1100E6E522 /* PLCrashAsync.c in Sources */,
 				28FB39B1150C1A1100E6E522 /* PLCrashAsyncSignalInfo.c in Sources */,
 				28FB39B2150C1A1100E6E522 /* PLCrashFrameWalker_arm.c in Sources */,
+				28BE998518CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m in Sources */,
 				28FB39B3150C1A1100E6E522 /* PLCrashFrameWalker_i386.c in Sources */,
 				28FB39B4150C1A1100E6E522 /* PLCrashFrameWalker_ppc.c in Sources */,
 				28FB39B5150C1A1100E6E522 /* PLCrashFrameWalker_x86_64.c in Sources */,

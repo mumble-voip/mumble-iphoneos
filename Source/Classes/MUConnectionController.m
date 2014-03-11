@@ -8,6 +8,8 @@
 #import "MUCertificateController.h"
 #import "MUCertificateChainBuilder.h"
 #import "MUDatabase.h"
+#import "MUOperatingSystem.h"
+#import "MUHorizontalFlipTransitionDelegate.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -32,6 +34,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     NSUInteger                 _port;
     NSString                   *_username;
     NSString                   *_password;
+
+    id                         _transitioningDelegate;
 }
 - (void) establishConnection;
 - (void) teardownConnection;
@@ -52,13 +56,17 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 
 - (id) init {
     if ((self = [super init])) {
-        // ...
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            _transitioningDelegate = [[MUHorizontalFlipTransitionDelegate alloc] init];
+        }
     }
     return self;
 }
 
 - (void) dealloc {
     [super dealloc];
+
+    [_transitioningDelegate release];
 }
 
 - (void) connetToHostname:(NSString *)hostName port:(NSUInteger)port withUsername:(NSString *)userName andPassword:(NSString *)password withParentViewController:(UIViewController *)parentViewController {
@@ -373,7 +381,11 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     _password = nil;
 
     if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-        [_serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            [_serverRoot setTransitioningDelegate:_transitioningDelegate];
+        } else {
+            [_serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+        }
     }
 
     [_parentViewController presentModalViewController:_serverRoot animated:YES];
