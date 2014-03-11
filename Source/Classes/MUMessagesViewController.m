@@ -36,6 +36,11 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 @end
 
 @implementation MUConsistentTextField
+
+- (CGRect) textRectForBounds:(CGRect)bounds {
+    return [self editingRectForBounds:bounds];
+}
+
 - (CGRect) editingRectForBounds:(CGRect)bounds {
     NSInteger padding = 13;
 
@@ -47,7 +52,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if (rect.origin.x < minx) {
         NSInteger delta = minx - rect.origin.x;
         rect.origin.x += delta;
-        rect.size.width -= delta;
+        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+            rect.size.width -= delta;
+        }
     }
 
     return rect;
@@ -233,7 +240,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
     UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 12, CGRectGetHeight(imgView.frame));
+        CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 6, CGRectGetHeight(imgView.frame));
         UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
         [paddedView addSubview:imgView];
         _textField.rightView = paddedView;
