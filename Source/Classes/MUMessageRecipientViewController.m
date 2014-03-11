@@ -7,6 +7,7 @@
 #import "MUColor.h"
 #import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
+#import "MUServerTableViewCell.h"
 
 @interface MUMessageRecipientViewController () {
     MKServerModel                                 *_serverModel;
@@ -161,7 +162,11 @@
     static NSString *CellIdentifier = @"MUMessageRecipientCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            cell = [[[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+        } else {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
     }
 
     cell.textLabel.font = [UIFont systemFontOfSize:18.0f];

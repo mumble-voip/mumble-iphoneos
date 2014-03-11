@@ -8,6 +8,7 @@
 #import "MUColor.h"
 #import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
+#import "MUServerTableViewCell.h"
 
 #import <MumbleKit/MKAudio.h>
 
@@ -264,7 +265,11 @@
     static NSString *CellIdentifier = @"ChannelNavigationCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+            cell = [[[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+        } else {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        }
     }
 
     MUChannelNavigationItem *navItem = [_modelItems objectAtIndex:[indexPath row]];
