@@ -19,15 +19,24 @@
 #import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
+static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *prefix) {
+    for (UIView *subview in [rootView subviews]) {
+        if ([[subview description] hasPrefix:prefix]) {
+            return subview;
+        }
+        UIView *candidate = MUMessagesViewControllerFindUIView(subview, prefix);
+        if (candidate) {
+            return candidate;
+        }
+    }
+    return nil;
+}
+
 @interface MUConsistentTextField : UITextField
 @end
 
 @implementation MUConsistentTextField
 - (CGRect) editingRectForBounds:(CGRect)bounds {
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        return [super editingRectForBounds:bounds];
-    }
-    
     NSInteger padding = 13;
 
     CGRect leftRect = [super leftViewRectForBounds:bounds];
@@ -43,6 +52,7 @@
 
     return rect;
 }
+
 @end
 
 @interface MUMessageReceiverButton : UIControl {
@@ -162,18 +172,19 @@
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
     _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+
     [_tableView setBackgroundView:[MUBackgroundView backgroundView]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [self.view addSubview:_tableView];
-    
+
     UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:swipeGesture];
     [swipeGesture release];
-    
+
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:swipeGesture];
@@ -185,10 +196,7 @@
     _textBarView.backgroundColor = [UIColor yellowColor];
 
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        UIImage *img = [UIImage imageNamed:@"AccessoryViewBackground4iOS7"];
-        UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
-        [imgView setFrame:[_textBarView bounds]];
-        [_textBarView addSubview:imgView];
+        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPatterniOS7"]];
     } else {
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
     }
@@ -211,10 +219,27 @@
 - (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
     MUMessageReceiverButton *receiverView = [[[MUMessageReceiverButton alloc] initWithText:receiver] autorelease];
     [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
-    _textField.leftView = receiverView;
+
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        CGRect paddedRect = CGRectMake(0, 0, CGRectGetWidth(receiverView.frame) + 12, CGRectGetHeight(receiverView.frame));
+        UIView *paddedView = [[[UIView alloc] initWithFrame:paddedRect] autorelease];
+        [paddedView addSubview:receiverView];
+        paddedRect.origin.x += 6;
+        [receiverView setFrame:paddedRect];
+        _textField.leftView = paddedView;
+    } else {
+        _textField.leftView = receiverView;
+    }
 
     UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
-    _textField.rightView = imgView;
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 12, CGRectGetHeight(imgView.frame));
+        UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
+        [paddedView addSubview:imgView];
+        _textField.rightView = paddedView;
+    } else {
+        _textField.rightView = imgView;
+    }
     _textField.rightViewMode = UITextFieldViewModeAlways;
 }
 
@@ -331,6 +356,24 @@
     if (_autoCorrectGuard)
         return;
     
+    // Make the keyboard background completely black on iOS 7.
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100000), dispatch_get_main_queue(), ^{
+            for (UIWindow *win in [[UIApplication sharedApplication] windows]) {
+                if ([[win description] hasPrefix:@"<UITextEffectsWindow"]) {
+                    UIView *possibleUIKBBackdropView = MUMessagesViewControllerFindUIView(win, @"<UIKBBackdropView");
+                    if (possibleUIKBBackdropView) {
+                        for (UIView *subview in [possibleUIKBBackdropView subviews]) {
+                            if ([[subview description] hasPrefix:@"<UIView"]) {
+                                [subview setBackgroundColor:[UIColor blackColor]];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSTimeInterval t;
     [val getValue:&t];

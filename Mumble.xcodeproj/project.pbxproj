@@ -46,11 +46,6 @@
 		285D6B9016BF03D700F239EB /* MUTextMessageProcessorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */; };
 		285D6BD316BF067400F239EB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 285D6B8416BF02E900F239EB /* InfoPlist.strings */; };
 		285D6BD416BF078E00F239EB /* MUTextMessageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */; };
-		28617D5F18CE9C17006BD17E /* AccessoryViewBackgroundiOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28617D5E18CE9C17006BD17E /* AccessoryViewBackgroundiOS7@2x.png */; };
-		28617D6118CE9DDA006BD17E /* AccessoryViewBackgroundiOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 28617D6018CE9DDA006BD17E /* AccessoryViewBackgroundiOS7.png */; };
-		28617D6318CEA89B006BD17E /* AccessoryViewBackground2iOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28617D6218CEA89B006BD17E /* AccessoryViewBackground2iOS7@2x.png */; };
-		28617D6518CEA92C006BD17E /* AccessoryViewBackground3iOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28617D6418CEA92C006BD17E /* AccessoryViewBackground3iOS7@2x.png */; };
-		28617D6718CEADA2006BD17E /* AccessoryViewBackground4iOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28617D6618CEADA2006BD17E /* AccessoryViewBackground4iOS7@2x.png */; };
 		2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C25E116BE905002B8514 /* MUApplicationDelegate.m */; };
 		2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* MUPublicServerList.m */; };
 		2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* MUPublicServerListController.m */; };
@@ -117,6 +112,8 @@
 		28A2AEC114788BE300F3B83F /* MUColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 28A2AEC014788BE300F3B83F /* MUColor.m */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28ADA303148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */; };
+		28BE998018CFA83800910551 /* BlackToolbarPatterniOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE997F18CFA83800910551 /* BlackToolbarPatterniOS7@2x.png */; };
+		28BE998218CFA8B900910551 /* BlackToolbarPatterniOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
 		28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034216EFB1C100DECE08 /* MUActionSheet.m */; };
 		28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */; };
@@ -300,11 +297,6 @@
 		285E2A62150D729B008AE185 /* BetaDist.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = BetaDist.xcconfig; path = BuildConfig/BetaDist.xcconfig; sourceTree = "<group>"; };
 		285E2A63150D729B008AE185 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = BuildConfig/Debug.xcconfig; sourceTree = "<group>"; };
 		285E2A64150D729B008AE185 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = BuildConfig/Release.xcconfig; sourceTree = "<group>"; };
-		28617D5E18CE9C17006BD17E /* AccessoryViewBackgroundiOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AccessoryViewBackgroundiOS7@2x.png"; path = "Resources/AccessoryViewBackgroundiOS7@2x.png"; sourceTree = "<group>"; };
-		28617D6018CE9DDA006BD17E /* AccessoryViewBackgroundiOS7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AccessoryViewBackgroundiOS7.png; path = Resources/AccessoryViewBackgroundiOS7.png; sourceTree = "<group>"; };
-		28617D6218CEA89B006BD17E /* AccessoryViewBackground2iOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AccessoryViewBackground2iOS7@2x.png"; path = "Resources/AccessoryViewBackground2iOS7@2x.png"; sourceTree = "<group>"; };
-		28617D6418CEA92C006BD17E /* AccessoryViewBackground3iOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AccessoryViewBackground3iOS7@2x.png"; path = "Resources/AccessoryViewBackground3iOS7@2x.png"; sourceTree = "<group>"; };
-		28617D6618CEADA2006BD17E /* AccessoryViewBackground4iOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AccessoryViewBackground4iOS7@2x.png"; path = "Resources/AccessoryViewBackground4iOS7@2x.png"; sourceTree = "<group>"; };
 		2861C25D116BE905002B8514 /* MUApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUApplicationDelegate.h; sourceTree = "<group>"; };
 		2861C25E116BE905002B8514 /* MUApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUApplicationDelegate.m; sourceTree = "<group>"; };
 		2861C25F116BE905002B8514 /* MUCountryServerListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCountryServerListController.h; sourceTree = "<group>"; };
@@ -403,6 +395,8 @@
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainWindow.xib; path = ../MainWindow.xib; sourceTree = "<group>"; };
 		28ADA301148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioQualityPreferencesViewController.h; sourceTree = "<group>"; };
 		28ADA302148A3E3B00C55E51 /* MUAudioQualityPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioQualityPreferencesViewController.m; sourceTree = "<group>"; };
+		28BE997F18CFA83800910551 /* BlackToolbarPatterniOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BlackToolbarPatterniOS7@2x.png"; path = "Resources/BlackToolbarPatterniOS7@2x.png"; sourceTree = "<group>"; };
+		28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BlackToolbarPatterniOS7.png; path = Resources/BlackToolbarPatterniOS7.png; sourceTree = "<group>"; };
 		28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateDiskImportViewController.h; sourceTree = "<group>"; };
 		28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateDiskImportViewController.m; sourceTree = "<group>"; };
 		28C1034116EFB1C100DECE08 /* MUActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheet.h; sourceTree = "<group>"; };
@@ -946,11 +940,8 @@
 				286A3CC0158CFEAB00C817D1 /* _UIPopoverViewBlackBackgroundArrowUp@2x.png */,
 				2843040816BF25590025A783 /* MumbleMenuButton.png */,
 				2843040916BF25590025A783 /* MumbleMenuButton@2x.png */,
-				28617D6018CE9DDA006BD17E /* AccessoryViewBackgroundiOS7.png */,
-				28617D5E18CE9C17006BD17E /* AccessoryViewBackgroundiOS7@2x.png */,
-				28617D6218CEA89B006BD17E /* AccessoryViewBackground2iOS7@2x.png */,
-				28617D6418CEA92C006BD17E /* AccessoryViewBackground3iOS7@2x.png */,
-				28617D6618CEADA2006BD17E /* AccessoryViewBackground4iOS7@2x.png */,
+				28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */,
+				28BE997F18CFA83800910551 /* BlackToolbarPatterniOS7@2x.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1192,7 +1183,6 @@
 				2858A580123B9E5700A82155 /* MUCertificateCell.xib in Resources */,
 				28DC1C5C13DE596B0037CDC2 /* authenticated.png in Resources */,
 				28DC1C5D13DE596B0037CDC2 /* authenticated@2x.png in Resources */,
-				28617D5F18CE9C17006BD17E /* AccessoryViewBackgroundiOS7@2x.png in Resources */,
 				28DC1C6513DE596B0037CDC2 /* certificatecell-selected.png in Resources */,
 				28DC1C6613DE596B0037CDC2 /* certificatecell-selected@2x.png in Resources */,
 				28DC1C6713DE596B0037CDC2 /* certificatecell.png in Resources */,
@@ -1213,7 +1203,6 @@
 				28DC1C8613DE596B0037CDC2 /* muted_self.png in Resources */,
 				28DC1C8713DE596B0037CDC2 /* muted_self@2x.png in Resources */,
 				28DC1C8813DE596B0037CDC2 /* muted_server.png in Resources */,
-				28617D6318CEA89B006BD17E /* AccessoryViewBackground2iOS7@2x.png in Resources */,
 				28DC1C8913DE596B0037CDC2 /* muted_server@2x.png in Resources */,
 				28DC1C8A13DE596B0037CDC2 /* muted_suppressed.png in Resources */,
 				28DC1C8B13DE596B0037CDC2 /* muted_suppressed@2x.png in Resources */,
@@ -1224,10 +1213,10 @@
 				28DC1C9A13DE596B0037CDC2 /* talking_off.png in Resources */,
 				28DC1C9C13DE596B0037CDC2 /* talking_off@2x.png in Resources */,
 				28DC1C9D13DE596B0037CDC2 /* talking_on.png in Resources */,
+				28BE998018CFA83800910551 /* BlackToolbarPatterniOS7@2x.png in Resources */,
 				28DC1C9F13DE596B0037CDC2 /* talking_on@2x.png in Resources */,
 				28DC1CA013DE596B0037CDC2 /* talking_whisper.png in Resources */,
 				28DC1CA213DE596B0037CDC2 /* talking_whisper@2x.png in Resources */,
-				28617D6118CE9DDA006BD17E /* AccessoryViewBackgroundiOS7.png in Resources */,
 				28DC1CA313DE596B0037CDC2 /* up.png in Resources */,
 				28DC1CA413DE596B0037CDC2 /* up@2x.png in Resources */,
 				28234D5F13F09148006B830D /* talkbutton_off.png in Resources */,
@@ -1243,6 +1232,7 @@
 				28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */,
 				28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */,
 				28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */,
+				28BE998218CFA8B900910551 /* BlackToolbarPatterniOS7.png in Resources */,
 				28F0835F147F102F00DC126F /* publist.xml in Resources */,
 				2879525E14C0AFAC00567430 /* BlackToolbarPattern.png in Resources */,
 				2879525F14C0AFAC00567430 /* BlackToolbarPattern@2x.png in Resources */,
@@ -1257,7 +1247,6 @@
 				2879528A14C3874C00567430 /* LeftBalloonSelected.png in Resources */,
 				2879528B14C3874C00567430 /* LeftBalloonSelected@2x.png in Resources */,
 				2879528C14C3874C00567430 /* RightBalloonSelected.png in Resources */,
-				28617D6718CEADA2006BD17E /* AccessoryViewBackground4iOS7@2x.png in Resources */,
 				2879528D14C3874C00567430 /* RightBalloonSelected@2x.png in Resources */,
 				287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */,
 				287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */,
@@ -1268,7 +1257,6 @@
 				287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */,
 				28529B3B1541C043003DD813 /* certificatecreation.png in Resources */,
 				28529B3C1541C043003DD813 /* certificatecreation@2x.png in Resources */,
-				28617D6518CEA92C006BD17E /* AccessoryViewBackground3iOS7@2x.png in Resources */,
 				286A3CA7158CD05A00C817D1 /* BackgroundTextureBlackGradientPad@2x.png in Resources */,
 				286A3CA9158CD12E00C817D1 /* LogoBigShadow@2x.png in Resources */,
 				286A3CAB158CD55700C817D1 /* LogoBigShadow.png in Resources */,
