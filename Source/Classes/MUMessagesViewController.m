@@ -78,7 +78,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
             _str = [str copy];
         }
         CGSize size = [_str sizeWithFont:[UIFont boldSystemFontOfSize:14.0f]];
-        size.width += 6*2;
+        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+            size.width += 6*2;
+        }
         [self setFrame:CGRectMake(0, 0, size.width, size.height)];
     }
     return self;
