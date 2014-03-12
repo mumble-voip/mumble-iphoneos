@@ -126,9 +126,6 @@
 		28BE99A118CFF03D00910551 /* RightBalloonSelectedMono.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE999D18CFF03D00910551 /* RightBalloonSelectedMono.png */; };
 		28BE99A218CFF03D00910551 /* RightBalloonSelectedMono@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE999E18CFF03D00910551 /* RightBalloonSelectedMono@2x.png */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
-		28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034216EFB1C100DECE08 /* MUActionSheet.m */; };
-		28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */; };
-		28C1034916EFB1C100DECE08 /* MUActionSheetButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034616EFB1C100DECE08 /* MUActionSheetButton.m */; };
 		28C6EF0A11BBF38100E426C8 /* MUCountryServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */; };
 		28D963961639B9E4002A9E73 /* iconpad.png in Resources */ = {isa = PBXBuildFile; fileRef = 28D963951639B9E4002A9E73 /* iconpad.png */; };
 		28D963981639B9E8002A9E73 /* iconpad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28D963971639B9E8002A9E73 /* iconpad@2x.png */; };
@@ -423,12 +420,6 @@
 		28BE999E18CFF03D00910551 /* RightBalloonSelectedMono@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "RightBalloonSelectedMono@2x.png"; path = "Resources/Apple/RightBalloonSelectedMono@2x.png"; sourceTree = "<group>"; };
 		28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateDiskImportViewController.h; sourceTree = "<group>"; };
 		28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateDiskImportViewController.m; sourceTree = "<group>"; };
-		28C1034116EFB1C100DECE08 /* MUActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheet.h; sourceTree = "<group>"; };
-		28C1034216EFB1C100DECE08 /* MUActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUActionSheet.m; sourceTree = "<group>"; };
-		28C1034316EFB1C100DECE08 /* MUActionSheetBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheetBackgroundView.h; sourceTree = "<group>"; };
-		28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUActionSheetBackgroundView.m; sourceTree = "<group>"; };
-		28C1034516EFB1C100DECE08 /* MUActionSheetButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheetButton.h; sourceTree = "<group>"; };
-		28C1034616EFB1C100DECE08 /* MUActionSheetButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUActionSheetButton.m; sourceTree = "<group>"; };
 		28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCountryServerListController.m; sourceTree = "<group>"; };
 		28D963951639B9E4002A9E73 /* iconpad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconpad.png; sourceTree = "<group>"; };
 		28D963971639B9E8002A9E73 /* iconpad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iconpad@2x.png"; sourceTree = "<group>"; };
@@ -610,7 +601,6 @@
 				2872F7C4124668880078C0B1 /* Certificates */,
 				28BF8E1C11D93A1900B72770 /* Database */,
 				2838EA0C1293165700035C5D /* Preferences */,
-				28C1033F16EFB1B500DECE08 /* MUActionSheet */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				286A3CAE158CEB5A00C817D1 /* MainWindow~iPad.xib */,
 				2882857B18CE39B40034F319 /* MUOperatingSystem.h */,
@@ -871,19 +861,6 @@
 				287BA33A11B97C470010E031 /* MUFavouriteServer.m */,
 			);
 			name = Database;
-			sourceTree = "<group>";
-		};
-		28C1033F16EFB1B500DECE08 /* MUActionSheet */ = {
-			isa = PBXGroup;
-			children = (
-				28C1034116EFB1C100DECE08 /* MUActionSheet.h */,
-				28C1034216EFB1C100DECE08 /* MUActionSheet.m */,
-				28C1034316EFB1C100DECE08 /* MUActionSheetBackgroundView.h */,
-				28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */,
-				28C1034516EFB1C100DECE08 /* MUActionSheetButton.h */,
-				28C1034616EFB1C100DECE08 /* MUActionSheetButton.m */,
-			);
-			name = MUActionSheet;
 			sourceTree = "<group>";
 		};
 		28DC1C1213DE59120037CDC2 /* Resources */ = {
@@ -1454,9 +1431,6 @@
 				28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */,
 				2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */,
 				285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */,
-				28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */,
-				28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */,
-				28C1034916EFB1C100DECE08 /* MUActionSheetButton.m in Sources */,
 				2846C7D616F4A09000739FD8 /* MUServerButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
