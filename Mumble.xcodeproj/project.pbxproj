@@ -116,6 +116,9 @@
 		28BE998218CFA8B900910551 /* BlackToolbarPatterniOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE998118CFA8B900910551 /* BlackToolbarPatterniOS7.png */; };
 		28BE998518CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE998418CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m */; };
 		28BE998818CFCDE600910551 /* MUServerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BE998718CFCDE600910551 /* MUServerTableViewCell.m */; };
+		28BE998A18CFD77400910551 /* Default-iOS7-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE998918CFD77400910551 /* Default-iOS7-568h@2x.png */; };
+		28BE998E18CFD7DC00910551 /* Default-iOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE998D18CFD7DC00910551 /* Default-iOS7@2x.png */; };
+		28BE999218CFE1FD00910551 /* icon7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28BE999118CFE1FD00910551 /* icon7@2x.png */; };
 		28BF81D2139AFFD50078B722 /* MUCertificateDiskImportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */; };
 		28C1034716EFB1C100DECE08 /* MUActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034216EFB1C100DECE08 /* MUActionSheet.m */; };
 		28C1034816EFB1C100DECE08 /* MUActionSheetBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C1034416EFB1C100DECE08 /* MUActionSheetBackgroundView.m */; };
@@ -403,6 +406,9 @@
 		28BE998418CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUHorizontalFlipTransitionDelegate.m; sourceTree = "<group>"; };
 		28BE998618CFCDE600910551 /* MUServerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerTableViewCell.h; sourceTree = "<group>"; };
 		28BE998718CFCDE600910551 /* MUServerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerTableViewCell.m; sourceTree = "<group>"; };
+		28BE998918CFD77400910551 /* Default-iOS7-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-iOS7-568h@2x.png"; sourceTree = "<group>"; };
+		28BE998D18CFD7DC00910551 /* Default-iOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-iOS7@2x.png"; sourceTree = "<group>"; };
+		28BE999118CFE1FD00910551 /* icon7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon7@2x.png"; sourceTree = "<group>"; };
 		28BF81D0139AFFD50078B722 /* MUCertificateDiskImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateDiskImportViewController.h; sourceTree = "<group>"; };
 		28BF81D1139AFFD50078B722 /* MUCertificateDiskImportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateDiskImportViewController.m; sourceTree = "<group>"; };
 		28C1034116EFB1C100DECE08 /* MUActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUActionSheet.h; sourceTree = "<group>"; };
@@ -879,9 +885,12 @@
 				2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */,
 				28A2AEB514786E6000F3B83F /* Default.png */,
 				28A2AEB614786E6000F3B83F /* Default@2x.png */,
+				28BE998D18CFD7DC00910551 /* Default-iOS7@2x.png */,
 				28451943163463C90027FAB3 /* Default-568h@2x.png */,
+				28BE998918CFD77400910551 /* Default-iOS7-568h@2x.png */,
 				28A2AEB714786E6000F3B83F /* icon.png */,
 				28A2AEB814786E6000F3B83F /* icon@2x.png */,
+				28BE999118CFE1FD00910551 /* icon7@2x.png */,
 				28D963951639B9E4002A9E73 /* iconpad.png */,
 				28D963971639B9E8002A9E73 /* iconpad@2x.png */,
 				28F79CA21479C23F0003B8BA /* BackgroundTextureBlackGradient.png */,
@@ -1196,6 +1205,7 @@
 				28DC1C6513DE596B0037CDC2 /* certificatecell-selected.png in Resources */,
 				28DC1C6613DE596B0037CDC2 /* certificatecell-selected@2x.png in Resources */,
 				28DC1C6713DE596B0037CDC2 /* certificatecell.png in Resources */,
+				28BE998E18CFD7DC00910551 /* Default-iOS7@2x.png in Resources */,
 				28DC1C6813DE596B0037CDC2 /* certificatecell@2x.png in Resources */,
 				28DC1C6913DE596B0037CDC2 /* channel.png in Resources */,
 				28DC1C6B13DE596B0037CDC2 /* channel@2x.png in Resources */,
@@ -1222,6 +1232,7 @@
 				28DC1C9913DE596B0037CDC2 /* talking_alt@2x.png in Resources */,
 				28DC1C9A13DE596B0037CDC2 /* talking_off.png in Resources */,
 				28DC1C9C13DE596B0037CDC2 /* talking_off@2x.png in Resources */,
+				28BE998A18CFD77400910551 /* Default-iOS7-568h@2x.png in Resources */,
 				28DC1C9D13DE596B0037CDC2 /* talking_on.png in Resources */,
 				28BE998018CFA83800910551 /* BlackToolbarPatterniOS7@2x.png in Resources */,
 				28DC1C9F13DE596B0037CDC2 /* talking_on@2x.png in Resources */,
@@ -1277,6 +1288,7 @@
 				2845194816346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png in Resources */,
 				2845194A1634849E0027FAB3 /* BackgroundTextureBlackGradient-568h@2x.png in Resources */,
 				28D963961639B9E4002A9E73 /* iconpad.png in Resources */,
+				28BE999218CFE1FD00910551 /* icon7@2x.png in Resources */,
 				28D963981639B9E8002A9E73 /* iconpad@2x.png in Resources */,
 				2843040A16BF25590025A783 /* MumbleMenuButton.png in Resources */,
 				2843040B16BF25590025A783 /* MumbleMenuButton@2x.png in Resources */,
