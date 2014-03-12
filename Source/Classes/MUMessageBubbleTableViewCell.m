@@ -5,6 +5,7 @@
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUTextMessage.h"
 #import "MUColor.h"
+#import "MUOperatingSystem.h"
 
 #define kBalloonWidth                190.0f
 #define kBalloonTopMargin            8.0f
@@ -136,20 +137,39 @@
 
     UIImage *balloon = nil;
     UIImage *stretchableBalloon = nil;
-    if (_rightSide) {
-        if (_selected) {
-            balloon = [UIImage imageNamed:@"RightBalloonSelected"];
+
+    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (_rightSide) {
+            if (_selected) {
+                balloon = [UIImage imageNamed:@"RightBalloonSelectedMono"];
+            } else {
+                balloon = [UIImage imageNamed:@"Balloon_2_Right"];
+            }
+            stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonNoTailInset, kBalloonBottomInset, kBalloonTailInset)];
         } else {
-            balloon = [UIImage imageNamed:@"Balloon_Blue"];
+            if (_selected) {
+                balloon = [UIImage imageNamed:@"LeftBalloonSelectedMono"];
+            } else {
+                balloon = [UIImage imageNamed:@"Balloon_2"];
+            }
+            stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonTailInset, kBalloonBottomInset, kBalloonNoTailInset)];
         }
-        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonNoTailInset, kBalloonBottomInset, kBalloonTailInset)];
     } else {
-        if (_selected) {
-            balloon = [UIImage imageNamed:@"LeftBalloonSelected"];
+        if (_rightSide) {
+            if (_selected) {
+                balloon = [UIImage imageNamed:@"RightBalloonSelected"];
+            } else {
+                balloon = [UIImage imageNamed:@"Balloon_Blue"];
+            }
+            stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonNoTailInset, kBalloonBottomInset, kBalloonTailInset)];
         } else {
-            balloon = [UIImage imageNamed:@"Balloon_2"];
+            if (_selected) {
+                balloon = [UIImage imageNamed:@"LeftBalloonSelected"];
+            } else {
+                balloon = [UIImage imageNamed:@"Balloon_2"];
+            }
+            stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonTailInset, kBalloonBottomInset, kBalloonNoTailInset)];
         }
-        stretchableBalloon = [balloon resizableImageWithCapInsets:UIEdgeInsetsMake(kBalloonTopInset, kBalloonTailInset, kBalloonBottomInset, kBalloonNoTailInset)];
     }
 
     NSString *text = _message;
