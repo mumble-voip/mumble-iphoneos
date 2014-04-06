@@ -4,3 +4,6 @@
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
 	url = http://github.com/ccgus/fmdb.git
+[submodule "Dependencies/plcrashreporter"]
+	path = Dependencies/plcrashreporter
+	url = https://opensource.plausible.coop/stash/scm/plcr/plcrashreporter.git
