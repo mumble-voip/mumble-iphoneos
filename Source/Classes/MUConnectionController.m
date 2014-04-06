@@ -93,8 +93,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 - (void) showConnectingView {
     NSString *title = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Connecting", nil)];
     NSString *msg = [NSString stringWithFormat:
-                        NSLocalizedString(@"Connecting to %@:%u", @"Connecting to hostname:port"),
-                            _hostname, _port];
+                        NSLocalizedString(@"Connecting to %@:%lu", @"Connecting to hostname:port"),
+                            _hostname, (unsigned long)_port];
     
     _alertView = [[UIAlertView alloc] initWithTitle:title
                                             message:msg

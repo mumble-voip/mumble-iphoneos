@@ -161,7 +161,7 @@
 }
 
 - (NSInteger) indexForUser:(MKUser *)user {
-    NSNumber *number = [_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]];
+    NSNumber *number = [_userIndexMap objectForKey:[NSNumber numberWithInteger:[user session]]];
     if (number) {
         return [number integerValue];
     }
@@ -169,7 +169,7 @@
 }
 
 - (NSInteger) indexForChannel:(MKChannel *)channel {
-    NSNumber *number = [_channelIndexMap objectForKey:[NSNumber numberWithInt:[channel channelId]]];
+    NSNumber *number = [_channelIndexMap objectForKey:[NSNumber numberWithInteger:[channel channelId]]];
     if (number) {
         return [number integerValue];
     }
@@ -222,17 +222,17 @@
     
     MKChannel *channel = [[_serverModel connectedUser] channel];
     for (MKUser *user in [channel users]) {
-        [_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
+        [_userIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[user session]]];
         [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:user indentLevel:0]];
     }
 }
 
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
-    [_channelIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[channel channelId]]];
+    [_channelIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithInteger:[channel channelId]]];
     [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:channel indentLevel:indentLevel]];
 
     for (MKUser *user in [channel users]) {
-        [_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
+        [_userIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[user session]]];
         [_modelItems addObject:[MUChannelNavigationItem navigationItemWithObject:user indentLevel:indentLevel+1]];
     }
     for (MKChannel *chan in [channel channels]) {

@@ -10,7 +10,7 @@
     NSArray        *_images;
     NSArray        *_imageViews;
     UIScrollView   *_scrollView;
-    NSInteger      _curPage;
+    NSUInteger     _curPage;
 }
 @end
 
@@ -80,7 +80,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%i of %i", nil), 1, [_images count]];
+    self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%lu of %lu", nil), (unsigned long)1, (unsigned long)[_images count]];
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
@@ -111,7 +111,7 @@
         NSInteger pg = (NSInteger)(pt.x / self.view.frame.size.width);
         if (pg != _curPage) {
             _curPage = pg;
-            self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%i of %i", nil), 1+_curPage, [_images count]];
+            self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%lu of %lu", nil), (unsigned long)1+_curPage, (unsigned long)[_images count]];
         }
     }
 }

@@ -292,8 +292,8 @@
             settings.codec = MKCodecFormatCELT;
         if ([[defaults stringForKey:@"AudioCodec"] isEqualToString:@"speex"])
             settings.codec = MKCodecFormatSpeex;
-        settings.quality = [defaults integerForKey:@"AudioQualityBitrate"];
-        settings.audioPerPacket = [defaults integerForKey:@"AudioQualityFrames"];
+        settings.quality = (int) [defaults integerForKey:@"AudioQualityBitrate"];
+        settings.audioPerPacket = (int) [defaults integerForKey:@"AudioQualityFrames"];
     }
     
     settings.noiseSuppression = -42; /* -42 dB */

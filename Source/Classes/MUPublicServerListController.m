@@ -111,7 +111,7 @@
     NSDictionary *countryInfo = [_serverList countryAtIndexPath:indexPath];
     cell.textLabel.text = [countryInfo objectForKey:@"name"];
     NSInteger numServers = [[countryInfo objectForKey:@"servers"] count];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%i %@", numServers, numServers > 1 ? @"servers" : @"server"];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%li %@", (long int)numServers, numServers > 1 ? @"servers" : @"server"];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     return cell;

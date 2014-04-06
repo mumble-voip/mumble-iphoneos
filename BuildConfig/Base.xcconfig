@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-ARCHS = armv7
+ARCHS = armv7 arm64
 SDKROOT = iphoneos
 
 MACOSX_DEPLOYMENT_TARGET = 10.7

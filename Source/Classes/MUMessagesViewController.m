@@ -318,7 +318,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if ([txtMsg hasAttachments]) {
         NSString *footer = nil;
         if ([txtMsg numberOfAttachments] > 1) {
-            footer = [NSString stringWithFormat:NSLocalizedString(@"%i attachments", nil), [txtMsg numberOfAttachments]];
+            footer = [NSString stringWithFormat:NSLocalizedString(@"%li attachments", nil), (long int)[txtMsg numberOfAttachments]];
         } else {
             footer = NSLocalizedString(@"1 attachment", nil);
         }
@@ -342,7 +342,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     NSString *footer = nil;
     if ([txtMsg hasAttachments]) {
         if ([txtMsg numberOfAttachments] > 1) {
-            footer = [NSString stringWithFormat:NSLocalizedString(@"%i attachments", nil), [txtMsg numberOfAttachments]];
+            footer = [NSString stringWithFormat:NSLocalizedString(@"%li attachments", nil), (long int)[txtMsg numberOfAttachments]];
         } else {
             footer = NSLocalizedString(@"1 attachment", nil);
         }

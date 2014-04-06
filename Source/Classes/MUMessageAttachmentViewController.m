@@ -107,7 +107,7 @@
         cell.textLabel.text = NSLocalizedString(@"Images", nil);
         NSString *detailText = NSLocalizedString(@"1 image", nil);
         if ([_images count] > 1)
-            detailText = [NSString stringWithFormat:NSLocalizedString(@"%i images", nil), [_images count]];
+            detailText = [NSString stringWithFormat:NSLocalizedString(@"%lu images", nil), (unsigned long)[_images count]];
         cell.detailTextLabel.text = detailText;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else {

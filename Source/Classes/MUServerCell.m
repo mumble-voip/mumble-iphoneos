@@ -67,7 +67,7 @@
     _hostname = [[favServ hostName] copy];
 
     [_port release];
-    _port = [[NSString stringWithFormat:@"%u", [favServ port]] retain];
+    _port = [[NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]] retain];
 
     [_username release];
     if ([[favServ userName] length] > 0) {
@@ -105,7 +105,7 @@
         pingColor = [MUColor mediumPingColor];
     else if (pingMs > 250)
         pingColor = [MUColor badPingColor];
-    NSString *pingStr = [NSString stringWithFormat:@"%u\nms", pingMs];
+    NSString *pingStr = [NSString stringWithFormat:@"%lu\nms", (unsigned long)pingMs];
     if (pingMs >= 999)
         pingStr = @"∞\nms";
 
@@ -133,7 +133,7 @@
 
     CGContextSetTextDrawingMode(ctx, kCGTextFill);
     CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    NSString *usersStr = [NSString stringWithFormat:NSLocalizedString(@"%u\nppl", @"user count"), userCount];
+    NSString *usersStr = [NSString stringWithFormat:NSLocalizedString(@"%lu\nppl", @"user count"), (unsigned long)userCount];
     [usersStr drawInRect:CGRectMake(34.0, 0.0, 32.0, 32.0)
                 withFont:[UIFont boldSystemFontOfSize:12]
            lineBreakMode:UILineBreakModeTailTruncation

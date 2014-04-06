@@ -124,10 +124,10 @@ static FMDatabase *db = nil;
         [db executeUpdate:@"UPDATE `favourites` SET `name`=?, `hostname`=?, `port`=?, `username`=?, `password`=? WHERE `id`=?",
             [favServ displayName],
             [favServ hostName],
-            [NSString stringWithFormat:@"%u", [favServ port]],
+            [NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]],
             [favServ userName],
             [favServ password],
-            [NSNumber numberWithInt:[favServ primaryKey]]];
+            [NSNumber numberWithInteger:[favServ primaryKey]]];
     // If it isn't already stored, store it and update the object's pkey.
     } else {
         // We're already inside a transaction if we were called from within
@@ -139,7 +139,7 @@ static FMDatabase *db = nil;
         [db executeUpdate:@"INSERT INTO `favourites` (`name`, `hostname`, `port`, `username`, `password`) VALUES (?, ?, ?, ?, ?)",
             [favServ displayName],
             [favServ hostName],
-            [NSString stringWithFormat:@"%u", [favServ port]],
+            [NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]],
             [favServ userName],
             [favServ password]];
         FMResultSet *res = [db executeQuery:@"SELECT last_insert_rowid()"];
@@ -153,7 +153,7 @@ static FMDatabase *db = nil;
 // Delete a particular favourite
 + (void) deleteFavourite:(MUFavouriteServer *)favServ {
     NSAssert([favServ hasPrimaryKey], @"Cannot delete a FavouriteServer not originated from the database.");
-    [db executeUpdate:@"DELETE FROM `favourites` WHERE `id`=?", [NSNumber numberWithInt:[favServ primaryKey]]];
+    [db executeUpdate:@"DELETE FROM `favourites` WHERE `id`=?", [NSNumber numberWithInteger:[favServ primaryKey]]];
 }
 
 // Save favourites

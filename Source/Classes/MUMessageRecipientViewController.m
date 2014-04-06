@@ -57,12 +57,12 @@
 }
 
 - (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
-    [_channelIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[channel channelId]]];
-    [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:indentLevel], @"indentLevel", channel, @"object", nil]];
+    [_channelIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[channel channelId]]];
+    [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:indentLevel], @"indentLevel", channel, @"object", nil]];
     
     for (MKUser *user in [channel users]) {
-        [_userIndexMap setObject:[NSNumber numberWithInt:[_modelItems count]] forKey:[NSNumber numberWithInt:[user session]]];
-        [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:indentLevel+1], @"indentLevel", user, @"object", nil]];
+        [_userIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[user session]]];
+        [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:indentLevel+1], @"indentLevel", user, @"object", nil]];
     }
     for (MKChannel *chan in [channel channels]) {
         [self addChannelTreeToModel:chan indentLevel:indentLevel+1];
@@ -70,12 +70,12 @@
 }
 
 - (NSInteger) indexForUser:(MKUser *)user {
-    NSInteger userIndex = 1+[[_userIndexMap objectForKey:[NSNumber numberWithInt:[user session]]] integerValue];
+    NSInteger userIndex = 1+[[_userIndexMap objectForKey:[NSNumber numberWithUnsignedInteger:[user session]]] integerValue];
     return userIndex;
 }
 
 - (NSInteger) indexForChannel:(MKChannel *)channel {
-    NSInteger channelIndex = 1+[[_channelIndexMap objectForKey:[NSNumber numberWithInt:[channel channelId]]] integerValue];
+    NSInteger channelIndex = 1+[[_channelIndexMap objectForKey:[NSNumber numberWithUnsignedInteger:[channel channelId]]] integerValue];
     return channelIndex;
 }
 

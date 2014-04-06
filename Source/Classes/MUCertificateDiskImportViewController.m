@@ -255,7 +255,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         } else {
             NSString *msg = [NSString stringWithFormat:
                                 NSLocalizedString(@"Mumble was unable to import the certificate.\nError Code: %li",
-                                                  @"Generic import error (with error code) for iTunes Import."), err];
+                                                  @"Generic import error (with error code) for iTunes Import."), (long int)err];
             ShowAlertDialog(@"Import Error", msg);
         }
 

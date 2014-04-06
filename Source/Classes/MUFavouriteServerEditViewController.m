@@ -104,7 +104,7 @@
         [_portField setPlaceholder:@"64738"];
         [_portField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         if ([_favourite port] != 0)
-            [_portField setText:[NSString stringWithFormat:@"%u", [_favourite port]]];
+            [_portField setText:[NSString stringWithFormat:@"%lu", (unsigned long)[_favourite port]]];
         else
             [_portField setText:@""];
         [_portField setClearButtonMode:UITextFieldViewModeWhileEditing];

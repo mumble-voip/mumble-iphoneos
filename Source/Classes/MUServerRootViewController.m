@@ -367,7 +367,7 @@
             _selfDeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Undeafen Self", nil)];
     }
     
-    int cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    NSInteger cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [actionSheet setCancelButtonIndex:cancelIndex];
 
     [actionSheet setDelegate:self];
