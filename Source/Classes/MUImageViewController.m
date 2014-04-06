@@ -46,8 +46,8 @@
     [_scrollView setContentSize:contentFrame.size];
     NSMutableArray *imageViews = [[NSMutableArray alloc] initWithCapacity:[_images count]];
     
-    int i = 0;
-    for (UIImage *img in _images) {
+    NSUInteger i = 0;
+    for (i = 0; i < [_images count]; i++) {
         CGRect imageFrame = CGRectMake(frame.size.width*i, 0, frame.size.width, frame.size.height);
         UIScrollView *imgZoomer = [[UIScrollView alloc] initWithFrame:imageFrame];
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, imageFrame.size.width, imageFrame.size.height)];
