@@ -72,7 +72,7 @@
     _hostname = [[favServ hostName] copy];
     
     [_port release];
-    _port = [[NSString stringWithFormat:@"%u", [favServ port]] retain];
+    _port = [[NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]] retain];
     
     [_username release];
     if ([[favServ userName] length] > 0) {
@@ -151,10 +151,10 @@
     NSString* titleTextContent = _displayname;
     NSString* pingTextContent = @"∞ ms";
     if (_pingMs < 999)  {
-        pingTextContent = [NSString stringWithFormat:@"%u ms", _pingMs];
+        pingTextContent = [NSString stringWithFormat:@"%lu ms", (unsigned long)_pingMs];
     }
     
-    NSString* userTextContent = [NSString stringWithFormat:@"%u/%u ppl", _userCount, _maxUserCount];
+    NSString* userTextContent = [NSString stringWithFormat:@"%lu/%lu ppl", (unsigned long)_userCount, (unsigned long)_maxUserCount];
 
     // Put address in the username text field if there is no username...
     NSString *usernameTextContent = nil;
