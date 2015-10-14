@@ -190,6 +190,7 @@
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
 		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
+		DECA5A6C1BCE52F700B7DB48 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DECA5A6B1BCE52F700B7DB48 /* Localizable.strings */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -587,6 +588,7 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		DECA5A6B1BCE52F700B7DB48 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -913,6 +915,7 @@
 		28DC1C1213DE59120037CDC2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DECA5A6A1BCE52E500B7DB48 /* es.lproj */,
 				280256351510D70D00178B08 /* en.lproj */,
 				280256391510DDCA00178B08 /* da.lproj */,
 				2879527A14C248B700567430 /* Apple */,
@@ -1072,6 +1075,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DECA5A6A1BCE52E500B7DB48 /* es.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				DECA5A6B1BCE52F700B7DB48 /* Localizable.strings */,
+			);
+			name = es.lproj;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1112,7 +1123,7 @@
 			name = MumbleTests;
 			productName = MumbleTests;
 			productReference = 285D6B7C16BF02E900F239EB /* MumbleTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1358,6 +1369,7 @@
 				280256381510D70D00178B08 /* Localizable.strings in Resources */,
 				287172AB151A041A00153D74 /* certificatecell-intermediate.png in Resources */,
 				287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */,
+				DECA5A6C1BCE52F700B7DB48 /* Localizable.strings in Resources */,
 				28529B3B1541C043003DD813 /* certificatecreation.png in Resources */,
 				28529B3C1541C043003DD813 /* certificatecreation@2x.png in Resources */,
 				286A3CA7158CD05A00C817D1 /* BackgroundTextureBlackGradientPad@2x.png in Resources */,

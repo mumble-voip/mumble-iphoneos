@@ -1,0 +1,651 @@
+/* username on hostname:port */
+"%@ on %@:%@" = "%1$@ en %2$@:%3$@";
+
+/* No comment provided by engineer. */
+"%i attachments" = "%i adjuntos";
+
+/* No comment provided by engineer. */
+"%i images" = "%i imágenes";
+
+/* Title for viewing a certificate chain (1 of 2, etc.) */
+"%i of %i" = "%1$i de %2$i";
+
+/* user count */
+"%u\nppl" = "%u\nppl";
+
+/* No comment provided by engineer. */
+"(Empty body)" = "(Cuerpo vacío)";
+
+/* No comment provided by engineer. */
+"(Empty)" = "(Vacío)";
+
+/* No comment provided by engineer. */
+"(Message with image attachment)" = "(Mensaje con imagen adjunta)";
+
+/* No comment provided by engineer. */
+"(Message with image attachments)" = "(Mensaje con imágenes adjuntas)";
+
+/* No comment provided by engineer. */
+"(No reason)" = "(Ninguna razón)";
+
+/* No comment provided by engineer. */
+"(No Server)" = "(Ningún servidor)";
+
+/* No comment provided by engineer. */
+"1 attachment" = "1 adjunto";
+
+/* No comment provided by engineer. */
+"1 image" = "1 imagen";
+
+/* No comment provided by engineer. */
+"16 kbit/s, 60 ms audio per packet" = "16 kbit/s, 60 ms audio por paquete";
+
+/* No comment provided by engineer. */
+"40 kbit/s, 20 ms audio per packet" = "40 kbit/s, 20 ms audio por paquete";
+
+/* No comment provided by engineer. */
+"72 kbit/s, 10 ms audio per packet" = "72 kbit/s, 10 ms audio por paquete";
+
+/* No comment provided by engineer. */
+"A certificate is needed to connect to this server" = "Se necesita un certificado para poder conectarse a este servidor";
+
+/* Error body when adding a certificate fails because of a subject name clash. */
+"A certificate with the same name already exist." = "Ya existe un certificado con el mismo nombre.";
+
+/* No comment provided by engineer. */
+"About" = "Acerca de";
+
+/* No comment provided by engineer. */
+"Access Tokens" = "Tokens de acceso";
+
+/* No comment provided by engineer. */
+"Add as favourite" = "Añadir como favorito";
+
+/* No comment provided by engineer. */
+"Address" = "Dirección";
+
+/* No comment provided by engineer. */
+"Advanced" = "Avanzando";
+
+/* No comment provided by engineer. */
+"Advanced Audio" = "Audio avanzado";
+
+/* No comment provided by engineer. */
+"Always" = "Siempre";
+
+/* Amplitude voice-activity mode */
+"Amplitude" = "Amplitud";
+
+/* Body for remove all importable certificates UIAlertView */
+"Are you sure you want to delete all importable certificates?\n\nCertificates already imported into Mumble will not be touched." = "¿Estás seguro de querer borrar todos los certificados importables?\n\nLos certificados que ya están importados en Mumble no se tocarán.";
+
+/* Certificate deletion warning message */
+"Are you sure you want to delete this certificate chain?\n\nIf you don't have a backup, this will permanently remove any rights associated with the certificate chain on any Mumble servers." = "¿Estás seguro de querer borrar esta cadena de certificados?\n\nSi no tienes una copia de seguridad, se borrarán permanentemente todos los permisos asociados a la cadena de certificados en cualquier servidor de mumble.";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete this favourite server?" = "¿Estás seguro de querer eliminar este servidor favorito?";
+
+/* No comment provided by engineer. */
+"Attachments" = "Adjuntos";
+
+/* No comment provided by engineer. */
+"Audio" = "Audio";
+
+/* No comment provided by engineer. */
+"Audio Input" = "Entrada de audio";
+
+/* No comment provided by engineer. */
+"Audio Output" = "Salida de audio";
+
+/* No comment provided by engineer. */
+"Audio Quality" = "Calidad de audio";
+
+/* No comment provided by engineer. */
+"Balanced" = "Equilibrado";
+
+/* No comment provided by engineer. */
+"Banned by %@ for reason: \"%@\"" = "Has sido baneado por %1$@. La razón: \"%2$@\"";
+
+/* No comment provided by engineer. */
+"Cancel" = "Cancelar";
+
+/* No comment provided by engineer. */
+"Cannot modify SuperUser" = "No se puede modificar el Superusuario";
+
+/* No comment provided by engineer. */
+"Certificate" = "Certificado";
+
+/* No comment provided by engineer. */
+"Certificate Mismatch" = "Los certificados no concuerdan";
+
+/* No comment provided by engineer. */
+"Certificates" = "Certificados";
+
+/* No comment provided by engineer. */
+"Channel is full" = "El canal está lleno";
+
+/* No comment provided by engineer. */
+"Clear Messages" = "Limpiar mensajes";
+
+/* Common Name (CN) of an X.509 certificate */
+"Common Name" = "Nombre común";
+
+/* No comment provided by engineer. */
+"Configuration" = "Configuracion";
+
+/* No comment provided by engineer. */
+"Connect" = "Conectar";
+
+/* No comment provided by engineer. */
+"Connecting" = "Conectando";
+
+/* Connecting to hostname:port */
+"Connecting to %@:%u" = "Conectando a %1$@:%2$u";
+
+/* No comment provided by engineer. */
+"Connection closed" = "Conexión cerrada";
+
+/* No comment provided by engineer. */
+"Connection Rejected" = "Conexión rechazada";
+
+/* Continuous transmission mode */
+"Continuous" = "Contínuo";
+
+/* No comment provided by engineer. */
+"Crash Reporting" = "Informe de error";
+
+/* 'Create' text for certificate creation */
+"Create" = "Crear";
+
+/* No comment provided by engineer. */
+"Current Channel" = "Canal actual";
+
+/* No comment provided by engineer. */
+"Custom" = "Personalizado";
+
+/* No comment provided by engineer. */
+"Custom Quality" = "Calidad personalizada";
+
+/* No comment provided by engineer. */
+"Delete" = "Eliminar";
+
+/* Certificate deletion warning title */
+"Delete Certificate Chain" = "Eliminar cadena de certificados";
+
+/* No comment provided by engineer. */
+"Delete Favourite" = "Eliminar favorito";
+
+/* No comment provided by engineer. */
+"Description" = "Descripción";
+
+/* No comment provided by engineer. */
+"Disconnect" = "Desconectar";
+
+/* No comment provided by engineer. */
+"Dismiss" = "Descartar";
+
+/* No comment provided by engineer. */
+"Do you want to upgrade?" = "¿Quieres actualizar?";
+
+/* No comment provided by engineer. */
+"Done" = "Hecho";
+
+/* No comment provided by engineer. */
+"Echo Cancellation" = "Cancelación de eco";
+
+/* No comment provided by engineer. */
+"Echo Cancellation is not available when using the current audio peripheral." = "La cancelación de eco no está disponible para el dispositivo de audio actual.";
+
+/* No comment provided by engineer. */
+"Edit" = "Editar";
+
+/* No comment provided by engineer. */
+"Edit Favourite" = "Editar favorito";
+
+/* Email address of an X.509 certificate */
+"Email" = "Email";
+
+/* No comment provided by engineer. */
+"Enable Sidetone" = "Activar tono propio";
+
+/* Title for certificate import password unlock UIAlertView. */
+"Enter Password" = "Introducir contraseña";
+
+/* Date is past the certificate's notAfter date */
+"Expired" = "Expirado";
+
+/* Certificate expiry explanation */
+"Expires on %@" = "Expira el %@";
+
+/* No comment provided by engineer. */
+"Export" = "Exportar";
+
+/* Title for certificate export alert view (with username and password field) */
+"Export Certificate Chain" = "Exportar cadena de certificados";
+
+/* Title for UIAlertView when a certificate export fails */
+"Export Failed" = "La exportación falló";
+
+/* No comment provided by engineer. */
+"Export Image" = "Exportar imagen";
+
+/* iTunes export button text for certificate chain action sheet */
+"Export to iTunes" = "Exportar a iTunes";
+
+/* No comment provided by engineer. */
+"Export to Photos" = "Exportar a Photos";
+
+/* No comment provided by engineer. */
+"Favourite Servers" = "Servidores favoritos";
+
+/* Certificate import file removal error body. */
+"File '%@' could not be deleted: %@" = "El archivo '%1$@' no puede ser eliminado: %2$@";
+
+/* Filename text field in certificate export alert view */
+"Filename" = "Nombre del fichero";
+
+/* No comment provided by engineer. */
+"Force TCP" = "Forzar TCP";
+
+/* Message sender title */
+"From %@" = "De %@";
+
+/* No comment provided by engineer. */
+"Generate New Certificate" = "Generar nuevo certificado";
+
+/* Title for certificate generator view controller */
+"Generating Certificate" = "Generando certificado";
+
+/* No comment provided by engineer. */
+"Help" = "Ayuda";
+
+/* No comment provided by engineer. */
+"High" = "Alto";
+
+/* No comment provided by engineer. */
+"Hostname or IP address" = "Nombre del servidor o dirección IP";
+
+/* No comment provided by engineer. */
+"Ignore" = "Ignorar";
+
+/* No comment provided by engineer. */
+"Images" = "Imágenes";
+
+/* Title for UIActionSheet for iTunes Import. */
+"Import Actions" = "Importar acciones";
+
+/* No comment provided by engineer. */
+"Import Error" = "Importar error";
+
+/* No comment provided by engineer. */
+"Import From iTunes" = "Importar desde iTunes";
+
+/* No comment provided by engineer. */
+"In Continuous mode, Mumble will\ncontinuously transmit all recorded audio.\n" = "En el modo contínuo, Mumble transmitirá\nde forma contínua todo el audio grabado.\n";
+
+/* No comment provided by engineer. */
+"In Push-to-Talk mode, touch the mouth\nicon to speak to other people when\nconnected to a server.\n" = "En el modo presionar para hablar, toca el icono de la boca\npara hablar con la gente\ncuando te conectes al servidor.\n";
+
+/* No comment provided by engineer. */
+"In Voice Activity mode, Mumble transmits\nyour voice when it senses you talking.\nFine-tune it below:\n" = "En el modo activación por voz, Mumble transmitirá\ntu voz cuando detecte que estás hablando.\nAjústalo debajo:\n";
+
+/* No comment provided by engineer. */
+"Invalid channel name" = "Nombre de canal inválido";
+
+/* No comment provided by engineer. */
+"Invalid username" = "Nombre de usuario inválido";
+
+/* Issuer of an X.509 certificate */
+"Issuer" = "Emisor";
+
+/* Import a certificate from iTunes action sheet button. */
+"iTunes Import" = "Importación desde iTunes";
+
+/* Kicked by user for reason */
+"Kicked by %@ for reason: \"%@\"" = "Has sido expuldado por %1$@. La razón: \"%2$@\"";
+
+/* No comment provided by engineer. */
+"LAN Servers" = "Servidores de área local";
+
+/* No comment provided by engineer. */
+"Legal" = "Legal";
+
+/* No comment provided by engineer. */
+"Links" = "Enlaces";
+
+/* No comment provided by engineer. */
+"Low" = "Bajo";
+
+/* No comment provided by engineer. */
+"Low latency, high quality voice chat" = "Chat de voz de baja latencia y alta calidad";
+
+/* No comment provided by engineer. */
+"Message Recipient" = "Destinatario del mensaje";
+
+/* No comment provided by engineer. */
+"Message too long" = "Mensaje demasiado largo";
+
+/* No comment provided by engineer. */
+"Messages" = "Mensajes";
+
+/* No comment provided by engineer. */
+"Method" = "Método";
+
+/* No comment provided by engineer. */
+"Mic Boost" = "Mejora del micrófono";
+
+/* No comment provided by engineer. */
+"Missing certificate" = "Certificado no encontrado";
+
+/* No comment provided by engineer. */
+"Missing certificate for user" = "Certificado no encontrado para el usuario";
+
+/* No comment provided by engineer. */
+"Mumble Server" = "Servidor Mumble";
+
+/* No comment provided by engineer. */
+"Mumble User" = "Usuario de Mumble";
+
+/* Error message shown for a failed export, cause unknown. */
+"Mumble was unable to export the certificate." = "Mumble no pudo exportar el certificado.";
+
+/* Error shown when when the conversion from PKCS12 to DER-encoded X.509 fails. */
+"Mumble was unable to export the specified certificate." = "Mumble no pudo exportar el certificado especificado.";
+
+/* Certificate generation error body text */
+"Mumble was unable to generate a certificate for your identity." = "Mumble no pudo generar un certificado para tu identidad.";
+
+/* No comment provided by engineer. */
+"Mumble was unable to import one of the intermediate certificates in the certificate chain." = "Mumble no pudo importar uno de los certificados intermedios en la cadena de certificados.";
+
+/* Generic import error for iTunes Import. */
+"Mumble was unable to import the certificate." = "Mumble no pudo importar el certificado.";
+
+/* Generic import error (with error code) for iTunes Import. */
+"Mumble was unable to import the certificate.\nError Code: %li" = "Mumble no pudo importar el certificado.\nCódigo de error: %li";
+
+/* Generic certificate import error message body. */
+"Mumble was unable to import the generated certificate." = "Mumble no pudo importar el certificado generado.";
+
+/* No comment provided by engineer. */
+"Mumble was unable to validate the certificate chain of the server." = "Mumble no pudo validad la cadena de certificados en el servidor.";
+
+/* No comment provided by engineer. */
+"Name" = "Nombre";
+
+/* No comment provided by engineer. */
+"Network" = "Red";
+
+/* No comment provided by engineer. */
+"New beta build available" = "Nueva versión beta disponible";
+
+/* Title of MUCertificateCreationView (shown when creating a self-signed certificate) */
+"New Certificate" = "Nuevo certificado";
+
+/* No comment provided by engineer. */
+"New Favourite" = "Nuevo favorito";
+
+/* No comment provided by engineer. */
+"No" = "No";
+
+/* No comment provided by engineer. */
+"No reason" = "Ninguna razón";
+
+/* None (No certificate chosen) */
+"None" = "Ninguno";
+
+/* Not After date (validity period) of an X.509 certificate */
+"Not After" = "Válido hasta";
+
+/* Not Before date (validity period) of an X.509 certificate */
+"Not Before" = "Válido desde";
+
+/* No comment provided by engineer. */
+"Not permitted in temporary channel" = "No permitido en el canal temporal";
+
+/* No comment provided by engineer. */
+"Off" = "Off";
+
+/* Default Cancel button text for UIAlertViews that are shown when certificate export fails. */
+"OK" = "OK";
+
+/* No comment provided by engineer. */
+"On" = "On";
+
+/* No comment provided by engineer. */
+"Optional" = "Opcional";
+
+/* Organization (O) of an X.509 certificate */
+"Organization" = "Organización";
+
+/* No comment provided by engineer. */
+"Password" = "Contraseña";
+
+/* Password text field in certificate export alert view */
+"Password (for importing)" = "Contraseña (para importar)";
+
+/* No comment provided by engineer. */
+"Permission denied" = "Permiso denegado";
+
+/* Permission denied with reason */
+"Permission denied: %@" = "Permiso denegado: %@";
+
+/* No comment provided by engineer. */
+"Playback Volume" = "Volumen de reproducción";
+
+/* No comment provided by engineer. */
+"Please enter the username you wish to use on this server" = "Por favor, intruduce el nombre de usuario que desees utilizar en este servidor";
+
+/* 'Please Wait' text for certificate generation */
+"Please Wait..." = "Por favor espera...";
+
+/* No comment provided by engineer. */
+"Port" = "Puerto";
+
+/* No comment provided by engineer. */
+"Preferences" = "Configuración";
+
+/* No comment provided by engineer. */
+"Preprocessing" = "Preprocesamiento";
+
+/* No comment provided by engineer. */
+"Public Servers" = "Servidores públicos";
+
+/* Push-to-talk transmission mode */
+"Push-to-talk" = "Presionar para hablar";
+
+/* No comment provided by engineer. */
+"Quality" = "Calidad";
+
+/* No comment provided by engineer. */
+"Quality Presets" = "Ajustes de calidad";
+
+/* No comment provided by engineer. */
+"Reconnect" = "Reconectar";
+
+/* No comment provided by engineer. */
+"Remote Control" = "Control remoto";
+
+/* Remove all importable certificates action. */
+"Remove All" = "Eliminar todos";
+
+/* Title for remove all importable certificates UIAlertView. */
+"Remove Importable Certificates" = "Eliminar certificados importables";
+
+/* No comment provided by engineer. */
+"Self-Deafen" = "Auto silenciar";
+
+/* No comment provided by engineer. */
+"Self-Mute" = "Auto mutear";
+
+/* No comment provided by engineer. */
+"Self-Register" = "Auto registrar";
+
+/* No comment provided by engineer. */
+"Server" = "Servidor";
+
+/* No comment provided by engineer. */
+"Server is full" = "El servidor está lleno";
+
+/* A message sent from the server itself */
+"Server Message" = "Mensaje del servidor";
+
+/* SHA1 fingerprint of an X.509 certificate */
+"SHA1 Fingerprint" = "Huella SHA1";
+
+/* SHA256 fingerprint of an X.509 certificate */
+"SHA256 Fingerprint" = "Huella SHA256";
+
+/* No comment provided by engineer. */
+"Show All Certificates" = "Mostrar todos los certificados";
+
+/* No comment provided by engineer. */
+"Show Certificates" = "Mostrar certificados";
+
+/* No comment provided by engineer. */
+"Show Identities Only" = "Mostrar solo identidades";
+
+/* No comment provided by engineer. */
+"Sidetone" = "Tono propio";
+
+/* No comment provided by engineer. */
+"Sidetone Feedback" = "Realimentación de tono propio";
+
+/* SNR voice-activity mode */
+"Signal to Noise" = "Señal/Ruido";
+
+/* Silence Below VAD configuration */
+"Silence Below" = "Silenciar por debajo";
+
+/* Silence Above VAD configuration */
+"Speech Above" = "Hablar por encima";
+
+/* Subject of an X.509 certificate */
+"Subject" = "Asunto";
+
+/* No comment provided by engineer. */
+"Support" = "Soporte";
+
+/* No comment provided by engineer. */
+"Switched to channel view mode." = "Cambiado a modo vista de canal.";
+
+/* No comment provided by engineer. */
+"Switched to server view mode." = "Cambiado a modo vista de servidor.";
+
+/* Body text for certificate import password unlock UIAlertView. */
+"The certificate is protected by a password. Please enter it below:" = "El certificado está protegido por una contraseña. Por favor, introdúcela debajo:";
+
+/* No comment provided by engineer. */
+"The server presented a different certificate than the one stored for this server" = "El servidor presenta un certificado diferente que el almacenado para este servidor";
+
+/* No comment provided by engineer. */
+"The TLS connection was closed due to an error.\n\nThe server might be temporarily rejecting your connection because you have attempted to connect too many times in a row." = "La conexión TLS se cerró por un error.\n\nEl servidor podría estar rechazando temporalmente tu conexión por haber intentado conectarte muchas veces al mismo tiempo.";
+
+/* Message recipient title */
+"To %@" = "Para %@";
+
+/* Help text for Voice Activity */
+"To calibrate the voice activity correctly, adjust the sliders so that:\n\n1. The first few utterances you make are inside the green area.\n2. While talking, the bar should stay inside the yellow area.\n3. When not speaking, the bar should stay inside the red area." = "Para calibrar la activación por voz correctamente, ajusta los desplazadores de modo que:\n\n1. Los primeros sonidos que pronuncies se vean en el área verde\n2. Mientras hablas, la barra permanezca en el área amarilla.\n3. Cuando no hables, la barra permanezca en el área roja.";
+
+/* Help text for iTunes File Transfer (iTunes Import) */
+"To import your own certificate into\nMumble, please transfer them to your\ndevice using iTunes File Transfer." = "Para importar tu propio certificado en\nMumble, por favor, tranfiérelo a tu\ndispositivo utilizando la transferencia de ficheros de iTunes.";
+
+/* No comment provided by engineer. */
+"Transmission" = "Transmisión";
+
+/* No comment provided by engineer. */
+"Transmission Method" = "Método de transmisión";
+
+/* No comment provided by engineer. */
+"Transmission Quality" = "Calidad de transmisión";
+
+/* No comment provided by engineer. */
+"Trust Certificate" = "Confiar en el certificado";
+
+/* No comment provided by engineer. */
+"Trust New Certificate" = "Confiar en un nuevo certificado";
+
+/* Error title shown when adding a certificate fails because of a subject name clash. */
+"Unable to add identity" = "No es posible añadir la identidad";
+
+/* No comment provided by engineer. */
+"Unable to connect" = "No es posible conectar";
+
+/* Certificate generation error title */
+"Unable to generate certificate" = "No es posible generar el certificado";
+
+/* Certificate import file removal error title. */
+"Unable to remove file" = "No es posible eliminar el fichero";
+
+/* No comment provided by engineer. */
+"Unable to save image" = "No es posible guardar la imagen";
+
+/* No comment provided by engineer. */
+"Unable to validate server certificate" = "No es posible validar el certificado del servidor";
+
+/* No comment provided by engineer. */
+"Undeafen Self" = "Quitar silencio";
+
+/* Title shown when viewing a certificate without a Subject Common Name (CN) */
+"Unknown Certificate" = "Certificado desconocido";
+
+/* No comment provided by engineer. */
+"Unmute and undeafen" = "Quitar mute y silencio";
+
+/* No comment provided by engineer. */
+"Unmute Self" = "Quitar mute";
+
+/* No comment provided by engineer. */
+"Upgrade" = "Actualizar";
+
+/* No comment provided by engineer. */
+"User Registration" = "Registro de usuario";
+
+/* No comment provided by engineer. */
+"Username" = "Nombre de usuario";
+
+/* No comment provided by engineer. */
+"Username already in use" = "El nombre de usuario ya está en uso";
+
+/* Voice activated transmission mode */
+"Voice Activated" = "Activación por voz";
+
+/* No comment provided by engineer. */
+"Voice Activity" = "Actividad vocal";
+
+/* No comment provided by engineer. */
+"Voice Activity Configuration" = "Configuración de actividad vocal";
+
+/* No comment provided by engineer. */
+"Voice Activity Help" = "Ayuda para actividad vocal";
+
+/* No comment provided by engineer. */
+"Volume" = "Volumen";
+
+/* No comment provided by engineer. */
+"We're terribly sorry. It looks like Mumble has recently crashed. Do you want to send a crash report to the Mumble developers?" = "Lo sentimos. Parece que mumble se ha cerrado recientemente. ¿Quieres mandar un informe de errores a los desarrolladores de mumble?";
+
+/* No comment provided by engineer. */
+"Website" = "Página web";
+
+/* Title for welcome message */
+"Welcome Message" = "Mensaje de bienvenida";
+
+/* No comment provided by engineer. */
+"Wrong certificate or password for existing user" = "Contraseña o certificado incorrecto para el usuario existente";
+
+/* No comment provided by engineer. */
+"Wrong server password" = "Contraseña del servidor incorrecta";
+
+/* No comment provided by engineer. */
+"Yes" = "Si";
+
+/* Self-registration with given username */
+"You are about to register yourself on this server. This cannot be undone, and your username cannot be changed once this is done. You will forever be known as '%@' on this server.\n\nAre you sure you want to register yourself?" = "Estás a punto de registrarte en este servidor. No es posible volver atrás, tu usuario no podrá cambiar al finalizar. Siempre serás conocido como '%@' en este servidor.\n\n¿Estás seguro de querer registrarte?";
+
+/* No comment provided by engineer. */
+"You were banned" = "Fuiste baneado";
+
+/* No comment provided by engineer. */
+"You were kicked" = "Fuiste expulsado";
+
