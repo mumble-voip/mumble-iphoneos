@@ -18,8 +18,6 @@
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKVersion.h>
 
-#import "PLCrashReporter.h"
-
 @interface MUApplicationDelegate () <UIApplicationDelegate,
                                      UIAlertViewDelegate> {
     UIWindow                  *_window;
@@ -32,81 +30,11 @@
 }
 - (void) setupAudio;
 - (void) forceKeyboardLoad;
-- (void) notifyCrash;
 @end
 
 @implementation MUApplicationDelegate
 
-- (void) notifyCrash {
-    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-    if ([crashReporter hasPendingCrashReport]) {
-        BOOL autoReport = [[NSUserDefaults standardUserDefaults] boolForKey:@"AutoCrashReport"];
-        if (autoReport) {
-            [self sendPendingCrashReport];
-        } else {
-            NSString *title = NSLocalizedString(@"Crash Reporting", nil);
-            NSString *msg = NSLocalizedString(@"We're terribly sorry. It looks like Mumble has recently crashed. "
-                                              @"Do you want to send a crash report to the Mumble developers?", nil);
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                                message:msg
-                                                               delegate:self
-                                                      cancelButtonTitle:NSLocalizedString(@"No", nil)
-                                                      otherButtonTitles:NSLocalizedString(@"Yes", nil),
-                                                                        NSLocalizedString(@"Always", nil), nil];
-            [alertView show];
-            [alertView release];
-        }
-    }
-}
-
-- (void) sendPendingCrashReport {
-    NSError *err = nil;
-    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-
-    NSData *crashData = [crashReporter loadPendingCrashReportDataAndReturnError:&err];
-    if (crashData == nil) {
-        NSLog(@"MUApplicationDelegate: unable to load pending crash report: %@", err);
-        return;
-    }
-    if (![crashReporter purgePendingCrashReportAndReturnError:&err]) {
-        NSLog(@"MUApplicationDelegate: unable to purge pending crash report: %@", err);
-    }
-
-    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:
-                                 [NSString stringWithFormat:@"https://mumblecrash.appspot.com/report?ver=%@&gitrev=%@",
-                                  [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"],
-                                  [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"], nil]]];
-    [req setHTTPMethod:@"POST"];
-    [req setHTTPBody:crashData];
-    
-    [NSURLConnection sendAsynchronousRequest:req queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *resp, NSData *data, NSError *err) {
-        if (err != nil) {
-            NSLog(@"MUApplicationDelegate: unable to submit crash report: %@", err);
-        }
-    }];
-}
-
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        NSError *err = nil;
-        PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-        if (![crashReporter purgePendingCrashReportAndReturnError:&err]) {
-            NSLog(@"MUApplicationDelegate: unable to purge pending crash report: %@", err);
-        }
-        return;
-    }
-    if (buttonIndex == 2)
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"AutoCrashReport"];
-    [self sendPendingCrashReport];
-}
-
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSError *err = nil;
-    [[PLCrashReporter sharedReporter] enableCrashReporterAndReturnError:&err];
-    if (err != nil) {
-        NSLog(@"MUApplicationDelegate: Unable to enable PLCrashReporter: %@", err);
-    }
-
 #ifdef MUMBLE_BETA_DIST
     _verCheck = [[MUVersionChecker alloc] init];
 #endif
@@ -196,8 +124,6 @@
     
     [_window setRootViewController:_navigationController];
     [_window makeKeyAndVisible];
-    
-    [self notifyCrash];
 
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if ([[url scheme] isEqualToString:@"mumble"]) {

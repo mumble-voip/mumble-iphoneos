@@ -16,8 +16,6 @@
 		2802AC0314CB0131000983A5 /* MUImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0214CB0131000983A5 /* MUImage.m */; };
 		2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0514CB024A000983A5 /* MUImageViewController.m */; };
 		2802AC0D14CB2E2B000983A5 /* MUTextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802AC0C14CB2E2B000983A5 /* MUTextMessage.m */; };
-		280976E718F1C707006DA2E8 /* libCrashReporter-iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 280976CD18F1C420006DA2E8 /* libCrashReporter-iphoneos.a */; settings = {ATTRIBUTES = (Required, ); }; };
-		280976E818F1C70B006DA2E8 /* libCrashReporter-iphonesimulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 280976CF18F1C420006DA2E8 /* libCrashReporter-iphonesimulator.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		280D9ADA13EAFAAE003B64A0 /* MUServerRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */; };
 		2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2813B1D015EBFDA90049A59A /* MURemoteControlPreferencesViewController.m */; };
 		2822AC0614878AC500E9DB17 /* MUConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2822AC0514878AC500E9DB17 /* MUConnectionController.m */; };
@@ -193,111 +191,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		280976C618F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05E731F30EFA1AAB005EDFB7;
-			remoteInfo = "CrashReporter-MacOSX-Static";
-		};
-		280976C818F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
-			remoteInfo = "CrashReporter-MacOSX";
-		};
-		280976CA18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 058812B91040582D009128FB;
-			remoteInfo = "CrashReporter-iOS";
-		};
-		280976CC18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05CD31520EE936A9000FDE88;
-			remoteInfo = "CrashReporter-iOS-Device";
-		};
-		280976CE18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05CD31630EE93905000FDE88;
-			remoteInfo = "CrashReporter-iOS-Simulator";
-		};
-		280976D018F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05E731E30EFA1A3E005EDFB7;
-			remoteInfo = plcrashutil;
-		};
-		280976D218F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05CD32690EE93DC3000FDE88;
-			remoteInfo = "Tests-MacOSX";
-		};
-		280976D418F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05CD32A90EE94062000FDE88;
-			remoteInfo = "Tests-iOS-Simulator";
-		};
-		280976D618F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05CD33240EE94439000FDE88;
-			remoteInfo = "Tests-iOS-Device";
-		};
-		280976D818F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 05F40CE70EF7AB80008050CF;
-			remoteInfo = DemoCrash;
-		};
-		280976DA18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 052A45CF136353FB00987004;
-			remoteInfo = "DemoCrash-iOS-Device";
-		};
-		280976DC18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 052A464F136355FD00987004;
-			remoteInfo = "DemoCrash-iOS-Simulator";
-		};
-		280976DE18F1C420006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 050DE24D0F61B80B00152ED3;
-			remoteInfo = "Fuzz Testing";
-		};
-		280976E318F1C6F8006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 05CD31510EE936A9000FDE88;
-			remoteInfo = "CrashReporter-iOS-Device";
-		};
-		280976E518F1C6FB006DA2E8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 05CD31620EE93905000FDE88;
-			remoteInfo = "CrashReporter-iOS-Simulator";
-		};
 		28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
@@ -337,7 +230,6 @@
 		2802AC0514CB024A000983A5 /* MUImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUImageViewController.m; sourceTree = "<group>"; };
 		2802AC0B14CB2E2A000983A5 /* MUTextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUTextMessage.h; sourceTree = "<group>"; };
 		2802AC0C14CB2E2B000983A5 /* MUTextMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTextMessage.m; sourceTree = "<group>"; };
-		280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CrashReporter.xcodeproj; path = Dependencies/plcrashreporter/CrashReporter.xcodeproj; sourceTree = "<group>"; };
 		280D9AD813EAFAAE003B64A0 /* MUServerRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerRootViewController.h; sourceTree = "<group>"; };
 		280D9AD913EAFAAE003B64A0 /* MUServerRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerRootViewController.m; sourceTree = "<group>"; };
 		2813B1CF15EBFDA90049A59A /* MURemoteControlPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MURemoteControlPreferencesViewController.h; sourceTree = "<group>"; };
@@ -594,8 +486,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				280976E818F1C70B006DA2E8 /* libCrashReporter-iphonesimulator.a in Frameworks */,
-				280976E718F1C707006DA2E8 /* libCrashReporter-iphoneos.a in Frameworks */,
 				2879528F14C38FC200567430 /* MobileCoreServices.framework in Frameworks */,
 				28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
@@ -745,26 +635,6 @@
 			path = Resources/da.lproj;
 			sourceTree = "<group>";
 		};
-		280976B418F1C41F006DA2E8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				280976C718F1C420006DA2E8 /* libCrashReporter-MacOSX-Static.a */,
-				280976C918F1C420006DA2E8 /* CrashReporter.framework */,
-				280976CB18F1C420006DA2E8 /* CrashReporter.framework */,
-				280976CD18F1C420006DA2E8 /* libCrashReporter-iphoneos.a */,
-				280976CF18F1C420006DA2E8 /* libCrashReporter-iphonesimulator.a */,
-				280976D118F1C420006DA2E8 /* plcrashutil */,
-				280976D318F1C420006DA2E8 /* Tests-MacOSX.octest */,
-				280976D518F1C420006DA2E8 /* Tests-iOS-Simulator.app */,
-				280976D718F1C420006DA2E8 /* Tests-iOS-Device.app */,
-				280976D918F1C420006DA2E8 /* DemoCrash.app */,
-				280976DB18F1C420006DA2E8 /* DemoCrash-iOS-Device.app */,
-				280976DD18F1C420006DA2E8 /* DemoCrash-iOS-Simulator.app */,
-				280976DF18F1C420006DA2E8 /* Fuzz Testing */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2838EA0C1293165700035C5D /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
@@ -827,7 +697,6 @@
 				28FAA36114D7550E00F6D711 /* MKNumberBadgeView */,
 				287A687014C777CC008B1BE7 /* gtm */,
 				28F9173911B9460D0030D649 /* fmdb */,
-				280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
 			name = Dependencies;
@@ -1087,8 +956,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				280976E618F1C6FB006DA2E8 /* PBXTargetDependency */,
-				280976E418F1C6F8006DA2E8 /* PBXTargetDependency */,
 				28990AAF132FDA4B0034B406 /* PBXTargetDependency */,
 			);
 			name = Mumble;
@@ -1112,7 +979,7 @@
 			name = MumbleTests;
 			productName = MumbleTests;
 			productReference = 285D6B7C16BF02E900F239EB /* MumbleTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1120,7 +987,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0510;
+				LastTestingUpgradeCheck = 0700;
 				LastUpgradeCheck = 0510;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
@@ -1144,10 +1011,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 280976B418F1C41F006DA2E8 /* Products */;
-					ProjectRef = 280976B318F1C41F006DA2E8 /* CrashReporter.xcodeproj */;
-				},
-				{
 					ProductGroup = 2861C28F116BE91B002B8514 /* Products */;
 					ProjectRef = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 				},
@@ -1161,97 +1024,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		280976C718F1C420006DA2E8 /* libCrashReporter-MacOSX-Static.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCrashReporter-MacOSX-Static.a";
-			remoteRef = 280976C618F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976C918F1C420006DA2E8 /* CrashReporter.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CrashReporter.framework;
-			remoteRef = 280976C818F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976CB18F1C420006DA2E8 /* CrashReporter.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CrashReporter.framework;
-			remoteRef = 280976CA18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976CD18F1C420006DA2E8 /* libCrashReporter-iphoneos.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCrashReporter-iphoneos.a";
-			remoteRef = 280976CC18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976CF18F1C420006DA2E8 /* libCrashReporter-iphonesimulator.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCrashReporter-iphonesimulator.a";
-			remoteRef = 280976CE18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976D118F1C420006DA2E8 /* plcrashutil */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = plcrashutil;
-			remoteRef = 280976D018F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976D318F1C420006DA2E8 /* Tests-MacOSX.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "Tests-MacOSX.octest";
-			remoteRef = 280976D218F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976D518F1C420006DA2E8 /* Tests-iOS-Simulator.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Tests-iOS-Simulator.app";
-			remoteRef = 280976D418F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976D718F1C420006DA2E8 /* Tests-iOS-Device.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Tests-iOS-Device.app";
-			remoteRef = 280976D618F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976D918F1C420006DA2E8 /* DemoCrash.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = DemoCrash.app;
-			remoteRef = 280976D818F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976DB18F1C420006DA2E8 /* DemoCrash-iOS-Device.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "DemoCrash-iOS-Device.app";
-			remoteRef = 280976DA18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976DD18F1C420006DA2E8 /* DemoCrash-iOS-Simulator.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "DemoCrash-iOS-Simulator.app";
-			remoteRef = 280976DC18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		280976DF18F1C420006DA2E8 /* Fuzz Testing */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "Fuzz Testing";
-			remoteRef = 280976DE18F1C420006DA2E8 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		28990A8E132FD9CC0034B406 /* libMumbleKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1501,16 +1273,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		280976E418F1C6F8006DA2E8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "CrashReporter-iOS-Device";
-			targetProxy = 280976E318F1C6F8006DA2E8 /* PBXContainerItemProxy */;
-		};
-		280976E618F1C6FB006DA2E8 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "CrashReporter-iOS-Simulator";
-			targetProxy = 280976E518F1C6FB006DA2E8 /* PBXContainerItemProxy */;
-		};
 		28990AAF132FDA4B0034B406 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "MumbleKit (iOS)";
