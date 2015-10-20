@@ -33,4 +33,6 @@ VALIDATE_PRODUCT = YES
 
 OTHER_LDFLAGS = -all_load -ObjC -lc++
 
+ENABLE_BITCODE = NO
+
 PRODUCT_NAME = Mumble
