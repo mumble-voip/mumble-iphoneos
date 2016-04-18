@@ -75,6 +75,7 @@
                                                                 [NSNumber numberWithFloat:0.2f],   @"AudioSidetoneVolume",
                                                                 [NSNumber numberWithBool:YES],     @"AudioSpeakerPhoneMode",
                                                                 [NSNumber numberWithBool:YES],     @"AudioOpusCodecForceCELTMode",
+                                                                [NSNumber numberWithBool:YES],     @"pttRemote",
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",

@@ -23,6 +23,7 @@
 }
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch;
+- (void) pttRemoteChanged:(UISwitch *)pttSwitch;
 @end
 
 @implementation MUPreferencesViewController
@@ -99,7 +100,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Audio
     if (section == 0) {
-        return 3;
+        return 4;
     // Network
     } else if (section == 1) {
 #ifdef ENABLE_REMOTE_CONTROL
@@ -159,6 +160,15 @@
             cell.textLabel.text = NSLocalizedString(@"Advanced", nil);
             cell.accessoryView = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else if ([indexPath row] == 3) {
+            UISwitch *pttSwitch = [[UISwitch alloc] init];
+            [pttSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"pttRemote"]];
+            [[cell textLabel] setText:NSLocalizedString(@"PTT Remote", nil)];
+            [cell setAccessoryView:pttSwitch];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [pttSwitch setOnTintColor:[UIColor blackColor]];
+            [pttSwitch addTarget:self action:@selector(pttRemoteChanged:) forControlEvents:UIControlEventValueChanged];
+            [pttSwitch release];
         }
 
     // Network
@@ -252,6 +262,10 @@
 
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch {
     [[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"NetworkForceTCP"];
+}
+
+- (void) pttRemoteChanged:(UISwitch *)pttSwitch {
+    [[NSUserDefaults standardUserDefaults] setBool:[pttSwitch isOn] forKey:@"pttRemote"];
 }
 
 @end
