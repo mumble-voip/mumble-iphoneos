@@ -150,25 +150,35 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"pttRemote"]) {
-            //Play a tiny bit of silent audio to get into "Now Playing" center
-            AVPlayer *player = [AVPlayer playerWithURL: [NSURL URLWithString: @"blankAudio.aiff"]];
-            [player play];
-            [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:0 error:nil];
-            [[AVAudioSession sharedInstance] setActive:YES withOptions:0 error:nil];
+        [self setupRemote];
         
-            //Get into "Now Playing" center
-            MPNowPlayingInfoCenter* info = [MPNowPlayingInfoCenter defaultCenter];
-            NSMutableDictionary* newInfo = [NSMutableDictionary dictionary];
-            newInfo[MPMediaItemPropertyTitle] = @"Mumble";
-            newInfo[MPNowPlayingInfoPropertyPlaybackRate] = @(0.0);
-            info.nowPlayingInfo = newInfo;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unplugHeadphones:) name:AVAudioSessionRouteChangeNotification object:nil];
+    }
+}
+
+- (void) unplugHeadphones:(NSNotification *) notification {
+    [self setupRemote];
+}
+
+- (void) setupRemote {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"pttRemote"]) {
+        //Play a tiny bit of silent audio to get into "Now Playing" center
+        AVPlayer *player = [AVPlayer playerWithURL: [NSURL URLWithString: @"blankAudio.aiff"]];
+        [player play];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:0 error:nil];
+        [[AVAudioSession sharedInstance] setActive:YES withOptions:0 error:nil];
         
-            //Register to recieve notifications about the headphone remote
-            [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-        } else {
-            [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
-        }
+        //Get into "Now Playing" center
+        MPNowPlayingInfoCenter* info = [MPNowPlayingInfoCenter defaultCenter];
+        NSMutableDictionary* newInfo = [NSMutableDictionary dictionary];
+        newInfo[MPMediaItemPropertyTitle] = @"Mumble";
+        newInfo[MPNowPlayingInfoPropertyPlaybackRate] = @(0.0);
+        info.nowPlayingInfo = newInfo;
+        
+        //Register to recieve notifications about the headphone remote
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    } else {
+        [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     }
 }
 
