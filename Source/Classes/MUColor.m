@@ -12,18 +12,18 @@
 }
 
 + (UIColor *) goodPingColor {
-    // #609a4b
-    return [UIColor colorWithRed:0x60/255.0f green:0x9a/255.0f blue:0x4b/255.0f alpha:1.0f];
+    // #2B9F78
+    return [UIColor colorWithRed:0x2b/255.0f green:0x9f/255.0f blue:0x78/255.0f alpha:1.0f];
 }
 
 + (UIColor *) mediumPingColor {
-    // #F2DE69
-    return [UIColor colorWithRed:0xf2/255.0f green:0xde/255.0f blue:0x69/255.0f alpha:1.0f];
+    // #F0E54B
+    return [UIColor colorWithRed:0xf0/255.0f green:0xe5/255.0f blue:0x4b/255.0f alpha:1.0f];
 }
 
 + (UIColor *) badPingColor {
-    // #D14D54
-    return [UIColor colorWithRed:0xd1/255.0f green:0x4d/255.0f blue:0x54/255.0f alpha:1.0f];
+    // #D6641E
+    return [UIColor colorWithRed:0xd6/255.0f green:0x64/255.0f blue:0x1e/255.0f alpha:1.0f];
 }
 
 + (UIColor *) userCountColor {
