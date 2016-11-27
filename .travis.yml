@@ -1,0 +1,11 @@
+os:
+  - osx
+
+osx_image: xcode8.1
+language: generic
+
+before_install:
+  - gem install --verbose xcpretty
+
+script:
+  - set -o pipefail && xcodebuild -configuration Release -target "Mumble" CONFIGURATION_BUILD_DIR="${PWD}/__build__" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphoneos | xcpretty
