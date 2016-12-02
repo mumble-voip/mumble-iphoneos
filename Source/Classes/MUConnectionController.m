@@ -120,6 +120,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 - (void) establishConnection {
     _connection = [[MKConnection alloc] init];
     [_connection setDelegate:self];
+    [_connection setForceTCP:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
     
     _serverModel = [[MKServerModel alloc] initWithConnection:_connection];
     [_serverModel addDelegate:self];
