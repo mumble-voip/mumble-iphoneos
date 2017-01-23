@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 int main(int argc, char *argv[]) {
+	ofdsafiwqjqf
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     int retVal = UIApplicationMain(argc, argv, @"UIApplication", @"MUApplicationDelegate");
     [pool release];
