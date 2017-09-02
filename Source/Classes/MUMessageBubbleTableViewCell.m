@@ -15,7 +15,6 @@
 #define kBalloonTopPadding           3.0f
 #define kBalloonBottomPadding        3.0f
 #define kBalloonTimestampSpacing     5.0f
-#define kPhoneWidth                  320.0f
 #define kBalloonTopInset             14.0f
 #define kBalloonBottomInset          17.0f
 #define kBalloonTailInset            23.0f
@@ -205,9 +204,10 @@
     CGRect timestampRect = CGRectMake(imgRect.size.width - kBalloonMarginNonTailSide - timestampSize.width, headerRect.origin.y, timestampSize.width, timestampSize.height);
     CGRect textRect = CGRectMake(kBalloonMarginTailSide, kBalloonTopPadding + kBalloonTopMargin + headingSize.height, textSize.width, textSize.height);
     if (_rightSide) {
-        imgRect.origin.x = kPhoneWidth - imgRect.size.width;
+        CGRect frame = [self frame];
+        imgRect.origin.x = CGRectGetWidth(frame) - imgRect.size.width;
         headerRect.origin.x = imgRect.origin.x + kBalloonMarginNonTailSide;
-        timestampRect.origin.x = kPhoneWidth - kBalloonMarginTailSide - timestampRect.size.width;
+        timestampRect.origin.x = CGRectGetWidth(frame) - kBalloonMarginTailSide - timestampRect.size.width;
         textRect.origin.x = imgRect.origin.x + kBalloonMarginNonTailSide;
     }
 
