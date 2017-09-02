@@ -171,6 +171,15 @@
     [[_editingCell contentView] addSubview:editingField];
     [editingField release];
 
+    [editingField setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:8];
+    NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
+
+    [[_editingCell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+
     [editingField becomeFirstResponder];
 }
 
