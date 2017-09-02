@@ -40,6 +40,17 @@
 #pragma mark -
 #pragma mark Initialization
 
++ (void) configureTableViewConstraintWithCell:(UITableViewCell *)cell andTextField:(UITextField *)textField {
+    [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:110];
+    NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
+
+    [[cell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+}
+
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _editMode = editMode;
@@ -67,6 +78,8 @@
         [_descriptionField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_descriptionCell contentView] addSubview:_descriptionField];
 
+        [MUFavouriteServerEditViewController configureTableViewConstraintWithCell:_descriptionCell andTextField:_descriptionField];
+
         _addressCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerAddress"];
         [_addressCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_addressCell textLabel] setText:NSLocalizedString(@"Address", nil)];
@@ -86,6 +99,8 @@
         [_addressField setText:[_favourite hostName]];
         [_addressField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_addressCell contentView] addSubview:_addressField];
+
+        [MUFavouriteServerEditViewController configureTableViewConstraintWithCell:_addressCell andTextField:_addressField];
 
         _portCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPort"];
         [_portCell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -110,6 +125,8 @@
         [_portField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_portCell contentView] addSubview:_portField];
 
+        [MUFavouriteServerEditViewController configureTableViewConstraintWithCell:_portCell andTextField:_portField];
+
         _usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerUsername"];
         [_usernameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_usernameCell textLabel] setText:NSLocalizedString(@"Username", nil)];
@@ -129,7 +146,9 @@
         [_usernameField setText:[_favourite userName]];
         [_usernameField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_usernameCell contentView] addSubview:_usernameField];
-        
+
+        [MUFavouriteServerEditViewController configureTableViewConstraintWithCell:_usernameCell andTextField:_usernameField];
+
         _passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPassword"];
         [_passwordCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_passwordCell textLabel] setText:NSLocalizedString(@"Password", nil)];
@@ -149,7 +168,8 @@
         [_passwordField setText:[_favourite password]];
         [_passwordField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_passwordCell contentView] addSubview:_passwordField];
-        
+
+        [MUFavouriteServerEditViewController configureTableViewConstraintWithCell:_passwordCell andTextField:_passwordField];
     }
     return self;
 }
