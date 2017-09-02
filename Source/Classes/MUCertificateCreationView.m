@@ -38,6 +38,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark -
 #pragma mark Initialization
 
++ (void) configureTableViewConstraintWithCell:(UITableViewCell *)cell andTextField:(UITextField *)textField {
+    [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:110];
+    NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
+
+    [[cell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+}
+
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
@@ -65,6 +76,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_nameField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_nameCell contentView] addSubview:_nameField];
 
+        [MUCertificateCreationView configureTableViewConstraintWithCell:_nameCell andTextField:_nameField];
+
         _emailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_emailCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_emailCell textLabel] setText:email];
@@ -83,6 +96,8 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_emailField setText:_fullName];
         [_emailField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_emailCell contentView] addSubview:_emailField];
+
+        [MUCertificateCreationView configureTableViewConstraintWithCell:_emailCell andTextField:_emailField];
     }
     return self;
 }
