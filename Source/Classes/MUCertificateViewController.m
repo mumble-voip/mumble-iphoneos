@@ -88,6 +88,9 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
 - (void) viewDidLoad {
     [self setTitle:_certTitle];
+
+    [[self tableView] setRowHeight:UITableViewAutomaticDimension];
+    [[self tableView] setEstimatedRowHeight:44.0f];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -285,9 +288,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
         NSString *hexDigest = [cert hexDigestOfKind:@"sha1"];
         if ([indexPath row] == 0 && hexDigest.length == 40) {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@",
-                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringToIndex:20]],
-                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringFromIndex:20]]];
+            cell.textLabel.text = hexDigest;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
@@ -298,11 +299,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
         NSString *hexDigest = [cert hexDigestOfKind:@"sha256"];
         if ([indexPath row] == 0 && hexDigest.length == 64) {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(0, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(20, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(40, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(60, 4)]]];
+            cell.textLabel.text = hexDigest;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
@@ -325,15 +322,6 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     return cell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == CertificateViewSectionSHA1Fingerprint) {
-        return 55.0f;
-    } else if ([indexPath section] == CertificateViewSectionSHA256Fingerprint) {
-        return 88.0f;
-    }
-    return 44.0f;
 }
 
 #pragma mark -
