@@ -285,9 +285,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
         NSString *hexDigest = [cert hexDigestOfKind:@"sha1"];
         if ([indexPath row] == 0 && hexDigest.length == 40) {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@",
-                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringToIndex:20]],
-                                    [MUCertificateController fingerprintFromHexString:[hexDigest substringFromIndex:20]]];
+            cell.textLabel.text = hexDigest;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
@@ -298,11 +296,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         MKCertificate *cert = [_certificates objectAtIndex:_curIdx];
         NSString *hexDigest = [cert hexDigestOfKind:@"sha256"];
         if ([indexPath row] == 0 && hexDigest.length == 64) {
-            cell.textLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@",
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(0, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(20, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(40, 20)]],
-                                   [MUCertificateController fingerprintFromHexString:[hexDigest substringWithRange:NSMakeRange(60, 4)]]];
+            cell.textLabel.text = hexDigest;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
