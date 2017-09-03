@@ -88,6 +88,9 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
 - (void) viewDidLoad {
     [self setTitle:_certTitle];
+
+    [[self tableView] setRowHeight:UITableViewAutomaticDimension];
+    [[self tableView] setEstimatedRowHeight:44.0f];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -319,15 +322,6 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
     return cell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == CertificateViewSectionSHA1Fingerprint) {
-        return 55.0f;
-    } else if ([indexPath section] == CertificateViewSectionSHA256Fingerprint) {
-        return 88.0f;
-    }
-    return 44.0f;
 }
 
 #pragma mark -
