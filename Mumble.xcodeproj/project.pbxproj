@@ -957,7 +957,6 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
-				2830A26311CEA89100970A41 /* Info.plist Extras */,
 			);
 			buildRules = (
 			);
@@ -1168,20 +1167,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2830A26311CEA89100970A41 /* Info.plist Extras */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Info.plist Extras";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "PLIST=\"${TARGET_BUILD_DIR}/Mumble.app/Info\"\n\nexport PATH=\"$PATH:$HOME/.local/bin\"\ncd \"${PROJECT_DIR}\"\n\n# Git revision\ngitrev=$(git show HEAD | grep commit | sed 's,commit\\ ,,' | head -c12)\ndefaults write \"${PLIST}\" MumbleGitRevision -string \"${gitrev}\"\n\n# Build date\nbuilddate=$(python -B -c 'import datetime; print datetime.datetime.utcnow().strftime(\"%Y-%m-%dT%H:%M:%SZ\")')\ndefaults write \"${PLIST}\" MumbleBuildDate -date \"${builddate}\"";
-		};
 		285D6B7A16BF02E900F239EB /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
