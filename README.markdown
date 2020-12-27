@@ -1,6 +1,9 @@
 Mumble for iOS (iPhone, iPod touch and iPad)
 ============================================
 
+**Note:** This repo is unmaintained (last update in September 2017).
+If you are interested in taking over development of the app, write a comment in [#129](https://github.com/mumble-voip/mumble-iphoneos/issues/129).
+
 This is the source code of Mumble (a gaming-focused social
 voice chat utility) for iOS-based devices.
 
