@@ -63,13 +63,14 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1003001001</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Mumble uses your microphone for voice chats</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>voip</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
@@ -102,8 +103,6 @@
 	<true/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleBlackOpaque</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Mumble uses your microphone for voice chats</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
