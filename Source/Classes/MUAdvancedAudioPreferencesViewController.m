@@ -69,7 +69,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -80,6 +80,8 @@
     } else if (section == 2) {
         return 2;
     } else if (section == 3) {
+        return 1;
+    } else if (section == 4) {
         return 1;
     }
     return 0;
@@ -182,6 +184,17 @@
             [celtSwitch addTarget:self action:@selector(opusCodecForceCELTModeChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = celtSwitch;
         }
+    } else if ([indexPath section] == 4) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = NSLocalizedString(@"PTT button toggle", nil);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            UISwitch *pttToggleSwitch = [[[UISwitch alloc] init] autorelease];
+            pttToggleSwitch.onTintColor = [UIColor blackColor];
+            pttToggleSwitch.on = [defaults boolForKey:@"pttToggle"];
+            pttToggleSwitch.enabled = YES;
+            [pttToggleSwitch addTarget:self action:@selector(pttToggleChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = pttToggleSwitch;
+        }
     }
     
     return cell;
@@ -196,6 +209,8 @@
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Output", nil)];
     } else if (section == 3) { // Opus Codec
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Opus Codec", nil)];
+    } else if (section == 4) { // PTT Toggle
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"PTT Button", nil)];
     } else {
         return nil;
     }
@@ -209,6 +224,8 @@
     } else if (section == 2) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
     } else if (section == 3) {
+        return [MUTableViewHeaderLabel defaultHeaderHeight];
+    } else if (section == 4) {
         return [MUTableViewHeaderLabel defaultHeaderHeight];
     }
     return 0.0f;
@@ -281,6 +298,10 @@
 
 - (void) opusCodecForceCELTModeChanged:(UISwitch *)sender {
     [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioOpusCodecForceCELTMode"];
+}
+
+- (void) pttToggleChanged:(UISwitch *)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"pttToggle"];
 }
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {

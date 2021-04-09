@@ -12,6 +12,9 @@
 
 #import <MumbleKit/MKAudio.h>
 
+#import <AudioToolbox/AudioServices.h>
+#import <UIKit/UIKit.h>
+
 #pragma mark -
 #pragma mark MUChannelNavigationItem
 
@@ -139,8 +142,15 @@
         [_talkButton setAlpha:0.80f];
         [window addSubview:_talkButton];
         
-        [_talkButton addTarget:self action:@selector(talkOn:) forControlEvents:UIControlEventTouchDown];
-        [_talkButton addTarget:self action:@selector(talkOff:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"pttToggle"]) {
+            [_talkButton addTarget:self action:@selector(talkToggle:) forControlEvents:UIControlEventTouchDown];
+        } else {
+            [_talkButton addTarget:self action:@selector(talkOn:) forControlEvents:UIControlEventTouchDown];
+            [_talkButton addTarget:self action:@selector(talkOff:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+        }
+        
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                                        _talkButton);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repositionTalkButton) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
         [self repositionTalkButton];
@@ -598,6 +608,7 @@
 }
 
 - (void) talkOn:(UIButton *)button {
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     [button setAlpha:1.0f];
     [[MKAudio sharedAudio] setForceTransmit:YES];
 }
@@ -605,6 +616,14 @@
 - (void) talkOff:(UIButton *)button {
     [button setAlpha:0.80f];
     [[MKAudio sharedAudio] setForceTransmit:NO];
+}
+
+- (void) talkToggle:(UIButton *)button {
+    if ([[MKAudio sharedAudio] forceTransmit]) {
+        [self talkOff: button];
+    } else {
+        [self talkOn: button];
+    }
 }
 
 #pragma mark - Mode switch
