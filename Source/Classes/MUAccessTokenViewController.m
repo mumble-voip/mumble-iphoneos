@@ -5,7 +5,7 @@
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
 #import "MUOperatingSystem.h"
-#import "MUBAckgroundView.h"
+#import "MUBackgroundView.h"
 
 @interface MUAccessTokenViewController () {
     MKServerModel    *_model;
