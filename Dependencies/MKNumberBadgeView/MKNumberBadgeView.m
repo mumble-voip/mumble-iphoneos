@@ -95,8 +95,7 @@
 
 	NSString* numberString = [NSString stringWithFormat:@"%lu", (unsigned long)self.value];
 	
-	
-	CGSize numberSize = [numberString sizeWithFont:self.font];
+    CGSize numberSize = [numberString sizeWithAttributes: @{ NSFontAttributeName : self.font }];
 		
 	CGPathRef badgePath = [self newBadgePathForTextSize:numberSize];
 	
@@ -208,10 +207,9 @@
 	CGContextSetFillColorWithColor( curContext, self.textColor.CGColor );
 		
 	CGPoint textPt = CGPointMake( ctm.x + (badgeRect.size.width - numberSize.width)/2 , ctm.y + (badgeRect.size.height - numberSize.height)/2 );
-	
-	[numberString drawAtPoint:textPt withFont:self.font];
-
-	CGContextRestoreGState( curContext );
+    
+    [numberString drawAtPoint:textPt withAttributes: @{ NSFontAttributeName : self.font }];
+    CGContextRestoreGState( curContext );
 
 }
 
@@ -259,8 +257,7 @@
 	NSString* numberString = [NSString stringWithFormat:@"%lu",(unsigned long)self.value];
 	
 	
-	CGSize numberSize = [numberString sizeWithFont:self.font];
-	
+    CGSize numberSize = [numberString sizeWithAttributes: @{ NSFontAttributeName : self.font }];
 	CGPathRef badgePath = [self newBadgePathForTextSize:numberSize];
 	
 	CGRect badgeRect = CGPathGetBoundingBox(badgePath);
