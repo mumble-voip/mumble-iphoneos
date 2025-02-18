@@ -162,7 +162,7 @@
         UIView *parentView = [[UIView alloc] initWithFrame:CGRectZero];
         MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:nil];
         lbl.font = [UIFont systemFontOfSize:16.0f];
-        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.lineBreakMode = NSLineBreakByWordWrapping;
         lbl.numberOfLines = 0;
         lbl.contentMode = UIViewContentModeTop;
         if ([current isEqualToString:@"vad"]) {

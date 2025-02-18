@@ -100,8 +100,8 @@
     CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
     [pingStr drawInRect:CGRectMake(0.0, 0.0, 32.0, 32.0)
                withFont:[UIFont boldSystemFontOfSize:12]
-          lineBreakMode:UILineBreakModeTailTruncation
-              alignment:UITextAlignmentCenter];
+          lineBreakMode:NSLineBreakByTruncatingTail
+              alignment:NSTextAlignmentCenter];
 
     if (!isFull) {
         // Non-full servers get the mild iOS blue color
@@ -118,8 +118,8 @@
     NSString *usersStr = [NSString stringWithFormat:NSLocalizedString(@"%lu\nppl", @"user count"), (unsigned long)userCount];
     [usersStr drawInRect:CGRectMake(34.0, 0.0, 32.0, 32.0)
                 withFont:[UIFont boldSystemFontOfSize:12]
-           lineBreakMode:UILineBreakModeTailTruncation
-               alignment:UITextAlignmentCenter];
+           lineBreakMode:NSLineBreakByTruncatingTail
+               alignment:NSTextAlignmentCenter];
     
     img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();

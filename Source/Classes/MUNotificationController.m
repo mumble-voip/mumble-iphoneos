@@ -83,7 +83,7 @@
     [_notificationQueue removeObjectAtIndex:0];
     lbl.textColor = [UIColor whiteColor];
     lbl.backgroundColor = [UIColor clearColor];
-    lbl.textAlignment = UITextAlignmentCenter;
+    lbl.textAlignment = NSTextAlignmentCenter;
     [container addSubview:lbl];
     
     [[[UIApplication sharedApplication] keyWindow] addSubview:container];

@@ -147,7 +147,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                            @"Help text for iTunes File Transfer (iTunes Import)");
         MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:help];
         lbl.font = [UIFont systemFontOfSize:16.0f];
-        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.lineBreakMode = NSLineBreakByWordWrapping;
         lbl.numberOfLines = 0;
         return lbl;
     }

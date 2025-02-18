@@ -173,7 +173,7 @@
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, textShadowOffset, textShadowBlurRadius, textShadow.CGColor);
     [[UIColor whiteColor] setFill];
-    [titleTextContent drawInRect: titleTextRect withFont: [UIFont systemFontOfSize: 32] lineBreakMode: UILineBreakModeWordWrap alignment: UITextAlignmentCenter];
+    [titleTextContent drawInRect: titleTextRect withFont: [UIFont systemFontOfSize: 32] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
     CGContextRestoreGState(context);
     
     
@@ -183,7 +183,7 @@
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, textShadowOffset, textShadowBlurRadius, textShadow.CGColor);
     [[UIColor whiteColor] setFill];
-    [pingTextContent drawInRect: pingTextRect withFont: [UIFont systemFontOfSize: [UIFont buttonFontSize]] lineBreakMode: UILineBreakModeWordWrap alignment: UITextAlignmentLeft];
+    [pingTextContent drawInRect: pingTextRect withFont: [UIFont systemFontOfSize: [UIFont buttonFontSize]] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentLeft];
     CGContextRestoreGState(context);
     
     
@@ -193,7 +193,7 @@
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, textShadowOffset, textShadowBlurRadius, textShadow.CGColor);
     [[UIColor whiteColor] setFill];
-    [userTextContent drawInRect: userTextRect withFont: [UIFont systemFontOfSize: [UIFont buttonFontSize]] lineBreakMode: UILineBreakModeWordWrap alignment: UITextAlignmentRight];
+    [userTextContent drawInRect: userTextRect withFont: [UIFont systemFontOfSize: [UIFont buttonFontSize]] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentRight];
     CGContextRestoreGState(context);
     
     
@@ -203,7 +203,7 @@
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, textShadowOffset, textShadowBlurRadius, textShadow.CGColor);
     [[UIColor whiteColor] setFill];
-    [addressTextContent drawInRect: addressTextRect withFont: [UIFont systemFontOfSize: 13] lineBreakMode: UILineBreakModeWordWrap alignment: UITextAlignmentCenter];
+    [addressTextContent drawInRect: addressTextRect withFont: [UIFont systemFontOfSize: 13] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
     CGContextRestoreGState(context);
     
     
@@ -213,7 +213,7 @@
     CGContextSaveGState(context);
     CGContextSetShadowWithColor(context, textShadowOffset, textShadowBlurRadius, textShadow.CGColor);
     [[UIColor whiteColor] setFill];
-    [usernameTextContent drawInRect: usernameTextRect withFont: [UIFont systemFontOfSize: 13] lineBreakMode: UILineBreakModeWordWrap alignment: UITextAlignmentCenter];
+    [usernameTextContent drawInRect: usernameTextRect withFont: [UIFont systemFontOfSize: 13] lineBreakMode: NSLineBreakByWordWrapping alignment: NSTextAlignmentCenter];
     CGContextRestoreGState(context);
     
     

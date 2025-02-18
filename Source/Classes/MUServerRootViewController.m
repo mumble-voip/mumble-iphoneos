@@ -98,7 +98,7 @@
     
     _serverView.navigationItem.titleView = _segmentedControl;
     
-    _menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MumbleMenuButton"] style:UIBarButtonItemStyleBordered target:self action:@selector(actionButtonClicked:)];
+    _menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MumbleMenuButton"] style:UIBarButtonItemStylePlain target:self action:@selector(actionButtonClicked:)];
     _serverView.navigationItem.rightBarButtonItem = _menuButton;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

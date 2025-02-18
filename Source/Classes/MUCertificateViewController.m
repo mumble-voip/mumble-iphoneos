@@ -292,7 +292,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else if (section == CertificateViewSectionSHA256Fingerprint) {
@@ -303,7 +303,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else {
@@ -316,7 +316,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         cell.textLabel.textColor = [UIColor blackColor];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.textLabel.numberOfLines = 1;
-        cell.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        cell.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         cell.detailTextLabel.text = [item objectAtIndex:1];
         cell.detailTextLabel.textColor = [MUColor selectedTextColor];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;

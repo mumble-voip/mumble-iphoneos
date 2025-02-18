@@ -71,7 +71,7 @@
         [_descriptionField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_descriptionField setReturnKeyType:UIReturnKeyNext];
         [_descriptionField setAdjustsFontSizeToFitWidth:NO];
-        [_descriptionField setTextAlignment:UITextAlignmentLeft];
+        [_descriptionField setTextAlignment:NSTextAlignmentLeft];
         [_descriptionField setPlaceholder:NSLocalizedString(@"Mumble Server", nil)];
         [_descriptionField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_descriptionField setText:[_favourite displayName]];
@@ -91,7 +91,7 @@
         [_addressField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_addressField setReturnKeyType:UIReturnKeyNext];
         [_addressField setAdjustsFontSizeToFitWidth:NO];
-        [_addressField setTextAlignment:UITextAlignmentLeft];
+        [_addressField setTextAlignment:NSTextAlignmentLeft];
         [_addressField setPlaceholder:NSLocalizedString(@"Hostname or IP address", nil)];
         [_addressField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [_addressField setAutocorrectionType:UITextAutocorrectionTypeNo];
@@ -115,7 +115,7 @@
         [_portField setAdjustsFontSizeToFitWidth:YES];
         [_portField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [_portField setAutocorrectionType:UITextAutocorrectionTypeNo];
-        [_portField setTextAlignment:UITextAlignmentLeft];
+        [_portField setTextAlignment:NSTextAlignmentLeft];
         [_portField setPlaceholder:@"64738"];
         [_portField setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         if ([_favourite port] != 0)
@@ -140,7 +140,7 @@
         [_usernameField setAdjustsFontSizeToFitWidth:NO];
         [_usernameField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [_usernameField setAutocorrectionType:UITextAutocorrectionTypeNo];
-        [_usernameField setTextAlignment:UITextAlignmentLeft];
+        [_usernameField setTextAlignment:NSTextAlignmentLeft];
         [_usernameField setPlaceholder:[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"]];
         [_usernameField setSecureTextEntry:NO];
         [_usernameField setText:[_favourite userName]];
@@ -164,7 +164,7 @@
         [_passwordField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_passwordField setPlaceholder:NSLocalizedString(@"Optional", nil)];
         [_passwordField setSecureTextEntry:YES];
-        [_passwordField setTextAlignment:UITextAlignmentLeft];
+        [_passwordField setTextAlignment:NSTextAlignmentLeft];
         [_passwordField setText:[_favourite password]];
         [_passwordField setClearButtonMode:UITextFieldViewModeWhileEditing];
         [[_passwordCell contentView] addSubview:_passwordField];
