@@ -20,7 +20,7 @@
 @end
 
 static void *serverThread(void *udata) {
-    int sock = (int) udata;
+    int sock = (int) (long) udata;
     unsigned char action;
     
     int val = 1;
