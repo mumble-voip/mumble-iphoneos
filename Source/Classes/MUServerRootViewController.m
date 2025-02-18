@@ -92,7 +92,6 @@
     
     _segmentIndex = 0;
     
-    _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     _segmentedControl.selectedSegmentIndex = _segmentIndex;
     [_segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
     

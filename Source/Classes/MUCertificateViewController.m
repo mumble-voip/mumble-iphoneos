@@ -99,7 +99,6 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
                     [UIImage imageNamed:@"up.png"],
                     [UIImage imageNamed:@"down.png"],
                 nil]];
-        _arrows.segmentedControlStyle = UISegmentedControlStyleBar;
         _arrows.momentary = YES;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
