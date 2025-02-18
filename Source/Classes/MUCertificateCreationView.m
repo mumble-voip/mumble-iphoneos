@@ -252,7 +252,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Target/actions
 
 - (void) cancelClicked:(id)sender {
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) createClicked:(id)sender {
@@ -324,7 +324,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[self navigationController] dismissModalViewControllerAnimated:YES];
+            [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
         });
     });    
 }

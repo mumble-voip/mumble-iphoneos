@@ -279,7 +279,7 @@
 #pragma mark UIBarButton actions
 
 - (void) cancelClicked:(id)sender {
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) doneClicked:(id)sender {
@@ -294,7 +294,7 @@
 
     // Get rid of oureslves and call back to our target to tell it that
     // we're done.
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
     if ([_target respondsToSelector:_doneAction]) {
         [_target performSelector:_doneAction withObject:self];
     }

@@ -479,7 +479,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [recipientViewController setDelegate:self];
     UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:recipientViewController];
 
-    [self presentModalViewController:navCtrl animated:YES];
+    [self presentViewController:navCtrl animated:YES completion:nil];
 }
 
 #pragma mark - MUMessageBubbleTableViewCellDelegate

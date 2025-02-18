@@ -80,7 +80,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) disconnectFromServer {
-    [_serverRoot dismissModalViewControllerAnimated:YES];
+    [_serverRoot dismissViewControllerAnimated:YES completion:nil];
     [self teardownConnection];
 }
 
@@ -371,7 +371,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         }
     }
 
-    [_parentViewController presentModalViewController:_serverRoot animated:YES];
+    [_parentViewController presentViewController:_serverRoot animated:YES completion:nil];
     _parentViewController = nil;
 }
 
@@ -441,7 +441,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         MUServerCertificateTrustViewController *certTrustView = [[MUServerCertificateTrustViewController alloc] initWithCertificates:[_connection peerCertificates]];
         [certTrustView setDelegate:self];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certTrustView];
-        [_parentViewController presentModalViewController:navCtrl animated:YES];
+        [_parentViewController presentViewController:navCtrl animated:YES completion:nil];
     }
 }
 

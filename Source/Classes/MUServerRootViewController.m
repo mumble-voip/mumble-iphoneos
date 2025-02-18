@@ -360,7 +360,7 @@
 }
 
 - (void) childDoneButton:(id)sender {
-    [[self modalViewController] dismissModalViewControllerAnimated:YES];
+    [[self modalViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) modeSwitchButtonReleased:(id)sender {
@@ -388,17 +388,17 @@
     } else if (buttonIndex == _mixerDebugIndex) {
         MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
-        [self presentModalViewController:navCtrl animated:YES];
+        [self presentViewController:navCtrl animated:YES completion:nil];
     } else if (buttonIndex == _accessTokensIndex) {
         MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];
-        [self presentModalViewController:navCtrl animated:YES];
+        [self presentViewController:navCtrl animated:YES completion:nil];
     } else if (buttonIndex == _certificatesIndex) { // Certificates
         MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[_model serverCertificates]];
         UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certView];
         UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(childDoneButton:)];
         certView.navigationItem.leftBarButtonItem = doneButton;
-        [self presentModalViewController:navCtrl animated:YES];
+        [self presentViewController:navCtrl animated:YES completion:nil];
     } else if (buttonIndex == _selfRegisterIndex) { // Self-Register
         NSString *title = NSLocalizedString(@"User Registration", nil);
         NSString *msg = [NSString stringWithFormat:

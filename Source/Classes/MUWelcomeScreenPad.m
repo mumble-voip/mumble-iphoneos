@@ -161,7 +161,7 @@
         MULegalViewController *legalView = [[MULegalViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] init];
         [navController pushViewController:legalView animated:NO];
-        [[self navigationController] presentModalViewController:navController animated:YES];
+        [[self navigationController] presentViewController:navController animated:YES completion:nil];
     } else if (buttonIndex == 3) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
     }

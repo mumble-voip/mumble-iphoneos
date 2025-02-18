@@ -234,13 +234,13 @@
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Actions
 
 - (void) cancelClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - MKServerModel delegate

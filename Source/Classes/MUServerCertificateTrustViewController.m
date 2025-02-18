@@ -42,7 +42,7 @@
 #pragma mark Actions
 
 - (void) dismissClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [_delegate serverCertificateTrustViewControllerDidDismiss:self];
 }
 

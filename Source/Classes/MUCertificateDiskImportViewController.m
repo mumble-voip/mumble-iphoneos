@@ -334,7 +334,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark - Actions
 
 - (void) doneClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) showRemoveAlert {
