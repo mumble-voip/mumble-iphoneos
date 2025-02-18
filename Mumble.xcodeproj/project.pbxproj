@@ -996,12 +996,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastTestingUpgradeCheck = 0700;
-				LastUpgradeCheck = 1230;
-				TargetAttributes = {
-					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = CXBDCLUHDT;
-					};
-				};
+				LastUpgradeCheck = 1620;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mumble" */;
 			developmentRegion = en;
