@@ -355,7 +355,7 @@
 }
 
 - (void) childDoneButton:(id)sender {
-    [[self modalViewController] dismissViewControllerAnimated:YES completion:nil];
+    [[self presentedViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) modeSwitchButtonReleased:(id)sender {
