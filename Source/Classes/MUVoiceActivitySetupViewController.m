@@ -14,7 +14,7 @@
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }

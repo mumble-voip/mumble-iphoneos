@@ -51,7 +51,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
         
         NSString *name = NSLocalizedString(@"Name", nil);
         NSString *defaultName = NSLocalizedString(@"Mumble User", nil);

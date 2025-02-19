@@ -30,7 +30,7 @@
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
         _showAll = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CertificatesShowIntermediates"] boolValue];
     }
     return self;

@@ -38,7 +38,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        self.preferredContentSize = CGSizeMake(320, 480);
         
         // Try to build a chain, if possible.
         NSArray *chains = [MUCertificateChainBuilder buildChainFromPersistentRef:persistentRef];
@@ -63,7 +63,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _certificates = [[NSArray alloc] initWithObjects:cert, nil];
         _curIdx = 0;
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }
@@ -72,7 +72,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _certificates = [[NSArray alloc] initWithArray:cert];
         _curIdx = 0;
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }

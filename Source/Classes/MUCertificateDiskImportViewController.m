@@ -33,7 +33,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 @implementation MUCertificateDiskImportViewController
 
 - (id) init {
-    self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+    self.preferredContentSize = CGSizeMake(320, 480);
     
     UITableViewStyle style = UITableViewStyleGrouped;
     NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
