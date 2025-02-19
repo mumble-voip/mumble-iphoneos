@@ -121,7 +121,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     }
     
     UIBarButtonItem *actions = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
-    [actions setStyle:UIBarButtonItemStyleBordered];
+    [actions setStyle:UIBarButtonItemStylePlain];
     [actions autorelease];
 
     // If there's more than one certificate in the chain, show the arrows

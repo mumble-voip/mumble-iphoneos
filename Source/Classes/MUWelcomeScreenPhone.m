@@ -61,13 +61,13 @@
     
 #if MUMBLE_LAUNCH_IMAGE_CREATION != 1
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil)
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
     
     UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil)
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(prefsClicked:)];
     [self.navigationItem setLeftBarButtonItem:prefs];

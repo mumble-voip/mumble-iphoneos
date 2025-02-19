@@ -82,10 +82,10 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
-    UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(aboutButtonClicked:)];
+    UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStylePlain target:self action:@selector(aboutButtonClicked:)];
     self.navigationItem.rightBarButtonItem = aboutBtn;
     
-    UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(prefsButtonClicked:)];
+    UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStylePlain target:self action:@selector(prefsButtonClicked:)];
     self.navigationItem.leftBarButtonItem = prefsBtn;
     
     [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
