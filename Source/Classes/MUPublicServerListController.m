@@ -24,11 +24,6 @@
     return self;
 }
 
-- (void) dealloc {
-    [_serverList release];
-    [super dealloc];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
 
@@ -56,8 +51,6 @@
         UIBarButtonItem *barActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
         self.navigationItem.rightBarButtonItem = barActivityIndicator;
         [activityIndicatorView startAnimating];
-        [barActivityIndicator release];
-        [activityIndicatorView release];
     }
 }
 
@@ -104,7 +97,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countryItem"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryItem"] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryItem"];
     }
 
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -127,7 +120,6 @@
 
     MUCountryServerListController *countryController = [[MUCountryServerListController alloc] initWithName:countryName serverList:countryServers];
     [[self navigationController] pushViewController:countryController animated:YES];
-    [countryController release];
 }
 
 @end

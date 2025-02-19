@@ -71,7 +71,6 @@ static FMDatabase *db = nil;
         NSLog(@"MUDatabase: Initialized database at %@", dbPath);
     } else {
         NSLog(@"MUDatabase: Could not open database at %@", dbPath);
-        [db release];
         db = nil;
         return;
     }
@@ -114,7 +113,7 @@ static FMDatabase *db = nil;
 
 // Tear down the database
 + (void) teardown {
-    [db release];
+    
 }
 
 // Store a single favourite
@@ -178,10 +177,9 @@ static FMDatabase *db = nil;
         [fs setUserName:[res stringForColumnIndex:4]];
         [fs setPassword:[res stringForColumnIndex:5]];
         [favs addObject:fs];
-        [fs release];
     }
     [res close];
-    return [favs autorelease];
+    return favs;
 }
 
 #pragma mark -

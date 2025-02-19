@@ -36,7 +36,6 @@
                                                                      target:self
                                                                      action:@selector(dismissClicked:)];
     self.navigationItem.leftBarButtonItem = dismissButton;
-    [dismissButton release];
 }
 
 #pragma mark -

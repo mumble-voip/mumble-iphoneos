@@ -4,5 +4,4 @@
 
 @interface MUWelcomeScreenPhone : UITableViewController
 - (id) init;
-- (void) dealloc;
 @end

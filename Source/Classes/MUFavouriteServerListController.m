@@ -37,9 +37,6 @@
 
 - (void) dealloc {
     [MUDatabase storeFavourites:_favouriteServers];
-    [_favouriteServers release];
-    
-    [super dealloc];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -71,14 +68,12 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
-    [addButton release];
 
     [self reloadFavourites];
 }
 
 - (void) reloadFavourites {
-    [_favouriteServers release];
-    _favouriteServers = [[MUDatabase fetchAllFavourites] retain];
+    _favouriteServers = [MUDatabase fetchAllFavourites];
     [_favouriteServers sortUsingSelector:@selector(compare:)];
 }
 
@@ -97,7 +92,7 @@
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     MUServerCell *cell = (MUServerCell *)[tableView dequeueReusableCellWithIdentifier:[MUServerCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[MUServerCell alloc] init] autorelease];
+        cell = [[MUServerCell alloc] init];
     }
     [cell populateFromFavouriteServer:favServ];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -136,7 +131,6 @@
     } else {
         [sheet showInView:cellView];
     }
-    [sheet release];
 }
 
 - (void) deleteFavouriteAtIndexPath:(NSIndexPath *)indexPath {
@@ -165,7 +159,6 @@
                                                   cancelButtonTitle:NSLocalizedString(@"No", nil)
                                                   otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
         [alertView show];
-        [alertView release];
     // Connect
     } else if (index == 2) {
         NSString *userName = [favServ userName];
@@ -217,11 +210,9 @@
     [editView setTarget:self];
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
-    [editView release];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
     [[self navigationController] presentModalViewController:modalNav animated:YES];
-    [modalNav release];
 }
 
 - (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ {
@@ -235,11 +226,9 @@
     [editView setTarget:self];
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
-    [editView release];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
     [[self navigationController] presentModalViewController:modalNav animated:YES];
-    [modalNav release];
 }
 
 #pragma mark -
@@ -260,7 +249,6 @@
     MUFavouriteServerEditViewController *editView = sender;
     MUFavouriteServer *newServer = [editView copyFavouriteFromContent];
     [MUDatabase storeFavourite:newServer];
-    [newServer release];
 
     [self reloadFavourites];
     [self.tableView reloadData];

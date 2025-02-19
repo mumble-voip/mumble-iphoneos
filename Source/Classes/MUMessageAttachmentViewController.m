@@ -19,8 +19,8 @@
 
 - (id) initWithImages:(NSArray *)images andLinks:(NSArray *)links {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        _images = [images retain];
-        _links = [links retain];
+        _images = images;
+        _links = links;
     }
     return self;
 }
@@ -94,7 +94,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -128,7 +128,6 @@
     if (hasImages && [indexPath section] == 0) {
         MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:_images];
         [self.navigationController pushViewController:imgViewController animated:YES];
-        [imgViewController release];
     } else {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_links objectAtIndex:[indexPath row]]]];
     }

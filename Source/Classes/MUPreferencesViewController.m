@@ -41,7 +41,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     MUApplicationDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate reloadPreferences];
-    [super dealloc];
 }
 
 #pragma mark -
@@ -117,7 +116,7 @@
     static NSString *CellIdentifier = @"PreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -135,13 +134,12 @@
             [cell setAccessoryView:volSlider];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             [volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
-            [volSlider release];
         }
         // Transmit method
         if ([indexPath row] == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioTransmitCell"];
             if (cell == nil)
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioTransmitCell"] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"AudioTransmitCell"];
             cell.textLabel.text = NSLocalizedString(@"Transmission", nil);
             NSString *xmit = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioTransmitMethod"];
             if ([xmit isEqualToString:@"vad"]) {
@@ -171,11 +169,10 @@
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             [tcpSwitch setOnTintColor:[UIColor blackColor]];
             [tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
-            [tcpSwitch release];
         } else if ([indexPath row] == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
             if (cell == nil)
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"];
             MKCertificate *cert = [MUCertificateController defaultCertificate];
             cell.textLabel.text = NSLocalizedString(@"Certificate", nil);
             cell.detailTextLabel.text = cert ? [cert subjectName] : NSLocalizedString(@"None", @"None (No certificate chosen)");
@@ -186,7 +183,7 @@
         } else if ([indexPath row] == 2) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RemoteControlCell"];
             if (cell == nil)
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RemoteControlCell"] autorelease];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RemoteControlCell"];
             cell.textLabel.text = NSLocalizedString(@"Remote Control", nil);
             BOOL isOn = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
             if (isOn) {
@@ -226,22 +223,18 @@
         if (indexPath.row == 1) { // Transmission
             MUAudioTransmissionPreferencesViewController *audioXmit = [[MUAudioTransmissionPreferencesViewController alloc] init];
             [self.navigationController pushViewController:audioXmit animated:YES];
-            [audioXmit release];
         } else if (indexPath.row == 2) { // Advanced
             MUAdvancedAudioPreferencesViewController *advAudio = [[MUAdvancedAudioPreferencesViewController alloc] init];
             [self.navigationController pushViewController:advAudio animated:YES];
-            [advAudio release];
         }
     } else if ([indexPath section] == 1) { // Network
         if ([indexPath row] == 1) { // Certificates
             MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
             [self.navigationController pushViewController:certPref animated:YES];
-            [certPref release];
         }
         if ([indexPath row] == 2) { // Remote Control
             MURemoteControlPreferencesViewController *remoteControlPref = [[MURemoteControlPreferencesViewController alloc] init];
             [self.navigationController pushViewController:remoteControlPref animated:YES];
-            [remoteControlPref release];
         }
     }
 }

@@ -86,16 +86,6 @@
 	self.backgroundColor = [UIColor clearColor];
 }
 
-- (void)dealloc 
-{
-	[_font release];
-	[_fillColor release];
-	[_strokeColor release];
-	[_textColor release];
-	
-    [super dealloc];
-}
-
 
 - (void)drawRect:(CGRect)rect 
 {

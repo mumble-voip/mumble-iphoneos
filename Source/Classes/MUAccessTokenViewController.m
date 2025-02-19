@@ -23,16 +23,10 @@
 
 - (id) initWithServerModel:(MKServerModel *)model {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        _model = [model retain];
+        _model = model;
         _editingRow = -1;
     }
     return self;
-}
-
-- (void) dealloc {
-    [_model release];
-    [_editingCell release];
-    [super dealloc];
 }
 
 #pragma mark - View lifecycle
@@ -57,11 +51,9 @@
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
-    [addButton release];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
-    [doneButton release];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,7 +75,6 @@
     [_model setAccessTokens:_tokens];
 
     [MUDatabase storeAccessTokens:_tokens forServerWithHostname:[_model hostname] port:[_model port]];
-    [_tokens release];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -104,7 +95,7 @@
     static NSString *CellIdentifier = @"AccessTokenCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     if ([indexPath row] == _editingRow) {
         return _editingCell;
@@ -149,7 +140,6 @@
 - (void) editItemAtIndex:(NSInteger)row {
     _editingRow = row;
 
-    [_tokenValue release];
     _tokenValue = [[_tokens objectAtIndex:row] copy];
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
@@ -169,7 +159,6 @@
     [editingField setText:_tokenValue];
     [editingField setReturnKeyType:UIReturnKeyDone];
     [[_editingCell contentView] addSubview:editingField];
-    [editingField release];
 
     [editingField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
@@ -206,19 +195,16 @@
 }
 
 - (void) textFieldDidChange:(UITextField *)sender {
-    [_tokenValue release];
     _tokenValue = [[sender text] copy];
 }
 
 - (void) textFieldDidEndOnExit:(UITextField *)sender {
     [sender resignFirstResponder];
     [_tokens replaceObjectAtIndex:_editingRow withObject:_tokenValue];
-    [_tokenValue release];
     _tokenValue = nil;
     NSInteger row = _editingRow;
     _editingRow = -1;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [_editingCell release];
     _editingCell = nil;
 }
 

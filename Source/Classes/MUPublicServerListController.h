@@ -6,5 +6,4 @@
 
 @interface MUPublicServerListController : UITableViewController
 - (id) init;
-- (void) dealloc;
 @end

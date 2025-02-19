@@ -34,10 +34,6 @@
     return self;
 }
 
-- (void) dealloc {
-    [super dealloc];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
@@ -69,14 +65,12 @@
                                                              target:self
                                                              action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
-    [about release];
     
     UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil)
                                                               style:UIBarButtonItemStyleBordered
                                                              target:self
                                                              action:@selector(prefsClicked:)];
     [self.navigationItem setLeftBarButtonItem:prefs];
-    [prefs release];
 #endif
 }
 
@@ -103,7 +97,7 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIImage *img = [MUImage imageNamed:@"WelcomeScreenIcon"];
-    UIImageView *imgView = [[[UIImageView alloc] initWithImage:img] autorelease];
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
     [imgView setContentMode:UIViewContentModeCenter];
     [imgView setFrame:CGRectMake(0, 0, img.size.width, img.size.height)];
     return imgView;
@@ -126,7 +120,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -152,13 +146,13 @@
     /* Servers section. */
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            MUPublicServerListController *serverList = [[[MUPublicServerListController alloc] init] autorelease];
+            MUPublicServerListController *serverList = [[MUPublicServerListController alloc] init];
             [self.navigationController pushViewController:serverList animated:YES];
         } else if (indexPath.row == 1) {
-            MUFavouriteServerListController *favList = [[[MUFavouriteServerListController alloc] init] autorelease];
+            MUFavouriteServerListController *favList = [[MUFavouriteServerListController alloc] init];
             [self.navigationController pushViewController:favList animated:YES];
         } else if (indexPath.row == 2) {
-            MULanServerListController *lanList = [[[MULanServerListController alloc] init] autorelease];
+            MULanServerListController *lanList = [[MULanServerListController alloc] init];
             [self.navigationController pushViewController:lanList animated:YES];
         }
     }
@@ -181,11 +175,10 @@
                                                                 NSLocalizedString(@"Legal", nil),
                                                                 NSLocalizedString(@"Support", nil), nil];
     [aboutView show];
-    [aboutView release];
 }
 
 - (void) prefsClicked:(id)sender {
-    MUPreferencesViewController *prefs = [[[MUPreferencesViewController alloc] init] autorelease];
+    MUPreferencesViewController *prefs = [[MUPreferencesViewController alloc] init];
     [self.navigationController pushViewController:prefs animated:YES];
 }
 
@@ -199,9 +192,7 @@
         MULegalViewController *legalView = [[MULegalViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] init];
         [navController pushViewController:legalView animated:NO];
-        [legalView release];
         [[self navigationController] presentModalViewController:navController animated:YES];
-        [navController release];
     } else if (buttonIndex == 3) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
     }

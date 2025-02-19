@@ -6,5 +6,4 @@
 
 @interface MULanServerListController : UITableViewController
 - (id) init;
-- (void) dealloc;
 @end

@@ -115,11 +115,9 @@
     if (idiom == UIUserInterfaceIdiomPad) {
         welcomeScreen = [[MUWelcomeScreenPad alloc] init];
         [_navigationController pushViewController:welcomeScreen animated:YES];
-        [welcomeScreen release];
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
         [_navigationController pushViewController:welcomeScreen animated:YES];
-        [welcomeScreen release];
     }
     
     [_window setRootViewController:_navigationController];
@@ -156,15 +154,6 @@
 
 - (void) applicationWillTerminate:(UIApplication *)application {
     [MUDatabase teardown];
-}
-
-- (void) dealloc {
-#ifdef MUMBLE_BETA_DIST
-    [_verCheck release];
-#endif
-    [_navigationController release];
-    [_window release];
-    [super dealloc];
 }
 
 - (void) setupAudio {
@@ -260,7 +249,6 @@
 - (void) forceKeyboardLoad {
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectZero];
     [_window addSubview:textField];
-    [textField release];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [textField becomeFirstResponder];
 }

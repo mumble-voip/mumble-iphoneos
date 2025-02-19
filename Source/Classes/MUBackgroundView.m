@@ -11,12 +11,12 @@
 
 + (UIView *) backgroundView {
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        UIView *view = [[[UIView alloc] init] autorelease];
+        UIView *view = [[UIView alloc] init];
         [view setBackgroundColor:[MUColor backgroundViewiOS7Color]];
         return view;
     }
     
-    return [[[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]] autorelease];
+    return [[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]];
 }
 
 @end
