@@ -64,9 +64,9 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) dealloc {
-    [super dealloc];
-
     [_transitioningDelegate release];
+
+    [super dealloc];
 }
 
 - (void) connetToHostname:(NSString *)hostName port:(NSUInteger)port withUsername:(NSString *)userName andPassword:(NSString *)password withParentViewController:(UIViewController *)parentViewController {

@@ -16,7 +16,7 @@ Visit our website at:
 Building it
 ===========
 
-To build this you need Xcode 4 and the latest iOS SDK from Apple.
+To build this you need Xcode 16 and the latest iOS SDK from Apple.
 
 The easiest way to get a working source tree is to check out
 the mumble-iphoneos repository recursively (his will recursively
@@ -29,8 +29,6 @@ To fetch the repository:
 Once this is done, you should be able to open up the Xcode
 project file for Mumble (Mumble.xcodeproj) in the root of
 the source tree and hit Cmd-B to build!
-
-**Note:** The project currently only works in the legacy build system, which is available in **XCode version 13**, but not in XCode version 14. We will need someone to fix that facing forward.
 
 Extra tips for advanced users
 =============================

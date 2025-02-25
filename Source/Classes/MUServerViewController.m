@@ -95,6 +95,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     UINavigationBar *navBar = self.navigationController.navigationBar;
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
         navBar.tintColor = [UIColor whiteColor];
