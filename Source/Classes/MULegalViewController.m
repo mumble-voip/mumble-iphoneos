@@ -39,7 +39,6 @@
     
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     self.navigationItem.rightBarButtonItem = done;
-    [done release];
 
     NSData *html = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Legal" ofType:@"html"]];
     [_webView loadData:html MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];

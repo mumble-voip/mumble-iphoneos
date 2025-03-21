@@ -7,7 +7,6 @@
 @interface MUFavouriteServerEditViewController : UITableViewController 
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ;
 - (id) init;
-- (void) dealloc;
 
 #pragma mark Accessors
 

@@ -62,13 +62,13 @@
     static NSString *CellIdentifier = @"RemoteControlPrefsCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Enable";
-            UISwitch *enableSwitch = [[[UISwitch alloc] initWithFrame:CGRectZero] autorelease];
+            UISwitch *enableSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             [enableSwitch addTarget:self action:@selector(enableSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             enableSwitch.on = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
             enableSwitch.onTintColor = [UIColor blackColor];

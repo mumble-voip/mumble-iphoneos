@@ -41,17 +41,11 @@
     return self;
 }
 
-- (void) dealloc {
-    [_msgCache release];
-    [_db release];
-    [super dealloc];
-}
-
 - (void) addMessage:(MKTextMessage *)msg withHeading:(NSString *)heading andSentBySelf:(BOOL)selfSent {
     NSError *err = nil;
     NSString *plainMsg = [msg plainTextString];
     plainMsg = [plainMsg stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSMutableArray *imageDataArray = [[[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]] autorelease];
+    NSMutableArray *imageDataArray = [[NSMutableArray alloc] initWithCapacity:[[msg embeddedImages] count]];
     for (NSString *dataUrl in [msg embeddedImages]) {
         NSData *imgData = [MUDataURL dataFromDataURL:dataUrl];
         if (imgData) {
@@ -89,7 +83,7 @@
             NSDictionary *dict = [NSPropertyListSerialization propertyListWithData:plistData options:0 format:nil error:nil];
             if (dict) {
                 NSArray *imgDataArray = [dict objectForKey:@"images"];
-                NSMutableArray *imagesArray = [[[NSMutableArray alloc] initWithCapacity:[imgDataArray count]] autorelease];
+                NSMutableArray *imagesArray = [[NSMutableArray alloc] initWithCapacity:[imgDataArray count]];
                 for (NSData *data in imgDataArray) {
                     [imagesArray addObject:[UIImage imageWithData:data]];
                 }

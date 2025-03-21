@@ -20,29 +20,21 @@
     return self;
 }
 
-- (void) dealloc {
-    [_mixerInfo release];
-    [super dealloc];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [[self navigationItem] setTitle:@"Mixer Debug"];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneDebugging:)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
-    [doneButton release];
     
-    _timer = [[NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(updateMixerInfo:) userInfo:nil repeats:YES] retain];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(updateMixerInfo:) userInfo:nil repeats:YES];
     [self updateMixerInfo:self];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [_timer invalidate];
-    [_timer release];
 }
 
 - (void) updateMixerInfo:(id)sender {
-    [_mixerInfo release];
     _mixerInfo = [[MKAudio sharedAudio] copyAudioOutputMixerDebugInfo];
     [[self tableView] reloadData];
 }
@@ -69,7 +61,7 @@
     static NSString *CellIdentifier = @"AudioMixerDebugCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     
     if (indexPath.section == 0) { // Meta
@@ -79,7 +71,6 @@
             NSDate *date = [_mixerInfo objectForKey:@"last-update"];
             cell.textLabel.text = @"Last Updated";
             cell.detailTextLabel.text = [fmt stringFromDate:date];
-            [fmt release];
         }
     }
     

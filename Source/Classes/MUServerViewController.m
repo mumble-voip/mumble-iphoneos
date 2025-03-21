@@ -22,7 +22,6 @@
 
 + (MUChannelNavigationItem *) navigationItemWithObject:(id)obj indentLevel:(NSInteger)indentLevel;
 - (id) initWithObject:(id)obj indentLevel:(NSInteger)indentLevel;
-- (void) dealloc;
 - (id) object;
 - (NSInteger) indentLevel;
 @end
@@ -30,7 +29,7 @@
 @implementation MUChannelNavigationItem
 
 + (MUChannelNavigationItem *) navigationItemWithObject:(id)obj indentLevel:(NSInteger)indentLevel {
-    return [[[MUChannelNavigationItem alloc] initWithObject:obj indentLevel:indentLevel] autorelease];
+    return [[MUChannelNavigationItem alloc] initWithObject:obj indentLevel:indentLevel];
 }
 
 - (id) initWithObject:(id)obj indentLevel:(NSInteger)indentLevel {
@@ -39,10 +38,6 @@
         _indentLevel = indentLevel;
     }
     return self;
-}
-
-- (void) dealloc {
-    [super dealloc];
 }
 
 - (id) object {
@@ -81,7 +76,7 @@
 
 - (id) initWithServerModel:(MKServerModel *)serverModel {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        _serverModel = [serverModel retain];
+        _serverModel = serverModel;
         [_serverModel addDelegate:self];
         _viewMode = MUServerViewControllerViewModeServer;
     }
@@ -90,8 +85,6 @@
 
 - (void) dealloc {
     [_serverModel removeDelegate:self];
-    [_serverModel release];
-    [super dealloc];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -193,13 +186,10 @@
 }
 
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel {
-    [_modelItems release];
     _modelItems = [[NSMutableArray alloc] init];
-    
-    [_userIndexMap release];
+
     _userIndexMap = [[NSMutableDictionary alloc] init];
 
-    [_channelIndexMap release];
     _channelIndexMap = [[NSMutableDictionary alloc] init];
 
     [self addChannelTreeToModel:channel indentLevel:0];
@@ -212,14 +202,11 @@
 
 - (void) switchToChannelMode {
     _viewMode = MUServerViewControllerViewModeChannel;
-    
-    [_modelItems release];
+
     _modelItems = [[NSMutableArray alloc] init];
-    
-    [_userIndexMap release];
+
     _userIndexMap = [[NSMutableDictionary alloc] init];
-    
-    [_channelIndexMap release];
+
     _channelIndexMap = [[NSMutableDictionary alloc] init];
     
     MKChannel *channel = [[_serverModel connectedUser] channel];
@@ -268,9 +255,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-            cell = [[[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+            cell = [[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
         } else {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
     }
 

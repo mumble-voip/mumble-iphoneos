@@ -73,7 +73,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if ((self = [super initWithFrame:CGRectZero])) {
         [self setOpaque:NO];
         if ([str length] >= 15) {
-            _str = [[NSString stringWithFormat:@"%@...", [str substringToIndex:11]] retain];
+            _str = [NSString stringWithFormat:@"%@...", [str substringToIndex:11]];
         } else {
             _str = [str copy];
         }
@@ -152,7 +152,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
 - (id) initWithServerModel:(MKServerModel *)model {
     if ((self = [super init])) {
-        _model = [model retain];
+        _model = model;
         [_model addDelegate:self];
         _msgdb = [[MUMessagesDatabase alloc] init];
     }
@@ -160,16 +160,10 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 }
 
 - (void) dealloc {
-    [_msgdb release];
     [_model removeDelegate:self];
-    [_model release];
-    [_textField release];
-    [_tableView release];
-    [super dealloc];
 }
 
 - (void) clearAllMessages {
-    [_msgdb release];
     _msgdb = [[MUMessagesDatabase alloc] init];
     [_tableView reloadData];
 }
@@ -192,12 +186,10 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:swipeGesture];
-    [swipeGesture release];
 
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:swipeGesture];
-    [swipeGesture release];
 
     CGRect textBarFrame = CGRectMake(0, frame.size.height, frame.size.width, 44);
     _textBarView = [[UIView alloc] initWithFrame:textBarFrame];
@@ -210,7 +202,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
     }
 
-    _textField = [[[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)] autorelease];
+    _textField = [[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)];
     _textField.leftViewMode = UITextFieldViewModeAlways;
     _textField.rightViewMode = UITextFieldViewModeAlways;
     _textField.borderStyle = UITextBorderStyleRoundedRect;
@@ -226,12 +218,12 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 }
 
 - (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
-    MUMessageReceiverButton *receiverView = [[[MUMessageReceiverButton alloc] initWithText:receiver] autorelease];
+    MUMessageReceiverButton *receiverView = [[MUMessageReceiverButton alloc] initWithText:receiver];
     [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
 
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
         CGRect paddedRect = CGRectMake(0, 0, CGRectGetWidth(receiverView.frame) + 12, CGRectGetHeight(receiverView.frame));
-        UIView *paddedView = [[[UIView alloc] initWithFrame:paddedRect] autorelease];
+        UIView *paddedView = [[UIView alloc] initWithFrame:paddedRect];
         [paddedView addSubview:receiverView];
         paddedRect.origin.x += 6;
         [receiverView setFrame:paddedRect];
@@ -240,7 +232,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         _textField.leftView = receiverView;
     }
 
-    UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
     if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
         CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 6, CGRectGetHeight(imgView.frame));
         UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
@@ -486,10 +478,8 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     MUMessageRecipientViewController *recipientViewController = [[MUMessageRecipientViewController alloc] initWithServerModel:_model];
     [recipientViewController setDelegate:self];
     UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:recipientViewController];
-    [recipientViewController release];
 
     [self presentModalViewController:navCtrl animated:YES];
-    [navCtrl release];
 }
 
 #pragma mark - MUMessageBubbleTableViewCellDelegate
@@ -515,11 +505,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         if ([[txtMsg embeddedLinks] count] > 0) {
             MUMessageAttachmentViewController *attachmentViewController = [[MUMessageAttachmentViewController alloc] initWithImages:[txtMsg embeddedImages] andLinks:[txtMsg embeddedLinks]];
             [self.navigationController pushViewController:attachmentViewController animated:YES];
-            [attachmentViewController release];
         } else {
             MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:[txtMsg embeddedImages]];
             [self.navigationController pushViewController:imgViewController animated:YES];
-            [imgViewController release];
         }
     }
 }
@@ -613,12 +601,11 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
    
     UIApplication *app = [UIApplication sharedApplication];
     if ([app applicationState] == UIApplicationStateBackground) {
-        UILocalNotification *notification = [[[UILocalNotification alloc] init] autorelease];
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
         
         NSMutableCharacterSet *trimSet = [[NSMutableCharacterSet alloc] init];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
-        [trimSet autorelease];
     
         NSString *msgText = [[msg plainTextString] stringByTrimmingCharactersInSet:trimSet];
         NSUInteger numImages = [[msg embeddedImages] count];

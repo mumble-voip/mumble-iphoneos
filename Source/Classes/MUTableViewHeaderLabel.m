@@ -28,7 +28,7 @@
 }
 
 + (MUTableViewHeaderLabel *) labelWithText:(NSString *)text {
-    MUTableViewHeaderLabel *label = [[[MUTableViewHeaderLabel alloc] init] autorelease];
+    MUTableViewHeaderLabel *label = [[MUTableViewHeaderLabel alloc] init];
     label.text = text;
     return label;
 }

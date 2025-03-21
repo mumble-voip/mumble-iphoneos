@@ -65,12 +65,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     return self;
 }
 
-- (void) dealloc {
-    [_diskCertificates release];
-    [_attemptIndexPath release];
-    [super dealloc];
-}
-
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {

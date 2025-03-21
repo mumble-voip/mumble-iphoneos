@@ -28,7 +28,6 @@
             self.backgroundView.layer.cornerRadius = 8.0f;
         }
         self.backgroundColor = [UIColor clearColor];
-        [audioBarView release];
     }
     return self;
 }

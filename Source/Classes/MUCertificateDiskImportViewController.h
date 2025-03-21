@@ -5,6 +5,5 @@
 @interface MUCertificateDiskImportViewController : UITableViewController <UIAlertViewDelegate, UITextFieldDelegate>
 
 - (id) init;
-- (void) dealloc;
 
 @end

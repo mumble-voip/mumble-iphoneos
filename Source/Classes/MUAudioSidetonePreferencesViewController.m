@@ -61,7 +61,7 @@
     static NSString *CellIdentifier = @"MUAudioSidetonePreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -78,7 +78,6 @@
             [sidetoneSwitch addTarget:self action:@selector(sidetoneStatusChanged:) forControlEvents:UIControlEventValueChanged];
             [sidetoneSwitch setOn:[defaults boolForKey:@"AudioSidetone"]];
             cell.accessoryView = sidetoneSwitch;
-            [sidetoneSwitch release];
         } else if ([indexPath row] == 1) {
             NSLog(@"reloadin' (enabled? %u)", [defaults boolForKey:@"AudioSidetone"]);
             cell.textLabel.text = NSLocalizedString(@"Playback Volume", nil);
@@ -90,7 +89,6 @@
             [sidetoneSlider setValue:[defaults floatForKey:@"AudioSidetoneVolume"]];
             [sidetoneSlider setMinimumTrackTintColor:[UIColor blackColor]];
             cell.accessoryView = sidetoneSlider;
-            [sidetoneSlider release];
         }
     }
     

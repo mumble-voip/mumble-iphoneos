@@ -59,14 +59,6 @@
     return self;
 }
 
-- (void) dealloc {
-    [_shownImages release];
-    [_message release];
-    [_heading release];
-    [_date release];
-    [super dealloc];
-}
-
 + (CGSize) textSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
     return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
@@ -90,13 +82,13 @@
 }
 
 + (NSString *) stringForDate:(NSDate *)date {
-    NSDateFormatter *fmt = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"HH:mm"];
     return [fmt stringFromDate:date];
 }
 
 + (CGSize) imageSizeForImages:(NSArray *)images resizedToFitWithinSize:(CGSize)sz andNewImageSizes:(NSArray **)array {
-    NSMutableArray *imageSizes = [[[NSMutableArray alloc] initWithCapacity:[images count]] autorelease];
+    NSMutableArray *imageSizes = [[NSMutableArray alloc] initWithCapacity:[images count]];
     CGFloat imagesHeight = 0;
     for (UIImage *image in images) {
         CGSize imgSize = [image size];
@@ -259,25 +251,21 @@
 }
 
 - (void) setHeading:(NSString *)heading {
-    [_heading release];
     _heading = [heading copy];
     [self setNeedsDisplay];
 }
 
 - (void) setFooter:(NSString *)footer {
-    [_footer release];
     _footer = [footer copy];
     [self setNeedsDisplay];
 }
 
 - (void) setMessage:(NSString *)msg {
-    [_message release];
     _message = [msg copy];
     [self setNeedsDisplay];
 }
 
 - (void) setDate:(NSDate *)date {
-    [_date release];
     _date = [date copy];
     [self setNeedsDisplay];
 }
@@ -293,7 +281,7 @@
 }
 
 - (void) setShownImages:(NSArray *)shownImages {
-    _shownImages = [shownImages retain];
+    _shownImages = shownImages;
     [self setNeedsDisplay];
 }
 
@@ -353,19 +341,11 @@
         
         _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
         [_bubbleView addGestureRecognizer:_longPressRecognizer];
-        [_longPressRecognizer release];
         
         _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAttachments:)];
         [_bubbleView addGestureRecognizer:_tapRecognizer];
-        [_tapRecognizer release];
     }
     return self;
-}
-
-- (void) dealloc {
-    [_bubbleView release];
-    [_longPressRecognizer release];
-    [super dealloc];
 }
 
 - (void) setDelegate:(id<MUMessageBubbleTableViewCellDelegate>)delegate {

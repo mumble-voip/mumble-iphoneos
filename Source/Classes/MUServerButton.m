@@ -28,31 +28,18 @@
     return self;
 }
 
-- (void) dealloc {
-    [_hostname release];
-    [_port release];
-    [_username release];
-    [_displayname release];
-    [_pinger release];
-    [super dealloc];
-}
-
 - (void) setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
     [self setNeedsDisplay];
 }
 
 - (void) populateFromDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSString *)port {
-    [_displayname release];
     _displayname = [displayName copy];
-    
-    [_port release];
+
     _port = [port copy];
-    
-    [_pinger release];
+
     _pinger = nil;
-    
-    [_hostname release];
+
     if ([hostName length] > 0) {
         _hostname = [hostName copy];
         _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
@@ -65,23 +52,18 @@
 }
 
 - (void) populateFromFavouriteServer:(MUFavouriteServer *)favServ {
-    [_displayname release];
     _displayname = [[favServ displayName] copy];
-    
-    [_hostname release];
+
     _hostname = [[favServ hostName] copy];
-    
-    [_port release];
-    _port = [[NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]] retain];
-    
-    [_username release];
+
+    _port = [NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]];
+
     if ([[favServ userName] length] > 0) {
         _username = [[favServ userName] copy];
     } else {
         _username = [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"] copy];
     }
-    
-    [_pinger release];
+
     _pinger = nil;
     if ([_hostname length] > 0) {
         _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];

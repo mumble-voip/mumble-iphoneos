@@ -18,15 +18,10 @@
 
 - (id) initWithImages:(NSArray *)images {
     if ((self = [super init])) {
-        _images = [images retain];
+        _images = images;
         _curPage = 0;
     }
     return self;
-}
-
-- (void) dealloc {
-    [_images release];
-    [super dealloc];
 }
 
 - (void) viewDidLoad {
@@ -61,20 +56,12 @@
         [imgZoomer setShowsHorizontalScrollIndicator:NO];
         [_scrollView addSubview:imgZoomer];
         [imageViews addObject:imgView];
-        [imgView release];
-        [imgZoomer release];
         ++i;
     }
 
     _imageViews = imageViews;
     
     [self.view addSubview:_scrollView];
-}
-
-- (void) viewDidUnload {
-    [super viewDidUnload];
-    [_scrollView release];
-    [_imageViews release];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -96,7 +83,6 @@
     
     UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
     self.navigationItem.rightBarButtonItem = actionButton;
-    [actionButton release];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -141,7 +127,6 @@
                                                    cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                                   otherButtonTitles:nil];
         [alertView show];
-        [alertView release];
     }
 }
 
@@ -153,7 +138,6 @@
                                                     otherButtonTitles:NSLocalizedString(@"Export to Photos", nil), nil];
     [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     [actionSheet showFromBarButtonItem:sender animated:YES];
-    [actionSheet release];
 }
 
 @end

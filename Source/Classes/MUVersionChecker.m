@@ -28,13 +28,6 @@
     return self;
 }
 
-- (void) dealloc {
-    [_conn cancel];
-    [_conn release];
-    [_buf release];
-    [super dealloc];
-}
-
 - (void) connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
     [_buf appendData:data];
 }
@@ -72,7 +65,6 @@
                                           cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
                                           otherButtonTitles:NSLocalizedString(@"Upgrade", nil), nil];
     [alert show];
-    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

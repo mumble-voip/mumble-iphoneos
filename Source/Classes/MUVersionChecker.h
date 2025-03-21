@@ -6,5 +6,4 @@
 
 @interface MUVersionChecker : NSObject
 - (id) init;
-- (void) dealloc;
 @end

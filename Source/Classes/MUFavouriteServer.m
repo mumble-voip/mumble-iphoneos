@@ -43,14 +43,6 @@
     return [self initWithDisplayName:nil hostName:nil port:0 userName:nil password:nil];
 }
 
-- (void) dealloc {
-    [_displayName release];
-    [_hostName release];
-    [_userName release];
-    [_password release];
-    [super dealloc];
-}
-
 - (id) copyWithZone:(NSZone *)zone {
     MUFavouriteServer *favServ = [[MUFavouriteServer alloc] initWithDisplayName:_displayName hostName:_hostName port:_port userName:_userName password:_password];
     if ([self hasPrimaryKey])
