@@ -13,7 +13,7 @@
 
 #import <MumbleKit/MKCertificate.h>
 
-@interface MUCertificatePreferencesViewController () <UIActionSheetDelegate> {
+@interface MUCertificatePreferencesViewController () {
     NSMutableArray   *_certificateItems;
     BOOL             _picker;
     NSUInteger       _selectedIndex;
@@ -182,38 +182,43 @@
 - (void) addButtonClicked:(UIBarButtonItem *)addButton {
     NSString *showAllCerts = NSLocalizedString(@"Show All Certificates", nil);
     NSString *showIdentities = NSLocalizedString(@"Show Identities Only", nil);
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:NSLocalizedString(@"Generate New Certificate", nil),
-                                                                _showAll ? showIdentities : showAllCerts,
-                                                                NSLocalizedString(@"Import From iTunes", nil),
-                            nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [sheet showInView:self.view];
-}
-
-#pragma mark -
-#pragma mark UIActionSheet delegate
-
-- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)idx {
-    if (idx == 0) { // Generate New Certificate
+    
+    UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:nil
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Generate New Certificate", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         UINavigationController *navCtrl = [[UINavigationController alloc] init];
         navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
         MUCertificateCreationView *certGen = [[MUCertificateCreationView alloc] init];
         [navCtrl pushViewController:certGen animated:NO];
         [[self navigationController] presentViewController:navCtrl animated:YES completion:nil];
-    } else if (idx == 1) { // Show All Certificates; Show Identities Only
-        _showAll = !_showAll;
-        [[NSUserDefaults standardUserDefaults] setBool:_showAll forKey:@"CertificatesShowIntermediates"];
+    }]];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:_showAll ? showIdentities : showAllCerts
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        self->_showAll = !self->_showAll;
+        [[NSUserDefaults standardUserDefaults] setBool:self->_showAll forKey:@"CertificatesShowIntermediates"];
         [self fetchCertificates];
         [self.tableView reloadData];
-    } else if (idx == 2) { // Import From iTunes
+    }]];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Import From iTunes", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         MUCertificateDiskImportViewController *diskImportViewController = [[MUCertificateDiskImportViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
         [[self navigationController] presentViewController:navController animated:YES completion:nil];
-    }
+    }]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
 #pragma mark -
