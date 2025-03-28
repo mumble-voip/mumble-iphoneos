@@ -151,22 +151,6 @@
     }
 }
 
-#pragma mark -
-#pragma mark About Dialog
-
-- (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumbleapp.com/"]];
-    } else if (buttonIndex == 2) {
-        MULegalViewController *legalView = [[MULegalViewController alloc] init];
-        UINavigationController *navController = [[UINavigationController alloc] init];
-        [navController pushViewController:legalView animated:NO];
-        [[self navigationController] presentViewController:navController animated:YES completion:nil];
-    } else if (buttonIndex == 3) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
-    }
-}
-
 #pragma mark - Actions
 
 - (void) aboutButtonClicked:(id)sender {
@@ -180,12 +164,31 @@
 #endif
     NSString *aboutMessage = NSLocalizedString(@"Low latency, high quality voice chat", nil);
     
-    UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Website", nil),
-                              NSLocalizedString(@"Legal", nil),
-                              NSLocalizedString(@"Support", nil), nil];
-    [aboutView show];
+    UIAlertController* aboutAlert = [UIAlertController alertControllerWithTitle:aboutTitle message:aboutMessage preferredStyle:UIAlertControllerStyleAlert];
+    
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                    style:UIAlertActionStyleCancel
+                                                  handler:nil]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Website", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumbleapp.com/"]];
+    }]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Legal", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        MULegalViewController *legalView = [[MULegalViewController alloc] init];
+        UINavigationController *navController = [[UINavigationController alloc] init];
+        [navController pushViewController:legalView animated:NO];
+        [[self navigationController] presentViewController:navController animated:YES completion:nil];
+    }]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Support", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
+    }]];
+    
+    [self presentViewController:aboutAlert animated:YES completion:nil];
 }
 
 - (void) prefsButtonClicked:(id)sender {
