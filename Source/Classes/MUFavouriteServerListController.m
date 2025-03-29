@@ -212,7 +212,7 @@
     [modalNav pushViewController:editView animated:NO];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
+    [[self navigationController] presentViewController:modalNav animated:YES completion:nil];
 }
 
 - (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ {
@@ -228,7 +228,7 @@
     [modalNav pushViewController:editView animated:NO];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
+    [[self navigationController]presentViewController:modalNav animated:YES completion:nil];
 }
 
 #pragma mark -

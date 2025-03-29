@@ -51,7 +51,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
         
         NSString *name = NSLocalizedString(@"Name", nil);
         NSString *defaultName = NSLocalizedString(@"Mumble User", nil);
@@ -69,7 +69,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_nameField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_nameField setReturnKeyType:UIReturnKeyNext];
         [_nameField setAdjustsFontSizeToFitWidth:NO];
-        [_nameField setTextAlignment:UITextAlignmentLeft];
+        [_nameField setTextAlignment:NSTextAlignmentLeft];
         [_nameField setPlaceholder:defaultName];
         [_nameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_nameField setText:_fullName];
@@ -89,7 +89,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_emailField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_emailField setReturnKeyType:UIReturnKeyDefault];
         [_emailField setAdjustsFontSizeToFitWidth:NO];
-        [_emailField setTextAlignment:UITextAlignmentLeft];
+        [_emailField setTextAlignment:NSTextAlignmentLeft];
         [_emailField setPlaceholder:optional];
         [_emailField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_emailField setKeyboardType:UIKeyboardTypeEmailAddress];
@@ -252,7 +252,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Target/actions
 
 - (void) cancelClicked:(id)sender {
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) createClicked:(id)sender {
@@ -324,7 +324,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[self navigationController] dismissModalViewControllerAnimated:YES];
+            [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
         });
     });    
 }

@@ -30,7 +30,7 @@
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
         _showAll = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CertificatesShowIntermediates"] boolValue];
     }
     return self;
@@ -203,7 +203,7 @@
         navCtrl.modalPresentationStyle = UIModalPresentationCurrentContext;
         MUCertificateCreationView *certGen = [[MUCertificateCreationView alloc] init];
         [navCtrl pushViewController:certGen animated:NO];
-        [[self navigationController] presentModalViewController:navCtrl animated:YES];
+        [[self navigationController] presentViewController:navCtrl animated:YES completion:nil];
     } else if (idx == 1) { // Show All Certificates; Show Identities Only
         _showAll = !_showAll;
         [[NSUserDefaults standardUserDefaults] setBool:_showAll forKey:@"CertificatesShowIntermediates"];
@@ -212,7 +212,7 @@
     } else if (idx == 2) { // Import From iTunes
         MUCertificateDiskImportViewController *diskImportViewController = [[MUCertificateDiskImportViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:diskImportViewController];
-        [[self navigationController] presentModalViewController:navController animated:YES];
+        [[self navigationController] presentViewController:navController animated:YES completion:nil];
     }
 }
 

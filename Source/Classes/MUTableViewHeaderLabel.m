@@ -18,7 +18,7 @@
             self.shadowOffset = CGSizeMake(1.5f, 1.5f);
         }
         self.backgroundColor = [UIColor clearColor];
-        self.textAlignment = UITextAlignmentCenter;
+        self.textAlignment = NSTextAlignmentCenter;
     }
     return self;
 }

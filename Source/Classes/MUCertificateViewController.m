@@ -38,7 +38,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
 - (id) initWithPersistentRef:(NSData *)persistentRef {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        self.preferredContentSize = CGSizeMake(320, 480);
         
         // Try to build a chain, if possible.
         NSArray *chains = [MUCertificateChainBuilder buildChainFromPersistentRef:persistentRef];
@@ -63,7 +63,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _certificates = [[NSArray alloc] initWithObjects:cert, nil];
         _curIdx = 0;
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }
@@ -72,7 +72,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
         _certificates = [[NSArray alloc] initWithArray:cert];
         _curIdx = 0;
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }
@@ -99,7 +99,6 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
                     [UIImage imageNamed:@"up.png"],
                     [UIImage imageNamed:@"down.png"],
                 nil]];
-        _arrows.segmentedControlStyle = UISegmentedControlStyleBar;
         _arrows.momentary = YES;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
@@ -122,7 +121,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     }
     
     UIBarButtonItem *actions = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
-    [actions setStyle:UIBarButtonItemStyleBordered];
+    [actions setStyle:UIBarButtonItemStylePlain];
     [actions autorelease];
 
     // If there's more than one certificate in the chain, show the arrows
@@ -292,7 +291,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else if (section == CertificateViewSectionSHA256Fingerprint) {
@@ -303,7 +302,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
             cell.textLabel.textColor = [MUColor selectedTextColor];
             cell.textLabel.font = [UIFont fontWithName:@"Courier" size:16];
             cell.textLabel.numberOfLines = 0;
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
         }
     } else {
@@ -316,7 +315,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         cell.textLabel.textColor = [UIColor blackColor];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.textLabel.numberOfLines = 1;
-        cell.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
+        cell.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         cell.detailTextLabel.text = [item objectAtIndex:1];
         cell.detailTextLabel.textColor = [MUColor selectedTextColor];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;

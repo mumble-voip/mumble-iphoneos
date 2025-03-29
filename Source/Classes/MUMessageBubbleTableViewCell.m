@@ -61,24 +61,46 @@
 
 + (CGSize) textSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                               attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:14.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) headingSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                               attributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) timestampSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeHeadTruncation];
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingHead;
+
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{ NSFontAttributeName : [UIFont italicSystemFontOfSize:11.0f], NSParagraphStyleAttributeName : paragraphStyle }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) footerSizeForText:(NSString *)text {
     if (text == nil)
         return CGSizeZero;
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{ NSFontAttributeName : [UIFont italicSystemFontOfSize:11.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (NSString *) stringForDate:(NSDate *)date {
@@ -227,10 +249,10 @@
                                    footerSize.width,
                                    footerSize.height);
     [[UIColor blackColor] set];
-    [footer drawInRect:footerRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeWordWrap];
-    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
-    [dateStr drawInRect:timestampRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
-    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
+    [footer drawInRect:footerRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:NSLineBreakByWordWrapping];
+    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:NSLineBreakByWordWrapping];
+    [dateStr drawInRect:timestampRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:NSLineBreakByTruncatingHead];
+    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:NSLineBreakByWordWrapping];
 }
 
 - (CGRect) selectionRect {    

@@ -4,7 +4,7 @@
 
 #import "MUOperatingSystem.h"
 
-MUOperatingSystemVersion MUGetOperatingSystemVersion() {
+MUOperatingSystemVersion MUGetOperatingSystemVersion(void) {
     NSString *iOSVersion = [[UIDevice currentDevice] systemVersion];
     if (iOSVersion) {
         NSArray *iOSVersionComponents = [iOSVersion componentsSeparatedByString:@"."];

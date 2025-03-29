@@ -10,4 +10,4 @@ typedef NS_ENUM(NSInteger, MUOperatingSystemVersion) {
     MUMBLE_OS_IOS_7,
 };
 
-MUOperatingSystemVersion MUGetOperatingSystemVersion();
+MUOperatingSystemVersion MUGetOperatingSystemVersion(void);

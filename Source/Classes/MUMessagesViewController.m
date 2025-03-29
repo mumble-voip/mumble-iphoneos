@@ -77,7 +77,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         } else {
             _str = [str copy];
         }
-        CGSize size = [_str sizeWithFont:[UIFont boldSystemFontOfSize:14.0f]];
+        CGSize size = [_str sizeWithAttributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f] }];
         if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
             size.width += 6*2;
         }
@@ -479,7 +479,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [recipientViewController setDelegate:self];
     UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:recipientViewController];
 
-    [self presentModalViewController:navCtrl animated:YES];
+    [self presentViewController:navCtrl animated:YES completion:nil];
 }
 
 #pragma mark - MUMessageBubbleTableViewCellDelegate

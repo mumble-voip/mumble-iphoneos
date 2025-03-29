@@ -32,7 +32,7 @@
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }

@@ -176,7 +176,7 @@
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
 
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
+    [[self navigationController] presentViewController:modalNav animated:YES completion:nil];
 }
 
 - (void) doneButtonClicked:(id)sender {

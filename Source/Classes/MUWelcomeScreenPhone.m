@@ -61,13 +61,13 @@
     
 #if MUMBLE_LAUNCH_IMAGE_CREATION != 1
     UIBarButtonItem *about = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil)
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(aboutClicked:)];
     [self.navigationItem setRightBarButtonItem:about];
     
     UIBarButtonItem *prefs = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil)
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(prefsClicked:)];
     [self.navigationItem setLeftBarButtonItem:prefs];
@@ -192,7 +192,7 @@
         MULegalViewController *legalView = [[MULegalViewController alloc] init];
         UINavigationController *navController = [[UINavigationController alloc] init];
         [navController pushViewController:legalView animated:NO];
-        [[self navigationController] presentModalViewController:navController animated:YES];
+        [[self navigationController] presentViewController:navController animated:YES completion:nil];
     } else if (buttonIndex == 3) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
     }

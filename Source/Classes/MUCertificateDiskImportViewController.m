@@ -33,7 +33,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 @implementation MUCertificateDiskImportViewController
 
 - (id) init {
-    self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+    self.preferredContentSize = CGSizeMake(320, 480);
     
     UITableViewStyle style = UITableViewStyleGrouped;
     NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -147,7 +147,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                            @"Help text for iTunes File Transfer (iTunes Import)");
         MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:help];
         lbl.font = [UIFont systemFontOfSize:16.0f];
-        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.lineBreakMode = NSLineBreakByWordWrapping;
         lbl.numberOfLines = 0;
         return lbl;
     }
@@ -334,7 +334,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark - Actions
 
 - (void) doneClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) showRemoveAlert {

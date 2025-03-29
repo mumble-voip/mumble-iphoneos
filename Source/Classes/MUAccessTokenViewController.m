@@ -5,7 +5,7 @@
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
 #import "MUOperatingSystem.h"
-#import "MUBAckgroundView.h"
+#import "MUBackgroundView.h"
 
 @interface MUAccessTokenViewController () {
     MKServerModel    *_model;
@@ -182,7 +182,7 @@
 }
 
 - (void) doneButtonClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
