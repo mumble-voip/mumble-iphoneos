@@ -363,15 +363,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     _hostname = nil;
     _password = nil;
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] != UIUserInterfaceIdiomPad) {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-            [_serverRoot setTransitioningDelegate:_transitioningDelegate];
-        } else {
-            [_serverRoot setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-        }
-    }
-
-    [_parentViewController presentViewController:_serverRoot animated:YES completion:nil];
+    [[_parentViewController navigationController] presentViewController:_serverRoot animated:YES completion:nil];
     _parentViewController = nil;
 }
 
