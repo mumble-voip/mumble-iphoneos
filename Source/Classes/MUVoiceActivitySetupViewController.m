@@ -199,12 +199,15 @@
                                           @"3. When not speaking, the bar should stay inside the red area.",
                                                 @"Help text for Voice Activity");
         
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:msg
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-        [alertView show];
+        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:msg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler: nil]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
     }
 }
 
