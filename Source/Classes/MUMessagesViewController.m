@@ -123,7 +123,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     rect.size.width -= radius;
     
     [[UIColor whiteColor] set];
-    [_str drawInRect:rect withFont:[UIFont boldSystemFontOfSize:14.0f]];
+    [_str drawInRect:rect withAttributes:@{
+        NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f]
+    }];
 }
 
 - (void) setHighlighted:(BOOL)highlighted {
