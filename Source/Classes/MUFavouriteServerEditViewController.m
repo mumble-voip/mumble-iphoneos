@@ -384,7 +384,7 @@
         _activeTextField = nil;
         _activeCell = nil;
     }
-    if (_activeCell) {
+    if (self->_activeCell) {
         [self.tableView scrollToRowAtIndexPath:[self.tableView indexPathForCell:_activeCell]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
@@ -402,7 +402,7 @@
         if (!finished)
             return;
 
-        [self.tableView scrollToRowAtIndexPath:[self.tableView indexPathForCell:_activeCell]
+        [self.tableView scrollToRowAtIndexPath:[self.tableView indexPathForCell:self->_activeCell]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         
     }];

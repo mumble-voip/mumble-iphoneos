@@ -220,7 +220,7 @@
         if (!finished)
             return;
         
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_editingRow inSection:0]
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_editingRow inSection:0]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
 }
