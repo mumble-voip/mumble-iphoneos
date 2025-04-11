@@ -18,10 +18,7 @@
 + (NSString *) filePath;
 @end
 
-@interface MUPublicServerListFetcher () {
-    NSURLConnection *_conn;
-    NSMutableData   *_buf;
-}
+@interface MUPublicServerListFetcher () {}
 @end
 
 @implementation MUPublicServerListFetcher
@@ -35,21 +32,14 @@
 
 - (void) attemptUpdate {
     NSURLRequest *req = [NSURLRequest requestWithURL:[MKServices regionalServerListURL]];
-    _conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
-    _buf = [[NSMutableData alloc] init];
+    [[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error || data == nil) {
+            return;
+        }
+        
+        [data writeToFile:[MUPublicServerList filePath] atomically:YES];
+    }];
 }
-
-- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [_buf appendData:data];
-}
-
-- (void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)connection {
-    [_buf writeToFile:[MUPublicServerList filePath] atomically:YES];
-}
-
 
 @end
 
