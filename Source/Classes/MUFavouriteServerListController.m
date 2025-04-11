@@ -115,7 +115,6 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
-    UIView *cellView = [[self tableView] cellForRowAtIndexPath:indexPath];
     
     NSString *sheetTitle = pad ? nil : [favServ displayName];
     
