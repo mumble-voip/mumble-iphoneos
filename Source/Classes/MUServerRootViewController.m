@@ -21,7 +21,7 @@
 
 #import "MKNumberBadgeView.h"
 
-@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
+@interface MUServerRootViewController () <MKConnectionDelegate, MKServerModelDelegate> {
     MKConnection                *_connection;
     MKServerModel               *_model;
     
@@ -36,16 +36,6 @@
     MUMessagesViewController    *_messagesView;
     
     NSInteger                   _unreadMessages;
-    
-    NSInteger                   _disconnectIndex;
-    NSInteger                   _mixerDebugIndex;
-    NSInteger                   _accessTokensIndex;
-    NSInteger                   _certificatesIndex;
-    NSInteger                   _selfRegisterIndex;
-    NSInteger                   _clearMessagesIndex;
-    NSInteger                   _selfMuteIndex;
-    NSInteger                   _selfDeafenIndex;
-    NSInteger                   _selfUnmuteAndUndeafenIndex;
 }
 @end
 
@@ -186,12 +176,14 @@
 
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     if (err) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection closed", nil)
-                                                            message:[err localizedDescription]
-                                                           delegate:nil
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-        [alertView show];
+        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Connection closed", nil)
+                                                                           message:[err localizedDescription]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
 
         [[MUConnectionController sharedController] disconnectFromServer];
     }
@@ -206,12 +198,15 @@
         NSString *alertMsg = [NSString stringWithFormat:
                                 NSLocalizedString(@"Kicked by %@ for reason: \"%@\"", @"Kicked by user for reason"),
                                     [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:alertMsg
-                                                           delegate:nil
-                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-        [alertView show];
+        
+        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:alertMsg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
         
         [[MUConnectionController sharedController] disconnectFromServer];
     }
@@ -224,12 +219,15 @@
         NSString *alertMsg = [NSString stringWithFormat:
                                 NSLocalizedString(@"Banned by %@ for reason: \"%@\"", nil),
                                     [actor userName], reasonMsg];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:alertMsg
-                                                           delegate:nil
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-        [alertView show];
+        
+        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:alertMsg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
         
         [[MUConnectionController sharedController] disconnectFromServer];
     }
@@ -298,60 +296,125 @@
 
 - (void) actionButtonClicked:(id)sender {
     MKUser *connUser = [_model connectedUser];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
-    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
     BOOL inMessagesView = [[self viewControllers] objectAtIndex:0] == _messagesView;
     
-    _disconnectIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Disconnect", nil)];
-    [actionSheet setDestructiveButtonIndex:0];
+    UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:nil
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Disconnect", nil)
+                                                   style:UIAlertActionStyleDestructive
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [[MUConnectionController sharedController] disconnectFromServer];
+    }]];
     
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioMixerDebug"] boolValue]) {
-        _mixerDebugIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Mixer Debug", nil)];
-    } else {
-        _mixerDebugIndex = -1;
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Mixer Debug", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
+            [self presentViewController:navCtrl animated:YES completion:nil];
+        }]];
     }
     
-    _accessTokensIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Access Tokens", nil)];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Access Tokens", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:self->_model];
+        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];
+        [self presentViewController:navCtrl animated:YES completion:nil];
+    }]];
     
-    if (!inMessagesView)
-        _certificatesIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Certificates", nil)];
-    else
-        _certificatesIndex = -1;
-
+    if (!inMessagesView) {
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Certificates", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[self->_model serverCertificates]];
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certView];
+            UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                        target:self
+                                                                                        action:@selector(childDoneButton:)];
+            certView.navigationItem.leftBarButtonItem = doneButton;
+            [self presentViewController:navCtrl animated:YES completion:nil];
+        }]];
+    }
+    
     if (![connUser isAuthenticated]) {
-        _selfRegisterIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Register", nil)];
-    } else {
-        _selfRegisterIndex = -1;
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Self-Register", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            NSString *title = NSLocalizedString(@"User Registration", nil);
+            NSString *msg = [NSString stringWithFormat:
+                             NSLocalizedString(@"You are about to register yourself on this server. "
+                                               @"This cannot be undone, and your username cannot be changed once this is done. "
+                                               @"You will forever be known as '%@' on this server.\n\n"
+                                               @"Are you sure you want to register yourself?",
+                                               @"Self-registration with given username"),
+                             [connUser userName]];
+            UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                               message:msg
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil]];
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                [self->_model registerConnectedUser];
+            }]];
+            
+            [self presentViewController:alertCtrl animated:YES completion:nil];
+        }]];
     }
     
-    if (inMessagesView)
-        _clearMessagesIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Clear Messages", nil)];
-    else
-        _clearMessagesIndex = -1;
+    if (inMessagesView) {
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Clear Messages", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+    }
     
-    _selfMuteIndex = -1;
-    _selfDeafenIndex = -1;
-    _selfUnmuteAndUndeafenIndex = -1;
-
     if ([connUser isSelfMuted] && [connUser isSelfDeafened]) {
-        _selfUnmuteAndUndeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Unmute and undeafen", nil)];
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Unmute and undeafen", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            [self->_model setSelfMuted:NO andSelfDeafened:NO];
+        }]];
     } else {
-        if (![connUser isSelfMuted])
-            _selfMuteIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Mute", nil)];
-        else
-            _selfMuteIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Unmute Self", nil)];
-
-        if (![connUser isSelfDeafened])
-            _selfDeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Self-Deafen", nil)];
-        else
-            _selfDeafenIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Undeafen Self", nil)];
+        void (^muteHandler)(UIAlertAction * _Nonnull action) = ^(UIAlertAction * _Nonnull action) {
+            [self->_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
+        };
+        void (^deafenHandler)(UIAlertAction * _Nonnull action) = ^(UIAlertAction * _Nonnull action) {
+            [self->_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
+        };
+        if (![connUser isSelfMuted]) {
+            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Self-Mute", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:muteHandler]];
+        } else {
+            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Unmute Self", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:muteHandler]];
+        }
+        
+        if (![connUser isSelfDeafened]) {
+            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Self-Deafen", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:deafenHandler]];
+        } else {
+            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Undeafen Self", nil)
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:deafenHandler]];
+        }
     }
     
-    NSInteger cancelIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-    [actionSheet setCancelButtonIndex:cancelIndex];
-
-    [actionSheet setDelegate:self];
-    [actionSheet showFromBarButtonItem:_menuButton animated:YES];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
 - (void) childDoneButton:(id)sender {
@@ -360,64 +423,6 @@
 
 - (void) modeSwitchButtonReleased:(id)sender {
     [_serverView toggleMode];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) { // Self-Register
-        [_model registerConnectedUser];
-    }
-}
-
-#pragma mark - UIActionSheetDelegate
-
-- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    MKUser *connUser = [_model connectedUser];
-    
-    if (buttonIndex == [actionSheet cancelButtonIndex])
-        return;
-
-    if (buttonIndex == _disconnectIndex) { // Disconnect
-        [[MUConnectionController sharedController] disconnectFromServer];
-    } else if (buttonIndex == _mixerDebugIndex) {
-        MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
-        [self presentViewController:navCtrl animated:YES completion:nil];
-    } else if (buttonIndex == _accessTokensIndex) {
-        MUAccessTokenViewController *tokenViewController = [[MUAccessTokenViewController alloc] initWithServerModel:_model];
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:tokenViewController];
-        [self presentViewController:navCtrl animated:YES completion:nil];
-    } else if (buttonIndex == _certificatesIndex) { // Certificates
-        MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithCertificates:[_model serverCertificates]];
-        UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:certView];
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(childDoneButton:)];
-        certView.navigationItem.leftBarButtonItem = doneButton;
-        [self presentViewController:navCtrl animated:YES completion:nil];
-    } else if (buttonIndex == _selfRegisterIndex) { // Self-Register
-        NSString *title = NSLocalizedString(@"User Registration", nil);
-        NSString *msg = [NSString stringWithFormat:
-                            NSLocalizedString(@"You are about to register yourself on this server. "
-                                              @"This cannot be undone, and your username cannot be changed once this is done. "
-                                              @"You will forever be known as '%@' on this server.\n\n"
-                                              @"Are you sure you want to register yourself?", 
-                                              @"Self-registration with given username"),
-                            [connUser userName]];
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:msg
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"No", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
-        [alertView show];
-    } else if (buttonIndex == _clearMessagesIndex) { // Clear Messages
-        [_messagesView clearAllMessages];
-    } else if (buttonIndex == _selfMuteIndex) { // Self-Mute, Unmute Self
-        [_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
-    } else if (buttonIndex == _selfDeafenIndex) { // Self-Deafen, Undeafen Self
-        [_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
-    } else if (buttonIndex == _selfUnmuteAndUndeafenIndex) { // Unmute and undeafen
-        [_model setSelfMuted:NO andSelfDeafened:NO];
-    }
 }
 
 @end

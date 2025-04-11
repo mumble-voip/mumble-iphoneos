@@ -14,7 +14,7 @@
 #import "MUColor.h"
 #import "MUOperatingSystem.h"
 
-@interface MUCountryServerListController () <UIAlertViewDelegate, UISearchBarDelegate, UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface MUCountryServerListController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
     UITableView    *_tableView;
     NSArray        *_visibleServers;
     NSArray        *_countryServers;
@@ -126,40 +126,57 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
 
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[serverItem objectForKey:@"name"]
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:NSLocalizedString(@"Add as favourite", nil),
-                                                                NSLocalizedString(@"Connect", nil), nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [sheet showInView:[self tableView]];
-}
+    UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:[serverItem objectForKey:@"name"]
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
 
-- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler: ^(UIAlertAction * _Nonnull action) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }]];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Add as favourite", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler: ^(UIAlertAction * _Nonnull action) {
+        [self presentAddAsFavouriteDialogForServer:serverItem];
+    }]];
 
-    // Connect
-    if (index == 1) {
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler: ^(UIAlertAction * _Nonnull action) {
         NSString *title = NSLocalizedString(@"Username", nil);
         NSString *msg = NSLocalizedString(@"Please enter the username you wish to use on this server", nil);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:msg
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Connect", nil), nil];
-        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-        [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[serverItem objectForKey:@"ip"] port:[[serverItem objectForKey:@"port"] intValue]]];
-        [alert show];
 
-    // Add as favourite
-    } else if (index == 0) {
-        [self presentAddAsFavouriteDialogForServer:serverItem];
-    // Cancel
-    } else if (index == 2) {
+        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:msg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertCtrl addTextFieldWithConfigurationHandler:^(UITextField* textField) {
+            [textField setText:[MUDatabase usernameForServerWithHostname:[serverItem objectForKey:@"ip"]
+                                                                    port:[[serverItem objectForKey:@"port"] intValue]]];
+        }];
+        
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler: nil]];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler: ^(UIAlertAction * _Nonnull action) {
+            MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+            [connCtrlr connetToHostname:[serverItem objectForKey:@"ip"]
+                                   port:[[serverItem objectForKey:@"port"] intValue]
+                           withUsername:[[[alertCtrl textFields] firstObject] text]
+                            andPassword:nil
+               withParentViewController:self];
+        }]];
+
+        [self presentViewController:alertCtrl animated:YES completion:nil];
+    }]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:^() {
         [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }
+    }];
 }
 
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem {
@@ -188,22 +205,6 @@
     UINavigationController *navCtrl = [self navigationController];
     [navCtrl popToRootViewControllerAnimated:NO];
     [navCtrl pushViewController:favController animated:YES];
-}
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
-    
-    if (buttonIndex == 1) {
-        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
-        [connCtrlr connetToHostname:[serverItem objectForKey:@"ip"]
-                               port:[[serverItem objectForKey:@"port"] intValue]
-                       withUsername:[[alertView textFieldAtIndex:0] text]
-                        andPassword:nil
-           withParentViewController:self];
-    }
-
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark -
