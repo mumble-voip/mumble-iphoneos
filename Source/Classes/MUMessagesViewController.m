@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+#import <UserNotifications/UserNotifications.h>
+
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKTextMessage.h>
 
@@ -603,8 +605,6 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
    
     UIApplication *app = [UIApplication sharedApplication];
     if ([app applicationState] == UIApplicationStateBackground) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        
         NSMutableCharacterSet *trimSet = [[NSMutableCharacterSet alloc] init];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
@@ -623,14 +623,16 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
             msgText = [msg plainTextString];
         }
         
-        if (user == nil) {
-            notification.alertBody = msgText;
-        } else {
-           notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], msgText]; 
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        content.body = msgText;
+        if (user) {
+            content.title = [user userName];
         }
-
-        [notification.userInfo setValue:indexPath forKey:@"indexPath"];
-        [app presentLocalNotificationNow:notification];
+        
+        UNNotificationRequest *notificationReq = [UNNotificationRequest requestWithIdentifier:@"info.mumble.Mumble.TextMessageNotification"
+                                                                                     content:content
+                                                                                     trigger:nil];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:notificationReq withCompletionHandler:nil];
         [app setApplicationIconBadgeNumber:[app applicationIconBadgeNumber]+1];
     }
 }
