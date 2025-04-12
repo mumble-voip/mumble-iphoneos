@@ -249,10 +249,34 @@
                                    footerSize.width,
                                    footerSize.height);
     [[UIColor blackColor] set];
-    [footer drawInRect:footerRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:NSLineBreakByWordWrapping];
-    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:NSLineBreakByWordWrapping];
-    [dateStr drawInRect:timestampRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:NSLineBreakByTruncatingHead];
-    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:NSLineBreakByWordWrapping];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [footer drawInRect:footerRect withAttributes:@{
+        NSFontAttributeName: [UIFont italicSystemFontOfSize:11.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [heading drawInRect:headerRect withAttributes:@{
+        NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingHead;
+    [dateStr drawInRect:timestampRect withAttributes:@{
+        NSFontAttributeName: [UIFont italicSystemFontOfSize:11.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [text drawInRect:textRect withAttributes:@{
+        NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
 }
 
 - (CGRect) selectionRect {    

@@ -50,10 +50,6 @@
     }
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -129,7 +125,7 @@
         MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:_images];
         [self.navigationController pushViewController:imgViewController animated:YES];
     } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_links objectAtIndex:[indexPath row]]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_links objectAtIndex:[indexPath row]]] options:@{} completionHandler:nil];
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

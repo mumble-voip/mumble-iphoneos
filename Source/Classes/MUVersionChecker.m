@@ -4,13 +4,8 @@
 
 #import "MUVersionChecker.h"
 
-@interface MUVersionChecker () {
-    NSURLConnection *_conn;
-    NSMutableData   *_buf;
-}
-- (void) connection:(NSURLConnection *)conn didReceiveData:(NSData *)data;
-- (void) connection:(NSURLConnection *)conn didFailWithError:(NSError *)error;
-- (void) connectionDidFinishLoading:(NSURLConnection *)conn;
+@interface MUVersionChecker () {}
+- (void) connectionDidFinishLoading:(NSData *)data;
 - (void) newBuildAvailable;
 @end
 
@@ -21,24 +16,22 @@
     if (!self)
         return nil;
 
-    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://mumble-ios.appspot.com/latest.plist"]];
-    _conn = [[NSURLConnection alloc] initWithRequest:req delegate:self];
-    _buf = [[NSMutableData alloc] init];
+    NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://mumble-ios.appspot.com/latest.plist"]];
+    [[NSURLSession sharedSession] dataTaskWithRequest:req completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error || data == nil) {
+            NSLog(@"MUversionChecker: failed to fetch latest version info.");
+            return;
+        }
+
+        [self connectionDidFinishLoading:data];
+    }];
 
     return self;
 }
 
-- (void) connection:(NSURLConnection *)conn didReceiveData:(NSData *)data {
-    [_buf appendData:data];
-}
-
-- (void) connection:(NSURLConnection *)conn didFailWithError:(NSError *)error {
-    NSLog(@"MUversionChecker: failed to fetch latest version info.");
-}
-
-- (void) connectionDidFinishLoading:(NSURLConnection *)conn {
+- (void) connectionDidFinishLoading:(NSData *)data {
     NSPropertyListFormat fmt = NSPropertyListXMLFormat_v1_0;
-    NSDictionary *dict = [NSPropertyListSerialization propertyListWithData:_buf options:0 format:&fmt error:nil];
+    NSDictionary *dict = [NSPropertyListSerialization propertyListWithData:data options:0 format:&fmt error:nil];
     if (dict) {
         NSBundle *mainBundle = [NSBundle mainBundle];
         NSString *ourRev = [mainBundle objectForInfoDictionaryKey:@"MumbleGitRevision"];
@@ -69,7 +62,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) { // Upgrade
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://mumble-ios.appspot.com/wdist/manifest"]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://mumble-ios.appspot.com/wdist/manifest"] options:@{} completionHandler:nil];
     }
 }
 

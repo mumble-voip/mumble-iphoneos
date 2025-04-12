@@ -83,10 +83,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark -
 #pragma mark Table view methods
 
@@ -216,16 +212,16 @@
 
 - (void) performSearchForTerm:(NSString *)searchTerm {        
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[_countryServers count]];
-        for (NSDictionary *serverItem in _countryServers) {
+        NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[self->_countryServers count]];
+        for (NSDictionary *serverItem in self->_countryServers) {
             if ([(NSString *)[serverItem objectForKey:@"name"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound ||
                     [(NSString *)[serverItem objectForKey:@"ip"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound) {
                 [results addObject:serverItem];
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            _visibleServers = results;
-            [self.tableView reloadData]; 
+            self->_visibleServers = results;
+            [self.tableView reloadData];
         });
     });
 }

@@ -31,7 +31,7 @@
         return nil;
 
     NSString *base64data = [mimeStr substringFromIndex:r.location+r.length];
-    base64data = [base64data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    base64data = [base64data stringByRemovingPercentEncoding];
     base64data = [base64data stringByReplacingOccurrencesOfString:@" " withString:@""];
     return [base64decoder decode:base64data];
 }

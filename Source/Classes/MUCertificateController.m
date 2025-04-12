@@ -95,11 +95,11 @@
 // Returns an array of the persistent refs of all SecIdentityRefs
 // stored in the application's keychain.
 + (NSArray *) persistentRefsForIdentities {
-    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                           kSecClassIdentity,    kSecClass,
-                           kCFBooleanTrue,       kSecReturnPersistentRef,
-                           kSecMatchLimitAll,    kSecMatchLimit,
-                           nil];
+    NSDictionary *query = @{
+        (id)kSecClass: (id)kSecClassIdentity,
+        (id)kSecReturnPersistentRef: (id)kCFBooleanTrue,
+        (id)kSecMatchLimit: (id)kSecMatchLimitAll
+    };
     NSArray *array = nil;
     OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *)&array);
     if (err != noErr) {

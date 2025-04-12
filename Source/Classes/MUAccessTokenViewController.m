@@ -77,10 +77,6 @@
     [MUDatabase storeAccessTokens:_tokens forServerWithHostname:[_model hostname] port:[_model port]];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -220,7 +216,7 @@
         if (!finished)
             return;
         
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_editingRow inSection:0]
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_editingRow inSection:0]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
 }

@@ -58,11 +58,11 @@
     [super viewDidAppear:YES];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if ([_serverList isParsed]) {
+        if ([self->_serverList isParsed]) {
             self.navigationItem.rightBarButtonItem = nil;
             return;
         }
-        [_serverList parse];
+        [self->_serverList parse];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.navigationItem.rightBarButtonItem = nil;
             [self.tableView reloadData];
