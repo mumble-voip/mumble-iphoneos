@@ -73,10 +73,6 @@
 #endif
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    return toInterfaceOrientation == UIInterfaceOrientationPortrait;
-}
-
 #pragma mark -
 #pragma mark TableView
 

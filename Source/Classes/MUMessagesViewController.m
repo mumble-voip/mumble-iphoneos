@@ -279,10 +279,6 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     if ([[UIMenuController sharedMenuController] isMenuVisible]) {
         [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];

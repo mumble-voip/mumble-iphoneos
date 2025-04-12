@@ -39,10 +39,6 @@
     [_webView loadData:html MIMEType:@"text/html" characterEncodingName:@"utf-8" baseURL:[NSURL URLWithString:@"http://localhost"]];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (void) doneButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
