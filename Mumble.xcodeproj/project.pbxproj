@@ -91,7 +91,6 @@
 		287A686714C6FB9F008B1BE7 /* GrayCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */; };
 		287A686814C6FB9F008B1BE7 /* GrayCheckmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */; };
 		287A686F14C76E56008B1BE7 /* MUMessageAttachmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */; };
-		287A687414C777CC008B1BE7 /* GTMStringEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 287A687314C777CC008B1BE7 /* GTMStringEncoding.m */; };
 		287BA29011B96C960010E031 /* MUDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA28F11B96C960010E031 /* MUDatabase.m */; };
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
@@ -344,9 +343,6 @@
 		287A686614C6FB9F008B1BE7 /* GrayCheckmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GrayCheckmark@2x.png"; path = "Resources/Apple/GrayCheckmark@2x.png"; sourceTree = "<group>"; };
 		287A686D14C76E55008B1BE7 /* MUMessageAttachmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageAttachmentViewController.h; sourceTree = "<group>"; };
 		287A686E14C76E56008B1BE7 /* MUMessageAttachmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageAttachmentViewController.m; sourceTree = "<group>"; };
-		287A687114C777CC008B1BE7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
-		287A687214C777CC008B1BE7 /* GTMStringEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMStringEncoding.h; sourceTree = "<group>"; };
-		287A687314C777CC008B1BE7 /* GTMStringEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMStringEncoding.m; sourceTree = "<group>"; };
 		287BA28E11B96C960010E031 /* MUDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUDatabase.h; sourceTree = "<group>"; };
 		287BA28F11B96C960010E031 /* MUDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUDatabase.m; sourceTree = "<group>"; };
 		287BA33911B97C470010E031 /* MUFavouriteServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServer.h; sourceTree = "<group>"; };
@@ -707,7 +703,6 @@
 			isa = PBXGroup;
 			children = (
 				28FAA36114D7550E00F6D711 /* MKNumberBadgeView */,
-				287A687014C777CC008B1BE7 /* gtm */,
 				28F9173911B9460D0030D649 /* fmdb */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
@@ -767,17 +762,6 @@
 				28BE999E18CFF03D00910551 /* RightBalloonSelectedMono@2x.png */,
 			);
 			name = Apple;
-			sourceTree = "<group>";
-		};
-		287A687014C777CC008B1BE7 /* gtm */ = {
-			isa = PBXGroup;
-			children = (
-				287A687114C777CC008B1BE7 /* GTMDefines.h */,
-				287A687214C777CC008B1BE7 /* GTMStringEncoding.h */,
-				287A687314C777CC008B1BE7 /* GTMStringEncoding.m */,
-			);
-			name = gtm;
-			path = Dependencies/gtm;
 			sourceTree = "<group>";
 		};
 		28BF8E1C11D93A1900B72770 /* Database */ = {
@@ -1239,7 +1223,6 @@
 				2879528114C2504C00567430 /* MUMessageBubbleTableViewCell.m in Sources */,
 				287952B014C4D67500567430 /* MUMessageRecipientViewController.m in Sources */,
 				287A686F14C76E56008B1BE7 /* MUMessageAttachmentViewController.m in Sources */,
-				287A687414C777CC008B1BE7 /* GTMStringEncoding.m in Sources */,
 				2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */,
 				2802AC0314CB0131000983A5 /* MUImage.m in Sources */,
 				2802AC0614CB024A000983A5 /* MUImageViewController.m in Sources */,

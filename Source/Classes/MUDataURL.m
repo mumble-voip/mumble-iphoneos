@@ -3,15 +3,12 @@
 // license that can be found in the LICENSE file.
 
 #import "MUDataURL.h"
-#import "GTMStringEncoding.h"
 
 @implementation MUDataURL
 
 // todo(mkrautz): Redo this with our own internal scanning and base64 decoding
 // to get rid of the string copying.
 + (NSData *) dataFromDataURL:(NSString *)dataURL {
-    GTMStringEncoding *base64decoder = [GTMStringEncoding rfc4648Base64StringEncoding];
-
     // Read: data:<mimetype>;<encoding>,<data>
     // Expect encoding = base64
 
@@ -33,7 +30,7 @@
     NSString *base64data = [mimeStr substringFromIndex:r.location+r.length];
     base64data = [base64data stringByRemovingPercentEncoding];
     base64data = [base64data stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return [base64decoder decode:base64data];
+    return [[NSData alloc] initWithBase64EncodedString:base64data options:0];
 }
 
 + (UIImage *) imageFromDataURL:(NSString *)dataURL {
