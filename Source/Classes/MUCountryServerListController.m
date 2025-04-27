@@ -12,7 +12,6 @@
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 
 @interface MUCountryServerListController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
     UITableView    *_tableView;
@@ -58,14 +57,14 @@
     self.navigationItem.hidesBackButton = NO;
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _tableView.separatorInset = UIEdgeInsetsZero;
     }

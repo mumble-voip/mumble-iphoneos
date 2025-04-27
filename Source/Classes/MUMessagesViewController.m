@@ -18,7 +18,6 @@
 #import "MUDataURL.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *prefix) {
@@ -54,7 +53,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if (rect.origin.x < minx) {
         NSInteger delta = minx - rect.origin.x;
         rect.origin.x += delta;
-        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {} else {
             rect.size.width -= delta;
         }
     }
@@ -80,7 +79,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
             _str = [str copy];
         }
         CGSize size = [_str sizeWithAttributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f] }];
-        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {} else {
             size.width += 6*2;
         }
         [self setFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -200,7 +199,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
     _textBarView.backgroundColor = [UIColor yellowColor];
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPatterniOS7"]];
     } else {
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
@@ -225,7 +224,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     MUMessageReceiverButton *receiverView = [[MUMessageReceiverButton alloc] initWithText:receiver];
     [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         CGRect paddedRect = CGRectMake(0, 0, CGRectGetWidth(receiverView.frame) + 12, CGRectGetHeight(receiverView.frame));
         UIView *paddedView = [[UIView alloc] initWithFrame:paddedRect];
         [paddedView addSubview:receiverView];
@@ -237,7 +236,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     }
 
     UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 6, CGRectGetHeight(imgView.frame));
         UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
         [paddedView addSubview:imgView];
@@ -252,7 +251,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [super viewWillAppear:animated];
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
@@ -321,7 +320,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [cell setRightSide:[txtMsg isSentBySelf]];
     [cell setSelected:NO];
     [cell setDelegate:self];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         [cell setBackgroundColor:[UIColor clearColor]];
     }
     return cell;
@@ -358,7 +357,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         return;
     
     // Make the keyboard background completely black on iOS 7.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100000), dispatch_get_main_queue(), ^{
             for (UIWindow *win in [[UIApplication sharedApplication] windows]) {
                 if ([[win description] hasPrefix:@"<UITextEffectsWindow"]) {

@@ -8,7 +8,6 @@
 #import "MUCertificateChainBuilder.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -104,7 +103,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     }
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
@@ -113,7 +112,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {

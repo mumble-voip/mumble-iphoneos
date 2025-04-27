@@ -12,7 +12,6 @@
 #import "MUNotificationController.h"
 #import "MURemoteControlServer.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 #import <MumbleKit/MKAudio.h>
@@ -93,12 +92,12 @@
 #endif
     
     // Try to use a dark keyboard throughout the app's text fields.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     }
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
     // XXX: don't do it system-wide just yet
     //    _window.tintColor = [UIColor whiteColor];
     }

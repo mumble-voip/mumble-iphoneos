@@ -5,7 +5,6 @@
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUTextMessage.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 
 #define kBalloonWidth                190.0f
 #define kBalloonTopMargin            8.0f
@@ -151,7 +150,7 @@
     UIImage *balloon = nil;
     UIImage *stretchableBalloon = nil;
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         if (_rightSide) {
             if (_selected) {
                 balloon = [UIImage imageNamed:@"RightBalloonSelectedMono"];

@@ -8,7 +8,6 @@
 #import "MUCertificateController.h"
 #import "MUCertificateChainBuilder.h"
 #import "MUDatabase.h"
-#import "MUOperatingSystem.h"
 #import "MUHorizontalFlipTransitionDelegate.h"
 
 #import <MumbleKit/MKConnection.h>
@@ -57,7 +56,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 
 - (id) init {
     if ((self = [super init])) {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {
             _transitioningDelegate = [[MUHorizontalFlipTransitionDelegate alloc] init];
         }
     }

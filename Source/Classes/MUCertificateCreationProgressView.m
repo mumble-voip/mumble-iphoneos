@@ -5,7 +5,6 @@
 #import "MUCertificateCreationProgressView.h"
 #import "MUImage.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUCertificateCreationProgressView () {
@@ -37,14 +36,14 @@
 
 - (void) viewDidLoad {
     // fixme(mkrautz): This is esentially what a MUBackgroundView does.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _backgroundImage.backgroundColor = [MUColor backgroundViewiOS7Color];
     } else {
         _backgroundImage.image = [MUImage imageNamed:@"BackgroundTextureBlackGradient"];
     }
     
     // Unset text shadows for iOS 7.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _nameLabel.shadowOffset = CGSizeZero;
         _emailLabel.shadowOffset = CGSizeZero;
         _pleaseWaitLabel.shadowOffset = CGSizeZero;

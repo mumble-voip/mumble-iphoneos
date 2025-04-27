@@ -8,7 +8,6 @@
 #import "MUCertificateViewController.h"
 #import "MUCertificateController.h"
 #import "MUCertificateDiskImportViewController.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -45,14 +44,14 @@
     self.navigationItem.title = NSLocalizedString(@"Certificates", nil);
 
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
         
@@ -122,7 +121,7 @@
         [cell setIsCurrentCertificate:NO];
     }
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         [cell setAccessoryType:UITableViewCellAccessoryDetailButton];
     } else {
         [cell setAccessoryType:UITableViewCellAccessoryDetailDisclosureButton];

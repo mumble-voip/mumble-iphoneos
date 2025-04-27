@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #import "MUTableViewHeaderLabel.h"
-#import "MUOperatingSystem.h"
 
 @implementation MUTableViewHeaderLabel
 
@@ -11,7 +10,7 @@
     if ((self = [super init])) {
         self.font = [UIFont boldSystemFontOfSize:18.0f];
         self.textColor = [UIColor whiteColor];
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {
             // Don't use shadows on iOS 7 or greater.
         } else {
             self.shadowColor = [UIColor darkGrayColor];

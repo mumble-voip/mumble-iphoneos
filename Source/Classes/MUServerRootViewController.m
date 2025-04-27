@@ -12,7 +12,6 @@
 #import "MUMessagesViewController.h"
 #import "MUDatabase.h"
 #import "MUAudioMixerDebugViewController.h"
-#import "MUOperatingSystem.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -108,7 +107,7 @@
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
     
     UINavigationBar *navBar = self.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];

@@ -6,7 +6,6 @@
 #import "MUUserStateAcessoryView.h"
 #import "MUNotificationController.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 #import "MUServerTableViewCell.h"
 
@@ -91,14 +90,14 @@
     [super viewWillAppear:animated];
 
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
@@ -254,7 +253,7 @@
     static NSString *CellIdentifier = @"ChannelNavigationCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {
             cell = [[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
         } else {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];

@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #import "MUImageViewController.h"
-#import "MUOperatingSystem.h"
 #import "MUColor.h"
 
 @interface MUImageViewController () <UIScrollViewDelegate> {
@@ -70,14 +69,14 @@
     self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%lu of %lu", nil), (unsigned long)1, (unsigned long)[_images count]];
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _scrollView.backgroundColor = [MUColor backgroundViewiOS7Color];
     }
     

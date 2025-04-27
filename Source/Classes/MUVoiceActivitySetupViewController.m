@@ -7,7 +7,6 @@
 #import "MUAudioBarViewCell.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @implementation MUVoiceActivitySetupViewController
@@ -27,7 +26,7 @@
     self.navigationItem.title = NSLocalizedString(@"Voice Activity", nil);
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
@@ -36,7 +35,7 @@
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
