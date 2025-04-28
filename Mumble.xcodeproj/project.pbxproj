@@ -95,7 +95,6 @@
 		287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33A11B97C470010E031 /* MUFavouriteServer.m */; };
 		287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */; };
 		287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */; };
-		2882857D18CE39B40034F319 /* MUOperatingSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2882857C18CE39B40034F319 /* MUOperatingSystem.m */; };
 		2882858118CE40C80034F319 /* MUBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2882858018CE40C80034F319 /* MUBackgroundView.m */; };
 		28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28851B92147DC97D00088C4F /* MULegalViewController.m */; };
 		28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28851B93147DC97D00088C4F /* MULegalViewController.xib */; };
@@ -351,8 +350,6 @@
 		287BA33F11B97EEE0010E031 /* MUFavouriteServerListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerListController.m; sourceTree = "<group>"; };
 		287BA3A411B996D90010E031 /* MUFavouriteServerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUFavouriteServerEditViewController.h; sourceTree = "<group>"; };
 		287BA3A511B996D90010E031 /* MUFavouriteServerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUFavouriteServerEditViewController.m; sourceTree = "<group>"; };
-		2882857B18CE39B40034F319 /* MUOperatingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUOperatingSystem.h; sourceTree = "<group>"; };
-		2882857C18CE39B40034F319 /* MUOperatingSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUOperatingSystem.m; sourceTree = "<group>"; };
 		2882857F18CE40C80034F319 /* MUBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUBackgroundView.h; sourceTree = "<group>"; };
 		2882858018CE40C80034F319 /* MUBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUBackgroundView.m; sourceTree = "<group>"; };
 		28851B91147DC97D00088C4F /* MULegalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULegalViewController.h; sourceTree = "<group>"; };
@@ -528,8 +525,6 @@
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				286A3CAE158CEB5A00C817D1 /* MainWindow~iPad.xib */,
 				28B034951F5354C3008E51C7 /* LaunchScreen.storyboard */,
-				2882857B18CE39B40034F319 /* MUOperatingSystem.h */,
-				2882857C18CE39B40034F319 /* MUOperatingSystem.m */,
 				2861C25D116BE905002B8514 /* MUApplicationDelegate.h */,
 				2861C25E116BE905002B8514 /* MUApplicationDelegate.m */,
 				2861C25F116BE905002B8514 /* MUCountryServerListController.h */,
@@ -1231,7 +1226,6 @@
 				28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */,
 				28EF155D14D8738C008A35A4 /* MUMessagesDatabase.m in Sources */,
 				28BE998518CFB96A00910551 /* MUHorizontalFlipTransitionDelegate.m in Sources */,
-				2882857D18CE39B40034F319 /* MUOperatingSystem.m in Sources */,
 				2836767D1525053A0015958E /* MUCertificateChainBuilder.m in Sources */,
 				286A3CA0158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m in Sources */,
 				286A3CA4158CCF9F00C817D1 /* MUWelcomeScreenPad.m in Sources */,

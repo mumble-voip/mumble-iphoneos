@@ -4,7 +4,6 @@
 
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUAccessTokenViewController () {
@@ -37,14 +36,14 @@
     [[self navigationItem] setTitle:NSLocalizedString(@"Access Tokens", nil)];
 
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
@@ -140,7 +139,7 @@
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
     UITextField *editingField;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         editingField = [[UITextField alloc] initWithFrame:CGRectMake(14.0, 0.0, _editingCell.frame.size.width-14.0, _editingCell.frame.size.height)];
         [editingField setFont:[UIFont boldSystemFontOfSize:18.0f]];
     } else {

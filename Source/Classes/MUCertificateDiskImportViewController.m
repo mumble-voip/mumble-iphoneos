@@ -7,7 +7,6 @@
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
@@ -71,7 +70,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [super viewWillAppear:animated];
 
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
@@ -81,7 +80,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     if (self.tableView.style == UITableViewStyleGrouped) {
         self.tableView.backgroundView = [MUBackgroundView backgroundView];
     } else {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {
             self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
             self.tableView.separatorInset = UIEdgeInsetsZero;
         }

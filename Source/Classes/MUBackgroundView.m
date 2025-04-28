@@ -3,14 +3,13 @@
 // license that can be found in the LICENSE file.
 
 #import "MUBackgroundView.h"
-#import "MUOperatingSystem.h"
 #import "MUColor.h"
 #import "MUImage.h"
 
 @implementation MUBackgroundView
 
 + (UIView *) backgroundView {
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         UIView *view = [[UIView alloc] init];
         [view setBackgroundColor:[MUColor backgroundViewiOS7Color]];
         return view;

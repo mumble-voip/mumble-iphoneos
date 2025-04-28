@@ -8,7 +8,6 @@
 #import "MUAudioBarViewCell.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUAudioTransmissionPreferencesViewController () {
@@ -36,7 +35,7 @@
     self.title = NSLocalizedString(@"Transmission", nil);
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
@@ -45,7 +44,7 @@
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         // fixme(mkrautz): usually we want a single line separator on iOS 7, but
         // in this case, we embed an image in a table view cell, and want the separators
         // to not appear when the image is shown. This was the easiest way to achieve that.

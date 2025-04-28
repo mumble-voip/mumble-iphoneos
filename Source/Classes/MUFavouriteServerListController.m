@@ -10,7 +10,6 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUFavouriteServerListController () {
@@ -54,14 +53,14 @@
     [[self navigationItem] setTitle:NSLocalizedString(@"Favourite Servers", nil)];
     
     UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         navBar.tintColor = [UIColor whiteColor];
         navBar.translucent = NO;
         navBar.backgroundColor = [UIColor blackColor];
     }
     navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
