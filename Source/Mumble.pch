@@ -16,7 +16,6 @@
 # import <Foundation/Foundation.h>
 # import <UIKit/UIKit.h>
 # import <UIKit/UIPopoverBackgroundView.h>
-# import <QuartzCore/QuartzCore.h>
 # import <MobileCoreServices/MobileCoreServices.h>
 # import <CFNetwork/CFNetwork.h>
 #endif
