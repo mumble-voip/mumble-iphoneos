@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#import <CoreServices/CoreServices.h>
-#import <UserNotifications/UserNotifications.h>
+@import CoreServices;
+@import UserNotifications;
 
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKTextMessage.h>
