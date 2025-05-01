@@ -492,7 +492,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         self->_username = nil;
         self->_hostname = nil;
         self->_password = nil;
-
+        
+        self->_serverRoot.modalPresentationStyle = UIModalPresentationFullScreen;
         [[self->_parentViewController navigationController] presentViewController:self->_serverRoot animated:YES completion:nil];
         self->_parentViewController = nil;
     }];
