@@ -8,7 +8,7 @@
 
 #import <MumbleKit/MKTextMessage.h>
 
-#import <FMDatabase.h>
+#import <FMDB/FMDatabase.h>
 
 @interface MUMessagesDatabase () {
     NSCache    *_msgCache;

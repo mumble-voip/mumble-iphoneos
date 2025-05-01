@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0EEEF3B42DF1E5450042C0A8 /* libFMDB-IOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEEF35C2DF1DC6D0042C0A8 /* libFMDB-IOS.a */; };
 		0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
@@ -166,16 +167,12 @@
 		28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F08364147F369200DC126F /* MUAudioBarViewCell.m */; };
 		28F79C69147966840003B8BA /* WelcomeScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C68147966840003B8BA /* WelcomeScreenIcon.png */; };
 		28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */; };
-		28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */; };
 		28F79C70147973D60003B8BA /* MUUserStateAcessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */; };
 		28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C72147991480003B8BA /* MUAccessTokenViewController.m */; };
 		28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79CA01479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png */; };
 		28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79CA21479C23F0003B8BA /* BackgroundTextureBlackGradient.png */; };
 		28F79CA61479D7E80003B8BA /* MUTableViewHeaderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */; };
 		28F79CA9147AB62B0003B8BA /* MUNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79CA8147AB6280003B8BA /* MUNotificationController.m */; };
-		28F9174811B946250030D649 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174211B946250030D649 /* FMDatabase.m */; };
-		28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174411B946250030D649 /* FMDatabaseAdditions.m */; };
-		28F9174B11B946250030D649 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9174711B946250030D649 /* FMResultSet.m */; };
 		28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */; };
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
@@ -183,6 +180,69 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0EA3B0E92DC3B60100A69F03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
+			remoteInfo = fmdb;
+		};
+		0EA3B0EB2DC3B60100A69F03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE4290EF12B42F870088BD94;
+			remoteInfo = FMDB;
+		};
+		0EA3B0ED2DC3B60100A69F03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BF5D041618416BB2008C5AA9;
+			remoteInfo = Tests;
+		};
+		0EEEF35B2DF1DC6D0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6290CBB5188FE836009790F8;
+			remoteInfo = "FMDB-IOS";
+		};
+		0EEEF35D2DF1DC6D0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83C73EFE1C326AB000FFC730;
+			remoteInfo = "FMDB iOS";
+		};
+		0EEEF35F2DF1DC6D0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 83C73F0B1C326ADA00FFC730;
+			remoteInfo = "FMDB MacOS";
+		};
+		0EEEF3612DF1DC6D0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2CD2426D1FCC09CA00479FDE;
+			remoteInfo = "FMDB watchOS";
+		};
+		0EEEF3632DF1DC6D0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A08C6BB92AF0F5B1004F3F28;
+			remoteInfo = "FMDB xrOS";
+		};
+		0EEEF37A2DF1E05C0042C0A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6290CBB4188FE836009790F8;
+			remoteInfo = "FMDB-IOS";
+		};
 		28990A8D132FD9CC0034B406 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
@@ -207,6 +267,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = Dependencies/fmdb/fmdb.xcodeproj; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -436,7 +497,6 @@
 		28F08364147F369200DC126F /* MUAudioBarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioBarViewCell.m; sourceTree = "<group>"; };
 		28F79C68147966840003B8BA /* WelcomeScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WelcomeScreenIcon.png; path = Resources/WelcomeScreenIcon.png; sourceTree = "<group>"; };
 		28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon@2x.png"; path = "Resources/WelcomeScreenIcon@2x.png"; sourceTree = "<group>"; };
-		28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		28F79C6E147973D40003B8BA /* MUUserStateAcessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUUserStateAcessoryView.h; sourceTree = "<group>"; };
 		28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUUserStateAcessoryView.m; sourceTree = "<group>"; };
 		28F79C71147991480003B8BA /* MUAccessTokenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAccessTokenViewController.h; sourceTree = "<group>"; };
@@ -447,12 +507,6 @@
 		28F79CA51479D7E60003B8BA /* MUTableViewHeaderLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUTableViewHeaderLabel.m; sourceTree = "<group>"; };
 		28F79CA7147AB6260003B8BA /* MUNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUNotificationController.h; sourceTree = "<group>"; };
 		28F79CA8147AB6280003B8BA /* MUNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUNotificationController.m; sourceTree = "<group>"; };
-		28F9174111B946250030D649 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Dependencies/fmdb/src/fmdb/FMDatabase.h; sourceTree = "<group>"; };
-		28F9174211B946250030D649 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Dependencies/fmdb/src/fmdb/FMDatabase.m; sourceTree = "<group>"; };
-		28F9174311B946250030D649 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = Dependencies/fmdb/src/fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
-		28F9174411B946250030D649 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = Dependencies/fmdb/src/fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
-		28F9174611B946250030D649 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = Dependencies/fmdb/src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
-		28F9174711B946250030D649 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMResultSet.m; path = Dependencies/fmdb/src/fmdb/FMResultSet.m; sourceTree = "<group>"; };
 		28F9E1BD15EBDF2400D52001 /* MURemoteControlServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MURemoteControlServer.h; sourceTree = "<group>"; };
 		28F9E1BE15EBDF2400D52001 /* MURemoteControlServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MURemoteControlServer.m; sourceTree = "<group>"; };
 		28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SmallMumbleIcon.png; path = Resources/SmallMumbleIcon.png; sourceTree = "<group>"; };
@@ -470,8 +524,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */,
-				28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
+				0EEEF3B42DF1E5450042C0A8 /* libFMDB-IOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,6 +636,21 @@
 			path = Source/Classes;
 			sourceTree = "<group>";
 		};
+		0EA3B0DF2DC3B60000A69F03 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0EA3B0EA2DC3B60100A69F03 /* fmdb */,
+				0EA3B0EC2DC3B60100A69F03 /* libFMDB.a */,
+				0EA3B0EE2DC3B60100A69F03 /* Tests.xctest */,
+				0EEEF35C2DF1DC6D0042C0A8 /* libFMDB-IOS.a */,
+				0EEEF35E2DF1DC6D0042C0A8 /* FMDB.framework */,
+				0EEEF3602DF1DC6D0042C0A8 /* FMDB.framework */,
+				0EEEF3622DF1DC6D0042C0A8 /* FMDB.framework */,
+				0EEEF3642DF1DC6D0042C0A8 /* FMDB xrOS.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -669,7 +738,7 @@
 			isa = PBXGroup;
 			children = (
 				28FAA36114D7550E00F6D711 /* MKNumberBadgeView */,
-				28F9173911B9460D0030D649 /* fmdb */,
+				0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */,
 				2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */,
 			);
 			name = Dependencies;
@@ -839,19 +908,6 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		28F9173911B9460D0030D649 /* fmdb */ = {
-			isa = PBXGroup;
-			children = (
-				28F9174111B946250030D649 /* FMDatabase.h */,
-				28F9174211B946250030D649 /* FMDatabase.m */,
-				28F9174311B946250030D649 /* FMDatabaseAdditions.h */,
-				28F9174411B946250030D649 /* FMDatabaseAdditions.m */,
-				28F9174611B946250030D649 /* FMResultSet.h */,
-				28F9174711B946250030D649 /* FMResultSet.m */,
-			);
-			name = fmdb;
-			sourceTree = "<group>";
-		};
 		28FAA36114D7550E00F6D711 /* MKNumberBadgeView */ = {
 			isa = PBXGroup;
 			children = (
@@ -890,7 +946,6 @@
 			isa = PBXGroup;
 			children = (
 				28990AB0132FDA540034B406 /* libMumbleKit.a */,
-				28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */,
 				2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -912,6 +967,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0EEEF37B2DF1E05C0042C0A8 /* PBXTargetDependency */,
 				28990AAF132FDA4B0034B406 /* PBXTargetDependency */,
 			);
 			name = Mumble;
@@ -963,6 +1019,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 0EA3B0DF2DC3B60000A69F03 /* Products */;
+					ProjectRef = 0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */;
+				},
+				{
 					ProductGroup = 2861C28F116BE91B002B8514 /* Products */;
 					ProjectRef = 2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */;
 				},
@@ -976,6 +1036,62 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0EA3B0EA2DC3B60100A69F03 /* fmdb */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = fmdb;
+			remoteRef = 0EA3B0E92DC3B60100A69F03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EA3B0EC2DC3B60100A69F03 /* libFMDB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFMDB.a;
+			remoteRef = 0EA3B0EB2DC3B60100A69F03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EA3B0EE2DC3B60100A69F03 /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = 0EA3B0ED2DC3B60100A69F03 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EEEF35C2DF1DC6D0042C0A8 /* libFMDB-IOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libFMDB-IOS.a";
+			remoteRef = 0EEEF35B2DF1DC6D0042C0A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EEEF35E2DF1DC6D0042C0A8 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = 0EEEF35D2DF1DC6D0042C0A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EEEF3602DF1DC6D0042C0A8 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = 0EEEF35F2DF1DC6D0042C0A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EEEF3622DF1DC6D0042C0A8 /* FMDB.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FMDB.framework;
+			remoteRef = 0EEEF3612DF1DC6D0042C0A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0EEEF3642DF1DC6D0042C0A8 /* FMDB xrOS.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "FMDB xrOS.framework";
+			remoteRef = 0EEEF3632DF1DC6D0042C0A8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		28990A8E132FD9CC0034B406 /* libMumbleKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1139,9 +1255,6 @@
 				2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */,
 				2861C281116BE905002B8514 /* MUWelcomeScreenPhone.m in Sources */,
-				28F9174811B946250030D649 /* FMDatabase.m in Sources */,
-				28F9174911B946250030D649 /* FMDatabaseAdditions.m in Sources */,
-				28F9174B11B946250030D649 /* FMResultSet.m in Sources */,
 				287BA29011B96C960010E031 /* MUDatabase.m in Sources */,
 				287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */,
 				287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */,
@@ -1211,6 +1324,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0EEEF37B2DF1E05C0042C0A8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "FMDB-IOS";
+			targetProxy = 0EEEF37A2DF1E05C0042C0A8 /* PBXContainerItemProxy */;
+		};
 		28990AAF132FDA4B0034B406 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "MumbleKit (iOS)";
