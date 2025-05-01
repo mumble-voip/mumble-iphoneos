@@ -132,7 +132,7 @@ static FMDatabase *db = nil;
         // We're already inside a transaction if we were called from within
         // storeFavourites. If that isn't the case, make sure we start a new
         // transaction.
-        BOOL newTransaction = ![db inTransaction];
+        BOOL newTransaction = ![db isInTransaction];
         if (newTransaction)
             [db beginTransaction];
         [db executeUpdate:@"INSERT INTO `favourites` (`name`, `hostname`, `port`, `username`, `password`) VALUES (?, ?, ?, ?, ?)",
