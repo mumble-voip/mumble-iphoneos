@@ -176,49 +176,6 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
-    _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-
-    [_tableView setBackgroundView:[MUBackgroundView backgroundView]];
-    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
-    [_tableView setDelegate:self];
-    [_tableView setDataSource:self];
-    [self.view addSubview:_tableView];
-
-    UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
-    [swipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
-    [self.view addGestureRecognizer:swipeGesture];
-
-    swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showKeyboard:)];
-    [swipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
-    [self.view addGestureRecognizer:swipeGesture];
-
-    CGRect textBarFrame = CGRectMake(0, frame.size.height, frame.size.width, 44);
-    _textBarView = [[UIView alloc] initWithFrame:textBarFrame];
-    [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
-    _textBarView.backgroundColor = [UIColor yellowColor];
-
-    if (@available(iOS 7, *)) {
-        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPatterniOS7"]];
-    } else {
-        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
-    }
-
-    _textField = [[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)];
-    _textField.leftViewMode = UITextFieldViewModeAlways;
-    _textField.rightViewMode = UITextFieldViewModeAlways;
-    _textField.borderStyle = UITextBorderStyleRoundedRect;
-    _textField.textColor = [UIColor blackColor];
-    _textField.font = [UIFont systemFontOfSize:17.0];
-    _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    _textField.returnKeyType = UIReturnKeySend;
-    [_textField setDelegate:self];
-    [_textBarView addSubview:_textField];
-    [self.view addSubview:_textBarView];
-    
-    [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
 }
 
 - (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
@@ -263,6 +220,62 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     [_tableView reloadData];
+}
+
+- (void)viewIsAppearing:(BOOL)animated {
+    [super viewIsAppearing:animated];
+    
+    CGFloat textBarHeight = 44;
+    
+    UIEdgeInsets viewSafeAreaInsets = self.view.safeAreaInsets;
+    
+    CGFloat bottomInset = viewSafeAreaInsets.bottom;
+    
+    CGRect viewFrame = self.view.frame;
+
+    CGRect tableViewFrame = CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height-textBarHeight-bottomInset);
+    _tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
+
+    [_tableView setBackgroundView:[MUBackgroundView backgroundView]];
+    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+    [_tableView setDelegate:self];
+    [_tableView setDataSource:self];
+    [self.view addSubview:_tableView];
+
+    UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
+    [swipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:swipeGesture];
+
+    swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showKeyboard:)];
+    [swipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
+    [self.view addGestureRecognizer:swipeGesture];
+
+    CGRect textBarFrame = CGRectMake(0, tableViewFrame.size.height, tableViewFrame.size.width, textBarHeight);
+    _textBarView = [[UIView alloc] initWithFrame:textBarFrame];
+    [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+    _textBarView.backgroundColor = [UIColor yellowColor];
+
+    if (@available(iOS 7, *)) {
+        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPatterniOS7"]];
+    } else {
+        _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
+    }
+
+    int textFieldMargin = 6;
+    _textField = [[MUConsistentTextField alloc] initWithFrame:CGRectMake(textFieldMargin, textFieldMargin, tableViewFrame.size.width-2*textFieldMargin, textBarHeight-2*textFieldMargin)];
+    _textField.leftViewMode = UITextFieldViewModeAlways;
+    _textField.rightViewMode = UITextFieldViewModeAlways;
+    _textField.borderStyle = UITextBorderStyleRoundedRect;
+    _textField.textColor = [UIColor blackColor];
+    _textField.font = [UIFont systemFontOfSize:17.0];
+    _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _textField.returnKeyType = UIReturnKeySend;
+    [_textField setDelegate:self];
+    [_textBarView addSubview:_textField];
+    [self.view addSubview:_textBarView];
+    
+    [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
