@@ -2,24 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#import <Availability.h>
-
-#define MUMBLE_UNUSED __attribute__((unused))
-
-#ifndef __IPHONE_3_0
-# warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
-
-#include <TargetConditionals.h>
-
 #ifdef __OBJC__
-# import <Foundation/Foundation.h>
-# import <UIKit/UIKit.h>
-# import <UIKit/UIPopoverBackgroundView.h>
-# import <QuartzCore/QuartzCore.h>
-# import <MobileCoreServices/MobileCoreServices.h>
-# import <CFNetwork/CFNetwork.h>
+@import UIKit;
 #endif
-
-#undef NSLocalizedString
-#define NSLocalizedString(str, comment) str

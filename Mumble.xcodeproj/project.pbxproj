@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0E217BD72DA9B91700028D7F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E217BD62DA9B91700028D7F /* WebKit.framework */; };
-		0E217BD92DA9BE9900028D7F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E217BD82DA9BE9900028D7F /* UserNotifications.framework */; };
+		0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
-		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
-		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2801C35B11CA9F1A00E664E8 /* MUPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2801C35A11CA9F1A00E664E8 /* MUPreferencesViewController.m */; };
 		280256381510D70D00178B08 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 280256361510D70D00178B08 /* Localizable.strings */; };
 		2802AC0014C9E948000983A5 /* MUDataURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 2802ABFF14C9E948000983A5 /* MUDataURL.m */; };
@@ -43,7 +40,6 @@
 		2858DBA31233E31B000D6F75 /* MUVersionChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2858DBA21233E31B000D6F75 /* MUVersionChecker.m */; };
 		285AF26B1840DEE20065E339 /* MUAudioMixerDebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 285AF26A1840DEE20065E339 /* MUAudioMixerDebugViewController.m */; };
 		285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7016BEEFA700F239EB /* MUTextMessageProcessor.m */; };
-		285D6B7E16BF02E900F239EB /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285D6B7D16BF02E900F239EB /* SenTestingKit.framework */; };
 		285D6B7F16BF02E900F239EB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		285D6B8016BF02E900F239EB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		285D6B9016BF03D700F239EB /* MUTextMessageProcessorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */; };
@@ -53,9 +49,6 @@
 		2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C267116BE905002B8514 /* MUPublicServerList.m */; };
 		2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C269116BE905002B8514 /* MUPublicServerListController.m */; };
 		2861C281116BE905002B8514 /* MUWelcomeScreenPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 2861C271116BE905002B8514 /* MUWelcomeScreenPhone.m */; };
-		2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
-		2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B1116BE9B7002B8514 /* CFNetwork.framework */; };
-		2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2B5116BE9BA002B8514 /* Security.framework */; };
 		286A3CA0158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */; };
 		286A3CA4158CCF9F00C817D1 /* MUWelcomeScreenPad.m in Sources */ = {isa = PBXBuildFile; fileRef = 286A3CA2158CCF9D00C817D1 /* MUWelcomeScreenPad.m */; };
 		286A3CA7158CD05A00C817D1 /* BackgroundTextureBlackGradientPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 286A3CA6158CD05A00C817D1 /* BackgroundTextureBlackGradientPad@2x.png */; };
@@ -70,7 +63,6 @@
 		287172AC151A041A00153D74 /* certificatecell-intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 287172AA151A041A00153D74 /* certificatecell-intermediate@2x.png */; };
 		287639F911D29D99009DB8B6 /* MUCertificateCreationProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */; };
 		287639FF11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */; };
-		28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28763A4411D2AA91009DB8B6 /* QuartzCore.framework */; };
 		2879523714BF519A00567430 /* MUMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2879523614BF519A00567430 /* MUMessagesViewController.m */; };
 		2879525E14C0AFAC00567430 /* BlackToolbarPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879525C14C0AFAC00567430 /* BlackToolbarPattern.png */; };
 		2879525F14C0AFAC00567430 /* BlackToolbarPattern@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2879525D14C0AFAC00567430 /* BlackToolbarPattern@2x.png */; };
@@ -98,7 +90,6 @@
 		2882858118CE40C80034F319 /* MUBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2882858018CE40C80034F319 /* MUBackgroundView.m */; };
 		28851B94147DC97E00088C4F /* MULegalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28851B92147DC97D00088C4F /* MULegalViewController.m */; };
 		28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28851B93147DC97D00088C4F /* MULegalViewController.xib */; };
-		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		288B55E01252903300563A28 /* MUServerCertificateTrustViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */; };
 		288D6B60123D08EE00D37EDE /* MUCertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 288D6B5F123D08EE00D37EDE /* MUCertificateViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		28942D7C12456F9200C63A07 /* MUCertificateCreationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28942D7B12456F9200C63A07 /* MUCertificateCreationView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -189,7 +180,6 @@
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
 		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
-		337ACFEB25BC8393005E1A62 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 337ACFEA25BC8393005E1A62 /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -217,8 +207,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0E217BD62DA9B91700028D7F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		0E217BD82DA9BE9900028D7F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -274,7 +262,6 @@
 		285D6B7316BF027A00F239EB /* MUTextMessageProcessorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MUTextMessageProcessorTest.h; path = Tests/MUTextMessageProcessorTest.h; sourceTree = "<group>"; };
 		285D6B7416BF027A00F239EB /* MUTextMessageProcessorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MUTextMessageProcessorTest.m; path = Tests/MUTextMessageProcessorTest.m; sourceTree = "<group>"; };
 		285D6B7C16BF02E900F239EB /* MumbleTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MumbleTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		285D6B7D16BF02E900F239EB /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		285D6B8316BF02E900F239EB /* MumbleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "MumbleTests-Info.plist"; path = "Tests/MumbleTests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		285D6B8516BF02E900F239EB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		285D6B8A16BF02E900F239EB /* MumbleTests.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MumbleTests.pch; path = Tests/MumbleTests.pch; sourceTree = SOURCE_ROOT; };
@@ -294,8 +281,6 @@
 		2861C271116BE905002B8514 /* MUWelcomeScreenPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUWelcomeScreenPhone.m; sourceTree = "<group>"; };
 		2861C28E116BE91B002B8514 /* MumbleKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MumbleKit.xcodeproj; path = MumbleKit/MumbleKit.xcodeproj; sourceTree = "<group>"; };
 		2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		2861C2B1116BE9B7002B8514 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		2861C2B5116BE9BA002B8514 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		286A3C9E158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAudioSidetonePreferencesViewController.h; sourceTree = "<group>"; };
 		286A3C9F158BB17E00C817D1 /* MUAudioSidetonePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioSidetonePreferencesViewController.m; sourceTree = "<group>"; };
 		286A3CA1158CCF9D00C817D1 /* MUWelcomeScreenPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUWelcomeScreenPad.h; sourceTree = "<group>"; };
@@ -316,7 +301,6 @@
 		287639F711D29D99009DB8B6 /* MUCertificateCreationProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateCreationProgressView.h; sourceTree = "<group>"; };
 		287639F811D29D99009DB8B6 /* MUCertificateCreationProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCertificateCreationProgressView.m; sourceTree = "<group>"; };
 		287639FE11D2A242009DB8B6 /* MUCertificateCreationProgressView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MUCertificateCreationProgressView.xib; sourceTree = "<group>"; };
-		28763A4411D2AA91009DB8B6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2879523514BF519A00567430 /* MUMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessagesViewController.h; sourceTree = "<group>"; };
 		2879523614BF519A00567430 /* MUMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessagesViewController.m; sourceTree = "<group>"; };
 		2879525C14C0AFAC00567430 /* BlackToolbarPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BlackToolbarPattern.png; path = Resources/BlackToolbarPattern.png; sourceTree = "<group>"; };
@@ -335,7 +319,6 @@
 		2879528714C3874B00567430 /* LeftBalloonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LeftBalloonSelected@2x.png"; path = "Resources/Apple/LeftBalloonSelected@2x.png"; sourceTree = "<group>"; };
 		2879528814C3874C00567430 /* RightBalloonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = RightBalloonSelected.png; path = Resources/Apple/RightBalloonSelected.png; sourceTree = "<group>"; };
 		2879528914C3874C00567430 /* RightBalloonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "RightBalloonSelected@2x.png"; path = "Resources/Apple/RightBalloonSelected@2x.png"; sourceTree = "<group>"; };
-		2879528E14C38FC200567430 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		287952AE14C4D67500567430 /* MUMessageRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUMessageRecipientViewController.h; sourceTree = "<group>"; };
 		287952AF14C4D67500567430 /* MUMessageRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUMessageRecipientViewController.m; sourceTree = "<group>"; };
 		287A686514C6FB9F008B1BE7 /* GrayCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GrayCheckmark.png; path = Resources/Apple/GrayCheckmark.png; sourceTree = "<group>"; };
@@ -355,7 +338,6 @@
 		28851B91147DC97D00088C4F /* MULegalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MULegalViewController.h; sourceTree = "<group>"; };
 		28851B92147DC97D00088C4F /* MULegalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MULegalViewController.m; sourceTree = "<group>"; };
 		28851B93147DC97D00088C4F /* MULegalViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MULegalViewController.xib; sourceTree = "<group>"; };
-		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		288B55DE1252903300563A28 /* MUServerCertificateTrustViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUServerCertificateTrustViewController.h; sourceTree = "<group>"; };
 		288B55DF1252903300563A28 /* MUServerCertificateTrustViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUServerCertificateTrustViewController.m; sourceTree = "<group>"; };
 		288D6B5E123D08EE00D37EDE /* MUCertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCertificateViewController.h; sourceTree = "<group>"; };
@@ -479,7 +461,6 @@
 		28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKNumberBadgeView.m; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
-		337ACFEA25BC8393005E1A62 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -488,18 +469,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E217BD92DA9BE9900028D7F /* UserNotifications.framework in Frameworks */,
+				0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */,
 				28F79C6D14796B2F0003B8BA /* libsqlite3.dylib in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
-				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
-				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
-				337ACFEB25BC8393005E1A62 /* CoreServices.framework in Frameworks */,
-				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
-				2861C2AE116BE9B5002B8514 /* AudioToolbox.framework in Frameworks */,
-				2861C2B2116BE9B7002B8514 /* CFNetwork.framework in Frameworks */,
-				0E217BD72DA9B91700028D7F /* WebKit.framework in Frameworks */,
-				2861C2B6116BE9BA002B8514 /* Security.framework in Frameworks */,
-				28763A4511D2AA91009DB8B6 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,7 +479,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				285D6B7E16BF02E900F239EB /* SenTestingKit.framework in Frameworks */,
 				285D6B7F16BF02E900F239EB /* UIKit.framework in Frameworks */,
 				285D6B8016BF02E900F239EB /* Foundation.framework in Frameworks */,
 			);
@@ -918,20 +889,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0E217BD82DA9BE9900028D7F /* UserNotifications.framework */,
-				0E217BD62DA9B91700028D7F /* WebKit.framework */,
-				337ACFEA25BC8393005E1A62 /* CoreServices.framework */,
 				28990AB0132FDA540034B406 /* libMumbleKit.a */,
 				28F79C6C14796B2E0003B8BA /* libsqlite3.dylib */,
-				2879528E14C38FC200567430 /* MobileCoreServices.framework */,
-				28763A4411D2AA91009DB8B6 /* QuartzCore.framework */,
-				2861C2B1116BE9B7002B8514 /* CFNetwork.framework */,
-				2861C2B5116BE9BA002B8514 /* Security.framework */,
 				2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
-				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
-				285D6B7D16BF02E900F239EB /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1436,6 +1398,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 285E2A60150D729B008AE185 /* AppStore.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DEVELOPMENT_TEAM = J3TTEQJNML;
 			};
@@ -1455,6 +1418,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 285E2A62150D729B008AE185 /* BetaDist.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DEVELOPMENT_TEAM = J3TTEQJNML;
 			};
@@ -1474,6 +1438,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 285E2A63150D729B008AE185 /* Debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DEVELOPMENT_TEAM = J3TTEQJNML;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1484,6 +1449,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 285E2A64150D729B008AE185 /* Release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				DEVELOPMENT_TEAM = J3TTEQJNML;
 			};
