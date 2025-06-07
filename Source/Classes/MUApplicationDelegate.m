@@ -101,6 +101,12 @@
     // XXX: don't do it system-wide just yet
     //    _window.tintColor = [UIColor whiteColor];
     }
+
+    UINavigationBar.appearance.tintColor = [UIColor whiteColor];
+    UINavigationBar.appearance.translucent = NO;
+    UINavigationBar.appearance.barTintColor = [UIColor blackColor];
+    UINavigationBar.appearance.backgroundColor = [UIColor blackColor];
+    UINavigationBar.appearance.barStyle = UIBarStyleBlack;
     
     // Put a background view in here, to have prettier transitions.
     [_window addSubview:[MUBackgroundView backgroundView]];
