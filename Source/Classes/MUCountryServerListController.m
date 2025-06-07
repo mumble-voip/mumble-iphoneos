@@ -55,14 +55,6 @@
     self.navigationItem.titleView = nil;
     self.navigationItem.title = _countryName;
     self.navigationItem.hidesBackButton = NO;
-    
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
 
     if (@available(iOS 7, *)) {
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;

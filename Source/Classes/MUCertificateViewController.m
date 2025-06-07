@@ -104,14 +104,6 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         [_arrows addTarget:self action:@selector(certificateSwitch:) forControlEvents:UIControlEventValueChanged];
     }
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
     if (@available(iOS 7, *)) {

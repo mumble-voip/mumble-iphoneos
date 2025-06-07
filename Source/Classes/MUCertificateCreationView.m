@@ -114,14 +114,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                           @"Title of MUCertificateCreationView (shown when creating a self-signed certificate)");
     [self setTitle:newCert];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
     if (@available(iOS 7, *)) {

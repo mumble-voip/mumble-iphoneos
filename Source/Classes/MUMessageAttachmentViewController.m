@@ -30,14 +30,6 @@
     [super viewWillAppear:animated];
 
     self.navigationItem.title = NSLocalizedString(@"Attachments", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     

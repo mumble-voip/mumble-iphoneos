@@ -68,14 +68,6 @@
     
     self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%lu of %lu", nil), (unsigned long)1, (unsigned long)[_images count]];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     if (@available(iOS 7, *)) {
         _scrollView.backgroundColor = [MUColor backgroundViewiOS7Color];
     }

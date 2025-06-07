@@ -22,14 +22,6 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = NSLocalizedString(@"Legal", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     self.navigationItem.rightBarButtonItem = done;

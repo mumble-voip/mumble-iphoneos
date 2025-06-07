@@ -105,14 +105,6 @@
     _numberBadgeView.hidden = _unreadMessages == 0;
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
-    
-    UINavigationBar *navBar = self.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
 
     self.toolbar.barStyle = UIBarStyleBlackOpaque;
 }
