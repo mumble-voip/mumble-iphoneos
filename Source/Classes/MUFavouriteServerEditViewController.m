@@ -42,12 +42,12 @@
 + (void) configureTableViewConstraintWithCell:(UITableViewCell *)cell andTextField:(UITextField *)textField {
     [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
-    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:8];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:-8];
     NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:110];
     NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
 
-    [[cell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+    [NSLayoutConstraint activateConstraints:@[top, bottom, left, right]];
 }
 
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ {
@@ -59,10 +59,12 @@
             _favourite = [[MUFavouriteServer alloc] init];
         }
         
+        CGRect textFieldRect = CGRectMake(110.0, 10.0, 185.0, 30.0);
+        
         _descriptionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_descriptionCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_descriptionCell textLabel] setText:NSLocalizedString(@"Description", nil)];
-        _descriptionField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _descriptionField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_descriptionField setTextColor:[MUColor selectedTextColor]];
         [_descriptionField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_descriptionField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -82,7 +84,7 @@
         _addressCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerAddress"];
         [_addressCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_addressCell textLabel] setText:NSLocalizedString(@"Address", nil)];
-        _addressField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _addressField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_addressField setTextColor:[MUColor selectedTextColor]];
         [_addressField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_addressField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -104,7 +106,7 @@
         _portCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPort"];
         [_portCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_portCell textLabel] setText:NSLocalizedString(@"Port", nil)];
-        _portField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _portField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_portField setTextColor:[MUColor selectedTextColor]];
         [_portField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_portField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -129,7 +131,7 @@
         _usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerUsername"];
         [_usernameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_usernameCell textLabel] setText:NSLocalizedString(@"Username", nil)];
-        _usernameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _usernameField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_usernameField setTextColor:[MUColor selectedTextColor]];
         [_usernameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_usernameField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -151,7 +153,7 @@
         _passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerPassword"];
         [_passwordCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_passwordCell textLabel] setText:NSLocalizedString(@"Password", nil)];
-        _passwordField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _passwordField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_passwordField setTextColor:[MUColor selectedTextColor]];
         [_passwordField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_passwordField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];

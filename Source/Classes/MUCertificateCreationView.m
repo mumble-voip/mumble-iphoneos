@@ -40,12 +40,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 + (void) configureTableViewConstraintWithCell:(UITableViewCell *)cell andTextField:(UITextField *)textField {
     [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
-    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:8];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:-8];
     NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:110];
     NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
 
-    [[cell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+    [NSLayoutConstraint activateConstraints:@[top, bottom, left, right]];
 }
 
 - (id) init {
@@ -57,10 +57,12 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         NSString *email = NSLocalizedString(@"Email", nil);
         NSString *optional = NSLocalizedString(@"Optional", nil);
         
+        CGRect textFieldRect = CGRectMake(110.0, 10.0, 185.0, 30.0);
+        
         _nameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_nameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_nameCell textLabel] setText:name];
-        _nameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _nameField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_nameField setTextColor:[MUColor selectedTextColor]];
         [_nameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_nameField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -80,7 +82,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         _emailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_emailCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_emailCell textLabel] setText:email];
-        _emailField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _emailField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_emailField setTextColor:[MUColor selectedTextColor]];
         [_emailField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_emailField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
