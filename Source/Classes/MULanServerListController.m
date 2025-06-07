@@ -49,14 +49,6 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [super viewWillAppear:YES];
     [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (@available(iOS 7, *)) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
