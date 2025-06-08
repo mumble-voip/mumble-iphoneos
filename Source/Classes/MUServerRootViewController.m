@@ -53,8 +53,10 @@
         
         _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectZero];
         _numberBadgeView.shadow = NO;
-        _numberBadgeView.font = [UIFont boldSystemFontOfSize:10.0f];
+        _numberBadgeView.font = [UIFont boldSystemFontOfSize:11.0f];
         _numberBadgeView.hidden = YES;
+        _numberBadgeView.shine = NO;
+        _numberBadgeView.strokeColor = [UIColor redColor];
     }
     return self;
 }
