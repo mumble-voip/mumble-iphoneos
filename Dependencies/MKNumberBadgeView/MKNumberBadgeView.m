@@ -208,7 +208,7 @@
 		
 	CGPoint textPt = CGPointMake( ctm.x + (badgeRect.size.width - numberSize.width)/2 , ctm.y + (badgeRect.size.height - numberSize.height)/2 );
     
-    [numberString drawAtPoint:textPt withAttributes: @{ NSFontAttributeName : self.font }];
+    [numberString drawAtPoint:textPt withAttributes: @{ NSFontAttributeName : self.font, NSForegroundColorAttributeName : self.textColor }];
     CGContextRestoreGState( curContext );
 
 }

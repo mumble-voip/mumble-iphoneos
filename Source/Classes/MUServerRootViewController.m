@@ -53,8 +53,10 @@
         
         _numberBadgeView = [[MKNumberBadgeView alloc] initWithFrame:CGRectZero];
         _numberBadgeView.shadow = NO;
-        _numberBadgeView.font = [UIFont boldSystemFontOfSize:10.0f];
+        _numberBadgeView.font = [UIFont boldSystemFontOfSize:11.0f];
         _numberBadgeView.hidden = YES;
+        _numberBadgeView.shine = NO;
+        _numberBadgeView.strokeColor = [UIColor redColor];
     }
     return self;
 }
@@ -84,8 +86,6 @@
     _segmentedControl.selectedSegmentIndex = _segmentIndex;
     [_segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
     
-    _serverView.navigationItem.titleView = _segmentedControl;
-    
     _menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"MumbleMenuButton"] style:UIBarButtonItemStylePlain target:self action:@selector(actionButtonClicked:)];
     _serverView.navigationItem.rightBarButtonItem = _menuButton;
     
@@ -99,10 +99,14 @@
     _modeSwitchButton = button;
     _serverView.navigationItem.leftBarButtonItem = _smallIcon;
     
-    [_segmentedControl addSubview:_numberBadgeView];
+    UIView* containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _segmentedControl.frame.size.width, 30)];
+    [containerView addSubview:_segmentedControl];
+    [containerView addSubview:_numberBadgeView];
     _numberBadgeView.frame = CGRectMake(_segmentedControl.frame.size.width-24, -10, 50, 30);
     _numberBadgeView.value = _unreadMessages;
     _numberBadgeView.hidden = _unreadMessages == 0;
+    
+    _serverView.navigationItem.titleView = containerView;
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
 
