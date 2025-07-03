@@ -23,9 +23,6 @@
     UINavigationController    *_navigationController;
     MUPublicServerListFetcher *_publistFetcher;
     BOOL                      _connectionActive;
-#ifdef MUMBLE_BETA_DIST
-    MUVersionChecker          *_verCheck;
-#endif
 }
 - (void) setupAudio;
 - (void) forceKeyboardLoad;
@@ -34,10 +31,6 @@
 @implementation MUApplicationDelegate
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-#ifdef MUMBLE_BETA_DIST
-    _verCheck = [[MUVersionChecker alloc] init];
-#endif
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionOpened:) name:MUConnectionOpenedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionClosed:) name:MUConnectionClosedNotification object:nil];
     
