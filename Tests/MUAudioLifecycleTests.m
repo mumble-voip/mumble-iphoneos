@@ -7,6 +7,8 @@
 #else
 // Minimal stubs to allow the tests to compile in environments where
 // the real MumbleKit headers are not available (such as CI runners).
+// These stubs are non-functional and only exist for compilation.
+// Actual testing uses the mock (MUMockAudio) created via method swizzling.
 typedef NS_ENUM(NSInteger, MKTransmitType) {
     MKTransmitTypeVAD = 0,
     MKTransmitTypeToggle = 1,
