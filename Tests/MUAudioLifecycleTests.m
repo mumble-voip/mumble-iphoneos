@@ -58,6 +58,7 @@ static MKAudio *_mkAudioShared;
 #endif
 
 #import "MUApplicationDelegate.h"
+#import "MUConnectionController.h"
 
 @interface MUMockAudio : NSObject
 @property (nonatomic) BOOL running;
@@ -175,15 +176,27 @@ static id MUSharedAudioReplacement(id self, SEL _cmd) {
 
 - (void)testApplicationKeepsAudioRunningWhileConnected {
     MUApplicationDelegate *delegate = [[MUApplicationDelegate alloc] init];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-    if ([delegate respondsToSelector:@selector(connectionOpened:)]) {
-        [delegate performSelector:@selector(connectionOpened:) withObject:nil];
-    }
-#pragma clang diagnostic pop
+    
+    // Set up the notification observers that would normally be initialized
+    // in application:didFinishLaunchingWithOptions:
+    [[NSNotificationCenter defaultCenter] addObserver:delegate 
+                                             selector:@selector(connectionOpened:) 
+                                                 name:MUConnectionOpenedNotification 
+                                               object:nil];
+    
+    // Simulate a connection opening by posting the notification
+    // (Note: NSNotificationCenter delivers notifications synchronously, so the
+    // connectionOpened: method will be called before this line returns)
+    [[NSNotificationCenter defaultCenter] postNotificationName:MUConnectionOpenedNotification object:nil];
+    
     CurrentMockAudio.running = YES;
     [delegate applicationWillResignActive:nil];
     XCTAssertEqual(CurrentMockAudio.stopCallCount, 0);
+    
+    // Clean up the observer to avoid side effects
+    [[NSNotificationCenter defaultCenter] removeObserver:delegate 
+                                                    name:MUConnectionOpenedNotification 
+                                                  object:nil];
 }
 
 - (void)testApplicationRestartsAudioAfterInterruption {
