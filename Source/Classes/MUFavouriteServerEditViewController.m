@@ -51,7 +51,13 @@
 }
 
 - (id) initInEditMode:(BOOL)editMode withContentOfFavouriteServer:(MUFavouriteServer *)favServ {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         _editMode = editMode;
         if (favServ) {
             _favourite = [favServ copy];
@@ -179,13 +185,15 @@
     return [self initInEditMode:NO withContentOfFavouriteServer:nil];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    // On iPad, we support all interface orientations.
+- (BOOL) shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask) supportedInterfaceOrientations {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return YES;
+        return UIInterfaceOrientationMaskAll;
     }
-    
-    return toInterfaceOrientation == UIInterfaceOrientationPortrait;
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma mark -
@@ -195,13 +203,6 @@
     [super viewWillAppear:animated];
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -289,7 +290,10 @@
     // we're done.
     [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
     if ([_target respondsToSelector:_doneAction]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [_target performSelector:_doneAction withObject:self];
+#pragma clang diagnostic pop
     }
 }
 

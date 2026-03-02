@@ -6,6 +6,7 @@
 
 #import "MUWelcomeScreenPhone.h"
 #import "MUWelcomeScreenPad.h"
+#import "MUOnboardingViewController.h"
 #import "MUDatabase.h"
 #import "MUPublicServerList.h"
 #import "MUConnectionController.h"
@@ -13,14 +14,18 @@
 #import "MURemoteControlServer.h"
 #import "MUImage.h"
 #import "MUBackgroundView.h"
+#import "MUServerPlaceholderViewController.h"
+#import "MUPreferencesViewController.h"
+#import "MUCertificatePreferencesViewController.h"
 
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKVersion.h>
 
-@interface MUApplicationDelegate () <UIApplicationDelegate,
-                                     UIAlertViewDelegate> {
+@import UserNotifications;
+
+@interface MUApplicationDelegate () <UIApplicationDelegate> {
     UIWindow                  *_window;
-    UINavigationController    *_navigationController;
+    UITabBarController        *_tabBarController;
     MUPublicServerListFetcher *_publistFetcher;
     BOOL                      _connectionActive;
 }
@@ -29,6 +34,10 @@
 @end
 
 @implementation MUApplicationDelegate
+
+- (UITabBarController *) tabBarController {
+    return _tabBarController;
+}
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionOpened:) name:MUConnectionOpenedNotification object:nil];
@@ -39,6 +48,13 @@
     
     // Initialize the notification controller
     [MUNotificationController sharedController];
+    
+    // Request notification permissions
+    [[UNUserNotificationCenter currentNotificationCenter]
+        requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)
+        completionHandler:^(BOOL granted, NSError *error) {
+            // Permission prompt shown on first launch
+        }];
     
     // Try to fetch an updated public server list
     _publistFetcher = [[MUPublicServerListFetcher alloc] init];
@@ -70,6 +86,8 @@
                                                                 // Network
                                                                 [NSNumber numberWithBool:NO],      @"NetworkForceTCP",
                                                                 @"MumbleUser",                     @"DefaultUserName",
+                                                                // Notifications
+                                                                [NSNumber numberWithBool:YES],     @"NotificationsEnabled",
                                                         nil]];
 
     // Disable mixer debugging for all builds.
@@ -90,36 +108,92 @@
     }
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    if (@available(iOS 7, *)) {
-    // XXX: don't do it system-wide just yet
-    //    _window.tintColor = [UIColor whiteColor];
+
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *navAppearance = [[UINavigationBarAppearance alloc] init];
+        [navAppearance configureWithDefaultBackground];
+        UINavigationBar.appearance.standardAppearance = navAppearance;
+        UINavigationBar.appearance.scrollEdgeAppearance = navAppearance;
+        UINavigationBar.appearance.tintColor = [UIColor systemBlueColor];
+    } else {
+        UINavigationBar.appearance.tintColor = [UIColor whiteColor];
+        UINavigationBar.appearance.translucent = NO;
+        UINavigationBar.appearance.barTintColor = [UIColor blackColor];
+        UINavigationBar.appearance.backgroundColor = [UIColor blackColor];
+        UINavigationBar.appearance.barStyle = UIBarStyleBlack;
     }
 
-    UINavigationBar.appearance.tintColor = [UIColor whiteColor];
-    UINavigationBar.appearance.translucent = NO;
-    UINavigationBar.appearance.barTintColor = [UIColor blackColor];
-    UINavigationBar.appearance.backgroundColor = [UIColor blackColor];
-    UINavigationBar.appearance.barStyle = UIBarStyleBlack;
-    
-    // Put a background view in here, to have prettier transitions.
-    [_window addSubview:[MUBackgroundView backgroundView]];
-
-    // Add our default navigation controller
-    _navigationController = [[UINavigationController alloc] init];
-    _navigationController.toolbarHidden = YES;
-
-    UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
+    // --- Tab 0: Home ---
     UIViewController *welcomeScreen = nil;
+    UIUserInterfaceIdiom idiom = [[UIDevice currentDevice] userInterfaceIdiom];
     if (idiom == UIUserInterfaceIdiomPad) {
         welcomeScreen = [[MUWelcomeScreenPad alloc] init];
-        [_navigationController pushViewController:welcomeScreen animated:YES];
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
-        [_navigationController pushViewController:welcomeScreen animated:YES];
     }
+    UINavigationController *homeNav = [[UINavigationController alloc] initWithRootViewController:welcomeScreen];
+    homeNav.toolbarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        homeNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Home", nil)
+                                                          image:[UIImage systemImageNamed:@"house.fill"]
+                                                            tag:0];
+    } else {
+        homeNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Home", nil) image:nil tag:0];
+    }
+
+    // --- Tab 1: Server ---
+    MUServerPlaceholderViewController *placeholder = [[MUServerPlaceholderViewController alloc] init];
+    UINavigationController *serverNav = [[UINavigationController alloc] initWithRootViewController:placeholder];
+    serverNav.toolbarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        serverNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil)
+                                                            image:[UIImage systemImageNamed:@"server.rack"]
+                                                              tag:1];
+    } else {
+        serverNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil) image:nil tag:1];
+    }
+
+    // --- Tab 2: My Profiles ---
+    MUCertificatePreferencesViewController *profilesVC = [[MUCertificatePreferencesViewController alloc] init];
+    UINavigationController *profilesNav = [[UINavigationController alloc] initWithRootViewController:profilesVC];
+    profilesNav.toolbarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        profilesNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"My Profiles", nil)
+                                                              image:[UIImage systemImageNamed:@"person.crop.circle"]
+                                                                tag:2];
+    } else {
+        profilesNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"My Profiles", nil) image:nil tag:2];
+    }
+
+    // --- Tab 3: Settings ---
+    MUPreferencesViewController *settingsVC = [[MUPreferencesViewController alloc] init];
+    UINavigationController *settingsNav = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    settingsNav.toolbarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        settingsNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", nil)
+                                                              image:[UIImage systemImageNamed:@"gearshape"]
+                                                                tag:3];
+    } else {
+        settingsNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", nil) image:nil tag:3];
+    }
+
+    // --- Tab Bar Controller ---
+    _tabBarController = [[UITabBarController alloc] init];
+    _tabBarController.viewControllers = @[homeNav, serverNav, profilesNav, settingsNav];
     
-    [_window setRootViewController:_navigationController];
+    [_window setRootViewController:_tabBarController];
     [_window makeKeyAndVisible];
+
+    // Show onboarding on first launch
+    BOOL hasCompletedOnboarding = [[NSUserDefaults standardUserDefaults] boolForKey:@"HasCompletedOnboarding"];
+    if (!hasCompletedOnboarding) {
+        MUOnboardingViewController *onboarding = [[MUOnboardingViewController alloc] init];
+        onboarding.modalPresentationStyle = UIModalPresentationFullScreen;
+        onboarding.completionHandler = ^{
+            [self->_tabBarController dismissViewControllerAnimated:YES completion:nil];
+        };
+        [_tabBarController presentViewController:onboarding animated:NO completion:nil];
+    }
 
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     if ([[url scheme] isEqualToString:@"mumble"]) {
@@ -144,7 +218,9 @@
         NSNumber *port = [url port];
         NSString *username = [url user];
         NSString *password = [url password];
-        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:_navigationController.visibleViewController];
+        // Present from the Home tab's visible view controller
+        UINavigationController *homeNav = (UINavigationController *)_tabBarController.viewControllers[0];
+        [connController connetToHostname:hostname port:port ? [port integerValue] : 64738 withUsername:username andPassword:password withParentViewController:homeNav.visibleViewController];
         return YES;
     }
     return NO;
@@ -180,20 +256,14 @@
     
     NSString *quality = [defaults stringForKey:@"AudioQualityKind"];
     if ([quality isEqualToString:@"low"]) {
-        // Will fall back to CELT if the
-        // server requires it for inter-op.
         settings.codec = MKCodecFormatOpus;
         settings.quality = 16000;
         settings.audioPerPacket = 6;
     } else if ([quality isEqualToString:@"balanced"]) {
-        // Will fall back to CELT if the 
-        // server requires it for inter-op.
         settings.codec = MKCodecFormatOpus;
         settings.quality = 40000;
         settings.audioPerPacket = 2;
     } else if ([quality isEqualToString:@"high"] || [quality isEqualToString:@"opus"]) {
-        // Will fall back to CELT if the 
-        // server requires it for inter-op.
         settings.codec = MKCodecFormatOpus;
         settings.quality = 72000;
         settings.audioPerPacket = 1;
@@ -271,36 +341,22 @@
 }
 
 - (void) applicationWillResignActive:(UIApplication *)application {
-    // If we have any active connections, don't stop MKAudio. This is
-    // for 'clicking-the-home-button' invocations of this method.
-    //
-    // In case we've been backgrounded by a phone call, MKAudio will
-    // already have shut itself down.
     if (!_connectionActive) {
         NSLog(@"MumbleApplicationDelegate: Not connected to a server. Stopping MKAudio.");
         [[MKAudio sharedAudio] stop];
         
 #ifdef ENABLE_REMOTE_CONTROL
-        // Also terminate the remote control server.
         [[MURemoteControlServer sharedRemoteControlServer] stop];
 #endif
     }
 }
 
 - (void) applicationDidBecomeActive:(UIApplication *)application {
-    // It is possible that we will become active after a phone call has ended.
-    // In the case of phone calls, MKAudio will automatically stop itself, to
-    // allow the phone call to go through. However, once we're back inside the
-    // application, we have to start ourselves again.
-    //
-    // For regular backgrounding, we usually don't turn off the audio system, and
-    // we won't have to start it again.
     if (![[MKAudio sharedAudio] isRunning]) {
         NSLog(@"MumbleApplicationDelegate: MKAudio not running. Starting it.");
         [[MKAudio sharedAudio] start];
         
 #if ENABLE_REMOTE_CONTROL
-        // Re-start the remote control server.
         [[MURemoteControlServer sharedRemoteControlServer] stop];
         [[MURemoteControlServer sharedRemoteControlServer] start];
 #endif

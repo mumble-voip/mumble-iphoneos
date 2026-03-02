@@ -9,8 +9,17 @@
 #import "MUCertificateController.h"
 #import "MUCertificateDiskImportViewController.h"
 #import "MUBackgroundView.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKCertificate.h>
+
+// Section 0: Username
+// Section 1: Certificates (profiles)
+enum {
+    MUProfilesSectionUsername = 0,
+    MUProfilesSectionCertificates = 1,
+    MUProfilesSectionCount = 2,
+};
 
 @interface MUCertificatePreferencesViewController () {
     NSMutableArray   *_certificateItems;
@@ -28,7 +37,13 @@
 #pragma mark Initialization
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         self.preferredContentSize = CGSizeMake(320, 480);
         _showAll = [[[NSUserDefaults standardUserDefaults] objectForKey:@"CertificatesShowIntermediates"] boolValue];
     }
@@ -41,17 +56,14 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    self.navigationItem.title = NSLocalizedString(@"Certificates", nil);
+    self.navigationItem.title = NSLocalizedString(@"My Profiles", nil);
     
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-        
-        // Set the tint color of the table view to be the same color the ">" mark on each of the cells.
-        // This ensures that the DisclosureButton accessory view has the same color. It's not possible to change its
-        // color by setting the tint of the cell - but doing it via the table view's tint works, so we're doing that.
-        self.tableView.tintColor = [UIColor colorWithRed:0xc7/255.0f green:0xc7/255.0f blue:0xcc/255.0f alpha:1.0f];
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
     }
+    
+    self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
     [self fetchCertificates];
     [self.tableView reloadData];
@@ -64,20 +76,54 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return MUProfilesSectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_certificateItems count];
+    if (section == MUProfilesSectionUsername)
+        return 1;
+    if (section == MUProfilesSectionCertificates)
+        return [_certificateItems count];
+    return 0;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == MUProfilesSectionUsername)
+        return NSLocalizedString(@"Display Name", nil);
+    if (section == MUProfilesSectionCertificates)
+        return NSLocalizedString(@"Certificates", nil);
+    return nil;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == MUProfilesSectionUsername)
+        return NSLocalizedString(@"This name is used when connecting to servers that don't have a specific username set.", nil);
+    if (section == MUProfilesSectionCertificates)
+        return NSLocalizedString(@"Certificates identify you to servers. Select a certificate to use it as your default identity.", nil);
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == MUProfilesSectionUsername) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UsernameCell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UsernameCell"];
+        }
+        cell.textLabel.text = NSLocalizedString(@"Username", nil);
+        NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
+        cell.detailTextLabel.text = username ? username : @"MumbleUser";
+        cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        return cell;
+    }
+    
+    // Certificates section
     static NSString *CellIdentifier = @"CertificateCell";
     MUCertificateCell *cell = (MUCertificateCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [MUCertificateCell loadFromNib];
     
-    // Configure the cell...
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     MKCertificate *cert = [dict objectForKey:@"cert"];
     [cell setSubjectName:[cert subjectName]];
@@ -125,14 +171,27 @@
 
 #pragma mark -
 #pragma mark Table view delegate
+
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleDelete;
+    if (indexPath.section == MUProfilesSectionCertificates)
+        return UITableViewCellEditingStyleDelete;
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.section == MUProfilesSectionCertificates;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == MUProfilesSectionUsername) {
+        [self showUsernameEditor];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
+    
+    // Certificate section
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     
-    // Don't allow selection of intermediates.
     if (![[dict objectForKey:@"isIdentity"] boolValue]) {
         return;
     }
@@ -140,7 +199,7 @@
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     [[NSUserDefaults standardUserDefaults] setObject:persistentRef forKey:@"DefaultCertificate"];
 
-    MUCertificateCell *prevCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0]];
+    MUCertificateCell *prevCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:MUProfilesSectionCertificates]];
     MUCertificateCell *curCell = (MUCertificateCell *) [[self tableView] cellForRowAtIndexPath:indexPath];
     [prevCell setIsCurrentCertificate:NO];
     [curCell setIsCurrentCertificate:YES];
@@ -150,21 +209,53 @@
 }
 
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete && indexPath.section == MUProfilesSectionCertificates) {
         [self deleteCertificateForRow:[indexPath row]];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationRight];
     }
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == MUProfilesSectionUsername)
+        return 44.0f;
     return 85.0f;
 }
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section != MUProfilesSectionCertificates) return;
     NSDictionary *dict = [_certificateItems objectAtIndex:[indexPath row]];
     NSData *persistentRef = [dict objectForKey:@"persistentRef"];
     MUCertificateViewController *certView = [[MUCertificateViewController alloc] initWithPersistentRef:persistentRef];
     [[self navigationController] pushViewController:certView animated:YES];
+}
+
+#pragma mark -
+#pragma mark Username editor
+
+- (void) showUsernameEditor {
+    NSString *currentUsername = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Display Name", nil)
+                                                                   message:NSLocalizedString(@"Enter the username you want to use when connecting to servers.", nil)
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.text = currentUsername;
+        textField.placeholder = @"MumbleUser";
+        textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+    }];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Save", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *newUsername = [[alert.textFields firstObject] text];
+        if (newUsername && [newUsername length] > 0) {
+            [[NSUserDefaults standardUserDefaults] setObject:newUsername forKey:@"DefaultUserName"];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:MUProfilesSectionUsername]]
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark -
@@ -182,7 +273,7 @@
                                                    style:UIAlertActionStyleCancel
                                                  handler:nil]];
     
-    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Generate New Certificate", nil)
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Create New Profile", nil)
                                                    style:UIAlertActionStyleDefault
                                                  handler:^(UIAlertAction * _Nonnull action) {
         UINavigationController *navCtrl = [[UINavigationController alloc] init];
@@ -235,14 +326,12 @@
     }
 
     if (_showAll) {
-        // Extract hashes of identity certs
         NSMutableArray *identityCertHashes = [[NSMutableArray alloc] init];
         for (NSDictionary *item in _certificateItems) {
             MKCertificate *cert = [item objectForKey:@"cert"];
             [identityCertHashes addObject:[cert digest]];
         }
 
-        // Extract all intermediates
         NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
                                     (id)kSecClassCertificate, kSecClass,
                                     kCFBooleanTrue,       kSecReturnPersistentRef,
@@ -288,7 +377,6 @@
 }
 
 - (void) deleteCertificateForRow:(NSUInteger)row {
-    // Delete a certificate from the keychain
     NSDictionary *dict = [_certificateItems objectAtIndex:row];
     OSStatus err = [MUCertificateController deleteCertificateWithPersistentRef:[dict objectForKey:@"persistentRef"]];
     if (err == noErr) {
@@ -297,4 +385,3 @@
 }
 
 @end
-

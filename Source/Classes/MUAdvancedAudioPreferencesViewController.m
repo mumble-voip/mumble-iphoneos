@@ -16,7 +16,13 @@
 @implementation MUAdvancedAudioPreferencesViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -28,13 +34,6 @@
     self.title = NSLocalizedString(@"Advanced Audio", nil);
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
 
     self.tableView.scrollEnabled = YES;
 
@@ -103,7 +102,7 @@
             cell.textLabel.text = NSLocalizedString(@"Preprocessing", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *preprocSwitch = [[UISwitch alloc] init];
-            preprocSwitch.onTintColor = [UIColor blackColor];
+            preprocSwitch.onTintColor = [UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0];
             preprocSwitch.on = [defaults boolForKey:@"AudioPreprocessor"];
             [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = preprocSwitch;
@@ -112,7 +111,7 @@
                 cell.textLabel.text = NSLocalizedString(@"Echo Cancellation", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 UISwitch *echoCancelSwitch = [[UISwitch alloc] init];
-                echoCancelSwitch.onTintColor = [UIColor blackColor];
+                echoCancelSwitch.onTintColor = [UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0];
                 echoCancelSwitch.on = [defaults boolForKey:@"AudioEchoCancel"];
                 echoCancelSwitch.enabled = [[MKAudio sharedAudio] echoCancellationAvailable];
                 if (!echoCancelSwitch.enabled) {
@@ -152,7 +151,7 @@
             cell.textLabel.text = NSLocalizedString(@"Speakerphone Mode", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *speakerPhoneSwitch = [[UISwitch alloc] init];
-            speakerPhoneSwitch.onTintColor = [UIColor blackColor];
+            speakerPhoneSwitch.onTintColor = [UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0];
             speakerPhoneSwitch.on = [defaults boolForKey:@"AudioSpeakerPhoneMode"];
             speakerPhoneSwitch.enabled = YES;
             [speakerPhoneSwitch addTarget:self action:@selector(speakerPhoneModeChanged:) forControlEvents:UIControlEventValueChanged];
@@ -163,7 +162,7 @@
             cell.textLabel.text = NSLocalizedString(@"Force CELT Mode", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *celtSwitch = [[UISwitch alloc] init];
-            celtSwitch.onTintColor = [UIColor blackColor];
+            celtSwitch.onTintColor = [UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0];
             celtSwitch.on = [defaults boolForKey:@"AudioOpusCodecForceCELTMode"];
             celtSwitch.enabled = YES;
             [celtSwitch addTarget:self action:@selector(opusCodecForceCELTModeChanged:) forControlEvents:UIControlEventValueChanged];

@@ -104,6 +104,15 @@ static FMDatabase *db = nil;
                       @" `tokens` BLOB)"];
     [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS `tokens_host_port`"
                       @" on `tokens`(`hostname`,`port`)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS `recent_connections` "
+                      @"(`id` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      @" `hostname` TEXT,"
+                      @" `port` INTEGER,"
+                      @" `username` TEXT,"
+                      @" `timestamp` REAL)"];
+    [db executeUpdate:@"CREATE INDEX IF NOT EXISTS `recent_conn_ts`"
+                      @" on `recent_connections`(`timestamp`)"];
+
     [db executeUpdate:@"VACUUM"];
 
     if ([db hadError]) {
@@ -248,6 +257,51 @@ static FMDatabase *db = nil;
         return tokens;
     }
     return nil;
+}
+
+#pragma mark -
+#pragma mark Recent connections
+
++ (void) storeRecentConnectionWithHostname:(NSString *)hostname port:(NSInteger)port username:(NSString *)username {
+    NSNumber *portNum = [NSNumber numberWithInteger:port];
+    NSNumber *now = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    
+    FMResultSet *existing = [db executeQuery:
+        @"SELECT `id` FROM `recent_connections` WHERE `hostname`=? AND `port`=? AND `username`=?",
+        hostname, portNum, username];
+    if ([existing next]) {
+        NSInteger rowId = [existing intForColumnIndex:0];
+        [existing close];
+        [db executeUpdate:@"UPDATE `recent_connections` SET `timestamp`=? WHERE `id`=?",
+            now, [NSNumber numberWithInteger:rowId]];
+    } else {
+        [existing close];
+        [db executeUpdate:
+            @"INSERT INTO `recent_connections` (`hostname`,`port`,`username`,`timestamp`) VALUES (?,?,?,?)",
+            hostname, portNum, username, now];
+    }
+    
+    // Keep only the 20 most recent
+    [db executeUpdate:
+        @"DELETE FROM `recent_connections` WHERE `id` NOT IN "
+        @"(SELECT `id` FROM `recent_connections` ORDER BY `timestamp` DESC LIMIT 20)"];
+}
+
++ (NSArray *) fetchRecentConnections {
+    NSMutableArray *results = [[NSMutableArray alloc] init];
+    FMResultSet *res = [db executeQuery:
+        @"SELECT `hostname`, `port`, `username`, `timestamp` FROM `recent_connections` ORDER BY `timestamp` DESC LIMIT 20"];
+    while ([res next]) {
+        NSDictionary *entry = @{
+            @"hostname": [res stringForColumnIndex:0] ?: @"",
+            @"port": [NSNumber numberWithInt:[res intForColumnIndex:1]],
+            @"username": [res stringForColumnIndex:2] ?: @"",
+            @"timestamp": [NSNumber numberWithDouble:[res doubleForColumnIndex:3]]
+        };
+        [results addObject:entry];
+    }
+    [res close];
+    return results;
 }
 
 @end

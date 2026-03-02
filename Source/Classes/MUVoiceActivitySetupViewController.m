@@ -12,7 +12,13 @@
 @implementation MUVoiceActivitySetupViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -26,13 +32,6 @@
     self.navigationItem.title = NSLocalizedString(@"Voice Activity", nil);
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
     
     self.tableView.scrollEnabled = NO;
 }

@@ -10,6 +10,7 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServerListController.h"
 #import "MUConnectionController.h"
+#import "MUColor.h"
 #import "MUBackgroundView.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
@@ -49,15 +50,82 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [super viewWillAppear:YES];
     [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
     
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     }
+    
+    if (!self.refreshControl) {
+        UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+        [refresh addTarget:self action:@selector(refreshServerList:) forControlEvents:UIControlEventValueChanged];
+        self.refreshControl = refresh;
+    }
+}
+
+- (void) refreshServerList:(UIRefreshControl *)sender {
+    [_browser stop];
+    [_netServices removeAllObjects];
+    [self.tableView reloadData];
+    [_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [sender endRefreshing];
+        [self updateEmptyState];
+    });
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
     [_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
+    [self updateEmptyState];
+}
+
+- (void) updateEmptyState {
+    if ([_netServices count] == 0) {
+        UIView *emptyView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+        
+        UIImageView *iconView = [[UIImageView alloc] init];
+        if (@available(iOS 13.0, *)) {
+            iconView.image = [UIImage systemImageNamed:@"wifi.exclamationmark"
+                              withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:48 weight:UIImageSymbolWeightLight]];
+            iconView.tintColor = [UIColor tertiaryLabelColor];
+        }
+        iconView.translatesAutoresizingMaskIntoConstraints = NO;
+        [emptyView addSubview:iconView];
+        
+        UILabel *titleLabel = [[UILabel alloc] init];
+        titleLabel.text = NSLocalizedString(@"No Servers Found", nil);
+        titleLabel.font = [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold];
+        titleLabel.textColor = [MUColor secondaryTextColor];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [emptyView addSubview:titleLabel];
+        
+        UILabel *detailLabel = [[UILabel alloc] init];
+        detailLabel.text = NSLocalizedString(@"Make sure a Mumble server is running on the same Wi-Fi network.", nil);
+        detailLabel.font = [UIFont systemFontOfSize:15];
+        detailLabel.textColor = [MUColor tertiaryTextColor];
+        detailLabel.textAlignment = NSTextAlignmentCenter;
+        detailLabel.numberOfLines = 0;
+        detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [emptyView addSubview:detailLabel];
+        
+        [NSLayoutConstraint activateConstraints:@[
+            [iconView.centerXAnchor constraintEqualToAnchor:emptyView.centerXAnchor],
+            [iconView.centerYAnchor constraintEqualToAnchor:emptyView.centerYAnchor constant:-60],
+            
+            [titleLabel.topAnchor constraintEqualToAnchor:iconView.bottomAnchor constant:16],
+            [titleLabel.leadingAnchor constraintEqualToAnchor:emptyView.leadingAnchor constant:32],
+            [titleLabel.trailingAnchor constraintEqualToAnchor:emptyView.trailingAnchor constant:-32],
+            
+            [detailLabel.topAnchor constraintEqualToAnchor:titleLabel.bottomAnchor constant:8],
+            [detailLabel.leadingAnchor constraintEqualToAnchor:emptyView.leadingAnchor constant:32],
+            [detailLabel.trailingAnchor constraintEqualToAnchor:emptyView.trailingAnchor constant:-32],
+        ]];
+        
+        self.tableView.backgroundView = emptyView;
+    } else {
+        self.tableView.backgroundView = nil;
+    }
 }
 
 #pragma mark -
@@ -72,6 +140,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [netService scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     [netService setDelegate:self];
     [netService resolveWithTimeout:10.0f];
+    [self updateEmptyState];
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)netService moreComing:(BOOL)moreServices {
@@ -80,6 +149,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
     [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [self updateEmptyState];
 }
 
 #pragma mark -

@@ -30,4 +30,8 @@
 + (void) storeAccessTokens:(NSArray *)tokens forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 + (NSArray *) accessTokensForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 
+// Recent connections
++ (void) storeRecentConnectionWithHostname:(NSString *)hostname port:(NSInteger)port username:(NSString *)username;
++ (NSArray *) fetchRecentConnections;
+
 @end

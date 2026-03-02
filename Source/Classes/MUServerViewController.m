@@ -89,11 +89,6 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    }
-    
     if (_viewMode == MUServerViewControllerViewModeServer) {
         [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
         [self.tableView reloadData];
@@ -257,13 +252,27 @@
 
     MKUser *connectedUser = [_serverModel connectedUser];
 
-    cell.textLabel.font = [UIFont systemFontOfSize:18];
+    cell.textLabel.font = [UIFont systemFontOfSize:16];
+    cell.textLabel.textColor = [MUColor primaryTextColor];
+    
     if ([object class] == [MKChannel class]) {
         MKChannel *chan = object;
-        cell.imageView.image = [UIImage imageNamed:@"channel"];
+        
+        if (@available(iOS 13.0, *)) {
+            cell.imageView.image = [UIImage systemImageNamed:@"number"
+                                    withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightMedium]];
+            cell.imageView.tintColor = [UIColor secondaryLabelColor];
+        } else {
+            cell.imageView.image = [UIImage imageNamed:@"channel"];
+        }
+        
         cell.textLabel.text = [chan channelName];
-        if (chan == [connectedUser channel])
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        if (chan == [connectedUser channel]) {
+            cell.textLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightSemibold];
+            if (@available(iOS 13.0, *)) {
+                cell.imageView.tintColor = [UIColor systemBlueColor];
+            }
+        }
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         
@@ -271,54 +280,22 @@
         MKUser *user = object;
 
         cell.textLabel.text = [user userName];
-        if (user == connectedUser)
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        if (user == connectedUser) {
+            cell.textLabel.font = [UIFont systemFontOfSize:16 weight:UIFontWeightSemibold];
+        }
         
         MKTalkState talkState = [user talkState];
-        NSString *talkImageName = nil;
-        if (talkState == MKTalkStatePassive)
-            talkImageName = @"talking_off";
-        else if (talkState == MKTalkStateTalking)
-            talkImageName = @"talking_on";
-        else if (talkState == MKTalkStateWhispering)
-            talkImageName = @"talking_whisper";
-        else if (talkState == MKTalkStateShouting)
-            talkImageName = @"talking_alt";
         
-        // This check is here to correctly remove a user's talk state when backgrounding the app.
-        //
-        // For example, if the user of the app is holding his finger on the Push-to-Talk button
-        // and decides to background Mumble while he is transmitting (via either the home- or
-        // sleep button).
-        //
-        // This scenario brings two issues along with it:
-        //
-        //  1. We have to cut off Push-to-Talk when the app gets backgrounded - we get no TouchUpInside event
-        //     from the UIButton, so we wouldn't regularly stop Push-to-Talk in this scenario.
-        //
-        //  2. Even if we set MKAudio's forceTransmit to NO, there exists a delay in the audio subsystem
-        //     between setting the forceTransmit flag to NO before that change is propagated to MKServerModel
-        //     delegates.
-        //
-        // The first problem is solved by registering a notification observer for when the app enters the
-        // background. This is handled by the appDidEnterBackground: method of this class.
-        //
-        // This notification observer will set the forceTransmit flag to NO, but will also force-reload
-        // the view controller's table view, causing us to enter this method soon before we're really backgrounded.
-        //
-        // That's fine, but because of problem #2, the user's talk state will most likely not be updated by the time
-        // tableView:cellForRowAtIndexPath: is called by the table view.
-        //
-        // To solve this, we query the audio subsystem directly for the answer to whether the current user
-        // should be treated as holding down Push-to-Talk, and therefore be listed with an active talk state
-        // in the table view.
+        // Fix PTT state when backgrounding
         if (user == connectedUser && [[MKAudio sharedAudio] transmitType] == MKTransmitTypeToggle) {
             if (![[MKAudio sharedAudio] forceTransmit]) {
-                talkImageName = @"talking_off";
+                talkState = MKTalkStatePassive;
             }
         }
         
-        cell.imageView.image = [UIImage imageNamed:talkImageName];
+        // Generate initials avatar with talk state ring
+        cell.imageView.image = [self initialsAvatarForUser:[user userName] talkState:talkState];
+        
         cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -369,6 +346,68 @@
     }
 }
 
+- (UIImage *) initialsAvatarForUser:(NSString *)userName talkState:(MKTalkState)talkState {
+    CGFloat size = 30.0f;
+    CGFloat ringWidth = 2.0f;
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(size, size), NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    // Draw ring based on talk state
+    UIColor *ringColor;
+    BOOL isActive = (talkState == MKTalkStateTalking || talkState == MKTalkStateShouting);
+    BOOL isWhispering = (talkState == MKTalkStateWhispering);
+    
+    if (isActive) {
+        ringColor = [UIColor systemGreenColor];
+    } else if (isWhispering) {
+        ringColor = [UIColor systemYellowColor];
+    } else {
+        ringColor = [UIColor clearColor];
+    }
+    
+    if (isActive || isWhispering) {
+        CGContextSetStrokeColorWithColor(ctx, ringColor.CGColor);
+        CGContextSetLineWidth(ctx, ringWidth);
+        CGRect ringRect = CGRectInset(CGRectMake(0, 0, size, size), ringWidth / 2.0f, ringWidth / 2.0f);
+        CGContextStrokeEllipseInRect(ctx, ringRect);
+    }
+    
+    // Draw circle background
+    CGFloat inset = isActive || isWhispering ? ringWidth + 1.5f : 2.0f;
+    CGRect circleRect = CGRectInset(CGRectMake(0, 0, size, size), inset, inset);
+    
+    // Use a hash of the username for consistent color
+    NSUInteger hash = [userName hash];
+    CGFloat hue = (hash % 360) / 360.0f;
+    UIColor *bgColor = [UIColor colorWithHue:hue saturation:0.5f brightness:0.7f alpha:1.0f];
+    
+    CGContextSetFillColorWithColor(ctx, bgColor.CGColor);
+    CGContextFillEllipseInRect(ctx, circleRect);
+    
+    // Draw initials
+    NSString *initials = @"?";
+    if (userName && [userName length] > 0) {
+        initials = [[userName substringToIndex:1] uppercaseString];
+    }
+    
+    NSDictionary *attrs = @{
+        NSFontAttributeName: [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold],
+        NSForegroundColorAttributeName: [UIColor whiteColor]
+    };
+    CGSize textSize = [initials sizeWithAttributes:attrs];
+    CGPoint textPoint = CGPointMake(
+        CGRectGetMidX(circleRect) - textSize.width / 2.0f,
+        CGRectGetMidY(circleRect) - textSize.height / 2.0f
+    );
+    [initials drawAtPoint:textPoint withAttributes:attrs];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 - (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
     NSInteger userIndex = [self indexForUser:user];
     if (userIndex == NSNotFound) {
@@ -376,19 +415,9 @@
     }
 
     UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-
+    
     MKTalkState talkState = [user talkState];
-    NSString *talkImageName = nil;
-    if (talkState == MKTalkStatePassive)
-        talkImageName = @"talking_off";
-    else if (talkState == MKTalkStateTalking)
-        talkImageName = @"talking_on";
-    else if (talkState == MKTalkStateWhispering)
-        talkImageName = @"talking_whisper";
-    else if (talkState == MKTalkStateShouting)
-        talkImageName = @"talking_alt";
-
-    cell.imageView.image = [UIImage imageNamed:talkImageName];
+    cell.imageView.image = [self initialsAvatarForUser:[user userName] talkState:talkState];
 }
 
 - (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
@@ -533,58 +562,27 @@
 
 - (void) repositionTalkButton {
     // fixme(mkrautz): This should stay put if we're run on the iPhone.
-    return;
-    
-    UIDevice *device = [UIDevice currentDevice];
-    UIWindow *window = [[[UIApplication sharedApplication] windows] objectAtIndex:0];
-    CGRect windowRect = window.frame;
-    CGRect buttonRect;
-    CGSize buttonSize;
-    
-    UIImage *onImage = [UIImage imageNamed:@"talkbutton_on"];
-    buttonRect.size = onImage.size;
-    buttonRect.origin = CGPointMake(0, 0);
-    _talkButton.transform = CGAffineTransformIdentity;
-    buttonSize = onImage.size;
-    buttonRect.size = buttonSize;
-    
-    
-    UIDeviceOrientation orientation = device.orientation;
-    if (orientation == UIDeviceOrientationLandscapeLeft) {
-        _talkButton.transform = CGAffineTransformMakeRotation(M_PI_2);
-        buttonRect = _talkButton.frame;
-        buttonRect.origin.y = (windowRect.size.height - buttonSize.width)/2;
-        buttonRect.origin.x = 40;
-        _talkButton.frame = buttonRect;
-    } else if (orientation == UIDeviceOrientationLandscapeRight) {
-        _talkButton.transform = CGAffineTransformMakeRotation(-M_PI_2);
-        buttonRect = _talkButton.frame;
-        buttonRect.origin.y = (windowRect.size.height - buttonSize.width)/2;
-        buttonRect.origin.x = windowRect.size.width - (buttonSize.height + 40);
-        _talkButton.frame = buttonRect;
-    } else if (orientation == UIDeviceOrientationPortrait) {
-        _talkButton.transform = CGAffineTransformMakeRotation(0.0f);
-        buttonRect = _talkButton.frame;
-        buttonRect.origin.y = windowRect.size.height - (buttonSize.height + 40);
-        buttonRect.origin.x = (windowRect.size.width - buttonSize.width)/2;
-        _talkButton.frame = buttonRect;
-    } else if (orientation == UIDeviceOrientationPortraitUpsideDown) {
-        _talkButton.transform = CGAffineTransformMakeRotation(M_PI);
-        buttonRect = _talkButton.frame;
-        buttonRect.origin.y = 40;
-        buttonRect.origin.x = (windowRect.size.width - buttonSize.width)/2;
-        _talkButton.frame = buttonRect;
-    }
+    // Currently disabled — no-op.
 }
 
 - (void) talkOn:(UIButton *)button {
     [button setAlpha:1.0f];
     [[MKAudio sharedAudio] setForceTransmit:YES];
+    
+    if (@available(iOS 10.0, *)) {
+        UIImpactFeedbackGenerator *feedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        [feedback impactOccurred];
+    }
 }
 
 - (void) talkOff:(UIButton *)button {
     [button setAlpha:0.80f];
     [[MKAudio sharedAudio] setForceTransmit:NO];
+    
+    if (@available(iOS 10.0, *)) {
+        UIImpactFeedbackGenerator *feedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+        [feedback impactOccurred];
+    }
 }
 
 #pragma mark - Mode switch

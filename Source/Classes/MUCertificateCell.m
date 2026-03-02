@@ -11,6 +11,7 @@
     IBOutlet UILabel      *_emailLabel;
     IBOutlet UILabel      *_issuerLabel;
     IBOutlet UILabel      *_expiryLabel;
+    UIImageView           *_checkBadge;
     BOOL                  _isCurrentCert;
     BOOL                  _isExpired;
     BOOL                  _isIntermediate;
@@ -22,6 +23,16 @@
 + (MUCertificateCell *) loadFromNib {
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
     return [array objectAtIndex:0];
+}
+
+- (void) awakeFromNib {
+    [super awakeFromNib];
+    self.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = [UIColor clearColor];
+    _nameLabel.textColor = [MUColor primaryTextColor];
+    _emailLabel.textColor = [MUColor secondaryTextColor];
+    _issuerLabel.textColor = [MUColor secondaryTextColor];
+    _expiryLabel.textColor = [MUColor secondaryTextColor];
 }
 
 - (void) setSubjectName:(NSString *)name {
@@ -62,20 +73,37 @@
     return _isExpired;
 }
 
+- (void) _ensureCheckBadge {
+    if (_checkBadge != nil) return;
+    if (@available(iOS 13.0, *)) {
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:22 weight:UIImageSymbolWeightBold];
+        _checkBadge = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"checkmark.circle.fill" withConfiguration:config]];
+        _checkBadge.tintColor = [UIColor systemGreenColor];
+        _checkBadge.backgroundColor = [UIColor whiteColor];
+        _checkBadge.layer.cornerRadius = 12;
+        _checkBadge.clipsToBounds = YES;
+        _checkBadge.frame = CGRectMake(44, 44, 24, 24);
+        [_certImage.superview addSubview:_checkBadge];
+    }
+}
+
 - (void) setIsCurrentCertificate:(BOOL)isCurrent {
     _isCurrentCert = isCurrent;
     if (isCurrent) {
         [_certImage setImage:[UIImage imageNamed:@"certificatecell-selected"]];
-        [_nameLabel setTextColor:[MUColor selectedTextColor]];
-        [_emailLabel setTextColor:[MUColor selectedTextColor]];
+        [_nameLabel setTextColor:[UIColor systemBlueColor]];
+        [_emailLabel setTextColor:[UIColor systemBlueColor]];
+        [self _ensureCheckBadge];
+        _checkBadge.hidden = NO;
     } else {
         if (_isIntermediate) {
             [_certImage setImage:[UIImage imageNamed:@"certificatecell-intermediate"]];
         } else {
             [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];   
         }
-        [_nameLabel setTextColor:[UIColor blackColor]];
-        [_emailLabel setTextColor:[UIColor blackColor]];
+        [_nameLabel setTextColor:[MUColor primaryTextColor]];
+        [_emailLabel setTextColor:[MUColor secondaryTextColor]];
+        _checkBadge.hidden = YES;
     }
 }
 

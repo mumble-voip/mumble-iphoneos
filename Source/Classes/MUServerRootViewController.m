@@ -12,6 +12,7 @@
 #import "MUMessagesViewController.h"
 #import "MUDatabase.h"
 #import "MUAudioMixerDebugViewController.h"
+#import "MUApplicationDelegate.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -35,6 +36,11 @@
     MUMessagesViewController    *_messagesView;
     
     NSInteger                   _unreadMessages;
+    
+    UIView                      *_controlPanel;
+    UIButton                    *_muteBtn;
+    UIButton                    *_deafenBtn;
+    UIButton                    *_disconnectBtn;
 }
 @end
 
@@ -110,20 +116,26 @@
     
     [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
 
-    self.toolbar.barStyle = UIBarStyleBlackOpaque;
+    // Hide the default toolbar — we use a custom floating panel instead
+    [self setToolbarHidden:YES animated:NO];
+    [self _setupControlPanel];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setToolbarHidden:YES animated:NO];
+    [self _updateControlPanelState];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // On iPad, we support all interface orientations.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return YES;
-    }
+- (BOOL) shouldAutorotate {
+    return YES;
+}
 
-    return interfaceOrientation == UIInterfaceOrientationPortrait;
+- (UIInterfaceOrientationMask) supportedInterfaceOrientations {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return UIInterfaceOrientationMaskAll;
+    }
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void) segmentChanged:(id)sender {
@@ -133,12 +145,14 @@
         _serverView.navigationItem.rightBarButtonItem = _menuButton;
         [self setViewControllers:[NSArray arrayWithObject:_serverView] animated:NO];
         [_modeSwitchButton setEnabled:YES];
+        _controlPanel.hidden = NO;
     } else if (_segmentedControl.selectedSegmentIndex == 1) { // Messages view
         _messagesView.navigationItem.titleView = _segmentedControl;
         _messagesView.navigationItem.leftBarButtonItem = _smallIcon;
         _messagesView.navigationItem.rightBarButtonItem = _menuButton;
         [self setViewControllers:[NSArray arrayWithObject:_messagesView] animated:NO];
         [_modeSwitchButton setEnabled:NO];
+        _controlPanel.hidden = YES;
     }
     
     if (_segmentedControl.selectedSegmentIndex == 1) { // Messages view
@@ -171,16 +185,19 @@
 
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     if (err) {
+        // Disconnect first (switches tabs), then show alert on the tab bar
+        [[MUConnectionController sharedController] disconnectFromServer];
+        
+        MUApplicationDelegate *appDelegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
+        UITabBarController *tabBar = [appDelegate tabBarController];
+        
         UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Connection closed", nil)
                                                                            message:[err localizedDescription]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                        style:UIAlertActionStyleCancel
                                                      handler:nil]];
-        
-        [self presentViewController:alertCtrl animated:YES completion:nil];
-
-        [[MUConnectionController sharedController] disconnectFromServer];
+        [tabBar presentViewController:alertCtrl animated:YES completion:nil];
     }
 }
 
@@ -194,16 +211,18 @@
                                 NSLocalizedString(@"Kicked by %@ for reason: \"%@\"", @"Kicked by user for reason"),
                                     [actor userName], reasonMsg];
         
+        [[MUConnectionController sharedController] disconnectFromServer];
+        
+        MUApplicationDelegate *appDelegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
+        UITabBarController *tabBar = [appDelegate tabBarController];
+        
         UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                                            message:alertMsg
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                        style:UIAlertActionStyleCancel
                                                      handler:nil]];
-        
-        [self presentViewController:alertCtrl animated:YES completion:nil];
-        
-        [[MUConnectionController sharedController] disconnectFromServer];
+        [tabBar presentViewController:alertCtrl animated:YES completion:nil];
     }
 }
 
@@ -215,17 +234,54 @@
                                 NSLocalizedString(@"Banned by %@ for reason: \"%@\"", nil),
                                     [actor userName], reasonMsg];
         
+        [[MUConnectionController sharedController] disconnectFromServer];
+        
+        MUApplicationDelegate *appDelegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
+        UITabBarController *tabBar = [appDelegate tabBarController];
+        
         UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                                            message:alertMsg
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                        style:UIAlertActionStyleCancel
                                                      handler:nil]];
-        
-        [self presentViewController:alertCtrl animated:YES completion:nil];
-        
-        [[MUConnectionController sharedController] disconnectFromServer];
+        [tabBar presentViewController:alertCtrl animated:YES completion:nil];
     }
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userSelfMutedAndDeafened:(MKUser *)user {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
+}
+
+- (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+    if (user == [model connectedUser])
+        [self _updateControlPanelState];
 }
 
 - (void) serverModel:(MKServerModel *)model permissionDenied:(MKPermission)perm forUser:(MKUser *)user inChannel:(MKChannel *)channel {
@@ -287,6 +343,142 @@
     }
 }
 
+#pragma mark - Control Panel
+
+- (UIButton *) _makeControlButton {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    btn.translatesAutoresizingMaskIntoConstraints = NO;
+    btn.layer.cornerRadius = 22;
+    btn.clipsToBounds = YES;
+    if (@available(iOS 13.0, *)) {
+        btn.backgroundColor = [UIColor tertiarySystemFillColor];
+    } else {
+        btn.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+    }
+    [NSLayoutConstraint activateConstraints:@[
+        [btn.widthAnchor constraintEqualToConstant:44],
+        [btn.heightAnchor constraintEqualToConstant:44]
+    ]];
+    return btn;
+}
+
+- (void) _setupControlPanel {
+    _controlPanel = [[UIView alloc] init];
+    _controlPanel.translatesAutoresizingMaskIntoConstraints = NO;
+    if (@available(iOS 13.0, *)) {
+        _controlPanel.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+    } else {
+        _controlPanel.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
+    }
+    _controlPanel.layer.cornerRadius = 16;
+    _controlPanel.layer.shadowColor = [UIColor blackColor].CGColor;
+    _controlPanel.layer.shadowOpacity = 0.12;
+    _controlPanel.layer.shadowOffset = CGSizeMake(0, 2);
+    _controlPanel.layer.shadowRadius = 8;
+    
+    _muteBtn = [self _makeControlButton];
+    [_muteBtn addTarget:self action:@selector(toggleMute:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _deafenBtn = [self _makeControlButton];
+    [_deafenBtn addTarget:self action:@selector(toggleDeafen:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _disconnectBtn = [self _makeControlButton];
+    [_disconnectBtn addTarget:self action:@selector(disconnectTapped:) forControlEvents:UIControlEventTouchUpInside];
+    if (@available(iOS 13.0, *)) {
+        _disconnectBtn.backgroundColor = [[UIColor systemRedColor] colorWithAlphaComponent:0.15];
+    }
+    
+    UIStackView *stack = [[UIStackView alloc] initWithArrangedSubviews:@[_muteBtn, _deafenBtn, _disconnectBtn]];
+    stack.translatesAutoresizingMaskIntoConstraints = NO;
+    stack.axis = UILayoutConstraintAxisHorizontal;
+    stack.spacing = 20;
+    stack.alignment = UIStackViewAlignmentCenter;
+    
+    [_controlPanel addSubview:stack];
+    [self.view addSubview:_controlPanel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [stack.centerXAnchor constraintEqualToAnchor:_controlPanel.centerXAnchor],
+        [stack.centerYAnchor constraintEqualToAnchor:_controlPanel.centerYAnchor],
+        [_controlPanel.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [_controlPanel.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-8],
+        [_controlPanel.heightAnchor constraintEqualToConstant:60],
+        [stack.leadingAnchor constraintEqualToAnchor:_controlPanel.leadingAnchor constant:20],
+        [stack.trailingAnchor constraintEqualToAnchor:_controlPanel.trailingAnchor constant:-20],
+    ]];
+    
+    [self _updateControlPanelState];
+}
+
+- (void) _updateControlPanelState {
+    MKUser *connUser = [_model connectedUser];
+    BOOL muted = [connUser isSelfMuted];
+    BOOL deafened = [connUser isSelfDeafened];
+    
+    if (@available(iOS 13.0, *)) {
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:20 weight:UIImageSymbolWeightMedium];
+        
+        if (muted) {
+            [_muteBtn setImage:[UIImage systemImageNamed:@"mic.slash.fill" withConfiguration:config] forState:UIControlStateNormal];
+            _muteBtn.tintColor = [UIColor whiteColor];
+            _muteBtn.backgroundColor = [UIColor systemRedColor];
+        } else {
+            [_muteBtn setImage:[UIImage systemImageNamed:@"mic.fill" withConfiguration:config] forState:UIControlStateNormal];
+            _muteBtn.tintColor = [UIColor systemGreenColor];
+            _muteBtn.backgroundColor = [UIColor tertiarySystemFillColor];
+        }
+        
+        if (deafened) {
+            [_deafenBtn setImage:[UIImage systemImageNamed:@"speaker.slash.fill" withConfiguration:config] forState:UIControlStateNormal];
+            _deafenBtn.tintColor = [UIColor whiteColor];
+            _deafenBtn.backgroundColor = [UIColor systemRedColor];
+        } else {
+            [_deafenBtn setImage:[UIImage systemImageNamed:@"speaker.wave.2.fill" withConfiguration:config] forState:UIControlStateNormal];
+            _deafenBtn.tintColor = [UIColor labelColor];
+            _deafenBtn.backgroundColor = [UIColor tertiarySystemFillColor];
+        }
+        
+        [_disconnectBtn setImage:[UIImage systemImageNamed:@"xmark" withConfiguration:config] forState:UIControlStateNormal];
+        _disconnectBtn.tintColor = [UIColor systemRedColor];
+    }
+}
+
+- (void) toggleMute:(id)sender {
+    MKUser *connUser = [_model connectedUser];
+    BOOL newMuted = ![connUser isSelfMuted];
+    // If unmuting while deafened, also undeafen
+    BOOL newDeafened = newMuted ? [connUser isSelfDeafened] : NO;
+    [_model setSelfMuted:newMuted andSelfDeafened:newDeafened];
+    
+    if (@available(iOS 10.0, *)) {
+        UIImpactFeedbackGenerator *feedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        [feedback impactOccurred];
+    }
+}
+
+- (void) toggleDeafen:(id)sender {
+    MKUser *connUser = [_model connectedUser];
+    BOOL newDeafened = ![connUser isSelfDeafened];
+    // Deafening also mutes; undeafening also unmutes
+    [_model setSelfMuted:newDeafened andSelfDeafened:newDeafened];
+    
+    if (@available(iOS 10.0, *)) {
+        UIImpactFeedbackGenerator *feedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+        [feedback impactOccurred];
+    }
+}
+
+- (void) disconnectTapped:(id)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Disconnect", nil)
+                                                                   message:NSLocalizedString(@"Are you sure you want to disconnect from this server?", nil)
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Disconnect", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [[MUConnectionController sharedController] disconnectFromServer];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Actions
 
 - (void) actionButtonClicked:(id)sender {
@@ -296,22 +488,6 @@
     UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:nil
                                                                        message:nil
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Disconnect", nil)
-                                                   style:UIAlertActionStyleDestructive
-                                                 handler:^(UIAlertAction * _Nonnull action) {
-        [[MUConnectionController sharedController] disconnectFromServer];
-    }]];
-    
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioMixerDebug"] boolValue]) {
-        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Mixer Debug", nil)
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-            MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
-            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
-            [self presentViewController:navCtrl animated:YES completion:nil];
-        }]];
-    }
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Access Tokens", nil)
                                                    style:UIAlertActionStyleDefault
@@ -371,38 +547,14 @@
         }]];
     }
     
-    if ([connUser isSelfMuted] && [connUser isSelfDeafened]) {
-        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Unmute and undeafen", nil)
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioMixerDebug"] boolValue]) {
+        [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Mixer Debug", nil)
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
-            [self->_model setSelfMuted:NO andSelfDeafened:NO];
+            MUAudioMixerDebugViewController *audioMixerDebugViewController = [[MUAudioMixerDebugViewController alloc] init];
+            UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:audioMixerDebugViewController];
+            [self presentViewController:navCtrl animated:YES completion:nil];
         }]];
-    } else {
-        void (^muteHandler)(UIAlertAction * _Nonnull action) = ^(UIAlertAction * _Nonnull action) {
-            [self->_model setSelfMuted:![connUser isSelfMuted] andSelfDeafened:[connUser isSelfDeafened]];
-        };
-        void (^deafenHandler)(UIAlertAction * _Nonnull action) = ^(UIAlertAction * _Nonnull action) {
-            [self->_model setSelfMuted:[connUser isSelfMuted] andSelfDeafened:![connUser isSelfDeafened]];
-        };
-        if (![connUser isSelfMuted]) {
-            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Self-Mute", nil)
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:muteHandler]];
-        } else {
-            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Unmute Self", nil)
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:muteHandler]];
-        }
-        
-        if (![connUser isSelfDeafened]) {
-            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Self-Deafen", nil)
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:deafenHandler]];
-        } else {
-            [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Undeafen Self", nil)
-                                                           style:UIAlertActionStyleDefault
-                                                         handler:deafenHandler]];
-        }
     }
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)

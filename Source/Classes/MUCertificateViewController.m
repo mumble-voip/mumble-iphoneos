@@ -272,7 +272,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
 
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     [[cell detailTextLabel] setAdjustsFontSizeToFitWidth:NO];
-    [cell setBackgroundColor:[UIColor whiteColor]];
+    [cell setBackgroundColor:[MUColor cellBackgroundColor]];
 
     NSUInteger section = [indexPath section];
     NSUInteger row = [indexPath row];
@@ -305,7 +305,7 @@ static const NSUInteger CertificateViewSectionTotal              = 4;
         else if (section == CertificateViewSectionIssuer)
             item = [_issuerItems objectAtIndex:row];
         cell.textLabel.text = [item objectAtIndex:0];
-        cell.textLabel.textColor = [UIColor blackColor];
+        cell.textLabel.textColor = [MUColor primaryTextColor];
         cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.textLabel.numberOfLines = 1;
         cell.textLabel.lineBreakMode = NSLineBreakByTruncatingTail;

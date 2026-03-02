@@ -4,24 +4,37 @@
 
 #import "MUPreferencesViewController.h"
 #import "MUApplicationDelegate.h"
-#import "MUCertificatePreferencesViewController.h"
 #import "MUAudioTransmissionPreferencesViewController.h"
 #import "MUAdvancedAudioPreferencesViewController.h"
 #import "MURemoteControlPreferencesViewController.h"
-#import "MUCertificateController.h"
-#import "MUTableViewHeaderLabel.h"
 #import "MURemoteControlServer.h"
+#import "MULegalViewController.h"
+#import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 #import "MUImage.h"
 #import "MUBackgroundView.h"
 
-#import <MumbleKit/MKCertificate.h>
+@import UserNotifications;
+
+// Section 0: Audio
+// Section 1: Network
+// Section 2: Notifications
+// Section 3: About
+enum {
+    MUSettingsSectionAudio = 0,
+    MUSettingsSectionNetwork = 1,
+    MUSettingsSectionNotifications = 2,
+    MUSettingsSectionAbout = 3,
+    MUSettingsSectionCount = 4,
+};
 
 @interface MUPreferencesViewController () {
     UITextField *_activeTextField;
+    UISwitch    *_notificationsSwitch;
 }
 - (void) audioVolumeChanged:(UISlider *)volumeSlider;
 - (void) forceTCPChanged:(UISwitch *)tcpSwitch;
+- (void) notificationsChanged:(UISwitch *)notifSwitch;
 @end
 
 @implementation MUPreferencesViewController
@@ -30,7 +43,13 @@
 #pragma mark Initialization
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -38,7 +57,7 @@
 
 - (void) dealloc {
     [[NSUserDefaults standardUserDefaults] synchronize];
-    MUApplicationDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    MUApplicationDelegate *delegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate reloadPreferences];
 }
 
@@ -48,20 +67,12 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-        [self.navigationController.navigationBar setBackgroundImage:[MUImage clearColorImage] forBarMetrics:UIBarMetricsDefault];
-        self.navigationController.navigationBar.translucent = YES;
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
     }
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -70,7 +81,7 @@
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
 
-    self.title = NSLocalizedString(@"Preferences", nil);
+    self.title = NSLocalizedString(@"Settings", nil);
     [self.tableView reloadData];
 }
 
@@ -83,26 +94,26 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return MUSettingsSectionCount;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Audio
-    if (section == 0) {
-        return 3;
-    // Network
-    } else if (section == 1) {
+    if (section == MUSettingsSectionAudio) {
+        return 3; // Volume, Transmission, Advanced
+    } else if (section == MUSettingsSectionNetwork) {
 #ifdef ENABLE_REMOTE_CONTROL
-        return 3;
+        return 2; // Force TCP, Remote Control
 #else
-        return 2;
+        return 1; // Force TCP only
 #endif
+    } else if (section == MUSettingsSectionNotifications) {
+        return 1; // Enable Notifications
+    } else if (section == MUSettingsSectionAbout) {
+        return 3; // Website, Legal, Support
     }
-
     return 0;
 }
 
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"PreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -111,13 +122,13 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
     
     // Audio section
-    if ([indexPath section] == 0) {
-        // Volume
+    if ([indexPath section] == MUSettingsSectionAudio) {
         if ([indexPath row] == 0) {
             UISlider *volSlider = [[UISlider alloc] init];
-            [volSlider setMinimumTrackTintColor:[UIColor blackColor]];
+            [volSlider setMinimumTrackTintColor:[UIColor systemBlueColor]];
             [volSlider setMaximumValue:1.0f];
             [volSlider setMinimumValue:0.0f];
             [volSlider setValue:[[NSUserDefaults standardUserDefaults] floatForKey:@"AudioOutputVolume"]];
@@ -126,7 +137,6 @@
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             [volSlider addTarget:self action:@selector(audioVolumeChanged:) forControlEvents:UIControlEventValueChanged];
         }
-        // Transmit method
         if ([indexPath row] == 1) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AudioTransmitCell"];
             if (cell == nil)
@@ -142,7 +152,7 @@
             }
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-             cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = NSLocalizedString(@"Advanced", nil);
@@ -151,41 +161,71 @@
         }
 
     // Network
-    } else if ([indexPath section] == 1) {
+    } else if ([indexPath section] == MUSettingsSectionNetwork) {
         if ([indexPath row] == 0) {
             UISwitch *tcpSwitch = [[UISwitch alloc] init];
             [tcpSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NetworkForceTCP"]];
             [[cell textLabel] setText:NSLocalizedString(@"Force TCP", nil)];
             [cell setAccessoryView:tcpSwitch];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [tcpSwitch setOnTintColor:[UIColor blackColor]];
+            [tcpSwitch setOnTintColor:[UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0]];
             [tcpSwitch addTarget:self action:@selector(forceTCPChanged:) forControlEvents:UIControlEventValueChanged];
         } else if ([indexPath row] == 1) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PrefCertificateCell"];
-            if (cell == nil)
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"PrefCertificateCell"];
-            MKCertificate *cert = [MUCertificateController defaultCertificate];
-            cell.textLabel.text = NSLocalizedString(@"Certificate", nil);
-            cell.detailTextLabel.text = cert ? [cert subjectName] : NSLocalizedString(@"None", @"None (No certificate chosen)");
-            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            return cell;
-        } else if ([indexPath row] == 2) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RemoteControlCell"];
             if (cell == nil)
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"RemoteControlCell"];
             cell.textLabel.text = NSLocalizedString(@"Remote Control", nil);
             BOOL isOn = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
-            if (isOn) {
-                cell.detailTextLabel.text = NSLocalizedString(@"On", nil);
-            } else {
-                cell.detailTextLabel.text = NSLocalizedString(@"Off", nil);
-            }
+            cell.detailTextLabel.text = isOn ? NSLocalizedString(@"On", nil) : NSLocalizedString(@"Off", nil);
             cell.detailTextLabel.textColor = [MUColor selectedTextColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
+        }
+    
+    // Notifications
+    } else if ([indexPath section] == MUSettingsSectionNotifications) {
+        if ([indexPath row] == 0) {
+            _notificationsSwitch = [[UISwitch alloc] init];
+            [_notificationsSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"NotificationsEnabled"]];
+            [[cell textLabel] setText:NSLocalizedString(@"Enable Notifications", nil)];
+            [cell setAccessoryView:_notificationsSwitch];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+            [_notificationsSwitch addTarget:self action:@selector(notificationsChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            // Update switch state based on actual system authorization
+            [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (settings.authorizationStatus == UNAuthorizationStatusDenied) {
+                        [_notificationsSwitch setOn:NO animated:NO];
+                    }
+                });
+            }];
+        }
+
+    // About
+    } else if ([indexPath section] == MUSettingsSectionAbout) {
+        if ([indexPath row] == 0) {
+            cell.textLabel.text = NSLocalizedString(@"Website", nil);
+            if (@available(iOS 13.0, *)) {
+                cell.imageView.image = [UIImage systemImageNamed:@"safari"];
+                cell.imageView.tintColor = [UIColor systemBlueColor];
+            }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = NSLocalizedString(@"Legal", nil);
+            if (@available(iOS 13.0, *)) {
+                cell.imageView.image = [UIImage systemImageNamed:@"doc.text"];
+                cell.imageView.tintColor = [UIColor systemGrayColor];
+            }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else if ([indexPath row] == 2) {
+            cell.textLabel.text = NSLocalizedString(@"Support", nil);
+            if (@available(iOS 13.0, *)) {
+                cell.imageView.image = [UIImage systemImageNamed:@"questionmark.circle"];
+                cell.imageView.tintColor = [UIColor systemOrangeColor];
+            }
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
 
@@ -193,12 +233,15 @@
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
+    if (section == MUSettingsSectionAudio) {
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio", nil)];
-    } else if (section == 1) {
+    } else if (section == MUSettingsSectionNetwork) {
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Network", nil)];
+    } else if (section == MUSettingsSectionNotifications) {
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Notifications", nil)];
+    } else if (section == MUSettingsSectionAbout) {
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"About", nil)];
     }
-
     return nil;
 }
 
@@ -206,11 +249,25 @@
     return [MUTableViewHeaderLabel defaultHeaderHeight];
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == MUSettingsSectionAbout) {
+#ifdef MUMBLE_BETA_DIST
+        return [NSString stringWithFormat:@"Mumble %@ (%@)",
+                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"MumbleGitRevision"]];
+#else
+        return [NSString stringWithFormat:@"Mumble %@",
+                [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+#endif
+    }
+    return nil;
+}
+
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) { // Audio
+    if (indexPath.section == MUSettingsSectionAudio) {
         if (indexPath.row == 1) { // Transmission
             MUAudioTransmissionPreferencesViewController *audioXmit = [[MUAudioTransmissionPreferencesViewController alloc] init];
             [self.navigationController pushViewController:audioXmit animated:YES];
@@ -218,14 +275,21 @@
             MUAdvancedAudioPreferencesViewController *advAudio = [[MUAdvancedAudioPreferencesViewController alloc] init];
             [self.navigationController pushViewController:advAudio animated:YES];
         }
-    } else if ([indexPath section] == 1) { // Network
-        if ([indexPath row] == 1) { // Certificates
-            MUCertificatePreferencesViewController *certPref = [[MUCertificatePreferencesViewController alloc] init];
-            [self.navigationController pushViewController:certPref animated:YES];
-        }
-        if ([indexPath row] == 2) { // Remote Control
+    } else if (indexPath.section == MUSettingsSectionNetwork) {
+        if (indexPath.row == 1) { // Remote Control
             MURemoteControlPreferencesViewController *remoteControlPref = [[MURemoteControlPreferencesViewController alloc] init];
             [self.navigationController pushViewController:remoteControlPref animated:YES];
+        }
+    } else if (indexPath.section == MUSettingsSectionAbout) {
+        if (indexPath.row == 0) { // Website
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.mumble.info/"] options:@{} completionHandler:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        } else if (indexPath.row == 1) { // Legal
+            MULegalViewController *legalView = [[MULegalViewController alloc] init];
+            [self.navigationController pushViewController:legalView animated:YES];
+        } else if (indexPath.row == 2) { // Support
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/mumble-voip/mumble-iphoneos/issues"] options:@{} completionHandler:nil];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
 }
@@ -238,5 +302,42 @@
     [[NSUserDefaults standardUserDefaults] setBool:[tcpSwitch isOn] forKey:@"NetworkForceTCP"];
 }
 
-@end
+- (void) notificationsChanged:(UISwitch *)notifSwitch {
+    if ([notifSwitch isOn]) {
+        [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined) {
+                    [[UNUserNotificationCenter currentNotificationCenter]
+                        requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)
+                        completionHandler:^(BOOL granted, NSError *error) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [[NSUserDefaults standardUserDefaults] setBool:granted forKey:@"NotificationsEnabled"];
+                                [notifSwitch setOn:granted animated:YES];
+                            });
+                        }];
+                } else if (settings.authorizationStatus == UNAuthorizationStatusDenied) {
+                    [notifSwitch setOn:NO animated:YES];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Notifications Disabled", nil)
+                                                                                   message:NSLocalizedString(@"Notifications are disabled in system settings. Please enable them in Settings > Mumble > Notifications.", nil)
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                              style:UIAlertActionStyleCancel
+                                                            handler:nil]];
+                    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Open Settings", nil)
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction *action) {
+                        NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                        [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
+                    }]];
+                    [self presentViewController:alert animated:YES completion:nil];
+                } else {
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NotificationsEnabled"];
+                }
+            });
+        }];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NotificationsEnabled"];
+    }
+}
 
+@end

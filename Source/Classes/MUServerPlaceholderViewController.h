@@ -2,7 +2,5 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-@interface MUApplicationDelegate : NSObject <UIApplicationDelegate>
-@property (nonatomic, readonly) UITabBarController *tabBarController;
-- (void) reloadPreferences;
+@interface MUServerPlaceholderViewController : UIViewController
 @end

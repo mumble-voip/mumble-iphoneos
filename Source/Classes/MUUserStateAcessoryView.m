@@ -3,46 +3,64 @@
 // license that can be found in the LICENSE file.
 
 #import "MUUserStateAcessoryView.h"
+#import "MUColor.h"
 
 #import <MumbleKit/MKUser.h>
 
 @implementation MUUserStateAcessoryView
 
 + (UIView *) viewForUser:(MKUser *)user {
-    const CGFloat iconHeight = 24.0f;
-    const CGFloat iconWidth = 28.0f;
+    const CGFloat iconSize = 20.0f;
+    const CGFloat iconSpacing = 4.0f;
     
-    NSMutableArray *states = [[NSMutableArray alloc] init];
+    NSMutableArray *iconViews = [[NSMutableArray alloc] init];
+    
     if ([user isAuthenticated])
-        [states addObject:@"authenticated"];
+        [iconViews addObject:[self _iconWithSFSymbol:@"checkmark.shield.fill" color:[UIColor systemGreenColor] size:iconSize]];
     if ([user isSelfDeafened])
-        [states addObject:@"deafened_self"];
+        [iconViews addObject:[self _iconWithSFSymbol:@"speaker.slash.fill" color:[UIColor systemRedColor] size:iconSize]];
+    else if ([user isDeafened])
+        [iconViews addObject:[self _iconWithSFSymbol:@"speaker.slash" color:[UIColor systemRedColor] size:iconSize]];
     if ([user isSelfMuted])
-        [states addObject:@"muted_self"];
-    if ([user isMuted])
-        [states addObject:@"muted_server"];
-    if ([user isDeafened])
-        [states addObject:@"deafened_server"];
-    if ([user isLocalMuted])
-        [states addObject:@"muted_local"];
-    if ([user isSuppressed])
-        [states addObject:@"muted_suppressed"];
+        [iconViews addObject:[self _iconWithSFSymbol:@"mic.slash.fill" color:[UIColor systemRedColor] size:iconSize]];
+    else if ([user isMuted])
+        [iconViews addObject:[self _iconWithSFSymbol:@"mic.slash" color:[UIColor systemRedColor] size:iconSize]];
+    else if ([user isLocalMuted])
+        [iconViews addObject:[self _iconWithSFSymbol:@"mic.slash.fill" color:[UIColor systemOrangeColor] size:iconSize]];
+    else if ([user isSuppressed])
+        [iconViews addObject:[self _iconWithSFSymbol:@"mic.slash" color:[MUColor secondaryTextColor] size:iconSize]];
     if ([user isPrioritySpeaker])
-        [states addObject:@"priorityspeaker"];
+        [iconViews addObject:[self _iconWithSFSymbol:@"exclamationmark.triangle.fill" color:[UIColor systemYellowColor] size:iconSize]];
     
-    CGFloat widthOffset = [states count] * iconWidth;
-    UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
-    for (NSString *imageName in states) {
-        UIImage *img = [UIImage imageNamed:imageName];
-        UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
-        CGFloat ypos = (iconHeight - img.size.height)/2.0f;
-        CGFloat xpos = (iconWidth - img.size.width)/2.0f;
-        widthOffset -= iconWidth - xpos;
-        imgView.frame = CGRectMake(ceilf(widthOffset), ceilf(ypos), img.size.width, img.size.height);
-        [stateView addSubview:imgView];
+    if ([iconViews count] == 0)
+        return nil;
+    
+    CGFloat totalWidth = [iconViews count] * iconSize + ([iconViews count] - 1) * iconSpacing;
+    UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, totalWidth, iconSize)];
+    
+    CGFloat x = 0;
+    for (UIImageView *iv in iconViews) {
+        iv.frame = CGRectMake(x, 0, iconSize, iconSize);
+        [stateView addSubview:iv];
+        x += iconSize + iconSpacing;
     }
-
+    
     return stateView;
+}
+
++ (UIImageView *) _iconWithSFSymbol:(NSString *)symbolName color:(UIColor *)color size:(CGFloat)size {
+    UIImageView *imageView = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:size - 4 weight:UIImageSymbolWeightMedium];
+        UIImage *img = [UIImage systemImageNamed:symbolName withConfiguration:config];
+        imageView.image = img;
+        imageView.tintColor = color;
+    } else {
+        // Fallback to old PNGs for pre-iOS 13
+        imageView.image = [UIImage imageNamed:symbolName];
+    }
+    imageView.contentMode = UIViewContentModeCenter;
+    return imageView;
 }
 
 @end

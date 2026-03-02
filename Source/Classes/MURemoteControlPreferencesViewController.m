@@ -62,7 +62,7 @@
             UISwitch *enableSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             [enableSwitch addTarget:self action:@selector(enableSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             enableSwitch.on = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
-            enableSwitch.onTintColor = [UIColor blackColor];
+            enableSwitch.onTintColor = [UIColor colorWithRed:0.204 green:0.780 blue:0.349 alpha:1.0];
             cell.accessoryView = enableSwitch;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

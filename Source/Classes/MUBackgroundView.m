@@ -9,13 +9,15 @@
 @implementation MUBackgroundView
 
 + (UIView *) backgroundView {
-    if (@available(iOS 7, *)) {
-        UIView *view = [[UIView alloc] init];
+    UIView *view = [[UIView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        [view setBackgroundColor:[UIColor systemGroupedBackgroundColor]];
+    } else if (@available(iOS 7, *)) {
         [view setBackgroundColor:[MUColor backgroundViewiOS7Color]];
-        return view;
+    } else {
+        return [[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]];
     }
-    
-    return [[UIImageView alloc] initWithImage:[MUImage imageNamed:@"BackgroundTextureBlackGradient"]];
+    return view;
 }
 
 @end

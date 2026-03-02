@@ -176,6 +176,16 @@
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
 		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
+		831535552F41D1E000AB1C89 /* MUOnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 831535542F41D1E000AB1C89 /* MUOnboardingViewController.m */; };
+		83525F5F2F41E4D3004F8042 /* MUServerPlaceholderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83525F5E2F41E4D3004F8042 /* MUServerPlaceholderViewController.m */; };
+		83525F6B2F41E4F6004F8042 /* MUActionSheetButtonDestructive.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F642F41E4F6004F8042 /* MUActionSheetButtonDestructive.pcvd */; };
+		83525F6C2F41E4F6004F8042 /* MUActionSheetButtonBlueHighlight.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F612F41E4F6004F8042 /* MUActionSheetButtonBlueHighlight.pcvd */; };
+		83525F6D2F41E4F6004F8042 /* MUActionSheetButtonGrayHighlight.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F652F41E4F6004F8042 /* MUActionSheetButtonGrayHighlight.pcvd */; };
+		83525F6E2F41E4F6004F8042 /* MUServerButton.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F682F41E4F6004F8042 /* MUServerButton.pcvd */; };
+		83525F6F2F41E4F6004F8042 /* MUActionSheetBackgroundView.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F602F41E4F6004F8042 /* MUActionSheetBackgroundView.pcvd */; };
+		83525F702F41E4F6004F8042 /* MUActionSheetButtonNormal.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F662F41E4F6004F8042 /* MUActionSheetButtonNormal.pcvd */; };
+		83525F712F41E4F6004F8042 /* MUActionSheetButtonConstructive.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F632F41E4F6004F8042 /* MUActionSheetButtonConstructive.pcvd */; };
+		83525F722F41E4F6004F8042 /* MUActionSheetButtonCancel.pcvd in Resources */ = {isa = PBXBuildFile; fileRef = 83525F622F41E4F6004F8042 /* MUActionSheetButtonCancel.pcvd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -512,6 +522,18 @@
 		28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKNumberBadgeView.m; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
+		831535532F41D1E000AB1C89 /* MUOnboardingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUOnboardingViewController.h; sourceTree = "<group>"; };
+		831535542F41D1E000AB1C89 /* MUOnboardingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MUOnboardingViewController.m; sourceTree = "<group>"; };
+		83525F5D2F41E4D3004F8042 /* MUServerPlaceholderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUServerPlaceholderViewController.h; sourceTree = "<group>"; };
+		83525F5E2F41E4D3004F8042 /* MUServerPlaceholderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MUServerPlaceholderViewController.m; sourceTree = "<group>"; };
+		83525F602F41E4F6004F8042 /* MUActionSheetBackgroundView.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetBackgroundView.pcvd; sourceTree = "<group>"; };
+		83525F612F41E4F6004F8042 /* MUActionSheetButtonBlueHighlight.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonBlueHighlight.pcvd; sourceTree = "<group>"; };
+		83525F622F41E4F6004F8042 /* MUActionSheetButtonCancel.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonCancel.pcvd; sourceTree = "<group>"; };
+		83525F632F41E4F6004F8042 /* MUActionSheetButtonConstructive.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonConstructive.pcvd; sourceTree = "<group>"; };
+		83525F642F41E4F6004F8042 /* MUActionSheetButtonDestructive.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonDestructive.pcvd; sourceTree = "<group>"; };
+		83525F652F41E4F6004F8042 /* MUActionSheetButtonGrayHighlight.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonGrayHighlight.pcvd; sourceTree = "<group>"; };
+		83525F662F41E4F6004F8042 /* MUActionSheetButtonNormal.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUActionSheetButtonNormal.pcvd; sourceTree = "<group>"; };
+		83525F682F41E4F6004F8042 /* MUServerButton.pcvd */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = MUServerButton.pcvd; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -541,6 +563,10 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				83525F5D2F41E4D3004F8042 /* MUServerPlaceholderViewController.h */,
+				83525F5E2F41E4D3004F8042 /* MUServerPlaceholderViewController.m */,
+				831535532F41D1E000AB1C89 /* MUOnboardingViewController.h */,
+				831535542F41D1E000AB1C89 /* MUOnboardingViewController.m */,
 				2872F7C4124668880078C0B1 /* Certificates */,
 				28BF8E1C11D93A1900B72770 /* Database */,
 				2838EA0C1293165700035C5D /* Preferences */,
@@ -808,6 +834,7 @@
 		28DC1C1213DE59120037CDC2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83525F6A2F41E4F6004F8042 /* UIElements */,
 				280256351510D70D00178B08 /* en.lproj */,
 				280256391510DDCA00178B08 /* da.lproj */,
 				2879527A14C248B700567430 /* Apple */,
@@ -946,6 +973,37 @@
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83525F672F41E4F6004F8042 /* MUActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				83525F602F41E4F6004F8042 /* MUActionSheetBackgroundView.pcvd */,
+				83525F612F41E4F6004F8042 /* MUActionSheetButtonBlueHighlight.pcvd */,
+				83525F622F41E4F6004F8042 /* MUActionSheetButtonCancel.pcvd */,
+				83525F632F41E4F6004F8042 /* MUActionSheetButtonConstructive.pcvd */,
+				83525F642F41E4F6004F8042 /* MUActionSheetButtonDestructive.pcvd */,
+				83525F652F41E4F6004F8042 /* MUActionSheetButtonGrayHighlight.pcvd */,
+				83525F662F41E4F6004F8042 /* MUActionSheetButtonNormal.pcvd */,
+			);
+			path = MUActionSheet;
+			sourceTree = "<group>";
+		};
+		83525F692F41E4F6004F8042 /* MUServerButton */ = {
+			isa = PBXGroup;
+			children = (
+				83525F682F41E4F6004F8042 /* MUServerButton.pcvd */,
+			);
+			path = MUServerButton;
+			sourceTree = "<group>";
+		};
+		83525F6A2F41E4F6004F8042 /* UIElements */ = {
+			isa = PBXGroup;
+			children = (
+				83525F672F41E4F6004F8042 /* MUActionSheet */,
+				83525F692F41E4F6004F8042 /* MUServerButton */,
+			);
+			path = UIElements;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1167,6 +1225,14 @@
 				28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */,
 				28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */,
 				28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */,
+				83525F6B2F41E4F6004F8042 /* MUActionSheetButtonDestructive.pcvd in Resources */,
+				83525F6C2F41E4F6004F8042 /* MUActionSheetButtonBlueHighlight.pcvd in Resources */,
+				83525F6D2F41E4F6004F8042 /* MUActionSheetButtonGrayHighlight.pcvd in Resources */,
+				83525F6E2F41E4F6004F8042 /* MUServerButton.pcvd in Resources */,
+				83525F6F2F41E4F6004F8042 /* MUActionSheetBackgroundView.pcvd in Resources */,
+				83525F702F41E4F6004F8042 /* MUActionSheetButtonNormal.pcvd in Resources */,
+				83525F712F41E4F6004F8042 /* MUActionSheetButtonConstructive.pcvd in Resources */,
+				83525F722F41E4F6004F8042 /* MUActionSheetButtonCancel.pcvd in Resources */,
 				28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */,
 				28BE998218CFA8B900910551 /* BlackToolbarPatterniOS7.png in Resources */,
 				28F0835F147F102F00DC126F /* publist.xml in Resources */,
@@ -1246,12 +1312,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				83525F5F2F41E4D3004F8042 /* MUServerPlaceholderViewController.m in Sources */,
 				2861C276116BE905002B8514 /* MUApplicationDelegate.m in Sources */,
 				2861C27B116BE905002B8514 /* MUPublicServerList.m in Sources */,
 				2861C27C116BE905002B8514 /* MUPublicServerListController.m in Sources */,
 				2861C281116BE905002B8514 /* MUWelcomeScreenPhone.m in Sources */,
 				287BA29011B96C960010E031 /* MUDatabase.m in Sources */,
 				287BA33B11B97C470010E031 /* MUFavouriteServer.m in Sources */,
+				831535552F41D1E000AB1C89 /* MUOnboardingViewController.m in Sources */,
 				287BA34011B97EEE0010E031 /* MUFavouriteServerListController.m in Sources */,
 				287BA3A611B996D90010E031 /* MUFavouriteServerEditViewController.m in Sources */,
 				28C6EF0A11BBF38100E426C8 /* MUCountryServerListController.m in Sources */,
@@ -1364,6 +1432,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5HHMM9U6SJ;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1374,6 +1443,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5HHMM9U6SJ;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1521,6 +1591,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5HHMM9U6SJ;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1541,6 +1612,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5HHMM9U6SJ;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

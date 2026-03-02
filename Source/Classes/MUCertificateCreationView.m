@@ -13,10 +13,17 @@
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *ok = NSLocalizedString(@"OK", nil);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:ok otherButtonTitles:nil];
-        [alert show];
-        [alert release];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                  style:UIAlertActionStyleDefault
+                                                handler:nil]];
+        UIViewController *presenter = [UIApplication sharedApplication].keyWindow.rootViewController;
+        while (presenter.presentedViewController) {
+            presenter = presenter.presentedViewController;
+        }
+        [presenter presentViewController:alert animated:YES completion:nil];
     });
 }
 
@@ -115,13 +122,6 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     [self setTitle:newCert];
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
     
     NSString *create = NSLocalizedString(@"Create", @"'Create' text for certificate creation");
     NSString *cancel = NSLocalizedString(@"Cancel", nil);

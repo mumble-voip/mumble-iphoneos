@@ -17,7 +17,13 @@
 @implementation MUAudioTransmissionPreferencesViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    UITableViewStyle style;
+    if (@available(iOS 13.0, *)) {
+        style = UITableViewStyleInsetGrouped;
+    } else {
+        style = UITableViewStyleGrouped;
+    }
+    if ((self = [super initWithStyle:style])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -35,16 +41,7 @@
     self.title = NSLocalizedString(@"Transmission", nil);
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
-    
-    if (@available(iOS 7, *)) {
-        // fixme(mkrautz): usually we want a single line separator on iOS 7, but
-        // in this case, we embed an image in a table view cell, and want the separators
-        // to not appear when the image is shown. This was the easiest way to achieve that.
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    }
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     self.tableView.scrollEnabled = NO;
 }

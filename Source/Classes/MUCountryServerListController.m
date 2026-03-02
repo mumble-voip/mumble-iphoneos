@@ -56,9 +56,8 @@
     self.navigationItem.title = _countryName;
     self.navigationItem.hidesBackButton = NO;
 
-    if (@available(iOS 7, *)) {
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorInset = UIEdgeInsetsZero;
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     }
 
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
@@ -292,7 +291,11 @@
     
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
     searchBar.delegate = self;
-    searchBar.barStyle = UIBarStyleBlack;
+    if (@available(iOS 13.0, *)) {
+        // Use default bar style
+    } else {
+        searchBar.barStyle = UIBarStyleBlack;
+    }
     [searchBar sizeToFit];
     self.navigationItem.titleView = searchBar;
 

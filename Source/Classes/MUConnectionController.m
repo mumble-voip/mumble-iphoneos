@@ -8,7 +8,10 @@
 #import "MUCertificateController.h"
 #import "MUCertificateChainBuilder.h"
 #import "MUDatabase.h"
+#import "MUFavouriteServer.h"
 #import "MUHorizontalFlipTransitionDelegate.h"
+#import "MUApplicationDelegate.h"
+#import "MUServerPlaceholderViewController.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -80,8 +83,29 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) disconnectFromServer {
-    [_serverRoot dismissViewControllerAnimated:YES completion:nil];
     [self teardownConnection];
+    
+    // Reset the Server tab back to the placeholder
+    MUApplicationDelegate *appDelegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
+    UITabBarController *tabBar = [appDelegate tabBarController];
+    
+    MUServerPlaceholderViewController *placeholder = [[MUServerPlaceholderViewController alloc] init];
+    UINavigationController *serverNav = [[UINavigationController alloc] initWithRootViewController:placeholder];
+    serverNav.toolbarHidden = YES;
+    if (@available(iOS 13.0, *)) {
+        serverNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil)
+                                                            image:[UIImage systemImageNamed:@"server.rack"]
+                                                              tag:1];
+    } else {
+        serverNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil) image:nil tag:1];
+    }
+    
+    NSMutableArray *vcs = [tabBar.viewControllers mutableCopy];
+    [vcs replaceObjectAtIndex:1 withObject:serverNav];
+    tabBar.viewControllers = vcs;
+    
+    // Switch to Home tab
+    tabBar.selectedIndex = 0;
 }
 
 - (void) showConnectingView {
@@ -110,8 +134,10 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     _timer = nil;
 
     if (_alertCtrl != nil) {
-        [_parentViewController dismissViewControllerAnimated:YES completion:completion];
         _alertCtrl = nil;
+        [_parentViewController dismissViewControllerAnimated:YES completion:completion];
+    } else if (completion) {
+        completion();
     }
 }
 
@@ -177,7 +203,6 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
-    [self hideConnectingView];
     if (err) {
         UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Connection closed", nil)
                                                                            message:[err localizedDescription]
@@ -187,33 +212,32 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                        style:UIAlertActionStyleCancel
                                                      handler:nil]];
         
-        [_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+        [self hideConnectingViewWithCompletion:^{
+            [self->_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+        }];
         
         [self teardownConnection];
+    } else {
+        [self hideConnectingView];
     }
 }
 
 - (void) connection:(MKConnection*)conn unableToConnectWithError:(NSError *)err {
-    [self hideConnectingView];
-
+    NSString *title = NSLocalizedString(@"Connection Failed", nil);
     NSString *msg = [err localizedDescription];
 
-    // errSSLClosedAbort: "connection closed via error".
-    //
-    // This is the error we get when users hit a global ban on the server.
-    // Ideally, we'd provide better descriptions for more of these errors,
-    // but when using NSStream's TLS support, the NSErrors we get are simply
-    // OSStatus codes in an NSError wrapper without a useful description.
-    //
-    // In the future, MumbleKit should probably wrap the SecureTransport range of
-    // OSStatus codes to improve this situation, but this will do for now.
     if ([[err domain] isEqualToString:NSOSStatusErrorDomain] && [err code] == -9806) {
-        msg = NSLocalizedString(@"The TLS connection was closed due to an error.\n\n"
-                                @"The server might be temporarily rejecting your connection because you have "
-                                @"attempted to connect too many times in a row.", nil);
+        msg = NSLocalizedString(@"The secure connection was interrupted.\n\n"
+                                @"This usually means the server is temporarily blocking your connection. "
+                                @"Wait a moment and try again.", nil);
+    } else if ([[err domain] isEqualToString:NSPOSIXErrorDomain] && [err code] == 61) {
+        msg = NSLocalizedString(@"Could not reach the server. Check that the address and port are correct, "
+                                @"and that the server is online.", nil);
+    } else if ([[err domain] isEqualToString:NSPOSIXErrorDomain] && [err code] == 60) {
+        msg = NSLocalizedString(@"The connection timed out. Check your internet connection and the server address.", nil);
     }
     
-    UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Unable to connect", nil)
+    UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                                        message:msg
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     
@@ -221,7 +245,9 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                    style:UIAlertActionStyleCancel
                                                  handler:nil]];
     
-    [_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+    [self hideConnectingViewWithCompletion:^{
+        [self->_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+    }];
     
     [self teardownConnection];
 }
@@ -272,8 +298,6 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         } else {
             // Mismatch.  The server is using a new certificate, different from the one it previously
             // presented to us.
-            [self hideConnectingView];
-            
             NSString *title = NSLocalizedString(@"Certificate Mismatch", nil);
             NSString *msg = NSLocalizedString(@"The server presented a different certificate than the one stored for this server", nil);
             
@@ -294,12 +318,13 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                            style:UIAlertActionStyleDefault
                                                          handler:showCertsHandler]];
             
-            [_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+            [self hideConnectingViewWithCompletion:^{
+                [self->_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+            }];
         }
     } else {
         // No certhash of this certificate in the database for this hostname-port combo.  Let the user decide
         // what to do.
-        [self hideConnectingView];
         NSString *title = NSLocalizedString(@"Unable to validate server certificate", nil);
         NSString *msg = NSLocalizedString(@"Mumble was unable to validate the certificate chain of the server.", nil);
         
@@ -320,7 +345,9 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                        style:UIAlertActionStyleDefault
                                                      handler:showCertsHandler]];
         
-        [_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+        [self hideConnectingViewWithCompletion:^{
+            [self->_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+        }];
     }
 }
 
@@ -361,12 +388,11 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         [textField setText:self->_password];
     };
     
-    [self hideConnectingView];
     [self teardownConnection];
     
     switch (reason) {
         case MKRejectReasonNone:
-            msg = NSLocalizedString(@"No reason", nil);
+            msg = NSLocalizedString(@"The server rejected the connection without a specific reason. Please try again later.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -377,7 +403,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                          handler:cancelHandler]];
             break;
         case MKRejectReasonWrongVersion:
-            msg = @"Client/server version mismatch";
+            msg = NSLocalizedString(@"This server requires a different version of Mumble. Please update the app and try again.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -388,7 +414,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                          handler:cancelHandler]];
             break;
         case MKRejectReasonInvalidUsername:
-            msg = NSLocalizedString(@"Invalid username", nil);
+            title = NSLocalizedString(@"Invalid Username", nil);
+            msg = NSLocalizedString(@"The username you entered is not allowed on this server. Please choose a different one.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -399,12 +426,13 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
             [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:cancelHandler]];
-            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Reconnect", nil)
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Again", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:reconnectHandler]];
             break;
         case MKRejectReasonWrongUserPassword:
-            msg = NSLocalizedString(@"Wrong certificate or password for existing user", nil);
+            title = NSLocalizedString(@"Authentication Failed", nil);
+            msg = NSLocalizedString(@"The password is incorrect, or this username is registered with a different certificate. Please check your password and try again.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -415,12 +443,13 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
             [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:cancelHandler]];
-            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Reconnect", nil)
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Again", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:reconnectHandler]];
             break;
         case MKRejectReasonWrongServerPassword:
-            msg = NSLocalizedString(@"Wrong server password", nil);
+            title = NSLocalizedString(@"Server Password Required", nil);
+            msg = NSLocalizedString(@"This server is password-protected. Please enter the correct password to connect.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -431,12 +460,13 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
             [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:cancelHandler]];
-            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Reconnect", nil)
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Again", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:reconnectHandler]];
             break;
         case MKRejectReasonUsernameInUse:
-            msg = NSLocalizedString(@"Username already in use", nil);
+            title = NSLocalizedString(@"Username Taken", nil);
+            msg = NSLocalizedString(@"Someone is already using that name on this server. Please choose a different username.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -447,12 +477,13 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
             [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                            style:UIAlertActionStyleCancel
                                                          handler:cancelHandler]];
-            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Reconnect", nil)
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Try Again", nil)
                                                            style:UIAlertActionStyleDefault
                                                          handler:reconnectHandler]];
             break;
         case MKRejectReasonServerIsFull:
-            msg = NSLocalizedString(@"Server is full", nil);
+            title = NSLocalizedString(@"Server Full", nil);
+            msg = NSLocalizedString(@"This server has reached its maximum number of users. Please try again later.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -463,7 +494,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
                                                          handler:cancelHandler]];
             break;
         case MKRejectReasonNoCertificate:
-            msg = NSLocalizedString(@"A certificate is needed to connect to this server", nil);
+            title = NSLocalizedString(@"Certificate Required", nil);
+            msg = NSLocalizedString(@"This server requires a client certificate to connect. Go to Preferences > Certificate to create or import one.", nil);
             
             alertCtrl = [UIAlertController alertControllerWithTitle:title
                                                             message:msg
@@ -478,13 +510,27 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     _rejectAlertCtrl = alertCtrl;
     _rejectReason = reason;
 
-    [_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+    [self hideConnectingViewWithCompletion:^{
+        [self->_parentViewController presentViewController:alertCtrl animated:YES completion:nil];
+    }];
 }
 
 #pragma mark - MKServerModelDelegate
 
 - (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
     [MUDatabase storeUsername:[user userName] forServerWithHostname:[model hostname] port:[model port]];
+
+    // Record in connection history
+    [MUDatabase storeRecentConnectionWithHostname:[model hostname] port:[model port] username:[user userName]];
+
+    // Auto-save to favourites if not already saved
+    [self autoSaveToFavouritesWithHostname:[model hostname] port:[model port] username:[user userName]];
+
+    // Haptic feedback on successful connection
+    if (@available(iOS 10.0, *)) {
+        UINotificationFeedbackGenerator *feedback = [[UINotificationFeedbackGenerator alloc] init];
+        [feedback notificationOccurred:UINotificationFeedbackTypeSuccess];
+    }
 
     [self hideConnectingViewWithCompletion:^{
         [self->_serverRoot takeOwnershipOfConnectionDelegate];
@@ -493,10 +539,42 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         self->_hostname = nil;
         self->_password = nil;
         
-        self->_serverRoot.modalPresentationStyle = UIModalPresentationFullScreen;
-        [[self->_parentViewController navigationController] presentViewController:self->_serverRoot animated:YES completion:nil];
+        // Switch to Server tab with the connected server view
+        MUApplicationDelegate *appDelegate = (MUApplicationDelegate *)[[UIApplication sharedApplication] delegate];
+        UITabBarController *tabBar = [appDelegate tabBarController];
+        
+        // Preserve the tab bar item
+        if (@available(iOS 13.0, *)) {
+            self->_serverRoot.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil)
+                                                                        image:[UIImage systemImageNamed:@"server.rack"]
+                                                                          tag:1];
+        } else {
+            self->_serverRoot.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Server", nil) image:nil tag:1];
+        }
+        
+        NSMutableArray *vcs = [tabBar.viewControllers mutableCopy];
+        [vcs replaceObjectAtIndex:1 withObject:self->_serverRoot];
+        tabBar.viewControllers = vcs;
+        tabBar.selectedIndex = 1;
+        
         self->_parentViewController = nil;
     }];
+}
+
+- (void) autoSaveToFavouritesWithHostname:(NSString *)hostname port:(NSInteger)port username:(NSString *)username {
+    NSMutableArray *favourites = [MUDatabase fetchAllFavourites];
+    for (MUFavouriteServer *fav in favourites) {
+        if ([[fav hostName] isEqualToString:hostname] && [fav port] == (NSUInteger)port) {
+            return; // Already saved
+        }
+    }
+    
+    MUFavouriteServer *newFav = [[MUFavouriteServer alloc] init];
+    [newFav setDisplayName:hostname];
+    [newFav setHostName:hostname];
+    [newFav setPort:port];
+    [newFav setUserName:username];
+    [MUDatabase storeFavourite:newFav];
 }
 
 - (void) serverCertificateTrustViewControllerDidDismiss:(MUServerCertificateTrustViewController *)trustView {

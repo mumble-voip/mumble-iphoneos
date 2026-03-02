@@ -9,7 +9,11 @@
 - (id) init {
     if ((self = [super init])) {
         self.font = [UIFont boldSystemFontOfSize:18.0f];
-        self.textColor = [UIColor whiteColor];
+        if (@available(iOS 13.0, *)) {
+            self.textColor = [UIColor secondaryLabelColor];
+        } else {
+            self.textColor = [UIColor whiteColor];
+        }
         if (@available(iOS 7, *)) {
             // Don't use shadows on iOS 7 or greater.
         } else {
