@@ -10,10 +10,9 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
-@interface MUFavouriteServerListController () <UIAlertViewDelegate> {
+@interface MUFavouriteServerListController () {
     NSMutableArray     *_favouriteServers;
     BOOL               _editMode;
     MUFavouriteServer  *_editedServer;
@@ -37,9 +36,6 @@
 
 - (void) dealloc {
     [MUDatabase storeFavourites:_favouriteServers];
-    [_favouriteServers release];
-    
-    [super dealloc];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
@@ -56,29 +52,19 @@
 
     [[self navigationItem] setTitle:NSLocalizedString(@"Favourite Servers", nil)];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
-    [addButton release];
 
     [self reloadFavourites];
 }
 
 - (void) reloadFavourites {
-    [_favouriteServers release];
-    _favouriteServers = [[MUDatabase fetchAllFavourites] retain];
+    _favouriteServers = [MUDatabase fetchAllFavourites];
     [_favouriteServers sortUsingSelector:@selector(compare:)];
 }
 
@@ -97,7 +83,7 @@
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     MUServerCell *cell = (MUServerCell *)[tableView dequeueReusableCellWithIdentifier:[MUServerCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[MUServerCell alloc] init] autorelease];
+        cell = [[MUServerCell alloc] init];
     }
     [cell populateFromFavouriteServer:favServ];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -120,54 +106,50 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
     BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
-    UIView *cellView = [[self tableView] cellForRowAtIndexPath:indexPath];
     
     NSString *sheetTitle = pad ? nil : [favServ displayName];
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:sheetTitle delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                         destructiveButtonTitle:NSLocalizedString(@"Delete", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Edit", nil),
-                                                                NSLocalizedString(@"Connect", nil), nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    if (pad) {
-        CGRect frame = cellView.frame;
-        frame.origin.y = frame.origin.y - (frame.size.height/2);
-        [sheet showFromRect:frame inView:self.tableView animated:YES];
-    } else {
-        [sheet showInView:cellView];
-    }
-    [sheet release];
-}
-
-- (void) deleteFavouriteAtIndexPath:(NSIndexPath *)indexPath {
-    // Drop it from the database
-    MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-    [MUDatabase deleteFavourite:favServ];
     
-    // And remove it from our locally sorted array
-    [_favouriteServers removeObjectAtIndex:[indexPath row]];
-    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+    UIAlertController* sheetCtrl = [UIAlertController alertControllerWithTitle:sheetTitle
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
     
-    MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    }]];
     
-    // Delete
-    if (index == 0) {
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil)
+                                                   style:UIAlertActionStyleDestructive
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         NSString *title = NSLocalizedString(@"Delete Favourite", nil);
         NSString *msg = NSLocalizedString(@"Are you sure you want to delete this favourite server?", nil);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                            message:msg
-                                                           delegate:self
-                                                  cancelButtonTitle:NSLocalizedString(@"No", nil)
-                                                  otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
-        [alertView show];
-        [alertView release];
-    // Connect
-    } else if (index == 2) {
+        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:msg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            [self deleteFavouriteAtIndexPath:indexPath];
+        }]];
+
+        [self presentViewController:alertCtrl animated:YES completion:nil];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    }]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [self presentEditDialogForFavourite:favServ];
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    }]];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         NSString *userName = [favServ userName];
         if (userName == nil) {
             userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
@@ -180,27 +162,20 @@
                         andPassword:[favServ password]
            withParentViewController:self];
         [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    // Edit
-    } else if (index == 1) {
-        [self presentEditDialogForFavourite:favServ];
-    // Cancel
-    } else if (index == 3) {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }
+    }]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
-#pragma mark -
-#pragma mark UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    NSIndexPath *selectedRow = [[self tableView] indexPathForSelectedRow];
-    if (buttonIndex == 0) {
-        // ...
-    } else if (buttonIndex == 1) {
-        [self deleteFavouriteAtIndexPath:selectedRow];
-    }
-
-    [[self tableView] deselectRowAtIndexPath:selectedRow animated:YES];
+- (void) deleteFavouriteAtIndexPath:(NSIndexPath *)indexPath {
+    // Drop it from the database
+    MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
+    [MUDatabase deleteFavourite:favServ];
+    
+    // And remove it from our locally sorted array
+    [_favouriteServers removeObjectAtIndex:[indexPath row]];
+    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark -
@@ -217,11 +192,9 @@
     [editView setTarget:self];
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
-    [editView release];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
-    [modalNav release];
+    [[self navigationController] presentViewController:modalNav animated:YES completion:nil];
 }
 
 - (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ {
@@ -235,11 +208,9 @@
     [editView setTarget:self];
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
-    [editView release];
     
     modalNav.modalPresentationStyle = UIModalPresentationFormSheet;
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
-    [modalNav release];
+    [[self navigationController]presentViewController:modalNav animated:YES completion:nil];
 }
 
 #pragma mark -
@@ -260,7 +231,6 @@
     MUFavouriteServerEditViewController *editView = sender;
     MUFavouriteServer *newServer = [editView copyFavouriteFromContent];
     [MUDatabase storeFavourite:newServer];
-    [newServer release];
 
     [self reloadFavourites];
     [self.tableView reloadData];

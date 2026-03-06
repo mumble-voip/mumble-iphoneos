@@ -4,6 +4,5 @@
 
 @interface MUCountryServerListController : UIViewController 
 - (id) initWithName:(NSString *)country serverList:(NSArray *)servers;
-- (void) dealloc;
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem;
 @end

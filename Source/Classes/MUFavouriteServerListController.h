@@ -6,7 +6,6 @@
 
 @interface MUFavouriteServerListController : UITableViewController <UIActionSheetDelegate>
 - (id) init;
-- (void) dealloc;
 - (void) presentNewFavouriteDialog;
 - (void) presentEditDialogForFavourite:(MUFavouriteServer *)favServ;
 @end

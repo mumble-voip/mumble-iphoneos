@@ -4,5 +4,4 @@
 
 @interface MUPreferencesViewController : UITableViewController
 - (id) init;
-- (void) dealloc;
 @end

@@ -32,18 +32,17 @@
     [super viewWillAppear:animated];
 
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Dismiss", nil)
-                                                                      style:UIBarButtonItemStyleBordered
+                                                                      style:UIBarButtonItemStylePlain
                                                                      target:self
                                                                      action:@selector(dismissClicked:)];
     self.navigationItem.leftBarButtonItem = dismissButton;
-    [dismissButton release];
 }
 
 #pragma mark -
 #pragma mark Actions
 
 - (void) dismissClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
     [_delegate serverCertificateTrustViewControllerDidDismiss:self];
 }
 

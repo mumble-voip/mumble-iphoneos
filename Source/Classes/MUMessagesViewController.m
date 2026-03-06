@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+@import CoreServices;
+@import UserNotifications;
+
 #import <MumbleKit/MKServerModel.h>
 #import <MumbleKit/MKTextMessage.h>
 
@@ -16,7 +19,6 @@
 #import "MUDataURL.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *prefix) {
@@ -52,7 +54,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if (rect.origin.x < minx) {
         NSInteger delta = minx - rect.origin.x;
         rect.origin.x += delta;
-        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {} else {
             rect.size.width -= delta;
         }
     }
@@ -73,12 +75,12 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     if ((self = [super initWithFrame:CGRectZero])) {
         [self setOpaque:NO];
         if ([str length] >= 15) {
-            _str = [[NSString stringWithFormat:@"%@...", [str substringToIndex:11]] retain];
+            _str = [NSString stringWithFormat:@"%@...", [str substringToIndex:11]];
         } else {
             _str = [str copy];
         }
-        CGSize size = [_str sizeWithFont:[UIFont boldSystemFontOfSize:14.0f]];
-        if (MUGetOperatingSystemVersion() < MUMBLE_OS_IOS_7) {
+        CGSize size = [_str sizeWithAttributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f] }];
+        if (@available(iOS 7, *)) {} else {
             size.width += 6*2;
         }
         [self setFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -123,7 +125,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     rect.size.width -= radius;
     
     [[UIColor whiteColor] set];
-    [_str drawInRect:rect withFont:[UIFont boldSystemFontOfSize:14.0f]];
+    [_str drawInRect:rect withAttributes:@{
+        NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f]
+    }];
 }
 
 - (void) setHighlighted:(BOOL)highlighted {
@@ -152,7 +156,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
 - (id) initWithServerModel:(MKServerModel *)model {
     if ((self = [super init])) {
-        _model = [model retain];
+        _model = model;
         [_model addDelegate:self];
         _msgdb = [[MUMessagesDatabase alloc] init];
     }
@@ -160,16 +164,10 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 }
 
 - (void) dealloc {
-    [_msgdb release];
     [_model removeDelegate:self];
-    [_model release];
-    [_textField release];
-    [_tableView release];
-    [super dealloc];
 }
 
 - (void) clearAllMessages {
-    [_msgdb release];
     _msgdb = [[MUMessagesDatabase alloc] init];
     [_tableView reloadData];
 }
@@ -178,9 +176,57 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+}
 
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-44);
-    _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+- (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
+    MUMessageReceiverButton *receiverView = [[MUMessageReceiverButton alloc] initWithText:receiver];
+    [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
+
+    if (@available(iOS 7, *)) {
+        CGRect paddedRect = CGRectMake(0, 0, CGRectGetWidth(receiverView.frame) + 12, CGRectGetHeight(receiverView.frame));
+        UIView *paddedView = [[UIView alloc] initWithFrame:paddedRect];
+        [paddedView addSubview:receiverView];
+        paddedRect.origin.x += 6;
+        [receiverView setFrame:paddedRect];
+        _textField.leftView = paddedView;
+    } else {
+        _textField.leftView = receiverView;
+    }
+
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+    if (@available(iOS 7, *)) {
+        CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 6, CGRectGetHeight(imgView.frame));
+        UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
+        [paddedView addSubview:imgView];
+        _textField.rightView = paddedView;
+    } else {
+        _textField.rightView = imgView;
+    }
+    _textField.rightViewMode = UITextFieldViewModeAlways;
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [_tableView reloadData];
+}
+
+- (void)viewIsAppearing:(BOOL)animated {
+    [super viewIsAppearing:animated];
+    
+    CGFloat textBarHeight = 44;
+    
+    UIEdgeInsets viewSafeAreaInsets = self.view.safeAreaInsets;
+    
+    CGFloat bottomInset = viewSafeAreaInsets.bottom;
+    
+    CGRect viewFrame = self.view.frame;
+
+    CGRect tableViewFrame = CGRectMake(0, 0, viewFrame.size.width, viewFrame.size.height-textBarHeight-bottomInset);
+    _tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
 
     [_tableView setBackgroundView:[MUBackgroundView backgroundView]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -192,25 +238,24 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionDown];
     [self.view addGestureRecognizer:swipeGesture];
-    [swipeGesture release];
 
     swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showKeyboard:)];
     [swipeGesture setDirection:UISwipeGestureRecognizerDirectionUp];
     [self.view addGestureRecognizer:swipeGesture];
-    [swipeGesture release];
 
-    CGRect textBarFrame = CGRectMake(0, frame.size.height, frame.size.width, 44);
+    CGRect textBarFrame = CGRectMake(0, tableViewFrame.size.height, tableViewFrame.size.width, textBarHeight);
     _textBarView = [[UIView alloc] initWithFrame:textBarFrame];
     [_textBarView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
     _textBarView.backgroundColor = [UIColor yellowColor];
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPatterniOS7"]];
     } else {
         _textBarView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BlackToolbarPattern"]];
     }
 
-    _textField = [[[MUConsistentTextField alloc] initWithFrame:CGRectMake(6, 6, frame.size.width-12, 44-12)] autorelease];
+    int textFieldMargin = 6;
+    _textField = [[MUConsistentTextField alloc] initWithFrame:CGRectMake(textFieldMargin, textFieldMargin, tableViewFrame.size.width-2*textFieldMargin, textBarHeight-2*textFieldMargin)];
     _textField.leftViewMode = UITextFieldViewModeAlways;
     _textField.rightViewMode = UITextFieldViewModeAlways;
     _textField.borderStyle = UITextBorderStyleRoundedRect;
@@ -225,50 +270,6 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [self setReceiverName:[[[_model connectedUser] channel] channelName] andImage:@"channelmsg"];
 }
 
-- (void) setReceiverName:(NSString *)receiver andImage:(NSString *)imageName {
-    MUMessageReceiverButton *receiverView = [[[MUMessageReceiverButton alloc] initWithText:receiver] autorelease];
-    [receiverView addTarget:self action:@selector(showRecipientPicker:) forControlEvents:UIControlEventTouchUpInside];
-
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        CGRect paddedRect = CGRectMake(0, 0, CGRectGetWidth(receiverView.frame) + 12, CGRectGetHeight(receiverView.frame));
-        UIView *paddedView = [[[UIView alloc] initWithFrame:paddedRect] autorelease];
-        [paddedView addSubview:receiverView];
-        paddedRect.origin.x += 6;
-        [receiverView setFrame:paddedRect];
-        _textField.leftView = paddedView;
-    } else {
-        _textField.leftView = receiverView;
-    }
-
-    UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]] autorelease];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        CGRect paddedFrame = CGRectMake(0, 0, CGRectGetWidth(imgView.frame) + 6, CGRectGetHeight(imgView.frame));
-        UIView *paddedView = [[UIView alloc] initWithFrame:paddedFrame];
-        [paddedView addSubview:imgView];
-        _textField.rightView = paddedView;
-    } else {
-        _textField.rightView = imgView;
-    }
-    _textField.rightViewMode = UITextFieldViewModeAlways;
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    
-    [_tableView reloadData];
-}
-
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
@@ -281,10 +282,6 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -329,7 +326,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     [cell setRightSide:[txtMsg isSentBySelf]];
     [cell setSelected:NO];
     [cell setDelegate:self];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         [cell setBackgroundColor:[UIColor clearColor]];
     }
     return cell;
@@ -366,7 +363,7 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         return;
     
     // Make the keyboard background completely black on iOS 7.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100000), dispatch_get_main_queue(), ^{
             for (UIWindow *win in [[UIApplication sharedApplication] windows]) {
                 if ([[win description] hasPrefix:@"<UITextEffectsWindow"]) {
@@ -486,10 +483,8 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
     MUMessageRecipientViewController *recipientViewController = [[MUMessageRecipientViewController alloc] initWithServerModel:_model];
     [recipientViewController setDelegate:self];
     UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:recipientViewController];
-    [recipientViewController release];
 
-    [self presentModalViewController:navCtrl animated:YES];
-    [navCtrl release];
+    [self presentViewController:navCtrl animated:YES completion:nil];
 }
 
 #pragma mark - MUMessageBubbleTableViewCellDelegate
@@ -515,11 +510,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
         if ([[txtMsg embeddedLinks] count] > 0) {
             MUMessageAttachmentViewController *attachmentViewController = [[MUMessageAttachmentViewController alloc] initWithImages:[txtMsg embeddedImages] andLinks:[txtMsg embeddedLinks]];
             [self.navigationController pushViewController:attachmentViewController animated:YES];
-            [attachmentViewController release];
         } else {
             MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:[txtMsg embeddedImages]];
             [self.navigationController pushViewController:imgViewController animated:YES];
-            [imgViewController release];
         }
     }
 }
@@ -613,12 +606,9 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
    
     UIApplication *app = [UIApplication sharedApplication];
     if ([app applicationState] == UIApplicationStateBackground) {
-        UILocalNotification *notification = [[[UILocalNotification alloc] init] autorelease];
-        
         NSMutableCharacterSet *trimSet = [[NSMutableCharacterSet alloc] init];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
         [trimSet formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
-        [trimSet autorelease];
     
         NSString *msgText = [[msg plainTextString] stringByTrimmingCharactersInSet:trimSet];
         NSUInteger numImages = [[msg embeddedImages] count];
@@ -634,14 +624,16 @@ static UIView *MUMessagesViewControllerFindUIView(UIView *rootView, NSString *pr
             msgText = [msg plainTextString];
         }
         
-        if (user == nil) {
-            notification.alertBody = msgText;
-        } else {
-           notification.alertBody = [NSString stringWithFormat:@"%@ - %@", [user userName], msgText]; 
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        content.body = msgText;
+        if (user) {
+            content.title = [user userName];
         }
-
-        [notification.userInfo setValue:indexPath forKey:@"indexPath"];
-        [app presentLocalNotificationNow:notification];
+        
+        UNNotificationRequest *notificationReq = [UNNotificationRequest requestWithIdentifier:@"info.mumble.Mumble.TextMessageNotification"
+                                                                                     content:content
+                                                                                     trigger:nil];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:notificationReq withCompletionHandler:nil];
         [app setApplicationIconBadgeNumber:[app applicationIconBadgeNumber]+1];
     }
 }

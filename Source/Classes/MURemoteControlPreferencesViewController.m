@@ -5,7 +5,6 @@
 #import "MURemoteControlPreferencesViewController.h"
 #import "MURemoteControlServer.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MURemoteControlPreferencesViewController () {
@@ -24,18 +23,10 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     self.navigationItem.title = NSLocalizedString(@"Remote Control", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
@@ -62,13 +53,13 @@
     static NSString *CellIdentifier = @"RemoteControlPrefsCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"Enable";
-            UISwitch *enableSwitch = [[[UISwitch alloc] initWithFrame:CGRectZero] autorelease];
+            UISwitch *enableSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
             [enableSwitch addTarget:self action:@selector(enableSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             enableSwitch.on = [[MURemoteControlServer sharedRemoteControlServer] isRunning];
             enableSwitch.onTintColor = [UIColor blackColor];

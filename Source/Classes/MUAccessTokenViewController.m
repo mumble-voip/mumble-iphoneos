@@ -4,8 +4,7 @@
 
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
-#import "MUOperatingSystem.h"
-#import "MUBAckgroundView.h"
+#import "MUBackgroundView.h"
 
 @interface MUAccessTokenViewController () {
     MKServerModel    *_model;
@@ -23,16 +22,10 @@
 
 - (id) initWithServerModel:(MKServerModel *)model {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        _model = [model retain];
+        _model = model;
         _editingRow = -1;
     }
     return self;
-}
-
-- (void) dealloc {
-    [_model release];
-    [_editingCell release];
-    [super dealloc];
 }
 
 #pragma mark - View lifecycle
@@ -41,27 +34,17 @@
     [super viewWillAppear:animated];
 
     [[self navigationItem] setTitle:NSLocalizedString(@"Access Tokens", nil)];
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
     [[self navigationItem] setRightBarButtonItem:addButton];
-    [addButton release];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
-    [doneButton release];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,11 +66,6 @@
     [_model setAccessTokens:_tokens];
 
     [MUDatabase storeAccessTokens:_tokens forServerWithHostname:[_model hostname] port:[_model port]];
-    [_tokens release];
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -104,7 +82,7 @@
     static NSString *CellIdentifier = @"AccessTokenCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     if ([indexPath row] == _editingRow) {
         return _editingCell;
@@ -149,12 +127,11 @@
 - (void) editItemAtIndex:(NSInteger)row {
     _editingRow = row;
 
-    [_tokenValue release];
     _tokenValue = [[_tokens objectAtIndex:row] copy];
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
     UITextField *editingField;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         editingField = [[UITextField alloc] initWithFrame:CGRectMake(14.0, 0.0, _editingCell.frame.size.width-14.0, _editingCell.frame.size.height)];
         [editingField setFont:[UIFont boldSystemFontOfSize:18.0f]];
     } else {
@@ -169,7 +146,6 @@
     [editingField setText:_tokenValue];
     [editingField setReturnKeyType:UIReturnKeyDone];
     [[_editingCell contentView] addSubview:editingField];
-    [editingField release];
 
     [editingField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
@@ -193,7 +169,7 @@
 }
 
 - (void) doneButtonClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
@@ -206,19 +182,16 @@
 }
 
 - (void) textFieldDidChange:(UITextField *)sender {
-    [_tokenValue release];
     _tokenValue = [[sender text] copy];
 }
 
 - (void) textFieldDidEndOnExit:(UITextField *)sender {
     [sender resignFirstResponder];
     [_tokens replaceObjectAtIndex:_editingRow withObject:_tokenValue];
-    [_tokenValue release];
     _tokenValue = nil;
     NSInteger row = _editingRow;
     _editingRow = -1;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [_editingCell release];
     _editingCell = nil;
 }
 
@@ -234,7 +207,7 @@
         if (!finished)
             return;
         
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_editingRow inSection:0]
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_editingRow inSection:0]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
 }

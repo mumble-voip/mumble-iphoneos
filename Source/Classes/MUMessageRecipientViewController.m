@@ -5,7 +5,6 @@
 #import "MUMessageRecipientViewController.h"
 #import "MUUserStateAcessoryView.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 #import "MUServerTableViewCell.h"
 
@@ -24,7 +23,7 @@
 
 - (id) initWithServerModel:(MKServerModel *)model {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        _serverModel = [model retain];
+        _serverModel = model;
         [_serverModel addDelegate:self];
     }
     return self;
@@ -32,7 +31,6 @@
 
 - (void) dealloc {
     [_serverModel removeDelegate:self];
-    [super dealloc];
 }
 
 - (id<MUMessageRecipientViewControllerDelegate>) delegate {
@@ -44,13 +42,10 @@
 }
 
 - (void) rebuildModelArrayFromChannel:(MKChannel *)channel {
-    [_modelItems release];
     _modelItems = [[NSMutableArray alloc] init];
-    
-    [_userIndexMap release];
+
     _userIndexMap = [[NSMutableDictionary alloc] init];
-    
-    [_channelIndexMap release];
+
     _channelIndexMap = [[NSMutableDictionary alloc] init];
     
     [self addChannelTreeToModel:channel indentLevel:0];
@@ -100,20 +95,12 @@
 
     self.navigationItem.title = NSLocalizedString(@"Message Recipient", nil);
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
 
-    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)] autorelease];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)];
     
     [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
     [self.tableView reloadData];
@@ -129,10 +116,6 @@
 
 - (void) viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -162,10 +145,10 @@
     static NSString *CellIdentifier = @"MUMessageRecipientCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-            cell = [[[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier] autorelease];
+        if (@available(iOS 7, *)) {
+            cell = [[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
         } else {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
     }
 
@@ -238,13 +221,13 @@
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Actions
 
 - (void) cancelClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - MKServerModel delegate

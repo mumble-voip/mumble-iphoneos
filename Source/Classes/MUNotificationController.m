@@ -35,9 +35,7 @@
 }
 
 - (void) dealloc {
-    [_notificationQueue release];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [super dealloc];
 }
 
 - (void) keyboardDidShow:(NSNotification *)notification {
@@ -52,7 +50,7 @@
 
 - (void) addNotification:(NSString *)text {
     if ([_notificationQueue count] < 10)
-        [_notificationQueue addObject:[[text copy] autorelease]];
+        [_notificationQueue addObject:[text copy]];
     if (!_running) {
         [self showNext];
     }
@@ -77,7 +75,6 @@
     bg.backgroundColor = [UIColor blackColor];
     bg.alpha = 0.8f;
     [container addSubview:bg];
-    [bg release];
 
     UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     lbl.font = [UIFont systemFontOfSize:16.0f];
@@ -86,15 +83,14 @@
     [_notificationQueue removeObjectAtIndex:0];
     lbl.textColor = [UIColor whiteColor];
     lbl.backgroundColor = [UIColor clearColor];
-    lbl.textAlignment = UITextAlignmentCenter;
+    lbl.textAlignment = NSTextAlignmentCenter;
     [container addSubview:lbl];
-    [lbl release];
     
     [[[UIApplication sharedApplication] keyWindow] addSubview:container];
 
-    _notificationView = container;
+    self->_notificationView = container;
     [UIView animateWithDuration:0.1f animations:^{
-        _notificationView.alpha = 1.0f;
+        self->_notificationView.alpha = 1.0f;
     } completion:^(BOOL completed) {
         NSTimer *timer = [NSTimer timerWithTimeInterval:0.3f target:self selector:@selector(hideCurrent) userInfo:nil repeats:NO];
         [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
@@ -103,15 +99,14 @@
 
 - (void) hideCurrent {
     [UIView animateWithDuration:0.1f animations:^{
-        _notificationView.alpha = 0.0f;
+        self->_notificationView.alpha = 0.0f;
     } completion:^(BOOL completed) {
-        [_notificationView removeFromSuperview];
-        [_notificationView release];
-        _notificationView = nil;
-        if ([_notificationQueue count] > 0) {
+        [self->_notificationView removeFromSuperview];
+        self->_notificationView = nil;
+        if ([self->_notificationQueue count] > 0) {
             [self performSelectorOnMainThread:@selector(showNext) withObject:nil waitUntilDone:NO];
         } else {
-           _running = NO;
+            self->_running = NO;
         }
     }];
 }

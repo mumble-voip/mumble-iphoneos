@@ -7,7 +7,6 @@
 #import "MUCertificateController.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 #import <MumbleKit/MKCertificate.h>
@@ -41,27 +40,29 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 + (void) configureTableViewConstraintWithCell:(UITableViewCell *)cell andTextField:(UITextField *)textField {
     [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
-    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:8];
+    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:-8];
     NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:110];
     NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[cell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
 
-    [[cell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
+    [NSLayoutConstraint activateConstraints:@[top, bottom, left, right]];
 }
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        [self setContentSizeForViewInPopover:CGSizeMake(320, 480)];
+        self.preferredContentSize = CGSizeMake(320, 480);
         
         NSString *name = NSLocalizedString(@"Name", nil);
         NSString *defaultName = NSLocalizedString(@"Mumble User", nil);
         NSString *email = NSLocalizedString(@"Email", nil);
         NSString *optional = NSLocalizedString(@"Optional", nil);
         
+        CGRect textFieldRect = CGRectMake(110.0, 10.0, 185.0, 30.0);
+        
         _nameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_nameCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_nameCell textLabel] setText:name];
-        _nameField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _nameField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_nameField setTextColor:[MUColor selectedTextColor]];
         [_nameField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_nameField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -69,7 +70,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_nameField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_nameField setReturnKeyType:UIReturnKeyNext];
         [_nameField setAdjustsFontSizeToFitWidth:NO];
-        [_nameField setTextAlignment:UITextAlignmentLeft];
+        [_nameField setTextAlignment:NSTextAlignmentLeft];
         [_nameField setPlaceholder:defaultName];
         [_nameField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_nameField setText:_fullName];
@@ -81,7 +82,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         _emailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"MUFavouriteServerDescription"];
         [_emailCell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [[_emailCell textLabel] setText:email];
-        _emailField = [[UITextField alloc] initWithFrame:CGRectMake(110.0, 10.0, 185.0, 30.0)];
+        _emailField = [[UITextField alloc] initWithFrame:textFieldRect];
         [_emailField setTextColor:[MUColor selectedTextColor]];
         [_emailField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
         [_emailField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
@@ -89,7 +90,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         [_emailField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
         [_emailField setReturnKeyType:UIReturnKeyDefault];
         [_emailField setAdjustsFontSizeToFitWidth:NO];
-        [_emailField setTextAlignment:UITextAlignmentLeft];
+        [_emailField setTextAlignment:NSTextAlignmentLeft];
         [_emailField setPlaceholder:optional];
         [_emailField setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [_emailField setKeyboardType:UIKeyboardTypeEmailAddress];
@@ -113,17 +114,9 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                           @"Title of MUCertificateCreationView (shown when creating a self-signed certificate)");
     [self setTitle:newCert];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
@@ -252,7 +245,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark Target/actions
 
 - (void) cancelClicked:(id)sender {
-    [[self navigationController] dismissModalViewControllerAnimated:YES];
+    [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) createClicked:(id)sender {
@@ -324,7 +317,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[self navigationController] dismissModalViewControllerAnimated:YES];
+            [[self navigationController] dismissViewControllerAnimated:YES completion:nil];
         });
     });    
 }

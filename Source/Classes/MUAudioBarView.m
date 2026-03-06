@@ -24,7 +24,7 @@
         _value = 0.5f;
         _min = 0.0f;
         _max = 1.0f;
-        _timer = [[NSTimer timerWithTimeInterval:1/60.0f target:self selector:@selector(tickTock) userInfo:nil repeats:YES] retain];
+        _timer = [NSTimer timerWithTimeInterval:1/60.0f target:self selector:@selector(tickTock) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
     return self;
@@ -32,8 +32,6 @@
 
 - (void) dealloc {
     [_timer invalidate];
-    [_timer release];
-    [super dealloc];
 }
 
 - (void) setBelow:(CGFloat)below {

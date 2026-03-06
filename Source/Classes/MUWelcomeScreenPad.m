@@ -31,16 +31,13 @@
     _view = [[UIView alloc] initWithFrame:CGRectZero];
     _view.frame = CGRectMake(0, 0, 768, 1024);
     self.view = _view;
-    [_view release];
     
     _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BackgroundTextureBlackGradientPad"]];
     [_backgroundView setFrame:_view.frame];
     [_view addSubview:_backgroundView];
-    [_backgroundView release];
 
     _logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoBigShadow"]];
     [_view addSubview:_logoView];
-    [_logoView release];
 
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     _tableView.delegate = self;
@@ -51,7 +48,6 @@
     _tableView.scrollEnabled = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_view addSubview:_tableView];
-    [_tableView release];
 }
 
 - (void) setViewPositions {
@@ -86,13 +82,11 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     
-    UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(aboutButtonClicked:)];
+    UIBarButtonItem *aboutBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"About", nil) style:UIBarButtonItemStylePlain target:self action:@selector(aboutButtonClicked:)];
     self.navigationItem.rightBarButtonItem = aboutBtn;
-    [aboutBtn release];
     
-    UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(prefsButtonClicked:)];
+    UIBarButtonItem *prefsBtn = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Preferences", nil) style:UIBarButtonItemStylePlain target:self action:@selector(prefsButtonClicked:)];
     self.navigationItem.leftBarButtonItem = prefsBtn;
-    [prefsBtn release];
     
     [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
 }
@@ -119,7 +113,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"welcomeItem"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"welcomeItem"];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -145,33 +139,15 @@
     /* Servers section. */
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            MUPublicServerListController *serverList = [[[MUPublicServerListController alloc] init] autorelease];
+            MUPublicServerListController *serverList = [[MUPublicServerListController alloc] init];
             [self.navigationController pushViewController:serverList animated:YES];
         } else if (indexPath.row == 1) {
-            MUFavouriteServerListController *favList = [[[MUFavouriteServerListController alloc] init] autorelease];
+            MUFavouriteServerListController *favList = [[MUFavouriteServerListController alloc] init];
             [self.navigationController pushViewController:favList animated:YES];
         } else if (indexPath.row == 2) {
-            MULanServerListController *lanList = [[[MULanServerListController alloc] init] autorelease];
+            MULanServerListController *lanList = [[MULanServerListController alloc] init];
             [self.navigationController pushViewController:lanList animated:YES];
         }
-    }
-}
-
-#pragma mark -
-#pragma mark About Dialog
-
-- (void) alertView:(UIAlertView *)alert didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.mumbleapp.com/"]];
-    } else if (buttonIndex == 2) {
-        MULegalViewController *legalView = [[MULegalViewController alloc] init];
-        UINavigationController *navController = [[UINavigationController alloc] init];
-        [navController pushViewController:legalView animated:NO];
-        [legalView release];
-        [[self navigationController] presentModalViewController:navController animated:YES];
-        [navController release];
-    } else if (buttonIndex == 3) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:support@mumbleapp.com"]];
     }
 }
 
@@ -188,13 +164,31 @@
 #endif
     NSString *aboutMessage = NSLocalizedString(@"Low latency, high quality voice chat", nil);
     
-    UIAlertView *aboutView = [[UIAlertView alloc] initWithTitle:aboutTitle message:aboutMessage delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Website", nil),
-                              NSLocalizedString(@"Legal", nil),
-                              NSLocalizedString(@"Support", nil), nil];
-    [aboutView show];
-    [aboutView release];
+    UIAlertController* aboutAlert = [UIAlertController alertControllerWithTitle:aboutTitle message:aboutMessage preferredStyle:UIAlertControllerStyleAlert];
+    
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                    style:UIAlertActionStyleCancel
+                                                  handler:nil]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Website", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.mumble.info/"] options:@{} completionHandler:nil];
+    }]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Legal", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        MULegalViewController *legalView = [[MULegalViewController alloc] init];
+        UINavigationController *navController = [[UINavigationController alloc] init];
+        [navController pushViewController:legalView animated:NO];
+        [[self navigationController] presentViewController:navController animated:YES completion:nil];
+    }]];
+    [aboutAlert addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Support", nil)
+                                                    style:UIAlertActionStyleDefault
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/mumble-voip/mumble-iphoneos/issues"] options:@{} completionHandler:nil];
+    }]];
+    
+    [self presentViewController:aboutAlert animated:YES completion:nil];
 }
 
 - (void) prefsButtonClicked:(id)sender {
@@ -202,8 +196,8 @@
         return;
     }
     
-    MUPreferencesViewController *prefs = [[[MUPreferencesViewController alloc] init] autorelease];
-    UINavigationController *navCtrl = [[[UINavigationController alloc] initWithRootViewController:prefs] autorelease];
+    MUPreferencesViewController *prefs = [[MUPreferencesViewController alloc] init];
+    UINavigationController *navCtrl = [[UINavigationController alloc] initWithRootViewController:prefs];
     UIPopoverController *popOver = [[UIPopoverController alloc] initWithContentViewController:navCtrl];
     popOver.popoverBackgroundViewClass = [MUPopoverBackgroundView class];
     popOver.delegate = self;
@@ -216,7 +210,6 @@
 
 - (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     if (popoverController == _prefsPopover) {
-        [_prefsPopover release];
         _prefsPopover = nil;
     }
 }

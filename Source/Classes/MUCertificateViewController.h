@@ -9,7 +9,6 @@
 - (id) initWithPersistentRef:(NSData *)persistentRef;
 - (id) initWithCertificate:(MKCertificate *)cert;
 - (id) initWithCertificates:(NSArray *)certs;
-- (void) dealloc;
 
 - (void) showDataForCertificate:(MKCertificate *)cert;
 - (void) updateCertificateDisplay;

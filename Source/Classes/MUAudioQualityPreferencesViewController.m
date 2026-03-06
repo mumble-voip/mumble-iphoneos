@@ -6,14 +6,13 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @implementation MUAudioQualityPreferencesViewController
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }
@@ -23,17 +22,9 @@
     
     self.title = NSLocalizedString(@"Audio Quality", nil);
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
@@ -41,10 +32,6 @@
     }
 
     self.tableView.scrollEnabled = NO;
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -61,7 +48,7 @@
     static NSString *CellIdentifier = @"MUAudioQualityPreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -74,28 +61,28 @@
             cell.textLabel.text = NSLocalizedString(@"Low", nil);
             cell.detailTextLabel.text = NSLocalizedString(@"16 kbit/s, 60 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
             cell.detailTextLabel.text = NSLocalizedString(@"40 kbit/s, 20 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 2) {
             cell.textLabel.text = NSLocalizedString(@"High", nil);
             cell.detailTextLabel.text = NSLocalizedString(@"72 kbit/s, 10 ms audio per packet", nil);
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         } else if ([indexPath row] == 3) {
             cell.textLabel.text = NSLocalizedString(@"Custom", nil);
             cell.detailTextLabel.text = nil;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
-                cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
                 cell.textLabel.textColor = [MUColor selectedTextColor];
             }
         }
@@ -135,7 +122,7 @@
         cell.textLabel.textColor = [UIColor blackColor];
     }
     cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]] autorelease];
+    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
     cell.textLabel.textColor = [MUColor selectedTextColor];
     NSString *val = nil;
     switch ([indexPath row]) {

@@ -13,21 +13,14 @@
 
 - (id) initWithHeading:(NSString *)heading andMessage:(NSString *)msg andDate:(NSDate *)date andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)timestampDate andSentBySelf:(BOOL)sentBySelf {
     if ((self = [super init])) {
-        _heading = [heading retain];
-        _msg = [msg retain];
-        _date = [date retain];
+        _heading = heading;
+        _msg = msg;
+        _date = date;
         _self = sentBySelf;
-        _links = [links retain];
-        _images = [images retain];
+        _links = links;
+        _images = images;
     }
     return self;
-}
-
-- (void) dealloc {
-    [_heading release];
-    [_msg release];
-    [_date release];
-    [super dealloc];
 }
 
 - (NSString *) heading {
@@ -63,7 +56,7 @@
 }
 
 + (MUTextMessage *) textMessageWithHeading:(NSString *)heading andMessage:(NSString *)msg andEmbeddedLinks:(NSArray *)links andEmbeddedImages:(NSArray *)images andTimestampDate:(NSDate *)timestampDate isSentBySelf:(BOOL)sentBySelf {
-    return [[[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:timestampDate andEmbeddedLinks:links andEmbeddedImages:images  andTimestampDate:timestampDate andSentBySelf:sentBySelf] autorelease];
+    return [[MUTextMessage alloc] initWithHeading:heading andMessage:msg andDate:timestampDate andEmbeddedLinks:links andEmbeddedImages:images  andTimestampDate:timestampDate andSentBySelf:sentBySelf];
 }
 
 @end

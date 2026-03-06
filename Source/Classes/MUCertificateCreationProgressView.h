@@ -4,5 +4,4 @@
 
 @interface MUCertificateCreationProgressView : UIViewController
 - (id) initWithName:(NSString *)name email:(NSString *)email;
-- (void) dealloc;
 @end

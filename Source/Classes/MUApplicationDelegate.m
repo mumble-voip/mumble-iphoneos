@@ -12,7 +12,6 @@
 #import "MUNotificationController.h"
 #import "MURemoteControlServer.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 #import <MumbleKit/MKAudio.h>
@@ -24,9 +23,6 @@
     UINavigationController    *_navigationController;
     MUPublicServerListFetcher *_publistFetcher;
     BOOL                      _connectionActive;
-#ifdef MUMBLE_BETA_DIST
-    MUVersionChecker          *_verCheck;
-#endif
 }
 - (void) setupAudio;
 - (void) forceKeyboardLoad;
@@ -35,10 +31,6 @@
 @implementation MUApplicationDelegate
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-#ifdef MUMBLE_BETA_DIST
-    _verCheck = [[MUVersionChecker alloc] init];
-#endif
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionOpened:) name:MUConnectionOpenedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(connectionClosed:) name:MUConnectionClosedNotification object:nil];
     
@@ -93,15 +85,21 @@
 #endif
     
     // Try to use a dark keyboard throughout the app's text fields.
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         [[UITextField appearance] setKeyboardAppearance:UIKeyboardAppearanceDark];
     }
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
     // XXX: don't do it system-wide just yet
     //    _window.tintColor = [UIColor whiteColor];
     }
+
+    UINavigationBar.appearance.tintColor = [UIColor whiteColor];
+    UINavigationBar.appearance.translucent = NO;
+    UINavigationBar.appearance.barTintColor = [UIColor blackColor];
+    UINavigationBar.appearance.backgroundColor = [UIColor blackColor];
+    UINavigationBar.appearance.barStyle = UIBarStyleBlack;
     
     // Put a background view in here, to have prettier transitions.
     [_window addSubview:[MUBackgroundView backgroundView]];
@@ -115,11 +113,9 @@
     if (idiom == UIUserInterfaceIdiomPad) {
         welcomeScreen = [[MUWelcomeScreenPad alloc] init];
         [_navigationController pushViewController:welcomeScreen animated:YES];
-        [welcomeScreen release];
     } else {
         welcomeScreen = [[MUWelcomeScreenPhone alloc] init];
         [_navigationController pushViewController:welcomeScreen animated:YES];
-        [welcomeScreen release];
     }
     
     [_window setRootViewController:_navigationController];
@@ -138,7 +134,7 @@
     return NO;
 }
 
-- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     if ([[url scheme] isEqualToString:@"mumble"]) {
         MUConnectionController *connController = [MUConnectionController sharedController];
         if ([connController isConnected]) {
@@ -156,15 +152,6 @@
 
 - (void) applicationWillTerminate:(UIApplication *)application {
     [MUDatabase teardown];
-}
-
-- (void) dealloc {
-#ifdef MUMBLE_BETA_DIST
-    [_verCheck release];
-#endif
-    [_navigationController release];
-    [_window release];
-    [super dealloc];
 }
 
 - (void) setupAudio {
@@ -260,7 +247,6 @@
 - (void) forceKeyboardLoad {
     UITextField *textField = [[UITextField alloc] initWithFrame:CGRectZero];
     [_window addSubview:textField];
-    [textField release];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [textField becomeFirstResponder];
 }

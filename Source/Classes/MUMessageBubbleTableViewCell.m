@@ -5,7 +5,6 @@
 #import "MUMessageBubbleTableViewCell.h"
 #import "MUTextMessage.h"
 #import "MUColor.h"
-#import "MUOperatingSystem.h"
 
 #define kBalloonWidth                190.0f
 #define kBalloonTopMargin            8.0f
@@ -59,44 +58,58 @@
     return self;
 }
 
-- (void) dealloc {
-    [_shownImages release];
-    [_message release];
-    [_heading release];
-    [_date release];
-    [super dealloc];
-}
-
 + (CGSize) textSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                               attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:14.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) headingSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont boldSystemFontOfSize:14.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                               attributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) timestampSizeForText:(NSString *)text {
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeHeadTruncation];
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingHead;
+
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{ NSFontAttributeName : [UIFont italicSystemFontOfSize:11.0f], NSParagraphStyleAttributeName : paragraphStyle }
+                                  context:nil];
+    return rect.size;
 }
 
 + (CGSize) footerSizeForText:(NSString *)text {
     if (text == nil)
         return CGSizeZero;
     CGSize constraintSize = CGSizeMake(kBalloonWidth-(kBalloonMarginTailSide+kBalloonMarginNonTailSide), CGFLOAT_MAX);
-    return [text sizeWithFont:[UIFont italicSystemFontOfSize:11.0f] constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+
+    CGRect rect = [text boundingRectWithSize:constraintSize
+                                  options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:@{ NSFontAttributeName : [UIFont italicSystemFontOfSize:11.0f] }
+                                  context:nil];
+    return rect.size;
 }
 
 + (NSString *) stringForDate:(NSDate *)date {
-    NSDateFormatter *fmt = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"HH:mm"];
     return [fmt stringFromDate:date];
 }
 
 + (CGSize) imageSizeForImages:(NSArray *)images resizedToFitWithinSize:(CGSize)sz andNewImageSizes:(NSArray **)array {
-    NSMutableArray *imageSizes = [[[NSMutableArray alloc] initWithCapacity:[images count]] autorelease];
+    NSMutableArray *imageSizes = [[NSMutableArray alloc] initWithCapacity:[images count]];
     CGFloat imagesHeight = 0;
     for (UIImage *image in images) {
         CGSize imgSize = [image size];
@@ -137,7 +150,7 @@
     UIImage *balloon = nil;
     UIImage *stretchableBalloon = nil;
 
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         if (_rightSide) {
             if (_selected) {
                 balloon = [UIImage imageNamed:@"RightBalloonSelectedMono"];
@@ -235,10 +248,34 @@
                                    footerSize.width,
                                    footerSize.height);
     [[UIColor blackColor] set];
-    [footer drawInRect:footerRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeWordWrap];
-    [heading drawInRect:headerRect withFont:[UIFont boldSystemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
-    [dateStr drawInRect:timestampRect withFont:[UIFont italicSystemFontOfSize:11.0f] lineBreakMode:UILineBreakModeHeadTruncation];
-    [text drawInRect:textRect withFont:[UIFont systemFontOfSize:14.0f] lineBreakMode:UILineBreakModeWordWrap];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [footer drawInRect:footerRect withAttributes:@{
+        NSFontAttributeName: [UIFont italicSystemFontOfSize:11.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [heading drawInRect:headerRect withAttributes:@{
+        NSFontAttributeName: [UIFont boldSystemFontOfSize:14.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingHead;
+    [dateStr drawInRect:timestampRect withAttributes:@{
+        NSFontAttributeName: [UIFont italicSystemFontOfSize:11.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
+    
+    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+    [text drawInRect:textRect withAttributes:@{
+        NSFontAttributeName: [UIFont systemFontOfSize:14.0f],
+        NSParagraphStyleAttributeName: paragraphStyle
+    }];
 }
 
 - (CGRect) selectionRect {    
@@ -259,25 +296,21 @@
 }
 
 - (void) setHeading:(NSString *)heading {
-    [_heading release];
     _heading = [heading copy];
     [self setNeedsDisplay];
 }
 
 - (void) setFooter:(NSString *)footer {
-    [_footer release];
     _footer = [footer copy];
     [self setNeedsDisplay];
 }
 
 - (void) setMessage:(NSString *)msg {
-    [_message release];
     _message = [msg copy];
     [self setNeedsDisplay];
 }
 
 - (void) setDate:(NSDate *)date {
-    [_date release];
     _date = [date copy];
     [self setNeedsDisplay];
 }
@@ -293,7 +326,7 @@
 }
 
 - (void) setShownImages:(NSArray *)shownImages {
-    _shownImages = [shownImages retain];
+    _shownImages = shownImages;
     [self setNeedsDisplay];
 }
 
@@ -353,19 +386,11 @@
         
         _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showMenu:)];
         [_bubbleView addGestureRecognizer:_longPressRecognizer];
-        [_longPressRecognizer release];
         
         _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAttachments:)];
         [_bubbleView addGestureRecognizer:_tapRecognizer];
-        [_tapRecognizer release];
     }
     return self;
-}
-
-- (void) dealloc {
-    [_bubbleView release];
-    [_longPressRecognizer release];
-    [super dealloc];
 }
 
 - (void) setDelegate:(id<MUMessageBubbleTableViewCellDelegate>)delegate {

@@ -1,21 +1,22 @@
 Mumble for iOS (iPhone, iPod touch and iPad)
 ============================================
 
-**Note:** This repo is unmaintained (last update in September 2017).
+**Note:** This repo and the app for iOS are unmaintained.
 If you are interested in taking over development of the app, write a comment in [#129](https://github.com/mumble-voip/mumble-iphoneos/issues/129).
 
-This is the source code of Mumble (a gaming-focused social
-voice chat utility) for iOS-based devices.
 
-The desktop version of Mumble runs on Windows, Mac OS X, Linux
-and various other Unix-like systems. Visit its website at:
+This is the source code of Mumble (a voice chat application) for iOS-based devices.
 
- <http://mumble.info/>
+The [desktop version](https://github.com/mumble-voip/mumble) of Mumble runs on Windows, Mac OS X, Linux
+and various other Unix-like systems. 
+
+Visit our website at:
+<https://mumble.info/>
 
 Building it
 ===========
 
-To build this you need Xcode 4 and the latest iOS SDK from Apple.
+To build this you need Xcode 16 and the latest iOS SDK from Apple.
 
 The easiest way to get a working source tree is to check out
 the mumble-iphoneos repository recursively (his will recursively

@@ -7,7 +7,6 @@
 #import "MUCertificateController.h"
 #import "MUCertificateCell.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 static void ShowAlertDialog(NSString *title, NSString *msg) {
@@ -18,7 +17,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     });
 }
 
-@interface MUCertificateDiskImportViewController () <UIActionSheetDelegate> {
+@interface MUCertificateDiskImportViewController () {
     BOOL             _showHelp;
     NSMutableArray   *_diskCertificates;
     NSIndexPath      *_attemptIndexPath;
@@ -33,7 +32,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 @implementation MUCertificateDiskImportViewController
 
 - (id) init {
-    self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+    self.preferredContentSize = CGSizeMake(320, 480);
     
     UITableViewStyle style = UITableViewStyleGrouped;
     NSArray *documentDirs = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -65,29 +64,15 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     return self;
 }
 
-- (void) dealloc {
-    [_diskCertificates release];
-    [_attemptIndexPath release];
-    [super dealloc];
-}
-
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-
     if (self.tableView.style == UITableViewStyleGrouped) {
         self.tableView.backgroundView = [MUBackgroundView backgroundView];
     } else {
-        if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+        if (@available(iOS 7, *)) {
             self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
             self.tableView.separatorInset = UIEdgeInsetsZero;
         }
@@ -153,7 +138,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                            @"Help text for iTunes File Transfer (iTunes Import)");
         MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:help];
         lbl.font = [UIFont systemFontOfSize:16.0f];
-        lbl.lineBreakMode = UILineBreakModeWordWrap;
+        lbl.lineBreakMode = NSLineBreakByWordWrapping;
         lbl.numberOfLines = 0;
         return lbl;
     }
@@ -276,35 +261,28 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 }
 
 - (void) showPasswordDialog {
-    UIAlertView *dialog = [[UIAlertView alloc] init];
-    [dialog setDelegate:self];
-    
     NSString *title = NSLocalizedString(@"Enter Password", @"Title for certificate import password unlock UIAlertView.");
     NSString *msg = NSLocalizedString(@"The certificate is protected by a password. Please enter it below:",
                                       @"Body text for certificate import password unlock UIAlertView.");
-    [dialog setTitle:title];
-    [dialog setMessage:msg];
-    [dialog addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-    [dialog addButtonWithTitle:NSLocalizedString(@"OK", nil)];
-    [dialog setAlertViewStyle:UIAlertViewStyleSecureTextInput];
-    [dialog show];
-    [dialog release];
-}
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // Password view
-    if (alertView.alertViewStyle == UIAlertViewStyleSecureTextInput) {
-        if (buttonIndex == 1) { // OK
-            [self tryImportCertificateWithPassword:[[alertView textFieldAtIndex:0] text]];
-        }
-        _passwordField = nil;
-    }
-    // Delete all view
-    if (alertView.alertViewStyle == UIAlertViewStyleDefault) {
-        if (buttonIndex == 1) { // Remove 'Em
-            [self removeAllDiskCertificates];
-        }
-    }
+    UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertCtrl addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        [textField setSecureTextEntry:YES];
+    }];
+    
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [self tryImportCertificateWithPassword:[[[alertCtrl textFields] objectAtIndex:0] text]];
+    }]];
+    
+    [self presentViewController:alertCtrl animated:YES completion:nil];
+    [alertCtrl release];
 }
 
 - (void) removeAllDiskCertificates {
@@ -322,13 +300,17 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
                                 NSLocalizedString(@"File '%@' could not be deleted: %@",
                                                   @"Certificate import file removal error body."),
                                     fn, [err localizedDescription]];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                                message:msg
-                                                               delegate:nil
-                                                      cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                      otherButtonTitles:nil];
-            [alertView show];
-            [alertView release];
+            
+            UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                               message:msg
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+            
+            [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil]];
+            
+            [self presentViewController:alertCtrl animated:YES completion:nil];
+            [alertCtrl release];
         } else {
             [_diskCertificates removeObjectIdenticalTo:fn];
         }
@@ -340,7 +322,7 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
 #pragma mark - Actions
 
 - (void) doneClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) showRemoveAlert {
@@ -349,32 +331,43 @@ static void ShowAlertDialog(NSString *title, NSString *msg) {
     NSString *msg = NSLocalizedString(@"Are you sure you want to delete all importable certificates?\n\n"
                                       @"Certificates already imported into Mumble will not be touched.",
                                       @"Body for remove all importable certificates UIAlertView");
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                        message:msg
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"No", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Yes", nil), nil];
-    [alertView show];
-    [alertView release];
+    
+    UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                       message:msg
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [self removeAllDiskCertificates];
+    }]];
+    
+    [self presentViewController:alertCtrl animated:YES completion:nil];
+    [alertCtrl release];
 }
 
 - (void) actionClicked:(id)sender {
     NSString *title = NSLocalizedString(@"Import Actions", @"Title for UIActionSheet for iTunes Import.");
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                               destructiveButtonTitle:NSLocalizedString(@"Remove All",
-                                                                                        @"Remove all importable certificates action.")
-                                                    otherButtonTitles:nil];
-    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
-    [actionSheet release];
-}
-
-- (void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
+    
+    UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Remove All",
+                                                                           @"Remove all importable certificates action.")
+                                                   style:UIAlertActionStyleDestructive
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         [self showRemoveAlert];
-    }
+    }]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
+    [sheetCtrl release];
 }
 
 @end

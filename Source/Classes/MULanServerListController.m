@@ -10,7 +10,6 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServerListController.h"
 #import "MUConnectionController.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
@@ -21,7 +20,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     }
 } 
 
-@interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate, UIActionSheetDelegate, UIAlertViewDelegate> {
+@interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate> {
     NSNetServiceBrowser  *_browser;
     NSMutableArray       *_netServices;
 }
@@ -44,27 +43,13 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     return self;
 }
 
-- (void) dealloc {
-    [_browser release];
-    [_netServices release];
-    [super dealloc];
-}
-
 #pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     }
@@ -122,7 +107,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
     MUServerCell *cell = (MUServerCell *)[tableView dequeueReusableCellWithIdentifier:[MUServerCell reuseIdentifier]];
     if (cell == nil) {
-        cell = [[[MUServerCell alloc] init] autorelease];
+        cell = [[MUServerCell alloc] init];
     }
     [cell populateFromDisplayName:[netService name] hostName:[netService hostName] port:[NSString stringWithFormat:@"%li", (long)[netService port]]];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -140,42 +125,55 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         return;
     }
     
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:[netService name]
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:NSLocalizedString(@"Add as favourite", nil),
-                                                                NSLocalizedString(@"Connect", nil), nil];
-    [sheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [sheet showInView:[self tableView]];
-    [sheet release];
-}
-
-- (void) actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+    UIAlertController* sheetCtrl = [UIAlertController alertControllerWithTitle:[netService name]
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
     
-    // Connect
-    if (index == 1) {
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+    }]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Add as favourite", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        [self presentAddAsFavouriteDialogForServer:netService];
+    }]];
+    [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         NSString *title = NSLocalizedString(@"Username", nil);
         NSString *msg = NSLocalizedString(@"Please enter the username you wish to use on this server", nil);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
-                                                        message:msg
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                              otherButtonTitles:NSLocalizedString(@"Connect", nil), nil];
-        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-        [[alert textFieldAtIndex:0] setText:[MUDatabase usernameForServerWithHostname:[netService hostName] port:[netService port]]];
-        [alert show];
-        [alert release];
-
-    // Add as favourite
-    } else if (index == 0) {
-        [self presentAddAsFavouriteDialogForServer:netService];
-    // Cancel
-    } else if (index == 2) {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }
+        
+        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:title
+                                                                           message:msg
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        [alertCtrl addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            [textField setText:[MUDatabase usernameForServerWithHostname:[netService hostName] port:[netService port]]];
+        }];
+        
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        }]];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+            MUConnectionController *connCtrlr = [MUConnectionController sharedController];
+            [connCtrlr connetToHostname:[netService hostName]
+                                   port:[netService port]
+                           withUsername:[[[alertCtrl textFields] objectAtIndex:0] text]
+                            andPassword:nil
+               withParentViewController:self];
+            
+            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        }]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
+    }]];
+    
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
 - (void) presentAddAsFavouriteDialogForServer:(NSNetService *)netService {
@@ -191,41 +189,19 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [editView setTarget:self];
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
-    [editView release];
     
-    [[self navigationController] presentModalViewController:modalNav animated:YES];
-    
-    [modalNav release];
-    [favServ release];
+    [[self navigationController] presentViewController:modalNav animated:YES completion:nil];
 }
 
 - (void) doneButtonClicked:(id)sender {
     MUFavouriteServerEditViewController *editView = (MUFavouriteServerEditViewController *)sender;
     MUFavouriteServer *favServ = [editView copyFavouriteFromContent];
     [MUDatabase storeFavourite:favServ];
-    [favServ release];
     
     MUFavouriteServerListController *favController = [[MUFavouriteServerListController alloc] init];
     UINavigationController *navCtrl = [self navigationController];
     [navCtrl popToRootViewControllerAnimated:NO];
     [navCtrl pushViewController:favController animated:YES];
-    [favController release];
-}
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-    NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
-
-    if (buttonIndex == 1) {
-        MUConnectionController *connCtrlr = [MUConnectionController sharedController];
-        [connCtrlr connetToHostname:[netService hostName]
-                               port:[netService port]
-                       withUsername:[[alertView textFieldAtIndex:0] text]
-                        andPassword:nil
-           withParentViewController:self];
-    }
-
-    [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

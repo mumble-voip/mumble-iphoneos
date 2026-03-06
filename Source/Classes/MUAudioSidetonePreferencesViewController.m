@@ -6,14 +6,13 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUColor.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @implementation MUAudioSidetonePreferencesViewController
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        self.contentSizeForViewInPopover = CGSizeMake(320, 480);
+        self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
 }
@@ -22,18 +21,10 @@
     [super viewWillAppear:animated];
     
     self.title = NSLocalizedString(@"Sidetone", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
@@ -41,10 +32,6 @@
     }
 
     self.tableView.scrollEnabled = NO;
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -61,7 +48,7 @@
     static NSString *CellIdentifier = @"MUAudioSidetonePreferencesCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -78,7 +65,6 @@
             [sidetoneSwitch addTarget:self action:@selector(sidetoneStatusChanged:) forControlEvents:UIControlEventValueChanged];
             [sidetoneSwitch setOn:[defaults boolForKey:@"AudioSidetone"]];
             cell.accessoryView = sidetoneSwitch;
-            [sidetoneSwitch release];
         } else if ([indexPath row] == 1) {
             NSLog(@"reloadin' (enabled? %u)", [defaults boolForKey:@"AudioSidetone"]);
             cell.textLabel.text = NSLocalizedString(@"Playback Volume", nil);
@@ -90,7 +76,6 @@
             [sidetoneSlider setValue:[defaults floatForKey:@"AudioSidetoneVolume"]];
             [sidetoneSlider setMinimumTrackTintColor:[UIColor blackColor]];
             cell.accessoryView = sidetoneSlider;
-            [sidetoneSlider release];
         }
     }
     

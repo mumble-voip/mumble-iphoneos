@@ -3,10 +3,9 @@
 // license that can be found in the LICENSE file.
 
 #import "MUImageViewController.h"
-#import "MUOperatingSystem.h"
 #import "MUColor.h"
 
-@interface MUImageViewController () <UIScrollViewDelegate, UIActionSheetDelegate> {
+@interface MUImageViewController () <UIScrollViewDelegate> {
     NSArray        *_images;
     NSArray        *_imageViews;
     UIScrollView   *_scrollView;
@@ -18,15 +17,10 @@
 
 - (id) initWithImages:(NSArray *)images {
     if ((self = [super init])) {
-        _images = [images retain];
+        _images = images;
         _curPage = 0;
     }
     return self;
-}
-
-- (void) dealloc {
-    [_images release];
-    [super dealloc];
 }
 
 - (void) viewDidLoad {
@@ -61,8 +55,6 @@
         [imgZoomer setShowsHorizontalScrollIndicator:NO];
         [_scrollView addSubview:imgZoomer];
         [imageViews addObject:imgView];
-        [imgView release];
-        [imgZoomer release];
         ++i;
     }
 
@@ -71,36 +63,17 @@
     [self.view addSubview:_scrollView];
 }
 
-- (void) viewDidUnload {
-    [super viewDidUnload];
-    [_scrollView release];
-    [_imageViews release];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"%lu of %lu", nil), (unsigned long)1, (unsigned long)[_images count]];
     
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
-    
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         _scrollView.backgroundColor = [MUColor backgroundViewiOS7Color];
     }
     
     UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionClicked:)];
     self.navigationItem.rightBarButtonItem = actionButton;
-    [actionButton release];
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -123,37 +96,35 @@
     return nil;
 }
 
-#pragma mark - UIActionSheetDelegate
-
-- (void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        UIImageWriteToSavedPhotosAlbum([_images objectAtIndex:_curPage], self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-    }
-}
-
 #pragma mark - Actions
 
 - (void) image:(UIImage *)img didFinishSavingWithError:(NSError *)err contextInfo:(void *)userInfo {
     if (err != nil) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Unable to save image", nil)
-                                                            message:[err description]
-                                                           delegate:nil 
-                                                   cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                  otherButtonTitles:nil];
-        [alertView show];
-        [alertView release];
+        UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Unable to save image", nil)
+                                                                           message:[err description]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+        [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                       style:UIAlertActionStyleCancel
+                                                     handler:nil]];
+        
+        [self presentViewController:alertCtrl animated:YES completion:nil];
     }
 }
 
 - (void) actionClicked:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Export Image", nil)
-                                                             delegate:self
-                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                               destructiveButtonTitle:nil
-                                                    otherButtonTitles:NSLocalizedString(@"Export to Photos", nil), nil];
-    [actionSheet setActionSheetStyle:UIActionSheetStyleBlackOpaque];
-    [actionSheet showFromBarButtonItem:sender animated:YES];
-    [actionSheet release];
+    UIAlertController* alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Export Image", nil)
+                                                                       message:nil
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                   style:UIAlertActionStyleCancel
+                                                 handler:nil]];
+    [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Export to Photos", nil)
+                                                   style:UIAlertActionStyleDefault
+                                                 handler:^(UIAlertAction * _Nonnull action) {
+        UIImageWriteToSavedPhotosAlbum([self->_images objectAtIndex:self->_curPage], self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    }]];
+    
+    [self presentViewController:alertCtrl animated:YES completion:nil];
 }
 
 @end

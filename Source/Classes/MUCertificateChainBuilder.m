@@ -22,13 +22,13 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 static NSArray *FindValidParentsForCert(SecCertificateRef cert) {
     NSDictionary *attrs = GetAttrsForCert(cert);
     NSData *issuer = [attrs objectForKey:(id)kSecAttrIssuer];
-    NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                kSecClassCertificate, kSecClass,
-                issuer,               kSecAttrSubject,
-                kCFBooleanTrue,       kSecReturnAttributes,
-                kCFBooleanTrue,       kSecReturnRef,
-                kSecMatchLimitAll,    kSecMatchLimit,                        
-            nil];
+    NSDictionary *query = @{
+        (id)kSecClass: (id)kSecClassCertificate,
+        (id)kSecAttrSubject: (id)issuer,
+        (id)kSecReturnAttributes: (id)kCFBooleanTrue,
+        (id)kSecReturnRef: (id)kCFBooleanTrue,
+        (id)kSecMatchLimit: (id)kSecMatchLimitAll
+    };
     NSArray *allAttrs = nil;
     OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *) &allAttrs);
     if (err != noErr) {

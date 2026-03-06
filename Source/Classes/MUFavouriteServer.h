@@ -6,7 +6,6 @@
 
 - (id) initWithDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSUInteger)port userName:(NSString *)userName password:(NSString *)passWord;
 - (id) init;
-- (void) dealloc;
 
 @property (assign)  NSInteger   primaryKey;
 @property (copy)    NSString    *displayName;

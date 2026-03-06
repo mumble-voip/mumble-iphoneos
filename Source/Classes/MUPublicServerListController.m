@@ -7,7 +7,6 @@
 #import "MUCountryServerListController.h"
 #import "MUTableViewHeaderLabel.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUPublicServerListController () {
@@ -24,27 +23,14 @@
     return self;
 }
 
-- (void) dealloc {
-    [_serverList release];
-    [super dealloc];
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
 
     self.navigationItem.title = NSLocalizedString(@"Public Servers", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
@@ -56,8 +42,6 @@
         UIBarButtonItem *barActivityIndicator = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
         self.navigationItem.rightBarButtonItem = barActivityIndicator;
         [activityIndicatorView startAnimating];
-        [barActivityIndicator release];
-        [activityIndicatorView release];
     }
 }
 
@@ -65,11 +49,11 @@
     [super viewDidAppear:YES];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if ([_serverList isParsed]) {
+        if ([self->_serverList isParsed]) {
             self.navigationItem.rightBarButtonItem = nil;
             return;
         }
-        [_serverList parse];
+        [self->_serverList parse];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.navigationItem.rightBarButtonItem = nil;
             [self.tableView reloadData];
@@ -104,7 +88,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countryItem"];
     if (!cell) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryItem"] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"countryItem"];
     }
 
     [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
@@ -127,7 +111,6 @@
 
     MUCountryServerListController *countryController = [[MUCountryServerListController alloc] initWithName:countryName serverList:countryServers];
     [[self navigationController] pushViewController:countryController animated:YES];
-    [countryController release];
 }
 
 @end

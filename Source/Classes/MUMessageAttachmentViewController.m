@@ -6,7 +6,6 @@
 #import "MUTableViewHeaderLabel.h"
 #import "MUImageViewController.h"
 #import "MUImage.h"
-#import "MUOperatingSystem.h"
 #import "MUBackgroundView.h"
 
 @interface MUMessageAttachmentViewController () {
@@ -19,8 +18,8 @@
 
 - (id) initWithImages:(NSArray *)images andLinks:(NSArray *)links {
     if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
-        _images = [images retain];
-        _links = [links retain];
+        _images = images;
+        _links = links;
     }
     return self;
 }
@@ -31,27 +30,15 @@
     [super viewWillAppear:animated];
 
     self.navigationItem.title = NSLocalizedString(@"Attachments", nil);
-
-    UINavigationBar *navBar = self.navigationController.navigationBar;
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
-        navBar.tintColor = [UIColor whiteColor];
-        navBar.translucent = NO;
-        navBar.backgroundColor = [UIColor blackColor];
-    }
-    navBar.barStyle = UIBarStyleBlackOpaque;
     
     self.tableView.backgroundView = [MUBackgroundView backgroundView];
     
-    if (MUGetOperatingSystemVersion() >= MUMBLE_OS_IOS_7) {
+    if (@available(iOS 7, *)) {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorInset = UIEdgeInsetsZero;
     } else {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -94,7 +81,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -128,9 +115,8 @@
     if (hasImages && [indexPath section] == 0) {
         MUImageViewController *imgViewController = [[MUImageViewController alloc] initWithImages:_images];
         [self.navigationController pushViewController:imgViewController animated:YES];
-        [imgViewController release];
     } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_links objectAtIndex:[indexPath row]]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_links objectAtIndex:[indexPath row]]] options:@{} completionHandler:nil];
     }
 
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

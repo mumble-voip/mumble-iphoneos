@@ -20,7 +20,7 @@
 @end
 
 static void *serverThread(void *udata) {
-    int sock = (int) udata;
+    int sock = (int) (long) udata;
     unsigned char action;
     
     int val = 1;
@@ -54,7 +54,7 @@ out:
 }
 
 static void acceptCallBack(CFSocketRef socket, CFSocketCallBackType type, CFDataRef address, const void *data, void *info) {
-    MURemoteControlServer *remoteControl = (MURemoteControlServer *) info;
+    MURemoteControlServer *remoteControl = (__bridge MURemoteControlServer *) info;
     int sock = *(int *)data;
     [remoteControl addSocket:[NSNumber numberWithInt:sock]];
     if (type == kCFSocketAcceptCallBack) {
@@ -96,10 +96,9 @@ static void acceptCallBack(CFSocketRef socket, CFSocketCallBackType type, CFData
 }
 
 - (BOOL) start {
-    [_activeSocks release];
     _activeSocks = [[NSMutableArray alloc] init];
     
-    CFSocketContext ctx = {0, self, NULL, NULL, NULL};
+    CFSocketContext ctx = {0, (void *) CFBridgingRetain(self), NULL, NULL, NULL};
     _sock = CFSocketCreate(NULL, PF_INET6, SOCK_STREAM, IPPROTO_TCP,
                            kCFSocketAcceptCallBack, (CFSocketCallBack)acceptCallBack, &ctx);
     if (_sock == NULL) {
