@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E9B09F2304DCCE300682498 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E9B09E9304DCCE300682498 /* WebKit.framework */; };
 		0EEEF3B42DF1E5450042C0A8 /* libFMDB-IOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEEF35C2DF1DC6D0042C0A8 /* libFMDB-IOS.a */; };
 		0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -266,6 +267,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E9B09E9304DCCE300682498 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0EA3B0742DC3A75E00A69F03 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = Dependencies/fmdb/fmdb.xcodeproj; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Mumble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mumble.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -520,6 +522,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E9B09F2304DCCE300682498 /* WebKit.framework in Frameworks */,
 				0EF3A4672DC2573900028454 /* AudioToolbox.framework in Frameworks */,
 				28990AB1132FDA540034B406 /* libMumbleKit.a in Frameworks */,
 				0EEEF3B42DF1E5450042C0A8 /* libFMDB-IOS.a in Frameworks */,
@@ -940,6 +943,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0E9B09E9304DCCE300682498 /* WebKit.framework */,
 				28990AB0132FDA540034B406 /* libMumbleKit.a */,
 				2861C2AD116BE9B5002B8514 /* AudioToolbox.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
