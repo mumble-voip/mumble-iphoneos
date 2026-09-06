@@ -57,6 +57,8 @@
         _numberBadgeView.hidden = YES;
         _numberBadgeView.shine = NO;
         _numberBadgeView.strokeColor = [UIColor redColor];
+        
+        [_connection setSecondaryDelegate:self];
     }
     return self;
 }
@@ -64,6 +66,7 @@
 - (void) dealloc {
     [_model removeDelegate:self];
     [_connection setDelegate:nil];
+    [_connection setSecondaryDelegate:nil];
 }
 
 - (void) takeOwnershipOfConnectionDelegate {
@@ -167,20 +170,25 @@
 }
 
 - (void) connection:(MKConnection *)conn unableToConnectWithError:(NSError *)err {
+    [[MUConnectionController sharedController] teardownAfterShowingErrorWithTimeout:err];
 }
 
 - (void) connection:(MKConnection *)conn closedWithError:(NSError *)err {
     if (err) {
-        UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Connection closed", nil)
+        /*
+         UIAlertController *alertCtrl = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Connection closed", nil)
                                                                            message:[err localizedDescription]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                        style:UIAlertActionStyleCancel
                                                      handler:nil]];
         
-        [self presentViewController:alertCtrl animated:YES completion:nil];
+        [self presentViewController:alertCtrl animated:YES completion:^{
+            [[MUConnectionController sharedController] disconnectFromServer];
+        }];
+        */
 
-        [[MUConnectionController sharedController] disconnectFromServer];
+        [[MUConnectionController sharedController] teardownAfterShowingErrorWithTimeout:err];
     }
 }
 

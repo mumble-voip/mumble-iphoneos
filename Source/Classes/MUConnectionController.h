@@ -10,4 +10,5 @@ extern NSString *MUConnectionClosedNotification;
 - (void) connectToHostname:(NSString *)hostName port:(NSUInteger)port withUsername:(NSString *)userName andPassword:(NSString *)password withParentViewController:(UIViewController *)parentViewController;
 - (BOOL) isConnected;
 - (void) disconnectFromServer;
+- (void) teardownAfterShowingErrorWithTimeout:(NSError*) err;
 @end
