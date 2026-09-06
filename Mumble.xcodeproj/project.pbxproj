@@ -167,6 +167,9 @@
 		28F08365147F369200DC126F /* MUAudioBarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F08364147F369200DC126F /* MUAudioBarViewCell.m */; };
 		28F79C69147966840003B8BA /* WelcomeScreenIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C68147966840003B8BA /* WelcomeScreenIcon.png */; };
 		28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */; };
+		A194FD7F98034CC99D2F8ADD /* MumbleCallKitIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F386561B364C0C80BE9C0B /* MumbleCallKitIcon.png */; };
+		611A2042FB844D8E8772CABE /* MumbleCallKitIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D410F16017004390A4465A78 /* MumbleCallKitIcon@2x.png */; };
+		27D8A5C81E934166B1632865 /* MumbleCallKitIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EE780B612584CF1BE70C9E5 /* MumbleCallKitIcon@3x.png */; };
 		28F79C70147973D60003B8BA /* MUUserStateAcessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */; };
 		28F79C73147991490003B8BA /* MUAccessTokenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F79C72147991480003B8BA /* MUAccessTokenViewController.m */; };
 		28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28F79CA01479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png */; };
@@ -177,6 +180,7 @@
 		28FAA35F14D74C1600F6D711 /* SmallMumbleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35D14D74C1600F6D711 /* SmallMumbleIcon.png */; };
 		28FAA36014D74C1600F6D711 /* SmallMumbleIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 28FAA35E14D74C1600F6D711 /* SmallMumbleIcon@2x.png */; };
 		28FAA36414D7551600F6D711 /* MKNumberBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */; };
+		7E6F2709300331050079755A /* MUCallController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E6F2708300331030079755A /* MUCallController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -496,6 +500,9 @@
 		28F08364147F369200DC126F /* MUAudioBarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUAudioBarViewCell.m; sourceTree = "<group>"; };
 		28F79C68147966840003B8BA /* WelcomeScreenIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WelcomeScreenIcon.png; path = Resources/WelcomeScreenIcon.png; sourceTree = "<group>"; };
 		28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WelcomeScreenIcon@2x.png"; path = "Resources/WelcomeScreenIcon@2x.png"; sourceTree = "<group>"; };
+		63F386561B364C0C80BE9C0B /* MumbleCallKitIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = MumbleCallKitIcon.png; path = Resources/MumbleCallKitIcon.png; sourceTree = "<group>"; };
+		D410F16017004390A4465A78 /* MumbleCallKitIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MumbleCallKitIcon@2x.png"; path = "Resources/MumbleCallKitIcon@2x.png"; sourceTree = "<group>"; };
+		5EE780B612584CF1BE70C9E5 /* MumbleCallKitIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "MumbleCallKitIcon@3x.png"; path = "Resources/MumbleCallKitIcon@3x.png"; sourceTree = "<group>"; };
 		28F79C6E147973D40003B8BA /* MUUserStateAcessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUUserStateAcessoryView.h; sourceTree = "<group>"; };
 		28F79C6F147973D50003B8BA /* MUUserStateAcessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUUserStateAcessoryView.m; sourceTree = "<group>"; };
 		28F79C71147991480003B8BA /* MUAccessTokenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUAccessTokenViewController.h; sourceTree = "<group>"; };
@@ -514,6 +521,8 @@
 		28FAA36314D7551600F6D711 /* MKNumberBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MKNumberBadgeView.m; path = Dependencies/MKNumberBadgeView/MKNumberBadgeView.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Source/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Mumble.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mumble.pch; path = Source/Mumble.pch; sourceTree = "<group>"; };
+		7E6F26FF300330F60079755A /* MUCallController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MUCallController.h; sourceTree = "<group>"; };
+		7E6F2708300331030079755A /* MUCallController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MUCallController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/Info.plist; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -552,6 +561,8 @@
 				28B034951F5354C3008E51C7 /* LaunchScreen.storyboard */,
 				2861C25D116BE905002B8514 /* MUApplicationDelegate.h */,
 				2861C25E116BE905002B8514 /* MUApplicationDelegate.m */,
+				7E6F26FF300330F60079755A /* MUCallController.h */,
+				7E6F2708300331030079755A /* MUCallController.m */,
 				2861C25F116BE905002B8514 /* MUCountryServerListController.h */,
 				28C6EF0911BBF38100E426C8 /* MUCountryServerListController.m */,
 				2861C266116BE905002B8514 /* MUPublicServerList.h */,
@@ -823,6 +834,9 @@
 				28F79C68147966840003B8BA /* WelcomeScreenIcon.png */,
 				28F79C6A147968C60003B8BA /* WelcomeScreenIcon@2x.png */,
 				2845194716346F5B0027FAB3 /* WelcomeScreenIcon-568h@2x.png */,
+				63F386561B364C0C80BE9C0B /* MumbleCallKitIcon.png */,
+				D410F16017004390A4465A78 /* MumbleCallKitIcon@2x.png */,
+				5EE780B612584CF1BE70C9E5 /* MumbleCallKitIcon@3x.png */,
 				28A2AEB514786E6000F3B83F /* Default.png */,
 				28A2AEB614786E6000F3B83F /* Default@2x.png */,
 				28BE998D18CFD7DC00910551 /* Default-iOS7@2x.png */,
@@ -1169,6 +1183,9 @@
 				28A2AEBC14786E6000F3B83F /* icon@2x.png in Resources */,
 				28F79C69147966840003B8BA /* WelcomeScreenIcon.png in Resources */,
 				28F79C6B147968C60003B8BA /* WelcomeScreenIcon@2x.png in Resources */,
+				A194FD7F98034CC99D2F8ADD /* MumbleCallKitIcon.png in Resources */,
+				611A2042FB844D8E8772CABE /* MumbleCallKitIcon@2x.png in Resources */,
+				27D8A5C81E934166B1632865 /* MumbleCallKitIcon@3x.png in Resources */,
 				28F79CA11479C2180003B8BA /* BackgroundTextureBlackGradient@2x.png in Resources */,
 				28F79CA31479C23F0003B8BA /* BackgroundTextureBlackGradient.png in Resources */,
 				28851B95147DC97E00088C4F /* MULegalViewController.xib in Resources */,
@@ -1305,6 +1322,7 @@
 				286A3CBE158CFDF300C817D1 /* MUPopoverBackgroundView.m in Sources */,
 				28F9E1BF15EBDF2400D52001 /* MURemoteControlServer.m in Sources */,
 				2813B1D115EBFDA90049A59A /* MURemoteControlPreferencesViewController.m in Sources */,
+				7E6F2709300331050079755A /* MUCallController.m in Sources */,
 				285D6B7116BEEFA700F239EB /* MUTextMessageProcessor.m in Sources */,
 				2846C7D616F4A09000739FD8 /* MUServerButton.m in Sources */,
 			);

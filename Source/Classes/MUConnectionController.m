@@ -9,6 +9,7 @@
 #import "MUCertificateChainBuilder.h"
 #import "MUDatabase.h"
 #import "MUHorizontalFlipTransitionDelegate.h"
+#import "MUCallController.h"
 
 #import <MumbleKit/MKConnection.h>
 #import <MumbleKit/MKServerModel.h>
@@ -21,6 +22,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     MKConnection               *_connection;
     MKServerModel              *_serverModel;
     MUServerRootViewController *_serverRoot;
+    MUCallController           *_callController;
     UIViewController           *_parentViewController;
     UIAlertController          *_alertCtrl;
     NSTimer                    *_timer;
@@ -59,6 +61,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
         if (@available(iOS 7, *)) {
             _transitioningDelegate = [[MUHorizontalFlipTransitionDelegate alloc] init];
         }
+        _callController = [[MUCallController alloc] init];
     }
     return self;
 }
@@ -125,6 +128,8 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
     
     _serverRoot = [[MUServerRootViewController alloc] initWithConnection:_connection andServerModel:_serverModel];
     
+    [_callController connectionEstablished:_connection serverModel:_serverModel];
+
     // Set the connection's client cert if one is set in the app's preferences...
     NSData *certPersistentId = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultCertificate"];
     if (certPersistentId != nil) {
@@ -140,6 +145,7 @@ NSString *MUConnectionClosedNotification = @"MUConnectionClosedNotification";
 }
 
 - (void) teardownConnection {
+    [_callController connectionTornDown];
     [_serverModel removeDelegate:self];
     _serverModel = nil;
     [_connection setDelegate:nil];

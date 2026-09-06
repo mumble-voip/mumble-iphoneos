@@ -288,23 +288,13 @@
 }
 
 - (void) applicationDidBecomeActive:(UIApplication *)application {
-    // It is possible that we will become active after a phone call has ended.
-    // In the case of phone calls, MKAudio will automatically stop itself, to
-    // allow the phone call to go through. However, once we're back inside the
-    // application, we have to start ourselves again.
-    //
-    // For regular backgrounding, we usually don't turn off the audio system, and
-    // we won't have to start it again.
-    if (![[MKAudio sharedAudio] isRunning]) {
-        NSLog(@"MumbleApplicationDelegate: MKAudio not running. Starting it.");
-        [[MKAudio sharedAudio] start];
-        
+    // MKAudio is started and stopped by MUCallController in response to CallKit's
+    // didActivateAudioSession:/didDeactivateAudioSession: callbacks. Those fire reliably
+    // on foreground after interruptions, so no restart is needed here.
 #if ENABLE_REMOTE_CONTROL
-        // Re-start the remote control server.
-        [[MURemoteControlServer sharedRemoteControlServer] stop];
-        [[MURemoteControlServer sharedRemoteControlServer] start];
+    [[MURemoteControlServer sharedRemoteControlServer] stop];
+    [[MURemoteControlServer sharedRemoteControlServer] start];
 #endif
-    }
 }
 
 @end
