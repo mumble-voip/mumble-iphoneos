@@ -17,6 +17,8 @@
 #import <MumbleKit/MKAudio.h>
 #import <MumbleKit/MKVersion.h>
 
+@import UserNotifications;
+
 @interface MUApplicationDelegate () <UIApplicationDelegate,
                                      UIAlertViewDelegate> {
     UIWindow                  *_window;
@@ -39,6 +41,14 @@
     
     // Initialize the notification controller
     [MUNotificationController sharedController];
+    
+    // Request notification permissions
+    [[UNUserNotificationCenter currentNotificationCenter]
+        requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)
+        completionHandler:^(BOOL granted, NSError *error) {
+            // Permission prompt shown on first launch
+            [[NSUserDefaults standardUserDefaults] setBool:granted forKey:@"NotificationsEnabled"];
+    }];
     
     // Try to fetch an updated public server list
     _publistFetcher = [[MUPublicServerListFetcher alloc] init];

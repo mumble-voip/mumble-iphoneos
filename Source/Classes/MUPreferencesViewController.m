@@ -17,6 +17,8 @@
 
 #import <MumbleKit/MKCertificate.h>
 
+@import UserNotifications;
+
 @interface MUPreferencesViewController () {
     UITextField *_activeTextField;
 }
@@ -83,7 +85,7 @@
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -97,6 +99,9 @@
 #else
         return 2;
 #endif
+    // Notifications
+    } else if (section == 2) {
+        return 2;
     }
 
     return 0;
@@ -187,6 +192,40 @@
             cell.selectionStyle = UITableViewCellSelectionStyleGray;
             return cell;
         }
+    } else if ([indexPath section] == 2) {
+        if ([indexPath row] == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationStateCell"];
+            if (cell == nil)
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"NotificationStateCell"];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.text = NSLocalizedString(@"Enabled", nil);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            UILabel *yesnoText = [[UILabel alloc] init];
+            yesnoText.text = NSLocalizedString(@"Yes", nil);
+            
+            cell.detailTextLabel.text = NSLocalizedString(@"Yes", nil);
+            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            
+            [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (settings.authorizationStatus == UNAuthorizationStatusDenied) {
+                        yesnoText.text = NSLocalizedString(@"No", nil);
+                        cell.detailTextLabel.text = NSLocalizedString(@"No", nil);
+                    }
+                });
+            }];
+            
+            return cell;
+        } else if ([indexPath row] == 1) {
+            cell.textLabel.text = NSLocalizedString(@"Open settings", "Label for a button that opens the app's notification settings in the Settings app");
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            // TODO: HACK, replace with [UIColor linkColor] on iOS 13+. For now it's close enough.
+            cell.textLabel.textColor = [UIColor colorWithRed:16.0f/255.0f green:33.0f/255.0f blue:204.0f/255.0f alpha:1.0f];
+            return cell;
+        }
     }
 
     return cell;
@@ -197,6 +236,8 @@
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio", nil)];
     } else if (section == 1) {
         return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Network", nil)];
+    } else if (section == 2) {
+        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Notifications", nil)];
     }
 
     return nil;
@@ -226,6 +267,14 @@
         if ([indexPath row] == 2) { // Remote Control
             MURemoteControlPreferencesViewController *remoteControlPref = [[MURemoteControlPreferencesViewController alloc] init];
             [self.navigationController pushViewController:remoteControlPref animated:YES];
+        }
+    } else if ([indexPath section] == 2) { // Notifications
+        if ([indexPath row] == 1) { // Open Settings
+            NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            if (@available(iOS 15.4, *)) {
+                settingsURL = [NSURL URLWithString:UIApplicationOpenNotificationSettingsURLString];
+            }
+            [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
         }
     }
 }
