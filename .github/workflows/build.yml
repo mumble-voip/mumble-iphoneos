@@ -13,6 +13,8 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '26.2'
+      - name: Prepare FMDB
+        run: bash Scripts/prepare-fmdb.sh
       - name: Build
         run: |
           gem install --verbose xcpretty

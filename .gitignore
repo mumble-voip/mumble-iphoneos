@@ -1,5 +1,6 @@
 build/*
-MumbleKit/build/*
+/MumbleKit/
+/Dependencies/Generated/
 .DS_Store
 *.pbxuser
 *.mode1v3

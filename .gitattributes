@@ -1,0 +1,2 @@
+# Unified diff context and spaced filenames must preserve original whitespace.
+Patches/*.patch -whitespace

@@ -1,0 +1,335 @@
+diff --git a/fmdb.xcodeproj/project.pbxproj b/fmdb.xcodeproj/project.pbxproj
+index bd34258..80b3563 100644
+--- a/fmdb.xcodeproj/project.pbxproj
++++ b/fmdb.xcodeproj/project.pbxproj
+@@ -663,7 +663,8 @@
+ 		08FB7793FE84155DC02AAC07 /* Project object */ = {
+ 			isa = PBXProject;
+ 			attributes = {
+-				LastUpgradeCheck = 1240;
++				BuildIndependentTargetsInParallel = YES;
++				LastUpgradeCheck = 2700;
+ 				TargetAttributes = {
+ 					83C73EFD1C326AB000FFC730 = {
+ 						CreatedOnToolsVersion = 7.2;
+@@ -872,6 +873,10 @@
+ 		1DEB927508733DD40010E9CD /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_ENABLE_OBJC_ARC = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+@@ -897,6 +902,10 @@
+ 		1DEB927608733DD40010E9CD /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_ENABLE_OBJC_ARC = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+@@ -921,6 +930,10 @@
+ 		1DEB927908733DD40010E9CD /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				STRING_CATALOG_GENERATE_SYMBOLS = YES;
++				ENABLE_USER_SCRIPT_SANDBOXING = YES;
++				DEAD_CODE_STRIPPING = YES;
++				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+ 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+ 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+ 				CLANG_WARN_BOOL_CONVERSION = YES;
+@@ -955,7 +968,7 @@
+ 				GCC_WARN_UNUSED_FUNCTION = YES;
+ 				GCC_WARN_UNUSED_PARAMETER = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
++				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+ 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+ 				ONLY_ACTIVE_ARCH = YES;
+ 				SDKROOT = macosx;
+@@ -967,6 +980,10 @@
+ 		1DEB927A08733DD40010E9CD /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				STRING_CATALOG_GENERATE_SYMBOLS = YES;
++				ENABLE_USER_SCRIPT_SANDBOXING = YES;
++				DEAD_CODE_STRIPPING = YES;
++				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+ 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+ 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+ 				CLANG_WARN_BOOL_CONVERSION = YES;
+@@ -996,7 +1013,7 @@
+ 				GCC_WARN_UNUSED_FUNCTION = YES;
+ 				GCC_WARN_UNUSED_PARAMETER = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
++				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+ 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+ 				SDKROOT = macosx;
+ 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+@@ -1007,6 +1024,11 @@
+ 		2CD2426B1FCC09CA00479FDE /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1055,6 +1077,11 @@
+ 		2CD2426C1FCC09CA00479FDE /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1100,6 +1127,9 @@
+ 		6290CBD3188FE837009790F8 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+ 				CLANG_CXX_LIBRARY = "libc++";
+@@ -1132,6 +1162,9 @@
+ 		6290CBD4188FE837009790F8 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+ 				CLANG_CXX_LIBRARY = "libc++";
+@@ -1160,6 +1193,12 @@
+ 		83C73F031C326AB000FFC730 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				CODE_SIGN_IDENTITY = "";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1169,7 +1208,6 @@
+ 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 1;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+@@ -1209,6 +1247,12 @@
+ 		83C73F041C326AB000FFC730 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				CODE_SIGN_IDENTITY = "";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1218,7 +1262,6 @@
+ 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 1;
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+@@ -1255,6 +1298,12 @@
+ 		83C73F111C326ADB00FFC730 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1303,6 +1352,12 @@
+ 		83C73F121C326ADB00FFC730 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1347,6 +1402,12 @@
+ 		A08C6BB72AF0F5B1004F3F28 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				CODE_SIGN_IDENTITY = "";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1356,7 +1417,6 @@
+ 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 1;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+@@ -1400,6 +1460,12 @@
+ 		A08C6BB82AF0F5B1004F3F28 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				ENABLE_MODULE_VERIFIER = YES;
++				CODE_SIGN_IDENTITY = "";
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				APPLICATION_EXTENSION_API_ONLY = YES;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+@@ -1409,7 +1475,6 @@
+ 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 1;
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+@@ -1450,6 +1515,10 @@
+ 		BF5D042518416BB2008C5AA9 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+ 				CLANG_CXX_LIBRARY = "libc++";
+@@ -1495,6 +1564,10 @@
+ 		BF5D042618416BB2008C5AA9 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+ 				CLANG_CXX_LIBRARY = "libc++";
+@@ -1534,6 +1607,10 @@
+ 		EE4290F012B42F880088BD94 /* Debug */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_ENABLE_OBJC_ARC = YES;
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+@@ -1552,6 +1629,10 @@
+ 		EE4290F112B42F880088BD94 /* Release */ = {
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
++				XROS_DEPLOYMENT_TARGET = "$(RECOMMENDED_XROS_DEPLOYMENT_TARGET)";
++				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
++				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
++				DEAD_CODE_STRIPPING = YES;
+ 				ALWAYS_SEARCH_USER_PATHS = NO;
+ 				CLANG_ENABLE_OBJC_ARC = YES;
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+diff --git a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB MacOS.xcscheme b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB MacOS.xcscheme
+index baa0cab..9d77290 100644
+--- a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB MacOS.xcscheme	
++++ b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB MacOS.xcscheme	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <Scheme
+-   LastUpgradeVersion = "1240"
++   LastUpgradeVersion = "2700"
+    version = "1.3">
+    <BuildAction
+       parallelizeBuildables = "YES"
+diff --git a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB iOS.xcscheme b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB iOS.xcscheme
+index 70ed170..e682c11 100644
+--- a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB iOS.xcscheme	
++++ b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB iOS.xcscheme	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <Scheme
+-   LastUpgradeVersion = "1240"
++   LastUpgradeVersion = "2700"
+    version = "1.3">
+    <BuildAction
+       parallelizeBuildables = "YES"
+diff --git a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB watchOS.xcscheme b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB watchOS.xcscheme
+index 3453c82..9bcdb48 100644
+--- a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB watchOS.xcscheme	
++++ b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB watchOS.xcscheme	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <Scheme
+-   LastUpgradeVersion = "1240"
++   LastUpgradeVersion = "2700"
+    version = "1.3">
+    <BuildAction
+       parallelizeBuildables = "YES"
+diff --git a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB xrOS.xcscheme b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB xrOS.xcscheme
+index 15b5b86..c80be91 100644
+--- a/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB xrOS.xcscheme	
++++ b/fmdb.xcodeproj/xcshareddata/xcschemes/FMDB xrOS.xcscheme	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <Scheme
+-   LastUpgradeVersion = "1510"
++   LastUpgradeVersion = "2700"
+    version = "1.7">
+    <BuildAction
+       parallelizeBuildables = "YES"
+diff --git a/src/fmdb/FMDatabaseAdditions.m b/src/fmdb/FMDatabaseAdditions.m
+index 2289c13..da41a5c 100644
+--- a/src/fmdb/FMDatabaseAdditions.m
++++ b/src/fmdb/FMDatabaseAdditions.m
+@@ -242,4 +242,8 @@ - (BOOL)validateSQL:(NSString*)sql error:(NSError * _Nullable __autoreleasing *)
+     return validationSucceeded;
+ }
+ 
++__attribute__((visibility("default"), used))
++void FMDatabaseAdditionsAnchor(void) {
++}
++
+ @end
