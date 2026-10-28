@@ -1,7 +1,7 @@
-// Copyright 2009-2012 The 'Mumble for iOS' Developers. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-@interface MUImageViewController : UIViewController
-- (id) initWithImages:(NSArray *)images;
+// Use of this source code is governed by the BSD-style license in LICENSE.
+@import QuickLook;
+typedef void (^MUImageLoader)(void (^completion)(NSArray<UIImage *> *images));
+@interface MUImageViewController : QLPreviewController
+- (id)initWithImages:(NSArray<UIImage *> *)images;
+- (id)initWithImageLoader:(MUImageLoader)loader;
 @end

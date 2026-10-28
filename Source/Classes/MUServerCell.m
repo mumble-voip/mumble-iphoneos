@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #import "MUServerCell.h"
-#import "MUColor.h"
 #import "MUFavouriteServer.h"
 
 @interface MUServerCell () {
@@ -11,9 +10,11 @@
     NSString        *_hostname;
     NSString        *_port;
     NSString        *_username;
-    MKServerPinger  *_pinger;
+    MLServerPinger  *_pinger;
+    BOOL _hasServer, _verifiedCertificate, _lastFull;
+    NSUInteger _lastPing, _lastUserCount;
 }
-- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andUserCount:(NSUInteger)userCount isFull:(BOOL)isFull;
+- (void) applyPing:(NSUInteger)pingMs userCount:(NSUInteger)userCount isFull:(BOOL)isFull;
 @end
 
 @implementation MUServerCell
@@ -23,34 +24,55 @@
 }
 
 - (id) init {
-    return [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[MUServerCell reuseIdentifier]];
+    if ((self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:[MUServerCell reuseIdentifier]])) {
+        [self registerForTraitChanges:@[UITraitPreferredContentSizeCategory.class] withHandler:^(__kindof MUServerCell *cell, UITraitCollection *previous) {
+            [cell applyPing:cell->_lastPing userCount:cell->_lastUserCount isFull:cell->_lastFull];
+        }];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updatePinger) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updatePinger) name:UIApplicationDidBecomeActiveNotification object:nil];
+    }
+    return self;
+}
+
+- (void)dealloc { [NSNotificationCenter.defaultCenter removeObserver:self]; }
+
+- (void)didMoveToWindow { [super didMoveToWindow]; [self updatePinger]; }
+
+- (void)updatePinger {
+    BOOL visible = _hasServer && self.window && UIApplication.sharedApplication.applicationState != UIApplicationStateBackground;
+    if (!visible) { _pinger.delegate = nil; _pinger = nil; }
+    else if (!_pinger) { _pinger = [[MLServerPinger alloc] initWithHostname:_hostname port:_port]; _pinger.delegate = self; }
+}
+
+- (void) prepareForReuse {
+    [super prepareForReuse];
+    [_pinger setDelegate:nil];
+    _pinger = nil; _hasServer = NO; _verifiedCertificate = NO;
 }
 
 - (void) populateFromDisplayName:(NSString *)displayName hostName:(NSString *)hostName port:(NSString *)port {
-    _displayname = [displayName copy];
-
-    _port = [port copy];
-
+    [_pinger setDelegate:nil];
     _pinger = nil;
+    _username = nil;
+    _displayname = [displayName copy];
+    _port = [port copy];
 
     if ([hostName length] > 0) {
         _hostname = [hostName copy];
-        _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
-        [_pinger setDelegate:self];
     } else {
         _hostname = NSLocalizedString(@"(No Server)", nil);
     }
 
-    self.textLabel.text = _displayname;
-    self.detailTextLabel.text = [NSString stringWithFormat:@"%@:%@", _hostname, _port];
-    self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];
+    _hasServer = _hostname.length > 0 && ![_hostname isEqualToString:NSLocalizedString(@"(No Server)", nil)];
+    [self applyPing:999 userCount:0 isFull:NO];
+    [self updatePinger];
 }
 
 - (void) populateFromFavouriteServer:(MUFavouriteServer *)favServ {
+    [_pinger setDelegate:nil];
+    _pinger = nil;
     _displayname = [[favServ displayName] copy];
-
     _hostname = [[favServ hostName] copy];
-
     _port = [NSString stringWithFormat:@"%lu", (unsigned long)[favServ port]];
 
     if ([[favServ userName] length] > 0) {
@@ -59,87 +81,94 @@
         _username = [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"] copy];
     }
 
-    _pinger = nil;
-    if ([_hostname length] > 0) {
-        _pinger = [[MKServerPinger alloc] initWithHostname:_hostname port:_port];
-        [_pinger setDelegate:self]; 
-    } else {
+    if (![_hostname length]) {
         _hostname = NSLocalizedString(@"(No Server)", nil);
     }
     
-    self.textLabel.text = _displayname;
-    self.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ on %@:%@", @"username on hostname:port"),
-                                    _username, _hostname, _port];
-    self.imageView.image = [self drawPingImageWithPingValue:999 andUserCount:0 isFull:NO];
+    _hasServer = _hostname.length > 0 && ![_hostname isEqualToString:NSLocalizedString(@"(No Server)", nil)];
+    [self applyPing:999 userCount:0 isFull:NO];
+    [self updatePinger];
 }
 
-- (void) setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-}
-
-- (UIImage *) drawPingImageWithPingValue:(NSUInteger)pingMs andUserCount:(NSUInteger)userCount isFull:(BOOL)isFull {
-    UIImage *img = nil;
-    
-    UIColor *pingColor = [MUColor badPingColor];
-    if (pingMs <= 125)
-        pingColor = [MUColor goodPingColor];
-    else if (pingMs > 125 && pingMs <= 250)
-        pingColor = [MUColor mediumPingColor];
-    else if (pingMs > 250)
-        pingColor = [MUColor badPingColor];
-    NSString *pingStr = [NSString stringWithFormat:@"%lu\nms", (unsigned long)pingMs];
-    if (pingMs >= 999)
-        pingStr = @"∞\nms";
-
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(66.0f, 32.0f), NO, [[UIScreen mainScreen] scale]);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(ctx, pingColor.CGColor);
-    CGContextFillRect(ctx, CGRectMake(0, 0, 32.0, 32.0));
-
-    CGContextSetTextDrawingMode(ctx, kCGTextFill);
-    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    [pingStr drawInRect:CGRectMake(0.0, 0.0, 32.0, 32.0) withAttributes:@{
-        NSFontAttributeName : [UIFont boldSystemFontOfSize: 12],
-        NSParagraphStyleAttributeName : paragraphStyle,
-        NSForegroundColorAttributeName : [UIColor whiteColor]
-    }];
-
-    if (!isFull) {
-        // Non-full servers get the mild iOS blue color
-        CGContextSetFillColorWithColor(ctx, [MUColor userCountColor].CGColor);
-    } else {
-        // Mark full servers with the same red as we use for
-        // 'bad' pings...
-        CGContextSetFillColorWithColor(ctx, [MUColor badPingColor].CGColor);
+- (void) applyPing:(NSUInteger)pingMs userCount:(NSUInteger)userCount isFull:(BOOL)isFull {
+    _lastPing = pingMs; _lastUserCount = userCount; _lastFull = isFull;
+    UIColor *pingColor = [UIColor secondaryLabelColor];
+    NSString *pingText = NSLocalizedString(@"—", @"Ping not measured yet");
+    if (pingMs < 999) {
+        pingText = [NSString stringWithFormat:NSLocalizedString(@"%lu ms", @"server ping in milliseconds"), (unsigned long)pingMs];
+        if (pingMs <= 125) {
+            pingColor = [UIColor systemGreenColor];
+        } else if (pingMs <= 250) {
+            pingColor = [UIColor systemOrangeColor];
+        } else {
+            pingColor = [UIColor systemRedColor];
+        }
     }
-    CGContextFillRect(ctx, CGRectMake(34.0, 0, 32.0, 32.0));
 
-    CGContextSetTextDrawingMode(ctx, kCGTextFill);
-    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    NSString *usersStr = [NSString stringWithFormat:NSLocalizedString(@"%lu\nppl", @"user count"), (unsigned long)userCount];
-    paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    [usersStr drawInRect:CGRectMake(34.0, 0.0, 32.0, 32.0) withAttributes:@{
-        NSFontAttributeName : [UIFont boldSystemFontOfSize: 12],
-        NSParagraphStyleAttributeName : paragraphStyle,
-        NSForegroundColorAttributeName : [UIColor whiteColor]
+    NSString *place = [NSString stringWithFormat:@"%@:%@", _hostname, _port];
+    if ([_username length] > 0) {
+        place = [NSString stringWithFormat:NSLocalizedString(@"%@ on %@", @"username on hostname:port"), _username, place];
+    }
+    NSString *people = [NSString stringWithFormat:NSLocalizedString(@"%lu online", @"people currently on a server"), (unsigned long)userCount];
+    if (isFull) {
+        people = [NSString stringWithFormat:NSLocalizedString(@"%lu full", @"server is full"), (unsigned long)userCount];
+    }
+    NSString *line = [NSString stringWithFormat:@"%@ · %@ · %@", place, pingText, people];
+
+    UIFont *footnote = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote compatibleWithTraitCollection:self.traitCollection];
+    NSMutableAttributedString *detail = [[NSMutableAttributedString alloc] initWithString:line attributes:@{
+        NSFontAttributeName: footnote,
+        NSForegroundColorAttributeName: [UIColor secondaryLabelColor]
     }];
-    
-    img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    NSRange pingRange = [line rangeOfString:pingText];
+    if (pingRange.location != NSNotFound && pingMs < 999) {
+        [detail addAttribute:NSForegroundColorAttributeName value:pingColor range:pingRange];
+    }
+    if (isFull) {
+        NSRange peopleRange = [line rangeOfString:people];
+        if (peopleRange.location != NSNotFound) {
+            [detail addAttribute:NSForegroundColorAttributeName value:[UIColor systemRedColor] range:peopleRange];
+        }
+    }
 
-    return img;
+    UIListContentConfiguration *content = [UIListContentConfiguration subtitleCellConfiguration];
+    content.text = _displayname;
+    content.textProperties.numberOfLines = 0;
+    content.secondaryTextProperties.numberOfLines = 0;
+    content.secondaryAttributedText = detail;
+    if (_verifiedCertificate) {
+        content.image = [UIImage systemImageNamed:@"checkmark.seal.fill"];
+        content.imageProperties.tintColor = UIColor.systemGreenColor;
+        content.imageProperties.preferredSymbolConfiguration = [UIImageSymbolConfiguration configurationWithPointSize:17 weight:UIImageSymbolWeightRegular];
+    }
+    self.contentConfiguration = content;
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
 }
 
-- (void) serverPingerResult:(MKServerPingerResult *)result {
+- (void) setShowsVerifiedCertificate:(BOOL)verified {
+    _verifiedCertificate = verified;
+    UIListContentConfiguration *content = (UIListContentConfiguration *)self.contentConfiguration;
+    if (![content isKindOfClass:[UIListContentConfiguration class]]) {
+        content = [UIListContentConfiguration subtitleCellConfiguration];
+        content.text = _displayname;
+    }
+    if (verified) {
+        content.image = [UIImage systemImageNamed:@"checkmark.seal.fill"];
+        content.imageProperties.tintColor = [UIColor systemGreenColor];
+        content.imageProperties.preferredSymbolConfiguration = [UIImageSymbolConfiguration configurationWithPointSize:17 weight:UIImageSymbolWeightRegular];
+    } else {
+        content.image = nil;
+    }
+    self.contentConfiguration = content;
+    self.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+}
+
+- (void) serverPingerResult:(MLServerPingerResult *)result {
     NSUInteger pingValue = (NSUInteger)(result->ping * 1000.0f);
     NSUInteger userCount = (NSUInteger)(result->cur_users);
-    BOOL isFull = result->cur_users == result->max_users;
-    self.imageView.image = [self drawPingImageWithPingValue:pingValue andUserCount:userCount isFull:isFull];
+    BOOL isFull = result->max_users > 0 && result->cur_users == result->max_users;
+    [self applyPing:pingValue userCount:userCount isFull:isFull];
 }
 
 @end

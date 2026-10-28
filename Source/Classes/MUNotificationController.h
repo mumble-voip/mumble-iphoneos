@@ -3,8 +3,9 @@
 // license that can be found in the LICENSE file.
 
 @import Foundation;
+@class UIViewController;
 
 @interface MUNotificationController : NSObject
 + (MUNotificationController *) sharedController;
-- (void) addNotification:(NSString *)text;
+- (void)addNotification:(NSString *)text fromViewController:(UIViewController *)presenter;
 @end

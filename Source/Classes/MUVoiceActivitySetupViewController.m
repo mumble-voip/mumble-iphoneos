@@ -1,18 +1,19 @@
+#import "MUInterface.h"
 // Copyright 2009-2011 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 #import "MUVoiceActivitySetupViewController.h"
-#import "MUTableViewHeaderLabel.h"
+#import "MUApplicationDelegate.h"
+#import "MUConnectionController.h"
 #import "MUAudioBarViewCell.h"
-#import "MUColor.h"
+#import "MLClient.h"
 #import "MUImage.h"
-#import "MUBackgroundView.h"
 
 @implementation MUVoiceActivitySetupViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    if ((self = [super initWithStyle:UITableViewStyleInsetGrouped])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -22,19 +23,33 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     self.navigationItem.title = NSLocalizedString(@"Voice Activity", nil);
     
-    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    self.tableView.backgroundView = nil;
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     
-    self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = YES;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 72;
+
+    MUApplicationDelegate *delegate = (MUApplicationDelegate *)[UIApplication sharedApplication].delegate;
+    [delegate reloadPreferences];
+    if (![[MLAudio sharedAudio] isRunning]) {
+        [[MLAudio sharedAudio] start];
+    }
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (![MUConnectionController sharedController].hasActiveSession) {
+        [[MLAudio sharedAudio] stop];
+    }
 }
 
 #pragma mark - Table view data source
@@ -64,13 +79,14 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        MUConfigureStandardCell(cell);
     }
     
     NSString *current = [[NSUserDefaults standardUserDefaults] stringForKey:@"AudioVADKind"];
     cell.accessoryView = nil;
     cell.accessoryType = UITableViewCellAccessoryNone;
-    cell.textLabel.textColor = [UIColor blackColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.textLabel.textColor = [UIColor labelColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     NSInteger section = [indexPath section];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"])
@@ -80,45 +96,44 @@
         if (indexPath.row == 0) {
             cell.textLabel.text = NSLocalizedString(@"Amplitude", @"Amplitude voice-activity mode");
             if ([current isEqualToString:@"amplitude"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
         } else if (indexPath.row == 1) {
             cell.textLabel.text = NSLocalizedString(@"Signal to Noise", @"SNR voice-activity mode");
             if ([current isEqualToString:@"snr"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
         }
     } else if (section == 1) {
         if (indexPath.row == 0) {
             MUAudioBarViewCell *cell = [[MUAudioBarViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AudioBarCell"];
+            MUConfigureStandardCell(cell);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
     } else if (section == 2) {
-        if (indexPath.row == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Silence Below", @"Silence Below VAD configuration");
-            UISlider *slider = [[UISlider alloc] init];
-            [slider setMinimumValue:0.0f];
-            [slider setMaximumValue:1.0f];
-            [slider addTarget:self action:@selector(vadBelowChanged:) forControlEvents:UIControlEventValueChanged];
-            [slider setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioVADBelow"] floatValue]];
-            [slider setMaximumTrackTintColor:[UIColor whiteColor]];
-            [slider setMinimumTrackTintColor:[MUColor badPingColor]];
-            cell.accessoryView = slider;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        } else if (indexPath.row == 1) {
-            cell.textLabel.text = NSLocalizedString(@"Speech Above", @"Silence Above VAD configuration");
-            UISlider *slider = [[UISlider alloc] init];
-            [slider setMinimumValue:0.0f];
-            [slider setMaximumValue:1.0f];
-            [slider addTarget:self action:@selector(vadAboveChanged:) forControlEvents:UIControlEventValueChanged];
-            [slider setValue:[[[NSUserDefaults standardUserDefaults] objectForKey:@"AudioVADAbove"] floatValue]];
-            [slider setMaximumTrackTintColor:[MUColor goodPingColor]];
-            [slider setMinimumTrackTintColor:[UIColor whiteColor]];
-            cell.accessoryView = slider;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (indexPath.row < 2) {
+            NSString *title = indexPath.row == 0 ? NSLocalizedString(@"Silence Below", nil) : NSLocalizedString(@"Speech Above", nil);
+            UILabel *label = [UILabel new]; label.text = title;
+            label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            label.adjustsFontForContentSizeCategory = YES; label.numberOfLines = 0;
+            UISlider *slider = [UISlider new]; slider.accessibilityLabel = title;
+            slider.value = [NSUserDefaults.standardUserDefaults floatForKey:indexPath.row == 0 ? @"AudioVADBelow" : @"AudioVADAbove"];
+            [slider addTarget:self action:indexPath.row == 0 ? @selector(vadBelowChanged:) : @selector(vadAboveChanged:) forControlEvents:UIControlEventValueChanged];
+            UITableViewCell *sliderCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            MUConfigureStandardCell(sliderCell);
+            sliderCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            sliderCell.contentView.directionalLayoutMargins = NSDirectionalEdgeInsetsMake(12, 20, 12, 20);
+            UIStackView *stack = [[UIStackView alloc] initWithArrangedSubviews:@[label, slider]];
+            stack.axis = UILayoutConstraintAxisVertical; stack.spacing = 4; stack.translatesAutoresizingMaskIntoConstraints = NO;
+            [sliderCell.contentView addSubview:stack];
+            UILayoutGuide *margins = sliderCell.contentView.layoutMarginsGuide;
+            [NSLayoutConstraint activateConstraints:@[
+                [stack.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [stack.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+                [stack.topAnchor constraintEqualToAnchor:margins.topAnchor], [stack.bottomAnchor constraintEqualToAnchor:margins.bottomAnchor],
+                [slider.heightAnchor constraintGreaterThanOrEqualToConstant:44]
+            ]];
+            return sliderCell;
         } else if (indexPath.row == 2) {
             cell.accessoryView = nil;
             cell.textLabel.text = NSLocalizedString(@"Help", nil);
@@ -127,28 +142,16 @@
     return cell;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"])
         ++section;
 
     if (section == 0) {
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Method", nil)];
+        return NSLocalizedString(@"Method", nil);
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Configuration", nil)];
+        return NSLocalizedString(@"Configuration", nil);
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"])
-        ++section;
-
-    if (section == 0) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
-    } else if (section == 1) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
-    }
-    return 0.0f;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -161,9 +164,10 @@
     // Transmission setting change
     if (section == 0) {
         for (int i = 0; i < 2; i++) {
-            cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+            cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
             cell.accessoryView = nil;
-            cell.textLabel.textColor = [UIColor blackColor];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.textLabel.textColor = [UIColor labelColor];
         }
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         if (indexPath.row == 0) {
@@ -172,8 +176,9 @@
             [[NSUserDefaults standardUserDefaults] setObject:@"snr" forKey:@"AudioVADKind"];
         }
         cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-        cell.textLabel.textColor = [MUColor selectedTextColor];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.textLabel.textColor = [UIColor labelColor];
+        [self applyDetectionPreferences];
     }
     
     if (section == 2 && [indexPath row] == 2) {
@@ -202,10 +207,23 @@
 
 - (void) vadBelowChanged:(UISlider *)sender {
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:[sender value]] forKey:@"AudioVADBelow"];
+    [self applyDetectionPreferences];
 }
 
 - (void) vadAboveChanged:(UISlider *)sender {
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:[sender value]] forKey:@"AudioVADAbove"];
+    [self applyDetectionPreferences];
+}
+
+- (void) applyDetectionPreferences {
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+    MLAudio *audio = MLAudio.sharedAudio;
+    MLAudioSettings settings;
+    [audio readAudioSettings:&settings];
+    settings.vadKind = [[defaults stringForKey:@"AudioVADKind"] isEqualToString:@"snr"] ? MLVADKindSignalToNoise : MLVADKindAmplitude;
+    settings.vadMin = [defaults floatForKey:@"AudioVADBelow"];
+    settings.vadMax = [defaults floatForKey:@"AudioVADAbove"];
+    [audio updateAudioSettings:&settings];
 }
 
 @end

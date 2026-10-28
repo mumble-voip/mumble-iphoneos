@@ -1,6 +1,3 @@
-[submodule "MumbleKit"]
-	path = MumbleKit
-	url = https://github.com/mumble-voip/mumblekit.git
 [submodule "Dependencies/fmdb"]
 	path = Dependencies/fmdb
 	url = https://github.com/ccgus/fmdb.git

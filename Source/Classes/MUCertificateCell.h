@@ -4,7 +4,7 @@
 
 @interface MUCertificateCell : UITableViewCell
 
-+ (MUCertificateCell *) loadFromNib;
++ (MUCertificateCell *) certificateCell;
 
 - (void) setSubjectName:(NSString *)name;
 - (void) setEmail:(NSString *)email;

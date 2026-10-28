@@ -6,5 +6,4 @@
 
 @interface MUCertificateCreationView : UITableViewController
 - (id) init;
-- (void) dealloc;
 @end

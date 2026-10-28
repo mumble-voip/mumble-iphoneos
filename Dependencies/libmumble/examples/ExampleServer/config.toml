@@ -1,0 +1,42 @@
+maxUsers = 4000000
+
+[nodes]
+  [nodes.1]
+    bandwidth = 1000000
+    [nodes.1.identity]
+      cert = "cert.pem"
+      key = "key.pem"
+    [nodes.1.tcp]
+      ip = "::"
+      ipv6Only = false
+      port = 64738
+    [nodes.1.udp]
+      ip = "::"
+      ipv6Only = false
+      port = 64738
+  [nodes.2]
+    bandwidth = 750000
+    [nodes.2.identity]
+      cert = "cert.pem"
+      key = "key.pem"
+    [nodes.2.tcp]
+      ip = "::"
+      ipv6Only = true
+      port = 64739
+    [nodes.2.udp]
+      ip = "::"
+      ipv6Only = true
+      port = 64739
+  [nodes.3]
+    bandwidth = 500000
+    [nodes.3.identity]
+      cert = "cert.pem"
+      key = "key.pem"
+    [nodes.3.tcp]
+      ip = "0.0.0.0"
+      ipv6Only = false
+      port = 64740
+    [nodes.3.udp]
+      ip = "0.0.0.0"
+      ipv6Only = false
+      port = 64740

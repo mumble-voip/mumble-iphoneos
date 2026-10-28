@@ -3,5 +3,6 @@
 // license that can be found in the LICENSE file.
 
 @interface MUPreferencesViewController : UITableViewController
+@property(nonatomic) BOOL showsAppInformation;
 - (id) init;
 @end

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-@interface MUWelcomeScreenPhone : UITableViewController
+@interface MUWelcomeScreenPhone : UIViewController
+@property(nonatomic, strong) UITableView *tableView;
 - (id) init;
 @end

@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 
 @interface MUMessagesViewController : UIViewController
-- (id) initWithServerModel:(MKServerModel *)model;
+- (id) initWithServerModel:(MLServerModel *)model;
 - (void) clearAllMessages;
+- (void)resetRecipientAfterReconnect;
+- (void)setConnectionReconnecting:(BOOL)reconnecting;
 @end

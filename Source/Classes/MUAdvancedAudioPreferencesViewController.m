@@ -1,22 +1,37 @@
+#import "MUInterface.h"
 // Copyright 2009-2011 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 #import "MUAdvancedAudioPreferencesViewController.h"
-#import "MUTableViewHeaderLabel.h"
 #import "MUApplicationDelegate.h"
 #import "MUAudioQualityPreferencesViewController.h"
 #import "MUAudioSidetonePreferencesViewController.h"
-#import "MUColor.h"
 #import "MUImage.h"
-#import "MUBackgroundView.h"
 
-#import <MumbleKit/MKAudio.h>
+#import "MLClient.h"
+#import <AVFoundation/AVFoundation.h>
+
+static UISwitch *MUAudioSwitch(void) {
+    UISwitch *control = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 51, 31)];
+    return control;
+}
+
+static UISlider *MUAudioSlider(void) {
+    return [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 150, 31)];
+}
+
+static void *MUMicrophoneModeObservation = &MUMicrophoneModeObservation;
+
+@interface MUAdvancedAudioPreferencesViewController () {
+    BOOL _observingMicrophoneModes;
+}
+@end
 
 @implementation MUAdvancedAudioPreferencesViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    if ((self = [super initWithStyle:UITableViewStyleInsetGrouped])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -24,33 +39,78 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 
     self.title = NSLocalizedString(@"Advanced Audio", nil);
     
-    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    self.tableView.backgroundView = nil;
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
 
     self.tableView.scrollEnabled = YES;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSubsystemRestarted:) name:MKAudioDidRestartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSubsystemRestarted:) name:MLAudioDidRestartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(microphoneModeEnvironmentChanged:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(microphoneModeEnvironmentChanged:) name:AVAudioSessionRouteChangeNotification object:nil];
+    if (!_observingMicrophoneModes) {
+        [AVCaptureDevice.class addObserver:self forKeyPath:@"preferredMicrophoneMode" options:0 context:MUMicrophoneModeObservation];
+        [AVCaptureDevice.class addObserver:self forKeyPath:@"activeMicrophoneMode" options:0 context:MUMicrophoneModeObservation];
+        _observingMicrophoneModes = YES;
+    }
     
     [self.tableView reloadData];
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-
 - (void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:YES];
+    [super viewWillDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self stopObservingMicrophoneModes];
+}
+
+- (void)dealloc { [self stopObservingMicrophoneModes]; }
+
+- (void)stopObservingMicrophoneModes {
+    if (!_observingMicrophoneModes) return;
+    [AVCaptureDevice.class removeObserver:self forKeyPath:@"preferredMicrophoneMode" context:MUMicrophoneModeObservation];
+    [AVCaptureDevice.class removeObserver:self forKeyPath:@"activeMicrophoneMode" context:MUMicrophoneModeObservation];
+    _observingMicrophoneModes = NO;
+}
+
+- (NSString *)microphoneModeName {
+    AVCaptureMicrophoneMode mode = [[MLAudio sharedAudio] isRunning] ? AVCaptureDevice.activeMicrophoneMode : AVCaptureDevice.preferredMicrophoneMode;
+    switch (mode) {
+        case AVCaptureMicrophoneModeVoiceIsolation: return NSLocalizedString(@"Voice Isolation", nil);
+        case AVCaptureMicrophoneModeWideSpectrum: return NSLocalizedString(@"Wide Spectrum", nil);
+        default: return NSLocalizedString(@"Standard", nil);
+    }
+}
+
+- (void)refreshMicrophoneMode {
+    if (!self.viewIfLoaded.window || ![NSUserDefaults.standardUserDefaults boolForKey:@"AudioPreprocessor"]) return;
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+    cell.detailTextLabel.text = [self microphoneModeName];
+    [cell setNeedsLayout];
+}
+
+- (void)microphoneModeEnvironmentChanged:(NSNotification *)notification {
+    if (NSThread.isMainThread) [self refreshMicrophoneMode];
+    else {
+        __weak MUAdvancedAudioPreferencesViewController *weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf refreshMicrophoneMode]; });
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (context != MUMicrophoneModeObservation) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    __weak MUAdvancedAudioPreferencesViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{ [weakSelf refreshMicrophoneMode]; });
 }
 
 #pragma mark - Table view data source
@@ -77,16 +137,19 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        MUConfigureStandardCell(cell);
     }
     
     cell.detailTextLabel.text = nil;
+    cell.accessoryView = nil;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if ([indexPath section] == 0) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = NSLocalizedString(@"Quality", nil);
-            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"])
                 cell.detailTextLabel.text = NSLocalizedString(@"Low", nil);
@@ -96,41 +159,33 @@
                 cell.detailTextLabel.text = NSLocalizedString(@"High", nil);
             else
                 cell.detailTextLabel.text = NSLocalizedString(@"Custom", nil);
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
     } else if ([indexPath section] == 1) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Preprocessing", nil);
+            cell.textLabel.text = NSLocalizedString(@"Voice Processing", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            UISwitch *preprocSwitch = [[UISwitch alloc] init];
-            preprocSwitch.onTintColor = [UIColor blackColor];
+            UISwitch *preprocSwitch = MUAudioSwitch();
             preprocSwitch.on = [defaults boolForKey:@"AudioPreprocessor"];
             [preprocSwitch addTarget:self action:@selector(preprocessingChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = preprocSwitch;
         } else if ([indexPath row] == 1) {
             if ([defaults boolForKey:@"AudioPreprocessor"]) {
-                cell.textLabel.text = NSLocalizedString(@"Echo Cancellation", nil);
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISwitch *echoCancelSwitch = [[UISwitch alloc] init];
-                echoCancelSwitch.onTintColor = [UIColor blackColor];
-                echoCancelSwitch.on = [defaults boolForKey:@"AudioEchoCancel"];
-                echoCancelSwitch.enabled = [[MKAudio sharedAudio] echoCancellationAvailable];
-                if (!echoCancelSwitch.enabled) {
-                    echoCancelSwitch.on = NO;
-                }
-                [echoCancelSwitch addTarget:self action:@selector(echoCancelChanged:) forControlEvents:UIControlEventValueChanged];
-                cell.accessoryView = echoCancelSwitch;
+                cell.textLabel.text = NSLocalizedString(@"Microphone Mode", nil);
+                cell.detailTextLabel.text = [self microphoneModeName];
+                cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
+                cell.selectionStyle=UITableViewCellSelectionStyleDefault;
             } else {
                 cell.textLabel.text = NSLocalizedString(@"Mic Boost", nil);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                UISlider *slider = [[UISlider alloc] init];
+                UISlider *slider = MUAudioSlider();
                 [slider setMaximumValue:2.0f];
                 [slider setMinimumValue:0.0f];
                 float boost = [defaults floatForKey:@"AudioMicBoost"];
                 if (boost > 1.0f) {
-                    [slider setMinimumTrackTintColor:[MUColor badPingColor]];
+                    [slider setMinimumTrackTintColor:UIColor.systemRedColor];
                 } else {
-                    [slider setMinimumTrackTintColor:[MUColor goodPingColor]];
+                    [slider setMinimumTrackTintColor:UIColor.systemGreenColor];
                 }
                 [slider setValue:boost];
                 [slider addTarget:self action:@selector(micBoostChanged:) forControlEvents:UIControlEventValueChanged];
@@ -140,19 +195,18 @@
     } else if ([indexPath section] == 2) {
         if ([indexPath row] == 0) {
             cell.textLabel.text = NSLocalizedString(@"Sidetone", nil);
-            cell.detailTextLabel.textColor = [MUColor selectedTextColor];
+            cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if ([defaults boolForKey:@"AudioSidetone"]) {
                 cell.detailTextLabel.text = NSLocalizedString(@"On", nil);
             } else {
                 cell.detailTextLabel.text = NSLocalizedString(@"Off", nil);
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         } else if ([indexPath row] == 1) {
             cell.textLabel.text = NSLocalizedString(@"Speakerphone Mode", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            UISwitch *speakerPhoneSwitch = [[UISwitch alloc] init];
-            speakerPhoneSwitch.onTintColor = [UIColor blackColor];
+            UISwitch *speakerPhoneSwitch = MUAudioSwitch();
             speakerPhoneSwitch.on = [defaults boolForKey:@"AudioSpeakerPhoneMode"];
             speakerPhoneSwitch.enabled = YES;
             [speakerPhoneSwitch addTarget:self action:@selector(speakerPhoneModeChanged:) forControlEvents:UIControlEventValueChanged];
@@ -160,11 +214,10 @@
         }
     } else if ([indexPath section] == 3) {
         if ([indexPath row] == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Force CELT Mode", nil);
+            cell.textLabel.text = NSLocalizedString(@"Low-Delay Encoding", nil);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            UISwitch *celtSwitch = [[UISwitch alloc] init];
-            celtSwitch.onTintColor = [UIColor blackColor];
-            celtSwitch.on = [defaults boolForKey:@"AudioOpusCodecForceCELTMode"];
+            UISwitch *celtSwitch = MUAudioSwitch();
+            celtSwitch.on = [defaults boolForKey:@"AudioOpusLowDelay"];
             celtSwitch.enabled = YES;
             [celtSwitch addTarget:self action:@selector(opusCodecForceCELTModeChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = celtSwitch;
@@ -174,58 +227,27 @@
     return cell;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) { // Xmit
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Transmission Quality", nil)];
-    } else if (section == 1) { // Audio Input
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Input", nil)];
-    } else if (section == 2) { // Audio Output
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Audio Output", nil)];
-    } else if (section == 3) { // Opus Codec
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Opus Codec", nil)];
-    } else {
-        return nil;
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
+        return NSLocalizedString(@"Transmission Quality", nil);
     } else if (section == 1) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
+        return NSLocalizedString(@"Audio Input", nil);
     } else if (section == 2) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
+        return NSLocalizedString(@"Audio Output", nil);
     } else if (section == 3) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
-    }
-    return 0.0f;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 1) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
-            if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
-                NSString *echoCancelNotAvail = NSLocalizedString(@"Echo Cancellation is not available when using the current audio peripheral.", nil);
-                MUTableViewHeaderLabel *lbl = [MUTableViewHeaderLabel labelWithText:echoCancelNotAvail];
-                lbl.font = [UIFont systemFontOfSize:16.0f];
-                lbl.lineBreakMode = NSLineBreakByWordWrapping;
-                lbl.numberOfLines = 0;
-                return lbl;
-            }
-        }
+        return NSLocalizedString(@"Opus Codec", nil);
     }
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 1) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
-            if (![[MKAudio sharedAudio] echoCancellationAvailable]) {
-                return 44.0f;
-            }
-        }
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 1 && [[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
+        return NSLocalizedString(@"iOS handles echo cancellation, noise reduction and microphone level. You can choose a microphone mode before connecting. Availability depends on your device and audio route.", nil);
     }
-    return 0.0f;
+    if (section == 3) {
+        return NSLocalizedString(@"Leave off for speech. Low-delay encoding trades voice optimization for a shorter codec delay.", nil);
+    }
+    return nil;
 }
 
 #pragma mark - Table view delegate
@@ -234,6 +256,9 @@
     if ([indexPath section] == 0 && [indexPath row] == 0) {
         MUAudioQualityPreferencesViewController *audioQual = [[MUAudioQualityPreferencesViewController alloc] init];
         [self.navigationController pushViewController:audioQual animated:YES];
+    } else if (indexPath.section==1 && indexPath.row==1 && [[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [AVCaptureDevice showSystemUserInterface:AVCaptureSystemUserInterfaceMicrophoneModes];
     } else if ([indexPath section] == 2 && [indexPath row] == 0) {
         MUAudioSidetonePreferencesViewController *sidetonePrefs = [[MUAudioSidetonePreferencesViewController alloc] init];
         [self.navigationController pushViewController:sidetonePrefs animated:YES];
@@ -244,19 +269,16 @@
 
 - (void) preprocessingChanged:(UISwitch *)sender {
     [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioPreprocessor"];
+    [(MUApplicationDelegate *)UIApplication.sharedApplication.delegate reloadPreferences];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void) echoCancelChanged:(UISwitch *)sender {
-    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioEchoCancel"];
 }
 
 - (void) micBoostChanged:(UISlider *)sender {
     [[NSUserDefaults standardUserDefaults] setFloat:sender.value forKey:@"AudioMicBoost"];
     if (sender.value > 1.0f) {
-        [sender setMinimumTrackTintColor:[MUColor badPingColor]];
+        [sender setMinimumTrackTintColor:UIColor.systemRedColor];
     } else {
-        [sender setMinimumTrackTintColor:[MUColor goodPingColor]];
+        [sender setMinimumTrackTintColor:UIColor.systemGreenColor];
     }
 }
 
@@ -265,13 +287,11 @@
 }
 
 - (void) opusCodecForceCELTModeChanged:(UISwitch *)sender {
-    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioOpusCodecForceCELTMode"];
+    [[NSUserDefaults standardUserDefaults] setBool:sender.on forKey:@"AudioOpusLowDelay"];
 }
 
 - (void) audioSubsystemRestarted:(NSNotification *)notification {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"AudioPreprocessor"]) {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-    }
+    [self refreshMicrophoneMode];
 }
 
 @end

@@ -10,15 +10,21 @@
 @interface MUDatabase : NSObject
 
 + (void) initializeDatabase;
-+ (void) teardown;
++ (void)migrateLegacyCredentials;
 
 // FavouriteServer
 + (void) storeFavourite:(MUFavouriteServer *)favServ;
++ (void)storePassword:(NSString *)password forFavouriteWithPrimaryKey:(NSInteger)primaryKey;
 + (void) deleteFavourite:(MUFavouriteServer *)favServ;
 + (void) storeFavourites:(NSArray *)favourites;
 + (NSMutableArray *) fetchAllFavourites;
 
-// Cert verification
+// Successful connections, newest first. History never contains passwords.
++ (void)recordRecentServerWithHostname:(NSString *)hostname port:(NSUInteger)port displayName:(NSString *)displayName username:(NSString *)username;
++ (NSArray<MUFavouriteServer *> *)recentServers;
++ (void)deleteRecentServer:(MUFavouriteServer *)server;
+
+// Cert verification. DNS names match case-insensitively; ports remain distinct.
 + (void) storeDigest:(NSString *)hash forServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 + (NSString *) digestForServerWithHostname:(NSString *)hostname port:(NSInteger)port;
 

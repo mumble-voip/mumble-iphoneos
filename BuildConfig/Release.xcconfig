@@ -6,7 +6,6 @@
 
 COPY_PHASE_STRIP = YES
 
-CODE_SIGN_IDENTITY = iPhone Distribution: Mikkel Krautz
 
 GCC_FAST_MATH = YES
 GCC_UNROLL_LOOPS = YES

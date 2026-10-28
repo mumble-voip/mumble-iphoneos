@@ -1,0 +1,23 @@
+name: PR-Checks
+
+on: [pull_request]
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-26.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Check line endings
+      uses: erclu/check-crlf@c77fda0a97ea8944aba5f72796b9e937e7d1611c
+
+    - name: Check code formatting
+      uses: jidicula/clang-format-action@v4.18.0
+      with:
+          clang-format-version: '20'
+          check-path: '.'
+          exclude-regex: '(build/.*|_dependencies/.*)'
+          include-regex: '.*\.(cpp|hpp|c|h)$'

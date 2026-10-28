@@ -1,0 +1,6 @@
+[local]
+  tcpIP = "::"
+  tcpPort = 0
+[peer]
+  tcpIP = "::"
+  tcpPort = 64738

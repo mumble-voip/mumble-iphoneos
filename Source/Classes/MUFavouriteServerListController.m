@@ -1,3 +1,4 @@
+#import "MUInterface.h"
 // Copyright 2009-2010 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -7,10 +8,8 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServer.h"
 #import "MUFavouriteServerEditViewController.h"
-#import "MUTableViewHeaderLabel.h"
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
-#import "MUBackgroundView.h"
 
 @interface MUFavouriteServerListController () {
     NSMutableArray     *_favouriteServers;
@@ -38,23 +37,15 @@
     [MUDatabase storeFavourites:_favouriteServers];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    // On iPad, we support all interface orientations.
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        return YES;
-    }
-    
-    return toInterfaceOrientation == UIInterfaceOrientationPortrait;
-}
-
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 
     [[self navigationItem] setTitle:NSLocalizedString(@"Favourite Servers", nil)];
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
     }
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
@@ -86,7 +77,7 @@
         cell = [[MUServerCell alloc] init];
     }
     [cell populateFromFavouriteServer:favServ];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return (UITableViewCell *) cell;
 }
 
@@ -105,19 +96,16 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MUFavouriteServer *favServ = [_favouriteServers objectAtIndex:[indexPath row]];
-    BOOL pad = [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *sheetTitle = pad ? nil : [favServ displayName];
-    
-    UIAlertController* sheetCtrl = [UIAlertController alertControllerWithTitle:sheetTitle
+    UIAlertController* sheetCtrl = [UIAlertController alertControllerWithTitle:[favServ displayName]
                                                                        message:nil
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    MUConfigureServerActionSheet(sheetCtrl, [tableView cellForRowAtIndexPath:indexPath] ?: self.view);
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                    style:UIAlertActionStyleCancel
-                                                 handler:^(UIAlertAction * _Nonnull action) {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }]];
+                                                 handler:nil]];
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil)
                                                    style:UIAlertActionStyleDestructive
@@ -138,30 +126,18 @@
         }]];
 
         [self presentViewController:alertCtrl animated:YES completion:nil];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }]];
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Edit", nil)
                                                    style:UIAlertActionStyleDefault
                                                  handler:^(UIAlertAction * _Nonnull action) {
         [self presentEditDialogForFavourite:favServ];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
     }]];
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
                                                    style:UIAlertActionStyleDefault
                                                  handler:^(UIAlertAction * _Nonnull action) {
-        NSString *userName = [favServ userName];
-        if (userName == nil) {
-            userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultUserName"];
-        }
-        
         MUConnectionController *connCtrlr = [MUConnectionController sharedController];
-        [connCtrlr connectToHostname:[favServ hostName]
-                               port:[favServ port]
-                            withUsername:userName
-                        andPassword:[favServ password]
-           withParentViewController:self];
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+        [connCtrlr connectToFavouriteServer:favServ withParentViewController:self];
     }]];
     
     [self presentViewController:sheetCtrl animated:YES completion:nil];

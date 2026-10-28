@@ -3,42 +3,41 @@
 // license that can be found in the LICENSE file.
 
 #import "MUUserStateAcessoryView.h"
+#import "MUImage.h"
 
-#import <MumbleKit/MKUser.h>
+#import "MLClient.h"
 
 @implementation MUUserStateAcessoryView
 
-+ (UIView *) viewForUser:(MKUser *)user {
-    const CGFloat iconHeight = 24.0f;
-    const CGFloat iconWidth = 28.0f;
-    
-    NSMutableArray *states = [[NSMutableArray alloc] init];
-    if ([user isAuthenticated])
-        [states addObject:@"authenticated"];
-    if ([user isSelfDeafened])
-        [states addObject:@"deafened_self"];
-    if ([user isSelfMuted])
-        [states addObject:@"muted_self"];
-    if ([user isMuted])
-        [states addObject:@"muted_server"];
-    if ([user isDeafened])
-        [states addObject:@"deafened_server"];
-    if ([user isLocalMuted])
-        [states addObject:@"muted_local"];
-    if ([user isSuppressed])
-        [states addObject:@"muted_suppressed"];
-    if ([user isPrioritySpeaker])
-        [states addObject:@"priorityspeaker"];
-    
++ (UIView *) viewForUser:(MLUser *)user {
+    const CGFloat iconHeight = 24;
+    const CGFloat iconWidth = 22;
+    NSMutableArray *states = [NSMutableArray array];
+    NSMutableArray<UIColor *> *colors = [NSMutableArray array];
+    if (user.isAuthenticated)
+        { [states addObject:@"checkmark.seal.fill"]; [colors addObject:UIColor.secondaryLabelColor]; }
+    if (user.isSelfDeafened || user.isDeafened)
+        { [states addObject:@"speaker.slash.fill"]; [colors addObject:UIColor.systemRedColor]; }
+    if (user.isSuppressed)
+        { [states addObject:@"mic.badge.xmark"]; [colors addObject:UIColor.systemRedColor]; }
+    else if (user.isSelfMuted || user.isMuted)
+        { [states addObject:@"mic.slash.fill"]; [colors addObject:UIColor.systemRedColor]; }
+    else if (user.isLocalMuted)
+        { [states addObject:@"mic.slash"]; [colors addObject:UIColor.secondaryLabelColor]; }
+    if (user.isPrioritySpeaker)
+        { [states addObject:@"star.fill"]; [colors addObject:UIColor.secondaryLabelColor]; }
+    if (!states.count) return nil;
+
     CGFloat widthOffset = [states count] * iconWidth;
     UIView *stateView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, widthOffset, iconHeight)];
-    for (NSString *imageName in states) {
-        UIImage *img = [UIImage imageNamed:imageName];
+    stateView.accessibilityElementsHidden = YES;
+    for (NSUInteger index = 0; index < states.count; index++) {
+        UIImage *img = [[MUImage symbolNamed:states[index] pointSize:16] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
-        CGFloat ypos = (iconHeight - img.size.height)/2.0f;
-        CGFloat xpos = (iconWidth - img.size.width)/2.0f;
-        widthOffset -= iconWidth - xpos;
-        imgView.frame = CGRectMake(ceilf(widthOffset), ceilf(ypos), img.size.width, img.size.height);
+        imgView.tintColor = colors[index];
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+        widthOffset -= iconWidth;
+        imgView.frame = CGRectMake(ceilf(widthOffset), 2.0f, iconWidth, iconHeight - 4.0f);
         [stateView addSubview:imgView];
     }
 

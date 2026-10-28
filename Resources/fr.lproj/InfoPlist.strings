@@ -1,0 +1,4 @@
+// Mumble for iOS localized interface resources.
+"CFBundleDisplayName" = "Mumble";
+"NSLocalNetworkUsageDescription" = "Mumble utilise le réseau local pour rechercher des serveurs Mumble et s’y connecter.";
+"NSMicrophoneUsageDescription" = "Mumble utilise votre micro pour les discussions vocales.";

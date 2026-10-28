@@ -4,7 +4,7 @@
 
 #import "MUCertificateViewController.h"
 
-@class MKConnection;
+@class MLConnection;
 @class MUServerCertificateTrustViewController;
 
 @protocol MUServerCertificateTrustViewControllerProtocol

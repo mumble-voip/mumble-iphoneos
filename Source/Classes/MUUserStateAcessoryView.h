@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-@class MKUser;
+@class MLUser;
 
 @interface MUUserStateAcessoryView : NSObject
-+ (UIView *) viewForUser:(MKUser *)user;
++ (UIView *) viewForUser:(MLUser *)user;
 @end

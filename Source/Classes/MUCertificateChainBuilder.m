@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "MUCertificateChainBuilder.h"
-#include <MumbleKit/MKCertificate.h>
+#include "MLClient.h"
 
 static NSArray *FindValidParentsForCert(SecCertificateRef cert);
 static NSDictionary *GetAttrsForCert(SecCertificateRef cert);
@@ -13,7 +13,7 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 
 // Finds any certificates in the valid parents of the `cert' certificate.
 // A valid parent is a parent that:
-// 
+//
 //  1. Has signed the `cert' certificate's signature.
 //  2. Is valid at the current system time.
 //
@@ -21,35 +21,34 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 // when looking for parents.
 static NSArray *FindValidParentsForCert(SecCertificateRef cert) {
     NSDictionary *attrs = GetAttrsForCert(cert);
-    NSData *issuer = [attrs objectForKey:(id)kSecAttrIssuer];
+    NSData *issuer = [attrs objectForKey:(__bridge id)kSecAttrIssuer];
+    if (!issuer) return nil;
     NSDictionary *query = @{
-        (id)kSecClass: (id)kSecClassCertificate,
-        (id)kSecAttrSubject: (id)issuer,
-        (id)kSecReturnAttributes: (id)kCFBooleanTrue,
-        (id)kSecReturnRef: (id)kCFBooleanTrue,
-        (id)kSecMatchLimit: (id)kSecMatchLimitAll
+        (__bridge id)kSecClass: (__bridge id)kSecClassCertificate,
+        (__bridge id)kSecAttrSubject: issuer,
+        (__bridge id)kSecReturnAttributes: (__bridge id)kCFBooleanTrue,
+        (__bridge id)kSecReturnRef: (__bridge id)kCFBooleanTrue,
+        (__bridge id)kSecMatchLimit: (__bridge id)kSecMatchLimitAll
     };
-    NSArray *allAttrs = nil;
-    OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *) &allAttrs);
+    CFTypeRef result = NULL;
+    OSStatus err = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+    NSArray *allAttrs = CFBridgingRelease(result);
     if (err != noErr) {
         return nil;
     }
-    [allAttrs autorelease];
 
-    NSMutableArray *validParents = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *validParents = [[NSMutableArray alloc] init];
     for (NSDictionary *parentAttr in allAttrs) {
-        SecCertificateRef parentCertRef = (SecCertificateRef) [parentAttr objectForKey:(id)kSecValueRef];
+        id parentCertificate = [parentAttr objectForKey:(__bridge id)kSecValueRef];
 
-        NSData *parentData = (NSData *) SecCertificateCopyData(parentCertRef);
-        MKCertificate *parent = [MKCertificate certificateWithCertificate:parentData privateKey:nil];
-        [parentData release];
-        
-        NSData *childData = (NSData *) SecCertificateCopyData(cert);
-        MKCertificate *child = [MKCertificate certificateWithCertificate:childData privateKey:nil];
-        [childData release];
-    
+        NSData *parentData = CFBridgingRelease(SecCertificateCopyData((__bridge SecCertificateRef)parentCertificate));
+        MLCertificate *parent = [MLCertificate certificateWithCertificate:parentData privateKey:nil];
+
+        NSData *childData = CFBridgingRelease(SecCertificateCopyData(cert));
+        MLCertificate *child = [MLCertificate certificateWithCertificate:childData privateKey:nil];
+
         if ([parent isValidOnDate:[NSDate date]] && [child isSignedBy:parent]) {
-            [validParents addObject:(id)parentCertRef];
+            [validParents addObject:parentCertificate];
         }
     }
     if ([validParents count] == 0) {
@@ -66,28 +65,29 @@ static NSArray *FindValidParentsForCert(SecCertificateRef cert) {
 // with the kSecValueRef key.
 static NSDictionary *GetAttrsForCert(SecCertificateRef cert) {
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                            (id)cert,          kSecValueRef,
-                            kCFBooleanTrue,    kSecReturnRef,
-                            kCFBooleanTrue,    kSecReturnAttributes,
-                            kSecMatchLimitOne, kSecMatchLimit,
+                            (__bridge id)cert,          (__bridge id)kSecValueRef,
+                            (__bridge id)kCFBooleanTrue,    (__bridge id)kSecReturnRef,
+                            (__bridge id)kCFBooleanTrue,    (__bridge id)kSecReturnAttributes,
+                            (__bridge id)kSecMatchLimitOne, (__bridge id)kSecMatchLimit,
                            nil];
-    NSDictionary *attrs = nil;
-    OSStatus err = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef *) &attrs);
+    CFTypeRef result = NULL;
+    OSStatus err = SecItemCopyMatching((__bridge CFDictionaryRef)query, &result);
+    NSDictionary *attrs = CFBridgingRelease(result);
     if (err != noErr) {
         return nil;
     }
-    return [attrs autorelease];
+    return attrs;
 }
 
 // Checks whether the `cert' certificate is self-signed and valid.
 static BOOL CertIsSelfSignedAndValid(SecCertificateRef cert) {
     NSDictionary *attrs = GetAttrsForCert(cert);
-    NSData *subject = [attrs objectForKey:(id)kSecAttrSubject];
-    NSData *issuer = [attrs objectForKey:(id)kSecAttrIssuer]; 
+    NSData *subject = [attrs objectForKey:(__bridge id)kSecAttrSubject];
+    NSData *issuer = [attrs objectForKey:(__bridge id)kSecAttrIssuer];
     if ([subject isEqualToData:issuer]) {
-        NSData *data = (NSData *) SecCertificateCopyData(cert);
-        MKCertificate *selfSigned = [MKCertificate certificateWithCertificate:data privateKey:nil];
-        [data release];
+        NSData *data = CFBridgingRelease(SecCertificateCopyData(cert));
+        MLCertificate *selfSigned = [MLCertificate certificateWithCertificate:data privateKey:nil];
+
         if ([selfSigned isValidOnDate:[NSDate date]] && [selfSigned isSignedBy:selfSigned]) {
             return YES;
         }
@@ -129,7 +129,7 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 
     NSArray *parents = FindValidParentsForCert(cert);
     for (id obj in parents) {
-        SecCertificateRef parent = (SecCertificateRef) obj;
+        SecCertificateRef parent = (__bridge SecCertificateRef)obj;
 
         BOOL isFull = NO;
         NSArray *allParents = BuildCertChainFromCertInternal(parent, &isFull);
@@ -138,13 +138,13 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 
         // Is this a root certificate?
         if (isFull && allParents == nil) {
-            return [NSArray arrayWithObject:(id)parent];
+            return [NSArray arrayWithObject:(__bridge id)parent];
         // Or a regular intermediate?
         } else if (isFull && [allParents count] > 0) {
             NSMutableArray *parents = [[NSMutableArray alloc] init];
-            [parents addObject:(id)parent];
+            [parents addObject:(__bridge id)parent];
             [parents addObjectsFromArray:allParents];
-            return [parents autorelease];
+            return parents;
         }
     }
 
@@ -159,17 +159,18 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
 // The first item in the returned array will be the item identitied by
 // persistentRef (either a SecIdentityRef or a SecCertificateRef).
 + (NSArray *) buildChainFromPersistentRef:(NSData *)persistentRef {
+    if (!persistentRef.length) return nil;
     CFTypeRef thing = NULL;
     OSStatus err;
 
-    NSMutableArray *chain = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+    NSMutableArray *chain = [[NSMutableArray alloc] initWithCapacity:1];
 
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:
-                           persistentRef,      kSecValuePersistentRef,
-                           kCFBooleanTrue,     kSecReturnRef,
-                           kSecMatchLimitOne,  kSecMatchLimit,
+                           persistentRef,      (__bridge id)kSecValuePersistentRef,
+                           (__bridge id)kCFBooleanTrue,     (__bridge id)kSecReturnRef,
+                           (__bridge id)kSecMatchLimitOne,  (__bridge id)kSecMatchLimit,
                            nil];
-    err = SecItemCopyMatching((CFDictionaryRef)query, &thing);
+    err = SecItemCopyMatching((__bridge CFDictionaryRef)query, &thing);
     if (err != noErr) {
         return nil;
     }
@@ -177,26 +178,24 @@ static NSArray *BuildCertChainFromCertInternal(SecCertificateRef cert, BOOL *isF
     CFTypeID typeID = CFGetTypeID(thing);
     if (typeID == SecIdentityGetTypeID()) {
         SecIdentityRef identity = (SecIdentityRef) thing;
-        
-        [chain addObject:(id)identity];
-        CFRelease(identity);
-        
+
+        [chain addObject:(__bridge id)identity];
+
         SecCertificateRef cert = NULL;
-        SecIdentityCopyCertificate(identity, &cert);
-
-        NSArray *firstValidChain = BuildCertChainFromCert(cert);
-        [chain addObjectsFromArray:firstValidChain];
-
-        CFRelease(cert);
+        if (SecIdentityCopyCertificate(identity, &cert) == errSecSuccess && cert) {
+            NSArray *firstValidChain = BuildCertChainFromCert(cert);
+            if (firstValidChain.count) [chain addObjectsFromArray:firstValidChain];
+            CFRelease(cert);
+        }
     } else if (typeID == SecCertificateGetTypeID()) {
         SecCertificateRef cert = (SecCertificateRef) thing;
-        [chain addObject:(id)cert];
-        CFRelease(cert);
+        [chain addObject:(__bridge id)cert];
 
         NSArray *firstValidChain = BuildCertChainFromCert(cert);
-        [chain addObjectsFromArray:firstValidChain];
+        if (firstValidChain.count) [chain addObjectsFromArray:firstValidChain];
     }
 
+    CFRelease(thing);
     return chain;
 }
 

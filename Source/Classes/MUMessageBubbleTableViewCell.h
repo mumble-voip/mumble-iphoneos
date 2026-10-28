@@ -11,16 +11,20 @@
 @end
 
 @interface MUMessageBubbleTableViewCell : UITableViewCell
-+ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg images:(NSArray *)images footer:(NSString *)footer date:(NSDate *)date;
++ (CGFloat) heightForCellWithHeading:(NSString *)heading message:(NSString *)msg images:(NSArray *)images footer:(NSString *)footer date:(NSDate *)date width:(CGFloat)width traitCollection:(UITraitCollection *)traits;
 
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void) setHeading:(NSString *)heading;
 - (void) setMessage:(NSString *)msg;
 - (void) setShownImages:(NSArray *)shownImages;
+- (void)setShownImageSizes:(NSArray<NSValue *> *)sizes;
 - (void) setFooter:(NSString *)footer;
 - (void) setDate:(NSDate *)date;
 - (void) setRightSide:(BOOL)rightSide;
 - (void) setSelected:(BOOL)selected;
+- (BOOL) isEditMenuVisible;
+- (CGRect)messageBubbleFrame;
+- (void) dismissEditMenu;
 
 - (id<MUMessageBubbleTableViewCellDelegate>) delegate;
 - (void) setDelegate:(id<MUMessageBubbleTableViewCellDelegate>)delegate;

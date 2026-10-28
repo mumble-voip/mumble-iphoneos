@@ -6,4 +6,10 @@
 
 @interface MULanServerListController : UITableViewController
 - (id) init;
+@property(nonatomic, copy, readonly) NSArray<NSNetService *> *discoveredServers;
+@property(nonatomic, readonly) BOOL discoveryFailed;
+@property(nonatomic, copy) void (^serversChangedHandler)(void);
+- (void)startDiscovery;
+- (void)stopDiscovery;
+- (void)presentActionsForServer:(NSNetService *)server fromViewController:(UIViewController *)parent sourceView:(UIView *)sourceView;
 @end

@@ -8,6 +8,7 @@
     NSDate    *_date;
     NSArray   *_links;
     NSArray   *_images;
+    NSArray<NSValue *> *_embeddedImageSizes;
     BOOL      _self;
 }
 + (MUTextMessage *) textMessageWithHeading:(NSString *)heading
@@ -21,6 +22,7 @@
 - (NSDate *) date;
 - (NSArray *) embeddedLinks;
 - (NSArray *) embeddedImages;
+@property(nonatomic,copy) NSArray<NSValue *> *embeddedImageSizes;
 - (NSInteger) numberOfAttachments;
 - (BOOL) hasAttachments;
 - (BOOL) isSentBySelf;

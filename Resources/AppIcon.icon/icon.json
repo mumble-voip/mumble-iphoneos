@@ -1,0 +1,22 @@
+{
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.09,0.13,0.20,1.0"
+  },
+  "groups": [
+    {
+      "name": "Mumble",
+      "layers": [
+        {
+          "name": "Mumble",
+          "image-name": "Mumble.svg",
+          "glass": true
+        }
+      ]
+    }
+  ],
+  "supported-platforms": {
+    "squares": [
+      "iOS"
+    ]
+  }
+}

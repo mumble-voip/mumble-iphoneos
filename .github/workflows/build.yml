@@ -1,19 +1,65 @@
 name: Build
 on: [push, pull_request]
-env:
-  buildDir: ${{ github.workspace }}/build/
-
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '26.2'
-      - name: Build
+          submodules: recursive
+      - name: Verify Apple Silicon and Xcode
         run: |
-          gem install --verbose xcpretty
-          set -o pipefail && xcodebuild -configuration Release -target "Mumble" CONFIGURATION_BUILD_DIR="${PWD}/__build__" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphoneos | xcpretty
+          test "$(uname -m)" = arm64
+          xcodebuild -version
+      - name: Check project integrity
+        run: python3 Scripts/check-project-integrity.py
+      - name: Test text messages
+        run: bash Scripts/test-text-messages.sh
+      - name: Test audio capture buffers
+        run: bash Scripts/test-audio-buffers.sh
+      - name: Test adaptive voice jitter buffer
+        run: bash Scripts/test-jitter-buffer.sh
+      - name: Check translations
+        run: python3 Scripts/check-localizations.py
+      - name: Install build tools
+        run: brew install cmake ninja pkgconf
+      - name: Bootstrap pinned vcpkg
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git "$RUNNER_TEMP/vcpkg"
+          git -C "$RUNNER_TEMP/vcpkg" checkout e456309491fd875487bf02b8a0dca76c1b1b00cc
+          "$RUNNER_TEMP/vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$RUNNER_TEMP/vcpkg" >> "$GITHUB_ENV"
+      - uses: actions/cache/restore@v4
+        id: vcpkg-cache
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: libmumble-vcpkg-${{ runner.os }}-${{ hashFiles('Dependencies/libmumble/vcpkg.json', 'Scripts/vcpkg-triplets/*') }}
+      - name: Test backend
+        run: bash Scripts/test-libmumble.sh
+      - name: Build libmumble XCFramework
+        run: bash Scripts/build-libmumble.sh
+      - name: Build iPhone application
+        run: xcodebuild -project Mumble.xcodeproj -scheme Mumble -configuration Release -sdk iphoneos CODE_SIGNING_ALLOWED=NO build
+      - name: Build isolated Simulator test host
+        run: xcodebuild -project Mumble.xcodeproj -scheme Mumble -configuration Debug -sdk iphonesimulator -derivedDataPath "$RUNNER_TEMP/mumble-simulator" PRODUCT_BUNDLE_IDENTIFIER=com.blakebill.mumble.audio-lifecycle-tests CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- build
+      - name: Prepare Simulator runtime
+        run: |
+          if ! xcrun simctl list runtimes --json | python3 -c 'import json,sys; sys.exit(not any(r.get("isAvailable") and ".iOS-" in r["identifier"] and int(r["version"].split(".")[0]) >= 27 for r in json.load(sys.stdin)["runtimes"]))'; then
+            xcodebuild -downloadPlatform iOS -architectureVariant arm64
+          fi
+      - name: Test audio recovery, server lists, interface and Duo
+        run: bash Scripts/test-simulator.sh "$RUNNER_TEMP/mumble-simulator/Build/Products/Debug-iphonesimulator/Mumble.app" "$RUNNER_TEMP/mumble-reports"
+      - name: Upload Simulator diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: simulator-checks
+          path: ${{ runner.temp }}/mumble-reports
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Save dependency cache
+        if: always() && steps.vcpkg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/vcpkg/archives
+          key: ${{ steps.vcpkg-cache.outputs.cache-primary-key }}

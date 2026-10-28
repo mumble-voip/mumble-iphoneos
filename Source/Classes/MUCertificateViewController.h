@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-@class MKCertificate;
+@class MLCertificate;
 
 @interface MUCertificateViewController : UITableViewController
 
 - (id) initWithPersistentRef:(NSData *)persistentRef;
-- (id) initWithCertificate:(MKCertificate *)cert;
+- (id) initWithCertificate:(MLCertificate *)cert;
 - (id) initWithCertificates:(NSArray *)certs;
 
-- (void) showDataForCertificate:(MKCertificate *)cert;
+- (void) showDataForCertificate:(MLCertificate *)cert;
 - (void) updateCertificateDisplay;
 
 @end

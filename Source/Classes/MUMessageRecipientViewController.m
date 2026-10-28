@@ -4,24 +4,24 @@
 
 #import "MUMessageRecipientViewController.h"
 #import "MUUserStateAcessoryView.h"
-#import "MUColor.h"
-#import "MUBackgroundView.h"
+#import "MUImage.h"
 #import "MUServerTableViewCell.h"
 
 @interface MUMessageRecipientViewController () {
-    MKServerModel                                 *_serverModel;
+    MLServerModel                                 *_serverModel;
     NSMutableArray                                *_modelItems;
     NSMutableDictionary                           *_userIndexMap;
     NSMutableDictionary                           *_channelIndexMap;
     id<MUMessageRecipientViewControllerDelegate>  _delegate;
+    BOOL _refreshScheduled;
 }
-- (void) rebuildModelArrayFromChannel:(MKChannel *)channel;
-- (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel;
+- (void) rebuildModelArrayFromChannel:(MLChannel *)channel;
+- (void) addChannelTreeToModel:(MLChannel *)channel indentLevel:(NSInteger)indentLevel;
 @end
 
 @implementation MUMessageRecipientViewController
 
-- (id) initWithServerModel:(MKServerModel *)model {
+- (id) initWithServerModel:(MLServerModel *)model {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
         _serverModel = model;
         [_serverModel addDelegate:self];
@@ -41,67 +41,83 @@
     _delegate = delegate;
 }
 
-- (void) rebuildModelArrayFromChannel:(MKChannel *)channel {
+- (void) rebuildModelArrayFromChannel:(MLChannel *)channel {
     _modelItems = [[NSMutableArray alloc] init];
 
     _userIndexMap = [[NSMutableDictionary alloc] init];
 
     _channelIndexMap = [[NSMutableDictionary alloc] init];
-    
+
     [self addChannelTreeToModel:channel indentLevel:0];
 }
 
-- (void) addChannelTreeToModel:(MKChannel *)channel indentLevel:(NSInteger)indentLevel {    
+- (void) addChannelTreeToModel:(MLChannel *)channel indentLevel:(NSInteger)indentLevel {
     [_channelIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[channel channelId]]];
     [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:indentLevel], @"indentLevel", channel, @"object", nil]];
-    
-    for (MKUser *user in [channel users]) {
+
+    for (MLUser *user in [channel users]) {
         [_userIndexMap setObject:[NSNumber numberWithUnsignedInteger:[_modelItems count]] forKey:[NSNumber numberWithUnsignedInteger:[user session]]];
         [_modelItems addObject:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:indentLevel+1], @"indentLevel", user, @"object", nil]];
     }
-    for (MKChannel *chan in [channel channels]) {
+    for (MLChannel *chan in [channel channels]) {
         [self addChannelTreeToModel:chan indentLevel:indentLevel+1];
     }
 }
 
-- (NSInteger) indexForUser:(MKUser *)user {
-    NSInteger userIndex = 1+[[_userIndexMap objectForKey:[NSNumber numberWithUnsignedInteger:[user session]]] integerValue];
+- (NSInteger) indexForUser:(MLUser *)user {
+    NSNumber *index = _userIndexMap[@(user.session)];
+    NSInteger userIndex = index ? 1 + index.integerValue : NSNotFound;
     return userIndex;
 }
 
-- (NSInteger) indexForChannel:(MKChannel *)channel {
-    NSInteger channelIndex = 1+[[_channelIndexMap objectForKey:[NSNumber numberWithUnsignedInteger:[channel channelId]]] integerValue];
+- (NSInteger) indexForChannel:(MLChannel *)channel {
+    NSNumber *index = _channelIndexMap[@(channel.channelId)];
+    NSInteger channelIndex = index ? 1 + index.integerValue : NSNotFound;
     return channelIndex;
 }
 
-- (void) reloadUser:(MKUser *)user {
-    NSInteger userIndex = [self indexForUser:user];
-    if (userIndex != NSNotFound) {
-        [[self tableView] reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:userIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+- (void)reloadUser:(MLUser *)user {
+    if (!self.viewIfLoaded.window) return;
+    NSInteger row = [self indexForUser:user];
+    if (row == NSNotFound) return;
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+    cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
+    UIListContentConfiguration *content = [(UIListContentConfiguration *)cell.contentConfiguration copy];
+    content.image = [MUImage userTalkSymbolForState:user.talkState];
+    content.imageProperties.tintColor = [MUImage userTalkColorForState:user.talkState];
+    cell.contentConfiguration = content;
 }
-
-- (void) reloadChannel:(MKChannel *)channel {
-    NSInteger idx = [self indexForChannel:channel];
-    if (idx != NSNotFound) {
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
+- (void)scheduleRefresh {
+    if (!self.viewIfLoaded.window || _refreshScheduled) return;
+    _refreshScheduled = YES;
+    __weak MUMessageRecipientViewController *weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MUMessageRecipientViewController *controller = weakSelf;
+        if (!controller || !controller->_refreshScheduled) return;
+        controller->_refreshScheduled = NO;
+        if (!controller.viewIfLoaded.window) return;
+        [controller rebuildModelArrayFromChannel:controller->_serverModel.rootChannel];
+        [controller.tableView reloadData];
+    });
 }
 
 #pragma mark - View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    _refreshScheduled = NO;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48;
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 
     self.navigationItem.title = NSLocalizedString(@"Message Recipient", nil);
-    
-    if (@available(iOS 7, *)) {
+
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
     }
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked:)];
-    
+
     [self rebuildModelArrayFromChannel:[_serverModel rootChannel]];
     [self.tableView reloadData];
 }
@@ -112,6 +128,7 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    _refreshScheduled = NO;
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
@@ -129,79 +146,40 @@
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath row] == 0)
-        return;
-    NSDictionary *dict = [_modelItems objectAtIndex:[indexPath row]-1];
-    id object = [dict objectForKey:@"object"];
-    if ([object class] == [MKChannel class]) {
-        MKChannel *channel = (MKChannel *) object;
-        if (channel == [_serverModel rootChannel] && [_serverModel serverCertificatesTrusted]) {
-            cell.backgroundColor = [MUColor verifiedCertificateChainColor];
-        }
-    }
+    cell.backgroundColor = [UIColor systemBackgroundColor];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"MUMessageRecipientCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        if (@available(iOS 7, *)) {
-            cell = [[MUServerTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
-        } else {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-    }
-
-    cell.textLabel.font = [UIFont systemFontOfSize:18.0f];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
-
-    if ([indexPath row] == 0) {
-        [[cell imageView] setImage:[UIImage imageNamed:@"channel"]];
-        [[cell textLabel] setText:NSLocalizedString(@"Current Channel", nil)];
-        [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:18.0f]];
-        [cell setIndentationLevel:0];
-        [cell setAccessoryView:nil];
+    MUServerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MUMessageRecipientCell"];
+    if (!cell) cell = [[MUServerTableViewCell alloc] initWithReuseIdentifier:@"MUMessageRecipientCell"];
+    UIListContentConfiguration *content = [UIListContentConfiguration cellConfiguration];
+    NSInteger indent = 0;
+    BOOL bold = indexPath.row == 0;
+    cell.channelRow = YES;
+    cell.accessoryView = nil;
+    content.imageProperties.tintColor = UIColor.secondaryLabelColor;
+    if (!indexPath.row) {
+        content.text = NSLocalizedString(@"Current Channel", nil);
+        content.image = [MUImage channelSymbolForCurrentChannel:YES];
     } else {
-        NSDictionary *dict = [_modelItems objectAtIndex:[indexPath row]-1];
-        id object = [dict objectForKey:@"object"];
-        NSInteger indentLevel = [[dict objectForKey:@"indentLevel"] integerValue];
-        if ([object class] == [MKChannel class]) {
-            MKChannel *channel = (MKChannel *) object;
-            if ([[_serverModel connectedUser] channel] == channel) {
-                [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:18.0f]];
-            } else {
-                [[cell textLabel] setFont:[UIFont systemFontOfSize:18.0f]];    
-            }
-            [[cell imageView] setImage:[UIImage imageNamed:@"channel"]];
-            [[cell textLabel] setText:[channel channelName]];
-            [cell setIndentationLevel:indentLevel];
-            [cell setAccessoryView:nil];
-        } else if ([object class] == [MKUser class]) {
-            MKUser *user = (MKUser *) object;
-            if (user == [_serverModel connectedUser]) {
-                [[cell textLabel] setFont:[UIFont boldSystemFontOfSize:18.0f]];
-            } else {
-                [[cell textLabel] setFont:[UIFont systemFontOfSize:18.0f]];    
-            }
-            [[cell textLabel] setText:[user userName]];
-            [cell setIndentationLevel:indentLevel];
-            
-            MKTalkState talkState = [user talkState];
-            NSString *talkImageName = nil;
-            if (talkState == MKTalkStatePassive)
-                talkImageName = @"talking_off";
-            else if (talkState == MKTalkStateTalking)
-                talkImageName = @"talking_on";
-            else if (talkState == MKTalkStateWhispering)
-                talkImageName = @"talking_whisper";
-            else if (talkState == MKTalkStateShouting)
-                talkImageName = @"talking_alt";
-            [[cell imageView] setImage:[UIImage imageNamed:talkImageName]];
-
-            [cell setAccessoryView:[MUUserStateAcessoryView viewForUser:user]];
+        NSDictionary *item = _modelItems[indexPath.row - 1]; id object = item[@"object"];
+        indent = [item[@"indentLevel"] integerValue];
+        if ([object isKindOfClass:MLChannel.class]) {
+            MLChannel *channel = object; content.text = channel.channelName;
+            bold = channel == _serverModel.connectedUser.channel;
+            content.image = [MUImage channelSymbolForCurrentChannel:bold];
+        } else {
+            MLUser *user = object; content.text = user.userName; content.image = [MUImage userTalkSymbolForState:user.talkState];
+            content.imageProperties.tintColor = [MUImage userTalkColorForState:user.talkState];
+            bold = user == _serverModel.connectedUser; cell.channelRow = NO;
+            cell.accessoryView = [MUUserStateAcessoryView viewForUser:user];
         }
     }
-    
+    content.textProperties.font = [UIFont preferredFontForTextStyle:bold ? UIFontTextStyleHeadline : UIFontTextStyleBody compatibleWithTraitCollection:self.traitCollection];
+    content.textProperties.numberOfLines = 0;
+    content.imageProperties.maximumSize = CGSizeMake(40, 24); content.imageProperties.reservedLayoutSize = CGSizeMake(40, 24);
+    content.directionalLayoutMargins = NSDirectionalEdgeInsetsMake(10, 16 + indent * 14, 10, 16); content.imageToTextPadding = 8;
+    cell.contentConfiguration = content; cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return cell;
 }
 
@@ -213,9 +191,9 @@
     } else {
         NSDictionary *dict = [_modelItems objectAtIndex:[indexPath row]-1];
         id object = [dict objectForKey:@"object"];
-        if ([object class] == [MKChannel class]) {
+        if ([object class] == [MLChannel class]) {
             [_delegate messageRecipientViewController:self didSelectChannel:object];
-        } else if ([object class] == [MKUser class]) {
+        } else if ([object class] == [MLUser class]) {
             [_delegate messageRecipientViewController:self didSelectUser:object];
         }
     }
@@ -230,133 +208,72 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - MKServerModel delegate
+#pragma mark - MLServerModel delegate
 
-- (void) serverModel:(MKServerModel *)model joinedServerAsUser:(MKUser *)user {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView reloadData];
+- (void)serverModel:(MLServerModel *)model joinedServerAsUser:(MLUser *)user { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model userJoined:(MLUser *)user { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model userLeft:(MLUser *)user { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model userTalkStateChanged:(MLUser *)user { [self reloadUser:user]; }
+- (void)serverModel:(MLServerModel *)model userRenamed:(MLUser *)user { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model channelAdded:(MLChannel *)channel { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model channelRemoved:(MLChannel *)channel { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model channelMoved:(MLChannel *)channel { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model channelRenamed:(MLChannel *)channel { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model channelPositionChanged:(MLChannel *)channel { [self scheduleRefresh]; }
+- (void)serverModel:(MLServerModel *)model userMoved:(MLUser *)user toChannel:(MLChannel *)channel fromChannel:(MLChannel *)previous byUser:(MLUser *)actor { [self scheduleRefresh]; }
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath { return UITableViewAutomaticDimension; }
+
+- (void) serverModel:(MLServerModel *)model userSelfMuted:(MLUser *)user {
 }
 
-- (void) serverModel:(MKServerModel *)model userJoined:(MKUser *)user {
+- (void) serverModel:(MLServerModel *)model userRemovedSelfMute:(MLUser *)user {
 }
 
-- (void) serverModel:(MKServerModel *)model userDisconnected:(MKUser *)user {
+- (void) serverModel:(MLServerModel *)model userSelfMutedAndDeafened:(MLUser *)user {
 }
 
-- (void) serverModel:(MKServerModel *)model userLeft:(MKUser *)user {
-    NSInteger idx = [self indexForUser:user];
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+- (void) serverModel:(MLServerModel *)model userRemovedSelfMuteAndDeafen:(MLUser *)user {
 }
 
-- (void) serverModel:(MKServerModel *)model userTalkStateChanged:(MKUser *)user {
-    NSInteger userIndex = [self indexForUser:user];
-    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:[NSIndexPath indexPathForRow:userIndex inSection:0]];
-    
-    MKTalkState talkState = [user talkState];
-    NSString *talkImageName = nil;
-    if (talkState == MKTalkStatePassive)
-        talkImageName = @"talking_off";
-    else if (talkState == MKTalkStateTalking)
-        talkImageName = @"talking_on";
-    else if (talkState == MKTalkStateWhispering)
-        talkImageName = @"talking_whisper";
-    else if (talkState == MKTalkStateShouting)
-        talkImageName = @"talking_alt";
-    
-    cell.imageView.image = [UIImage imageNamed:talkImageName];
-}
-
-- (void) serverModel:(MKServerModel *)model channelAdded:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    NSInteger idx = [self indexForChannel:channel];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:idx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (void) serverModel:(MKServerModel *)model channelRemoved:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView reloadData];
-}
-
-- (void) serverModel:(MKServerModel *)model channelMoved:(MKChannel *)channel {
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    [self.tableView reloadData];
-}
-
-- (void) serverModel:(MKServerModel *)model channelRenamed:(MKChannel *)channel {
-    [self reloadChannel:channel];
-}
-
-- (void) serverModel:(MKServerModel *)model userMoved:(MKUser *)user toChannel:(MKChannel *)chan fromChannel:(MKChannel *)prevChan byUser:(MKUser *)mover {
-    [self.tableView beginUpdates]; 
-    if (user == [model connectedUser]) {
-        [self reloadChannel:chan];
-        [self reloadChannel:prevChan];
-    }
-    
-    // Check if the user is joining a channel for the first time.
-    if (prevChan != nil) {
-        NSInteger prevIdx = [self indexForUser:user];
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:prevIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    
-    [self rebuildModelArrayFromChannel:[model rootChannel]];
-    NSInteger newIdx = [self indexForUser:user];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIdx inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-}
-
-- (void) serverModel:(MKServerModel *)model userSelfMuted:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userRemovedSelfMute:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userSelfMutedAndDeafened:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userRemovedSelfMuteAndDeafen:(MKUser *)user {
-}
-
-- (void) serverModel:(MKServerModel *)model userSelfMuteDeafenStateChanged:(MKUser *)user {
+- (void) serverModel:(MLServerModel *)model userSelfMuteDeafenStateChanged:(MLUser *)user {
     [self reloadUser:user];
 }
 
 // --
 
-- (void) serverModel:(MKServerModel *)model userMutedAndDeafened:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userMutedAndDeafened:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userUnmutedAndUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userUnmutedAndUndeafened:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userMuted:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userMuted:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userUnmuted:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userUnmuted:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userDeafened:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userDeafened:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userUndeafened:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userUndeafened:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userSuppressed:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userSuppressed:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userUnsuppressed:(MKUser *)user byUser:(MKUser *)actor {
+- (void) serverModel:(MLServerModel *)model userUnsuppressed:(MLUser *)user byUser:(MLUser *)actor {
     [self reloadUser:user];
 }
 
-- (void) serverModel:(MKServerModel *)model userMuteStateChanged:(MKUser *)user {
+- (void) serverModel:(MLServerModel *)model userMuteStateChanged:(MLUser *)user {
     [self reloadUser:user];
 }
 

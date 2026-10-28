@@ -1,17 +1,15 @@
+#import "MUInterface.h"
 // Copyright 2009-2011 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 #import "MUAudioQualityPreferencesViewController.h"
-#import "MUTableViewHeaderLabel.h"
-#import "MUColor.h"
-#import "MUImage.h"
-#import "MUBackgroundView.h"
+#import "MUApplicationDelegate.h"
 
 @implementation MUAudioQualityPreferencesViewController
 
 - (id) init {
-    if ((self = [super initWithStyle:UITableViewStyleGrouped])) {
+    if ((self = [super initWithStyle:UITableViewStyleInsetGrouped])) {
         self.preferredContentSize = CGSizeMake(320, 480);
     }
     return self;
@@ -19,19 +17,18 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
     self.title = NSLocalizedString(@"Audio Quality", nil);
     
-    self.tableView.backgroundView = [MUBackgroundView backgroundView];
+    self.tableView.backgroundView = nil;
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
-    } else {
-        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
 
-    self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = YES;
 }
 
 #pragma mark - Table view data source
@@ -49,90 +46,59 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        MUConfigureStandardCell(cell);
     }
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     cell.accessoryView = nil;
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.textLabel.textColor = [UIColor labelColor];
+    cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
     
-    if ([indexPath section] == 0) {
-        if ([indexPath row] == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Low", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"16 kbit/s, 60 ms audio per packet", nil);
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"low"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        } else if ([indexPath row] == 1) {
-            cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"40 kbit/s, 20 ms audio per packet", nil);
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"balanced"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        } else if ([indexPath row] == 2) {
-            cell.textLabel.text = NSLocalizedString(@"High", nil);
-            cell.detailTextLabel.text = NSLocalizedString(@"72 kbit/s, 10 ms audio per packet", nil);
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"high"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        } else if ([indexPath row] == 3) {
-            cell.textLabel.text = NSLocalizedString(@"Custom", nil);
-            cell.detailTextLabel.text = nil;
-            if ([[defaults stringForKey:@"AudioQualityKind"] isEqualToString:@"custom"]) {
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-                cell.textLabel.textColor = [MUColor selectedTextColor];
-            }
-        }
+    NSString *kind = nil;
+    if ([indexPath row] == 0) {
+        cell.textLabel.text = NSLocalizedString(@"Low", nil);
+        cell.detailTextLabel.text = NSLocalizedString(@"16 kbit/s, 60 ms audio per packet", nil);
+        kind = @"low";
+    } else if ([indexPath row] == 1) {
+        cell.textLabel.text = NSLocalizedString(@"Balanced", nil);
+        cell.detailTextLabel.text = NSLocalizedString(@"40 kbit/s, 20 ms audio per packet", nil);
+        kind = @"balanced";
+    } else if ([indexPath row] == 2) {
+        cell.textLabel.text = NSLocalizedString(@"High", nil);
+        cell.detailTextLabel.text = NSLocalizedString(@"72 kbit/s, 10 ms audio per packet", nil);
+        kind = @"high";
     }
-    
+
+    if ([kind isEqualToString:[defaults stringForKey:@"AudioQualityKind"]]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+
     return cell;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) { // Input
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Quality Presets", nil)];
-    } else if (section == 1) {
-        return [MUTableViewHeaderLabel labelWithText:NSLocalizedString(@"Custom Quality", nil)];
-    } else {
-        return nil;
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
-    } else if (section == 1) {
-        return [MUTableViewHeaderLabel defaultHeaderHeight];
-    }
-    return 0.0f;
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return NSLocalizedString(@"Quality Presets", nil);
 }
 
 #pragma mark - Table view delegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    UITableViewCell *cell = nil;
-    int nsects = 3;
-    for (int i = 0; i <= nsects; i++) {
-        cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        cell.accessoryView = nil;
-        cell.textLabel.textColor = [UIColor blackColor];
-    }
-    cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"GrayCheckmark"]];
-    cell.textLabel.textColor = [MUColor selectedTextColor];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *val = nil;
     switch ([indexPath row]) {
         case 0: val = @"low"; break;
         case 1: val = @"balanced"; break;
         case 2: val = @"high"; break;
-        case 3: val = @"custom"; break;
     }
-    if (val != nil)
+    if (val != nil && ![val isEqualToString:[NSUserDefaults.standardUserDefaults stringForKey:@"AudioQualityKind"]]) {
         [[NSUserDefaults standardUserDefaults] setObject:val forKey:@"AudioQualityKind"];
+        [(MUApplicationDelegate *)UIApplication.sharedApplication.delegate reloadPreferences];
+    }
+    for (NSIndexPath *visible in tableView.indexPathsForVisibleRows)
+        [tableView cellForRowAtIndexPath:visible].accessoryType = visible.row == indexPath.row ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 }
 
 @end

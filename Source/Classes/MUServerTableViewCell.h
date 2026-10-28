@@ -3,5 +3,6 @@
 // license that can be found in the LICENSE file.
 
 @interface MUServerTableViewCell : UITableViewCell
+@property(nonatomic) BOOL channelRow;
 - (id) initWithReuseIdentifier:(NSString *)reuseIdentifier;
 @end

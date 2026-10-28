@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<!-- Rounded adaptation of Mumble's headset mark. Original logo: Martin Skilnand (2009), mumble-voip/mumble/icons/mumble_small.svg; BSD license in ../../Mumble-Translations-LICENSE.txt. -->
+<g transform="translate(52 68) scale(2.3)" fill="#ffffff" fill-rule="nonzero">
+  <!-- One compound silhouette lets native glass light the joined geometry smoothly. -->
+  <path d="
+    M 118 153 V 90
+    C 118 73 130 59 148 56
+    V 115 C 148 141 165 158 191 158
+    H 209 C 235 158 252 141 252 115
+    V 56 C 270 59 282 73 282 90
+    V 153 Q 282 161 290 161
+    H 302 Q 310 161 310 153
+    V 89 C 310 53 281 26 243 26
+    C 231 26 224 33 224 46
+    V 114 C 224 125 219 131 208 131
+    H 192 C 181 131 176 125 176 114
+    V 46 C 176 33 169 26 157 26
+    C 119 26 90 53 90 89
+    V 153 Q 90 161 98 161
+    H 110 Q 118 161 118 153 Z
+
+    M 112 143
+    C 76 143 44 184 44 234
+    C 44 284 76 325 112 325
+    C 119 325 124 320 124 313
+    V 155 C 124 148 119 143 112 143 Z
+
+    M 288 143
+    C 281 143 276 148 276 155
+    V 313 C 276 320 281 325 288 325
+    C 324 325 356 284 356 234
+    C 356 184 324 143 288 143 Z
+
+    M 288 310
+    L 265 331 Q 259 337 250 337
+    H 226 Q 221 337 221 342
+    Q 221 347 226 347
+    H 250 Q 263 347 273 337
+    L 294 318 Q 297 314 294 311
+    Q 291 308 288 310 Z
+
+    M 190 332
+    C 181 332 175 338 175 346
+    C 175 354 181 360 190 360
+    H 222 C 231 360 237 354 237 346
+    C 237 338 231 332 222 332
+    H 190 Z
+  "/>
+</g>
+</svg>

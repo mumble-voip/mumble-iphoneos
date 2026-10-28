@@ -1,12 +1,14 @@
-Icons made for Mumble for iOS.
-Licensed under the same terms as the program itself.
-(Except for the ones listed below)
+Application interface icons use UIKit SF Symbols.
 
-Exceptions
-==========
+The home-screen application icon uses the native layered AppIcon.icon document.
+Its headset geometry is adapted from Mumble's mumble_small.svg by Martin
+Skilnand (2009), under the BSD license in Mumble-Translations-LICENSE.txt.
+Icon Composer supplies the glass material, lighting and appearance variants.
+Legacy icon/iconpad PNGs and the old iTunes artwork have been removed.
+Xcode generates all packaged icon sizes, including older-iOS fallbacks, from
+AppIcon.icon. Do not add duplicate raster app icons to Copy Bundle Resources.
+Message attachments are user/server content and are not bundled interface artwork.
 
-Glyphish Icons by Jospeh Wain (Creative Commons Attribution 3.0 United States License)
---------------------------------------------------------------------------------------
-connection.png
-radar.png
-
+Interface translations include matching terminology from mumble-voip/mumble,
+under the BSD license in Mumble-Translations-LICENSE.txt. The same notice is
+bundled in Legal.html. New iOS-specific strings are translated for this app.

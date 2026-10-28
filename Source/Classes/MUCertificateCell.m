@@ -1,86 +1,41 @@
-// Copyright 2009-2010 The 'Mumble for iOS' Developers. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
+// Use of this source code is governed by the BSD-style license in LICENSE.
 #import "MUCertificateCell.h"
-#import "MUColor.h"
 
 @interface MUCertificateCell () {
-    IBOutlet UIImageView  *_certImage;
-    IBOutlet UILabel      *_nameLabel;
-    IBOutlet UILabel      *_emailLabel;
-    IBOutlet UILabel      *_issuerLabel;
-    IBOutlet UILabel      *_expiryLabel;
-    BOOL                  _isCurrentCert;
-    BOOL                  _isExpired;
-    BOOL                  _isIntermediate;
+    NSString *_subject, *_email, *_issuer, *_expiry;
+    BOOL _isCurrentCert, _isExpired, _isIntermediate;
 }
 @end
 
 @implementation MUCertificateCell
-
-+ (MUCertificateCell *) loadFromNib {
-    NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"MUCertificateCell" owner:self options:nil];
-    return [array objectAtIndex:0];
++ (MUCertificateCell *)certificateCell {
+    return [[self alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"CertificateCell"];
 }
-
-- (void) setSubjectName:(NSString *)name {
-    _nameLabel.text = name;
+- (void)updateContent {
+    UIListContentConfiguration *content = [UIListContentConfiguration subtitleCellConfiguration];
+    content.text = _subject.length ? _subject : NSLocalizedString(@"Certificate", nil);
+    content.textProperties.numberOfLines = 0;
+    NSMutableArray *details = [NSMutableArray array];
+    for (NSString *value in @[_email ?: @"", _issuer ?: @"", _expiry ?: @""])
+        if (value.length) [details addObject:value];
+    if (_isCurrentCert) [details insertObject:NSLocalizedString(@"Current Certificate", nil) atIndex:0];
+    content.secondaryText = [details componentsJoinedByString:@"\n"];
+    content.secondaryTextProperties.numberOfLines = 0;
+    content.secondaryTextProperties.color = _isExpired ? UIColor.systemRedColor : UIColor.secondaryLabelColor;
+    content.image = [UIImage systemImageNamed:_isCurrentCert ? @"checkmark.seal.fill" : (_isIntermediate ? @"doc.on.doc" : @"checkmark.seal")];
+    content.imageProperties.tintColor = _isCurrentCert ? UIColor.systemBlueColor : UIColor.secondaryLabelColor;
+    content.imageProperties.preferredSymbolConfiguration = [UIImageSymbolConfiguration configurationWithPointSize:24 weight:UIImageSymbolWeightRegular];
+    content.imageProperties.reservedLayoutSize = CGSizeMake(32, 32);
+    self.contentConfiguration = content;
 }
-
-- (void) setEmail:(NSString *)email {
-    _emailLabel.text = email;
-}
-
-- (void) setIssuerText:(NSString *)issuerText {
-    _issuerLabel.text = issuerText;
-}
-
-- (void) setExpiryText:(NSString *)expiryText {
-    _expiryLabel.text = expiryText;
-}
-
-- (void) setIsIntermediate:(BOOL)isIntermediate {
-    _isIntermediate = isIntermediate;
-    if (_isIntermediate) {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell-intermediate"]];
-    } else {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];   
-    }
-}
-
-- (BOOL) isIntermediate {
-    return _isIntermediate;
-}
-
-- (void) setIsExpired:(BOOL)isExpired {
-    _isExpired = isExpired;
-    _expiryLabel.textColor = [UIColor redColor];
-}
-
-- (BOOL) isExpired {
-    return _isExpired;
-}
-
-- (void) setIsCurrentCertificate:(BOOL)isCurrent {
-    _isCurrentCert = isCurrent;
-    if (isCurrent) {
-        [_certImage setImage:[UIImage imageNamed:@"certificatecell-selected"]];
-        [_nameLabel setTextColor:[MUColor selectedTextColor]];
-        [_emailLabel setTextColor:[MUColor selectedTextColor]];
-    } else {
-        if (_isIntermediate) {
-            [_certImage setImage:[UIImage imageNamed:@"certificatecell-intermediate"]];
-        } else {
-            [_certImage setImage:[UIImage imageNamed:@"certificatecell"]];   
-        }
-        [_nameLabel setTextColor:[UIColor blackColor]];
-        [_emailLabel setTextColor:[UIColor blackColor]];
-    }
-}
-
-- (BOOL) isCurrentCertificate {
-    return _isCurrentCert;
-}
-
+- (void)setSubjectName:(NSString *)value { _subject = [value copy]; [self updateContent]; }
+- (void)setEmail:(NSString *)value { _email = [value copy]; [self updateContent]; }
+- (void)setIssuerText:(NSString *)value { _issuer = [value copy]; [self updateContent]; }
+- (void)setExpiryText:(NSString *)value { _expiry = [value copy]; [self updateContent]; }
+- (void)setIsIntermediate:(BOOL)value { _isIntermediate = value; [self updateContent]; }
+- (BOOL)isIntermediate { return _isIntermediate; }
+- (void)setIsExpired:(BOOL)value { _isExpired = value; [self updateContent]; }
+- (BOOL)isExpired { return _isExpired; }
+- (void)setIsCurrentCertificate:(BOOL)value { _isCurrentCert = value; [self updateContent]; }
+- (BOOL)isCurrentCertificate { return _isCurrentCert; }
 @end

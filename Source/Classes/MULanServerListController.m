@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "MULanServerListController.h"
+#import "MUInterface.h"
 #import "MUServerRootViewController.h"
 #import "MUFavouriteServer.h"
 #import "MUFavouriteServerEditViewController.h"
@@ -10,21 +11,18 @@
 #import "MUDatabase.h"
 #import "MUFavouriteServerListController.h"
 #import "MUConnectionController.h"
-#import "MUBackgroundView.h"
 
 static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
-    if (reverse) {
-        return [[arg1 name] compare:[arg2 name]];
-    } else {
-        return [[arg2 name] compare:[arg1 name]];
-    }
+    return [[arg1 name] localizedStandardCompare:[arg2 name]];
 } 
 
 @interface MULanServerListController () <NSNetServiceBrowserDelegate, NSNetServiceDelegate> {
     NSNetServiceBrowser  *_browser;
     NSMutableArray       *_netServices;
+    BOOL _browsing, _discoveryFailed;
+    __weak UIViewController *_actionPresenter;
 }
-- (void) presentAddAsFavouriteDialogForServer:(NSNetService *)netService;
+- (void)presentAddAsFavouriteDialogForServer:(NSNetService *)netService fromViewController:(UIViewController *)parent;
 @end
 
 @implementation MULanServerListController
@@ -34,11 +32,9 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 
 - (id) init {
     if ((self = [super initWithStyle:UITableViewStylePlain])) {
-        _browser = [[NSNetServiceBrowser alloc] init];
-        [_browser setDelegate:self];
-        [_browser scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-
         _netServices = [[NSMutableArray alloc] init];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(appEnteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(appBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     return self;
 }
@@ -46,50 +42,109 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 #pragma mark -
 
 - (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
+    [super viewWillAppear:animated];
     [[self navigationItem] setTitle:NSLocalizedString(@"LAN Servers", nil)];
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
     }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:YES];
+    [super viewDidAppear:animated];
+    [self startDiscovery];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self stopDiscovery];
+}
+
+- (void)dealloc {
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+    [_browser stop];
+    _browser.delegate = nil;
+    [_browser removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
+    for (NSNetService *service in _netServices) {
+        service.delegate = nil;
+        [service stop];
+        [service removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
+    }
+}
+
+- (NSArray<NSNetService *> *)discoveredServers { return [_netServices copy]; }
+- (BOOL)discoveryFailed { return _discoveryFailed; }
+- (void)appEnteredBackground:(NSNotification *)notification { [self stopDiscovery]; }
+- (void)appBecameActive:(NSNotification *)notification {
+    if (self.isViewLoaded && self.view.window) [self startDiscovery];
+}
+
+- (void)notifyServersChanged {
+    if (self.isViewLoaded && self.view.window) [self.tableView reloadData];
+    if (self.serversChangedHandler) self.serversChangedHandler();
+}
+
+- (void)startDiscovery {
+    if (_browsing) return;
+    _browsing = YES;
+    _discoveryFailed = NO;
+    _browser = [NSNetServiceBrowser new];
+    _browser.delegate = self;
+    [_browser scheduleInRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
+    [_netServices removeAllObjects];
+    [self notifyServersChanged];
     [_browser searchForServicesOfType:@"_mumble._tcp" inDomain:@"local."];
+}
+
+- (void)stopDiscovery {
+    _browsing = NO;
+    [_browser stop];
+    _browser.delegate = nil;
+    [_browser removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
+    _browser = nil;
+    for (NSNetService *service in _netServices) {
+        service.delegate = nil;
+        [service stop];
+        [service removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSDefaultRunLoopMode];
+    }
+    [_netServices removeAllObjects];
 }
 
 #pragma mark -
 #pragma mark NSNetServiceBrowser delegate
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)netService moreComing:(BOOL)moreServices {    
+    if (!_browsing || browser != _browser || [_netServices containsObject:netService]) return;
     [_netServices addObject:netService];
     [_netServices sortUsingFunction:NetServiceAlphabeticalSort context:nil];
-    NSInteger newIndex = [_netServices indexOfObject:netService];
-    [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:newIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
     [netService scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     [netService setDelegate:self];
     [netService resolveWithTimeout:10.0f];
+    if (!moreServices) [self notifyServersChanged];
 }
 
 - (void) netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)netService moreComing:(BOOL)moreServices {
-    NSInteger curIndex = [_netServices indexOfObject:netService];
-    [_netServices removeObjectAtIndex:curIndex];
-    [[self tableView] deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:curIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-
+    if (!_browsing || browser != _browser || ![_netServices containsObject:netService]) return;
+    [_netServices removeObject:netService];
+    netService.delegate = nil;
+    [netService stop];
     [netService removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    if (!moreServices) [self notifyServersChanged];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didNotSearch:(NSDictionary<NSString *, NSNumber *> *)errorDict {
+    if (!_browsing || browser != _browser) return;
+    [self stopDiscovery];
+    _discoveryFailed = YES;
+    [self notifyServersChanged];
 }
 
 #pragma mark -
 #pragma mark NSNetService delegate
 
 - (void) netServiceDidResolveAddress:(NSNetService *)netService {
-    NSInteger index = [_netServices indexOfObject:netService];
-    if (index >= 0) {
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    }
+    if (_browsing && [_netServices containsObject:netService]) [self notifyServersChanged];
 }
 
 #pragma mark -
@@ -110,7 +165,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         cell = [[MUServerCell alloc] init];
     }
     [cell populateFromDisplayName:[netService name] hostName:[netService hostName] port:[NSString stringWithFormat:@"%li", (long)[netService port]]];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     return (UITableViewCell *) cell;
 }
 
@@ -119,9 +174,13 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSNetService *netService = [_netServices objectAtIndex:[indexPath row]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self presentActionsForServer:netService fromViewController:self sourceView:[tableView cellForRowAtIndexPath:indexPath]];
+}
+
+- (void)presentActionsForServer:(NSNetService *)netService fromViewController:(UIViewController *)parent sourceView:(UIView *)sourceView {
     // Server not yet resolved
     if ([netService hostName] == nil) {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
         return;
     }
     
@@ -131,13 +190,11 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                    style:UIAlertActionStyleCancel
-                                                 handler:^(UIAlertAction * _Nonnull action) {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }]];
+                                                 handler:nil]];
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Add as favourite", nil)
                                                    style:UIAlertActionStyleDefault
                                                  handler:^(UIAlertAction * _Nonnull action) {
-        [self presentAddAsFavouriteDialogForServer:netService];
+        [self presentAddAsFavouriteDialogForServer:netService fromViewController:parent];
     }]];
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
                                                    style:UIAlertActionStyleDefault
@@ -154,9 +211,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
         
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                        style:UIAlertActionStyleCancel
-                                                     handler:^(UIAlertAction * _Nonnull action) {
-            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-        }]];
+                                                     handler:nil]];
         [alertCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Connect", nil)
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
@@ -165,18 +220,18 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
                                    port:[netService port]
                            withUsername:[[[alertCtrl textFields] objectAtIndex:0] text]
                             andPassword:nil
-               withParentViewController:self];
-            
-            [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
+               withParentViewController:parent];
         }]];
         
-        [self presentViewController:alertCtrl animated:YES completion:nil];
+        [parent presentViewController:alertCtrl animated:YES completion:nil];
     }]];
     
-    [self presentViewController:sheetCtrl animated:YES completion:nil];
+    MUConfigureServerActionSheet(sheetCtrl, sourceView ?: parent.view);
+    [parent presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
-- (void) presentAddAsFavouriteDialogForServer:(NSNetService *)netService {
+- (void)presentAddAsFavouriteDialogForServer:(NSNetService *)netService fromViewController:(UIViewController *)parent {
+    _actionPresenter = parent;
     MUFavouriteServer *favServ = [[MUFavouriteServer alloc] init];
     [favServ setDisplayName:[netService name]];
     [favServ setHostName:[netService hostName]];
@@ -190,7 +245,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [editView setDoneAction:@selector(doneButtonClicked:)];
     [modalNav pushViewController:editView animated:NO];
     
-    [[self navigationController] presentViewController:modalNav animated:YES completion:nil];
+    [parent presentViewController:modalNav animated:YES completion:nil];
 }
 
 - (void) doneButtonClicked:(id)sender {
@@ -199,7 +254,7 @@ static NSInteger NetServiceAlphabeticalSort(id arg1, id arg2, void *reverse) {
     [MUDatabase storeFavourite:favServ];
     
     MUFavouriteServerListController *favController = [[MUFavouriteServerListController alloc] init];
-    UINavigationController *navCtrl = [self navigationController];
+    UINavigationController *navCtrl = (_actionPresenter ?: self).navigationController;
     [navCtrl popToRootViewControllerAnimated:NO];
     [navCtrl pushViewController:favController animated:YES];
 }

@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #import "MUCountryServerListController.h"
+#import "MUInterface.h"
 
 #import "MUDatabase.h"
 #import "MUFavouriteServer.h"
@@ -11,13 +12,14 @@
 #import "MUServerRootViewController.h"
 #import "MUConnectionController.h"
 #import "MUServerCell.h"
-#import "MUColor.h"
 
-@interface MUCountryServerListController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource> {
+@interface MUCountryServerListController () <UISearchResultsUpdating, UITableViewDelegate, UITableViewDataSource> {
     UITableView    *_tableView;
     NSArray        *_visibleServers;
     NSArray        *_countryServers;
     NSString       *_countryName;
+    UISearchController *_searchController;
+    NSUInteger _searchGeneration;
 }
 @end
 
@@ -39,39 +41,48 @@
     return _tableView;
 }
 
-- (void) viewDidLoad {    
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
-    [_tableView setDataSource:self];
-    [_tableView setDelegate:self];
-    [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = UIColor.systemBackgroundColor;
+    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    _tableView.dataSource = self; _tableView.delegate = self;
+    _tableView.rowHeight = UITableViewAutomaticDimension; _tableView.estimatedRowHeight = 64;
+    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    _tableView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_tableView];
-    
+    [NSLayoutConstraint activateConstraints:@[
+        [_tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor], [_tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [_tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor], [_tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+    ]];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(keyboardFrameWillChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchResultsUpdater = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.navigationItem.searchController = _searchController;
+    self.navigationItem.hidesSearchBarWhenScrolling = NO;
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    self.definesPresentationContext = YES;
     [self resetSearch];
 }
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
-    self.navigationItem.titleView = nil;
-    self.navigationItem.title = _countryName;
-    self.navigationItem.hidesBackButton = NO;
-
-    if (@available(iOS 7, *)) {
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _tableView.separatorInset = UIEdgeInsetsZero;
-    }
-
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
-    self.navigationItem.rightBarButtonItem = searchButton;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    self.title = _countryName;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)dealloc {
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
 
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+- (void)keyboardFrameWillChange:(NSNotification *)notification {
+    CGRect frame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect local = [self.view convertRect:frame fromView:nil];
+    CGFloat overlap = CGRectGetMaxY(self.view.bounds) - CGRectGetMinY(local);
+    if (overlap < 0 || overlap >= CGRectGetHeight(self.view.bounds)) overlap = 0;
+    UIEdgeInsets insets = _tableView.contentInset;
+    if (fabs(insets.bottom - overlap) < 0.5) return;
+    insets.bottom = overlap;
+    _tableView.contentInset = insets;
+    _tableView.scrollIndicatorInsets = insets;
 }
 
 #pragma mark -
@@ -87,8 +98,9 @@
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
-    if ([[serverItem objectForKey:@"ca"] integerValue] > 0) {
-        cell.backgroundColor = [MUColor verifiedCertificateChainColor];
+    BOOL verified = [[serverItem objectForKey:@"ca"] integerValue] > 0;
+    if ([cell isKindOfClass:[MUServerCell class]]) {
+        [(MUServerCell *)cell setShowsVerifiedCertificate:verified];
     }
 }
 
@@ -102,7 +114,7 @@
     [cell populateFromDisplayName:[serverItem objectForKey:@"name"]
                          hostName:[serverItem objectForKey:@"ip"]
                              port:[serverItem objectForKey:@"port"]];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
 
     return (UITableViewCell *) cell;
 }
@@ -112,16 +124,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *serverItem = [_visibleServers objectAtIndex:[indexPath row]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     UIAlertController *sheetCtrl = [UIAlertController alertControllerWithTitle:[serverItem objectForKey:@"name"]
                                                                        message:nil
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    MUConfigureServerActionSheet(sheetCtrl, [tableView cellForRowAtIndexPath:indexPath] ?: self.view);
 
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
                                                    style:UIAlertActionStyleCancel
-                                                 handler: ^(UIAlertAction * _Nonnull action) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }]];
+                                                 handler:nil]];
     
     [sheetCtrl addAction: [UIAlertAction actionWithTitle:NSLocalizedString(@"Add as favourite", nil)
                                                    style:UIAlertActionStyleDefault
@@ -161,9 +173,7 @@
         [self presentViewController:alertCtrl animated:YES completion:nil];
     }]];
     
-    [self presentViewController:sheetCtrl animated:YES completion:^() {
-        [[self tableView] deselectRowAtIndexPath:indexPath animated:YES];
-    }];
+    [self presentViewController:sheetCtrl animated:YES completion:nil];
 }
 
 - (void) presentAddAsFavouriteDialogForServer:(NSDictionary *)serverItem {
@@ -201,115 +211,22 @@
     _visibleServers = _countryServers;
 }
 
-- (void) performSearchForTerm:(NSString *)searchTerm {        
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:[self->_countryServers count]];
-        for (NSDictionary *serverItem in self->_countryServers) {
-            if ([(NSString *)[serverItem objectForKey:@"name"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound ||
-                    [(NSString *)[serverItem objectForKey:@"ip"] rangeOfString:searchTerm options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                [results addObject:serverItem];
-            }
-        }
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSString *term = [searchController.searchBar.text copy] ?: @"";
+    NSUInteger generation = ++_searchGeneration;
+    NSArray *servers = _countryServers;
+    __weak MUCountryServerListController *weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSMutableArray *matches = [NSMutableArray array];
+        for (NSDictionary *server in servers)
+            if (!term.length || [server[@"name"] rangeOfString:term options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch].location != NSNotFound || [server[@"ip"] rangeOfString:term options:NSCaseInsensitiveSearch].location != NSNotFound)
+                [matches addObject:server];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->_visibleServers = results;
-            [self.tableView reloadData];
+            MUCountryServerListController *controller = weakSelf;
+            if (!controller || generation != controller->_searchGeneration) return;
+            controller->_visibleServers = matches;
+            [controller.tableView reloadData];
         });
     });
 }
-
-#pragma mark -
-#pragma mark Search Bar Delegate Methods
-
-- (void) searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSString *searchText = searchBar.text;
-    [self performSearchForTerm:searchText];
-    [searchBar resignFirstResponder];
-}
-
-- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if([searchText length] == 0){
-        [self resetSearch];
-        [self.tableView reloadData];
-        return;
-    }
-    [self performSearchForTerm:searchText];
-}
-
-#pragma mark -
-#pragma mark UIKeyboard notifications
-
-- (void) keyboardWillShow:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    
-    NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval t;
-    [val getValue:&t];
-    
-    val = [userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    UIViewAnimationCurve c;
-    [val getValue:&c];
-    
-    val = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect r;
-    [val getValue:&r];
-    r = [self.view convertRect:r fromView:nil];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:t];
-    [UIView setAnimationCurve:c];
-    _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, r.size.height, 0.0f);
-    _tableView.scrollIndicatorInsets = _tableView.contentInset;
-    [UIView commitAnimations];
-}
-
-- (void) keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    
-    NSValue *val = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval t;
-    [val getValue:&t];
-    
-    val = [userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    UIViewAnimationCurve c;
-    [val getValue:&c];
-    
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:t];
-    [UIView setAnimationCurve:c];
-    _tableView.contentInset = UIEdgeInsetsZero;
-    _tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
-    [UIView commitAnimations];
-}
-
-#pragma mark -
-#pragma mark Actions
-
-- (void) searchButtonClicked:(id)sender {
-    self.navigationItem.hidesBackButton = YES;
-    
-    UIBarButtonItem *cancelSearchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelSearchButtonClicked:)];
-    self.navigationItem.rightBarButtonItem = cancelSearchButton;
-    
-    UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
-    searchBar.delegate = self;
-    searchBar.barStyle = UIBarStyleBlack;
-    [searchBar sizeToFit];
-    self.navigationItem.titleView = searchBar;
-
-    [searchBar becomeFirstResponder];
-}
-
-- (void) cancelSearchButtonClicked:(id)sender {
-    [self resetSearch];
-    [self.tableView reloadData];
-    
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(searchButtonClicked:)];
-    self.navigationItem.rightBarButtonItem = searchButton;
-    
-    self.navigationItem.hidesBackButton = NO;
-    self.navigationItem.titleView = nil;
-    [self.navigationItem setTitle:_countryName];
-}
-
 @end
-

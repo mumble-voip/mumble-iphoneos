@@ -1,9 +1,9 @@
+#import "MUInterface.h"
 // Copyright 2009-2010 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#import <MumbleKit/MKConnection.h>
-#import <MumbleKit/MKCertificate.h>
+#import "MLClient.h"
 
 #import "MUServerCertificateTrustViewController.h"
 #import "MUDatabase.h"
@@ -30,6 +30,8 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 
     UIBarButtonItem *dismissButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Dismiss", nil)
                                                                       style:UIBarButtonItemStylePlain

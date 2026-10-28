@@ -7,10 +7,7 @@
 #import "Classes/MUApplicationDelegate.h"
 
 int main(int argc, char *argv[]) {
-    NSString * appDelegateClassName;
     @autoreleasepool {
-        // Setup code that might create autoreleased objects goes here.
-        appDelegateClassName = NSStringFromClass([MUApplicationDelegate class]);
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass(MUApplicationDelegate.class));
     }
-    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }

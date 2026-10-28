@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 18,
+    "patch": 4
+  },
+  "configurePresets": [
+    {
+      "name": "ninja",
+      "displayName": "Ninja",
+      "binaryDir": "${sourceDir}/builds/${presetName}",
+      "generator": "Ninja"
+    },
+    {
+      "name": "ninja-vcpkg",
+      "displayName": "Ninja with vcpkg",
+      "binaryDir": "${sourceDir}/builds/${presetName}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja",
+      "configurePreset": "ninja",
+      "displayName": "Ninja"
+    },
+    {
+      "name": "ninja-vcpkg",
+      "configurePreset": "ninja-vcpkg",
+      "displayName": "Ninja with vcpkg"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ninja",
+      "configurePreset": "ninja"
+    },
+    {
+      "name": "ninja-vcpkg",
+      "configurePreset": "ninja-vcpkg"
+    }
+  ]
+}

@@ -3,16 +3,19 @@
 // license that can be found in the LICENSE file.
 
 @import Foundation;
-#import <MumbleKit/MKCertificate.h>
+#import "MLClient.h"
+
+FOUNDATION_EXPORT NSNotificationName const MUCertificatesDidChangeNotification;
 
 @interface MUCertificateController : NSObject
-+ (MKCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
++ (MLCertificate *) certificateWithPersistentRef:(NSData *)persistentRef;
 + (OSStatus) deleteCertificateWithPersistentRef:(NSData *)persistentRef;
 
 + (NSString *) fingerprintFromHexString:(NSString *)hexDigest;
 
 + (void) setDefaultCertificateByPersistentRef:(NSData *)persistentRef;
-+ (MKCertificate *) defaultCertificate;
++ (MLCertificate *) defaultCertificate;
 
 + (NSArray *) persistentRefsForIdentities;
++ (void)notifyCertificatesChanged;
 @end

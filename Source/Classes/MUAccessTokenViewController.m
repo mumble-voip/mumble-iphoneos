@@ -1,29 +1,33 @@
+#import "MUInterface.h"
 // Copyright 2009-2011 The 'Mumble for iOS' Developers. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 #import "MUAccessTokenViewController.h"
 #import "MUDatabase.h"
-#import "MUBackgroundView.h"
 
 @interface MUAccessTokenViewController () {
-    MKServerModel    *_model;
+    MLServerModel    *_model;
     NSMutableArray   *_tokens;
 
     NSString         *_tokenValue;
     NSInteger        _editingRow;
     
     UITableViewCell  *_editingCell;
+    UITextField     *_editingField;
 }
 - (void) editItemAtIndex:(NSInteger)row;
+- (void) finishEditingToken;
 @end
 
 @implementation MUAccessTokenViewController
 
-- (id) initWithServerModel:(MKServerModel *)model {
-    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+- (id) initWithServerModel:(MLServerModel *)model {
+    if ((self = [super initWithStyle:UITableViewStyleInsetGrouped])) {
         _model = model;
         _editingRow = -1;
+        // The draft belongs to this editor, not to an appearance transition.
+        _tokens = [[MUDatabase accessTokensForServerWithHostname:model.hostname port:model.port] mutableCopy] ?: [NSMutableArray new];
     }
     return self;
 }
@@ -32,12 +36,13 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    MUConfigureTable(self.tableView);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
 
     [[self navigationItem] setTitle:NSLocalizedString(@"Access Tokens", nil)];
     
-    if (@available(iOS 7, *)) {
+    {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.tableView.separatorInset = UIEdgeInsetsZero;
     }
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonClicked:)];
@@ -45,23 +50,12 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonClicked:)];
     [[self navigationItem] setLeftBarButtonItem:doneButton];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
 
-    NSArray *dbTokens = [MUDatabase accessTokensForServerWithHostname:[_model hostname] port:[_model port]];
-    _tokens = [[NSMutableArray alloc] initWithArray:dbTokens];
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self finishEditingToken];
 
     [_model setAccessTokens:_tokens];
 
@@ -83,16 +77,17 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        MUConfigureStandardCell(cell);
     }
     if ([indexPath row] == _editingRow) {
         return _editingCell;
     } else {
         NSString *token = [_tokens objectAtIndex:[indexPath row]];
         if ([token length] == 0) {
-            cell.textLabel.textColor = [UIColor lightGrayColor];
+            cell.textLabel.textColor = [UIColor secondaryLabelColor];
             cell.textLabel.text = NSLocalizedString(@"(Empty)", nil);
         } else {
-            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textColor = [UIColor labelColor];
             cell.textLabel.text = token;
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -125,18 +120,20 @@
 #pragma mark - Actions
 
 - (void) editItemAtIndex:(NSInteger)row {
+    if (row < 0 || row >= (NSInteger)_tokens.count) return;
     _editingRow = row;
 
     _tokenValue = [[_tokens objectAtIndex:row] copy];
 
     _editingCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AccessTokenEditingCell"];
+    MUConfigureStandardCell(_editingCell);
     UITextField *editingField;
-    if (@available(iOS 7, *)) {
+    {
         editingField = [[UITextField alloc] initWithFrame:CGRectMake(14.0, 0.0, _editingCell.frame.size.width-14.0, _editingCell.frame.size.height)];
-        [editingField setFont:[UIFont boldSystemFontOfSize:18.0f]];
-    } else {
-        editingField = [[UITextField alloc] initWithFrame:CGRectMake(10.0, 10.0, _editingCell.frame.size.width-10, _editingCell.frame.size.height-10)];
-        [editingField setFont:[UIFont boldSystemFontOfSize:20.0f]];
+        editingField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        editingField.adjustsFontForContentSizeCategory = YES;
+        editingField.accessibilityLabel = NSLocalizedString(@"Access Token", nil);
+        editingField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     }
     [editingField setAutocorrectionType:UITextAutocorrectionTypeNo];
     [editingField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
@@ -145,23 +142,28 @@
     [editingField addTarget:self action:@selector(textFieldDidEndOnExit:) forControlEvents:UIControlEventEditingDidEndOnExit];
     [editingField setText:_tokenValue];
     [editingField setReturnKeyType:UIReturnKeyDone];
+    _editingField = editingField;
     [[_editingCell contentView] addSubview:editingField];
 
     [editingField setTranslatesAutoresizingMaskIntoConstraints:NO];
 
-    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeTop multiplier:1 constant:1];
-    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
-    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeLeft multiplier:1 constant:8];
-    NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:editingField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:[_editingCell contentView] attribute:NSLayoutAttributeRight multiplier:1 constant:0];
+    UILayoutGuide *margins = _editingCell.contentView.layoutMarginsGuide;
+    [NSLayoutConstraint activateConstraints:@[
+        [editingField.leadingAnchor constraintEqualToAnchor:margins.leadingAnchor], [editingField.trailingAnchor constraintEqualToAnchor:margins.trailingAnchor],
+        [editingField.topAnchor constraintEqualToAnchor:margins.topAnchor], [editingField.bottomAnchor constraintEqualToAnchor:margins.bottomAnchor],
+        [_editingCell.contentView.heightAnchor constraintGreaterThanOrEqualToConstant:52]
+    ]];
 
-    [[_editingCell contentView] addConstraints:[NSArray arrayWithObjects:top, bottom, left, right, nil]];
-
-    [editingField becomeFirstResponder];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self->_editingField == editingField && editingField.window) [editingField becomeFirstResponder];
+    });
 }
 
 - (void) addButtonClicked:(id)sender {
     if (_editingRow != -1)
         return;
+    // Establish the table's initial snapshot before changing the backing array.
+    [self.tableView numberOfRowsInSection:0];
     NSInteger insertRow = [_tokens count];
     [_tokens addObject:@""];
     [self editItemAtIndex:insertRow];
@@ -169,6 +171,7 @@
 }
 
 - (void) doneButtonClicked:(id)sender {
+    [self finishEditingToken];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -179,47 +182,34 @@
 }
 
 - (void) textFieldEndedEditing:(UITextField *)sender {
+    if (sender == _editingField) [self finishEditingToken];
 }
 
 - (void) textFieldDidChange:(UITextField *)sender {
-    _tokenValue = [[sender text] copy];
+    if (sender == _editingField) _tokenValue = [[sender text] copy];
 }
 
 - (void) textFieldDidEndOnExit:(UITextField *)sender {
-    [sender resignFirstResponder];
-    [_tokens replaceObjectAtIndex:_editingRow withObject:_tokenValue];
-    _tokenValue = nil;
+    if (sender == _editingField) [self finishEditingToken];
+}
+
+- (void) finishEditingToken {
+    if (_editingRow < 0) return;
     NSInteger row = _editingRow;
+    UITextField *field = _editingField;
+    if (row < (NSInteger)_tokens.count) _tokens[row] = field.text ?: _tokenValue ?: @"";
+    // Clear ownership before resigning: UIKit sends EditingDidEnd synchronously.
     _editingRow = -1;
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    _editingField = nil;
+    _tokenValue = nil;
+    [field resignFirstResponder];
     _editingCell = nil;
+    if (row < [self.tableView numberOfRowsInSection:0])
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void) keyboardWasShown:(NSNotification*)aNotification {
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    [UIView animateWithDuration:0.2f animations:^{
-        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-        self.tableView.contentInset = contentInsets;
-        self.tableView.scrollIndicatorInsets = contentInsets;
-    } completion:^(BOOL finished) {
-        if (!finished)
-            return;
-        
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_editingRow inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }];
-}
 
-- (void) keyboardWillBeHidden:(NSNotification*)aNotification {
-    [UIView animateWithDuration:0.2f animations:^{
-        UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-        self.tableView.contentInset = contentInsets;
-        self.tableView.scrollIndicatorInsets = contentInsets;
-    } completion:^(BOOL finished) {
-        // ...
-    }];
-}
+
+
 
 @end

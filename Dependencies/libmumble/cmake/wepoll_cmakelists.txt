@@ -1,0 +1,14 @@
+# This is a drop-in CMakeLists.txt file intended for the wepoll
+# source tree (https://github.com/piscisaureus/wepoll), which
+# doesn't provide cmake support out of the box
+
+project(wepoll LANGUAGES "C")
+
+add_library(wepoll_lib STATIC
+	"wepoll.c"
+)
+
+target_include_directories(wepoll_lib PUBLIC "${PROJECT_SOURCE_DIR}")
+target_link_libraries(wepoll_lib PRIVATE WS2_32)
+
+add_library(wepoll::wepoll ALIAS wepoll_lib)

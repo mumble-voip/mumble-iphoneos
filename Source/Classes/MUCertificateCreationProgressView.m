@@ -1,69 +1,59 @@
-// Copyright 2009-2010 The 'Mumble for iOS' Developers. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
+// Use of this source code is governed by the BSD-style license in LICENSE.
 #import "MUCertificateCreationProgressView.h"
-#import "MUImage.h"
-#import "MUColor.h"
-#import "MUBackgroundView.h"
 
-@interface MUCertificateCreationProgressView () {
-    IBOutlet UIImageView              *_backgroundImage;
-    IBOutlet UIActivityIndicatorView  *_activityIndicator;
-    IBOutlet UILabel                  *_nameLabel;
-    IBOutlet UILabel                  *_emailLabel;
-    IBOutlet UILabel                  *_pleaseWaitLabel;
-    
-    NSString                          *_identityName;
-    NSString                          *_emailAddress;
-    id                                 _delegate;
+@implementation MUCertificateCreationProgressView {
+    NSString *_identityName, *_emailAddress;
 }
-@end
-
-@implementation MUCertificateCreationProgressView
-
-- (id) initWithName:(NSString *)name email:(NSString *)email {
-    if (self = [super initWithNibName:@"MUCertificateCreationProgressView" bundle:nil]) {
-        _identityName = name;
-        _emailAddress = email;
-        
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-            [self.view setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
-        }
-    }
+- (id)initWithName:(NSString *)name email:(NSString *)email {
+    if ((self = [super init])) { _identityName = [name copy]; _emailAddress = [email copy]; }
     return self;
 }
-
-- (void) viewDidLoad {
-    // fixme(mkrautz): This is esentially what a MUBackgroundView does.
-    if (@available(iOS 7, *)) {
-        _backgroundImage.backgroundColor = [MUColor backgroundViewiOS7Color];
-    } else {
-        _backgroundImage.image = [MUImage imageNamed:@"BackgroundTextureBlackGradient"];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = NSLocalizedString(@"Generating Certificate", nil);
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    self.navigationItem.hidesBackButton = YES;
+    self.view.backgroundColor = UIColor.systemGroupedBackgroundColor;
+    UIImageView *symbol = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"person.crop.circle.badge.checkmark"]];
+    symbol.contentMode = UIViewContentModeScaleAspectFit;
+    symbol.tintColor = UIColor.systemBlueColor;
+    symbol.accessibilityElementsHidden = YES;
+    UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
+    [activity startAnimating];
+    UILabel *name = [UILabel new], *email = [UILabel new], *status = [UILabel new];
+    name.text = _identityName;
+    email.text = _emailAddress;
+    email.hidden = !_emailAddress.length;
+    status.text = NSLocalizedString(@"Please Wait...", nil);
+    for (UILabel *label in @[name, email, status]) {
+        label.font = [UIFont preferredFontForTextStyle:label == name ? UIFontTextStyleHeadline : UIFontTextStyleBody];
+        label.adjustsFontForContentSizeCategory = YES;
+        label.numberOfLines = 0;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = label == name ? UIColor.labelColor : UIColor.secondaryLabelColor;
     }
-    
-    // Unset text shadows for iOS 7.
-    if (@available(iOS 7, *)) {
-        _nameLabel.shadowOffset = CGSizeZero;
-        _emailLabel.shadowOffset = CGSizeZero;
-        _pleaseWaitLabel.shadowOffset = CGSizeZero;
-    }
+    UIStackView *stack = [[UIStackView alloc] initWithArrangedSubviews:@[symbol, name, email, activity, status]];
+    stack.axis = UILayoutConstraintAxisVertical;
+    stack.alignment = UIStackViewAlignmentCenter;
+    stack.spacing = 20;
+    stack.translatesAutoresizingMaskIntoConstraints = NO;
+    UIScrollView *scroll = [UIScrollView new];
+    scroll.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:scroll]; [scroll addSubview:stack];
+    UILayoutGuide *safe = self.view.safeAreaLayoutGuide;
+    NSLayoutConstraint *center = [stack.centerYAnchor constraintEqualToAnchor:scroll.frameLayoutGuide.centerYAnchor];
+    center.priority = UILayoutPriorityDefaultHigh;
+    [NSLayoutConstraint activateConstraints:@[
+        [scroll.leadingAnchor constraintEqualToAnchor:safe.leadingAnchor], [scroll.trailingAnchor constraintEqualToAnchor:safe.trailingAnchor],
+        [scroll.topAnchor constraintEqualToAnchor:safe.topAnchor], [scroll.bottomAnchor constraintEqualToAnchor:safe.bottomAnchor],
+        [stack.leadingAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.leadingAnchor constant:24],
+        [stack.trailingAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.trailingAnchor constant:-24],
+        [stack.widthAnchor constraintEqualToAnchor:scroll.frameLayoutGuide.widthAnchor constant:-48],
+        [stack.topAnchor constraintGreaterThanOrEqualToAnchor:scroll.contentLayoutGuide.topAnchor constant:24],
+        [stack.bottomAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.bottomAnchor constant:-24], center,
+        [symbol.widthAnchor constraintEqualToConstant:80], [symbol.heightAnchor constraintEqualToConstant:80],
+        [name.widthAnchor constraintEqualToAnchor:stack.widthAnchor], [email.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [status.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
+    ]];
 }
-
-- (void) viewWillAppear:(BOOL)animated {
-    [[self navigationItem] setTitle:NSLocalizedString(@"Generating Certificate", @"Title for certificate generator view controller")];
-    [[self navigationItem] setHidesBackButton:YES];
-
-    [_nameLabel setText:_identityName];
-
-    if (_emailAddress != nil && _emailAddress.length > 0) {
-        [_emailLabel setText:[NSString stringWithFormat:@"<%@>", _emailAddress]];
-    } else {
-        [_emailLabel setText:nil];
-    }
-
-    [_pleaseWaitLabel setText:NSLocalizedString(@"Please Wait...", @"'Please Wait' text for certificate generation")];
-    [_activityIndicator startAnimating];
-}
-
 @end

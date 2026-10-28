@@ -5,8 +5,7 @@
 ARCHS = arm64
 SDKROOT = iphoneos
 
-MACOSX_DEPLOYMENT_TARGET = 10.13
-IPHONEOS_DEPLOYMENT_TARGET = 12.0
+IPHONEOS_DEPLOYMENT_TARGET = 18.0
 
 CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Developer
 
@@ -14,7 +13,7 @@ TARGETED_DEVICE_FAMILY = 1 // iPhone
 
 ALWAYS_SEARCH_USER_PATHS = NO
 USER_HEADER_SEARCH_PATHS = 
-HEADER_SEARCH_PATHS = "${PROJECT_DIR}/MumbleKit/src/" "${PROJECT_DIR}/Dependencies/MKNumberBadgeView/"
+HEADER_SEARCH_PATHS = "${PROJECT_DIR}/Source/LibMumble/" "$(PROJECT_DIR)/Dependencies/Generated/libmumble.xcframework/$(LIBMUMBLE_SLICE)/Headers"
 FRAMEWORK_SEARCH_PATHS =
 
 OTHER_CFLAGS = -DNS_BLOCK_ASSERTIONS=1
@@ -57,9 +56,14 @@ GCC_PREFIX_HEADER = Source/Mumble.pch
 
 VALIDATE_PRODUCT = YES
 
-OTHER_LDFLAGS = -all_load -ObjC -lc++
+OTHER_LDFLAGS = -ObjC -lc++ -weak_framework AVFoundation -weak_framework AVFAudio -weak_framework AudioToolbox -weak_framework WebKit -weak_framework UserNotifications -framework PhotosUI -framework ImageIO
 
-ENABLE_BITCODE = NO
 
 PRODUCT_NAME = Mumble
-PRODUCT_BUNDLE_IDENTIFIER = info.mumble.${PRODUCT_NAME:rfc1034identifier}
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+PRODUCT_BUNDLE_IDENTIFIER = com.blakebill.mumble
+
+CLANG_CXX_LANGUAGE_STANDARD = c++20
+CLANG_CXX_LIBRARY = libc++
+LIBMUMBLE_SLICE[sdk=iphoneos*] = ios-arm64
+LIBMUMBLE_SLICE[sdk=iphonesimulator*] = ios-arm64-simulator
